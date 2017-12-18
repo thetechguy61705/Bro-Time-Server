@@ -1,0 +1,44 @@
+{
+	"env": {
+		"es6": true,
+		"node": true
+	},
+	"extends": "eslint:recommended",
+	"parserOptions": {
+		"sourceType": "module"
+	},
+	"plugins": [
+		"json"
+	],
+	"rules": {
+		"max-len": [
+			"error", {
+				"code": 120
+			}
+		],
+		"line-comment-position": [
+			"error",
+			"above"
+		],
+		"indent": [
+			"error",
+			"tab"
+		],
+		"no-trailing-spaces": [
+			"error"
+		],
+		"comma-spacing": "error",
+		"linebreak-style": [
+			"error",
+			"windows"
+		],
+		"quotes": [
+			"error",
+			"double"
+		],
+		"semi": [
+			"error",
+			"always"
+		]
+	}
+}
