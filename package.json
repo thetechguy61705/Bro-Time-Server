@@ -1,31 +1,36 @@
 {
-	"name": "bro-time-server",
-	"version": "0.1.0",
-	"description": "The server implementation for the Discord Bro Time community (https://discord.gg/bnjGyuU).",
-	"main": "server/server.js",
-	"scripts": {
-		"test": "eslint . && eslint test/. --env mocha && mocha"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/cloewen8/Bro-Time-Server.git"
-	},
-	"keywords": [
-		"Bro",
-		"Time",
-		"Community",
-		"Server"
-	],
-	"author": "Colton Loewen",
-	"license": "CC-BY-SA-4.0",
-	"bugs": {
-		"url": "https://github.com/cloewen8/Bro-Time-Server/issues"
-	},
-	"homepage": "https://github.com/cloewen8/Bro-Time-Server#readme",
-	"dependencies": {},
-	"devDependencies": {
-		"eslint": "^4.13.1",
-		"eslint-plugin-json": "^1.2.0",
-		"mocha": "^4.0.1"
-	}
+  "name": "bro-time-server",
+  "version": "0.1.0",
+  "description": "The server implementation for the Discord Bro Time community (https://discord.gg/bnjGyuU).",
+  "main": "server/server.js",
+  "engines": {
+	"node": ">= 6.0.0"
+  },
+  "scripts": {
+    "test": "eslint . && eslint test/. --env mocha && mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloewen8/Bro-Time-Server.git"
+  },
+  "keywords": [
+    "Bro",
+    "Time",
+    "Community",
+    "Server"
+  ],
+  "author": "Colton Loewen",
+  "license": "CC-BY-SA-4.0",
+  "bugs": {
+    "url": "https://github.com/cloewen8/Bro-Time-Server/issues"
+  },
+  "homepage": "https://github.com/cloewen8/Bro-Time-Server#readme",
+  "dependencies": {
+    "discord.js": "^11.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.13.1",
+    "eslint-plugin-json": "^1.2.0",
+    "mocha": "^4.0.1"
+  }
 }
