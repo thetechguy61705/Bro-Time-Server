@@ -1,10 +1,15 @@
 var discord = require("discord.js");
 var util = require("util");
 
-// phrase (lowercased): Response (capitalized)
+// phrase (lower cased): Response (capitalized)
 var RESPONSES = {
 	hello: "Hi",
-	hi: "Hello"
+	hi: "Hello",
+	hey: "Hello",
+	greetings: "Hey",
+	greeting: "Hey",
+	ahoy: "Greetings",
+	hai: "Oh hi"
 };
 var FORMAT = "%s <@%s>!";
 
