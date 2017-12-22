@@ -1,4 +1,3 @@
-var discord = require("discord.js");
 var util = require("util");
 
 // phrase (lower cased): Response (capitalized)
@@ -18,7 +17,7 @@ function getGreeting(message) {
 	for (var phrase in RESPONSES) {
 		if (!RESPONSES.hasOwnProperty(phrase))
 			continue;
-		
+
 		if (content.startsWith(phrase))
 			return RESPONSES[phrase];
 	}
@@ -28,7 +27,7 @@ function getGreeting(message) {
 module.exports = function(message, client) {
 	if (message.isMentioned(client.user)) {
 		var response = getGreeting(message);
-		
+
 		if (response !== null)
 			message.channel.send(util.format(FORMAT, response, message.author.id));
 	}
