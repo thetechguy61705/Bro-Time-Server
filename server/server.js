@@ -2,7 +2,7 @@ var discord = require("discord.js");
 var client = new discord.Client();
 var chatHandlers = [];
 
-var CHAT = ["greeting"];
+var CHAT = ["greeting", "commands"];
 
 client.on("ready", () => {
 	CHAT.forEach(name => {
