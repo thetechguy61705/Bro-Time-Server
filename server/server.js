@@ -31,14 +31,14 @@ CHAT.forEach(name => {
 });
 BOTS.forEach(token => {
 	let client = new discord.Client();
-	
+
 	client.on("message", message => {
 		for (var i = 0; i < chatHandlers.length; i++) {
 			if (chatHandlers[i](message, client))
 				break;
 		}
 	});
-	
+
 	client.login(token);
 });
 
