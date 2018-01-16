@@ -21,11 +21,11 @@ COMMANDS.forEach(name => {
 });
 
 module.exports = {
-	exec() {
+	exec: function() {
 		// message, client
 		// Search for the loaded command and run it.
 		// Check permissions.
 		// Run the command.
 		// Save changes.
-	};
+	}
 };
