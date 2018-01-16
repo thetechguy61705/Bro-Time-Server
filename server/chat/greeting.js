@@ -3,7 +3,7 @@ var util = require("util");
 var GREETING = "(^%s|%s[/.!/?]*$)";
 var OPTIONS = "img";
 var RESPONSE = "%s <@%s>!";
-var MAX_LENGTH = 1000;
+var MAX_LENGTH = 100;
 
 function newGreeting(pattern) {
 	return util.format(GREETING, pattern, pattern);
@@ -31,7 +31,7 @@ RESPONSES[newGreeting("salutations")] = () => "greetings";
 module.exports = {
 	exec: function(message, client) {
 		if (message.isMentioned(client.user)) {
-			var response = getGreeting(message);
+			var response = this.getGreeting(message);
 	
 			if (response !== null)
 				message.channel.send(util.format(RESPONSE, response, message.author.id));
