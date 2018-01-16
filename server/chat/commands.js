@@ -20,10 +20,12 @@ COMMANDS.forEach(name => {
 	});
 });
 
-module.exports = function() {
-	// message, client
-	// Search for the loaded command and run it.
-	// Check permissions.
-	// Run the command.
-	// Save changes.
+module.exports = {
+	exec() {
+		// message, client
+		// Search for the loaded command and run it.
+		// Check permissions.
+		// Run the command.
+		// Save changes.
+	};
 };

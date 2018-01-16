@@ -34,7 +34,7 @@ BOTS.forEach(token => {
 
 	client.on("message", message => {
 		for (var i = 0; i < chatHandlers.length; i++) {
-			if (chatHandlers[i](message, client))
+			if (chatHandlers[i].exec(message, client))
 				break;
 		}
 	});
