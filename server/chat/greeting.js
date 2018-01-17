@@ -32,19 +32,19 @@ module.exports = {
 	exec: function(message, client) {
 		if (message.isMentioned(client.user)) {
 			var response = this.getGreeting(message);
-	
+
 			if (response !== null)
 				message.channel.send(util.format(RESPONSE, response, message.author.id));
 		}
 	},
-	
+
 	getGreeting: function(message) {
 		var content = message.content;
 		var matches;
 		for (var pattern in RESPONSES) {
 			if (!RESPONSES.hasOwnProperty(pattern))
 				continue;
-	
+
 			matches = new RegExp(pattern, OPTIONS).exec(content);
 			if (matches !== null)
 				return RESPONSES[pattern](matches);

@@ -4,10 +4,10 @@
   "description": "The server implementation for the Discord Bro Time community (https://discord.gg/bnjGyuU).",
   "main": "server/server.js",
   "engines": {
-	"node": ">= 6.0.0"
+    "node": ">= 6.0.0"
   },
   "scripts": {
-	"start": "node server/server.js",
+    "start": "node server/server.js",
     "test": "eslint . && eslint test/. --env mocha && mocha"
   },
   "repository": {
@@ -27,7 +27,8 @@
   },
   "homepage": "https://github.com/cloewen8/Bro-Time-Server#readme",
   "dependencies": {
-    "discord.js": "^11.2.1"
+    "discord.js": "^11.2.1",
+    "pg": "^7.4.1"
   },
   "devDependencies": {
     "eslint": "^4.13.1",
