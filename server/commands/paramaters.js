@@ -1,8 +1,11 @@
+var SPACE = "/s,";
+
 class Paramaters {
-	constructor(input) {
+	constructor(message) {
 		// Store the guild for role access.
-		this.sep = /^[/s,]+/y;
-		this.raw = input;
+		this.sep = new RegExp(`^[${SPACE}]+`, "y");
+		this.raw = message.content;
+		this.guild = message.guild
 		this.index = 0;
 	}
 
@@ -12,30 +15,41 @@ class Paramaters {
 
 	ReadSeparator() {
 		this.sep.lastIndex = this.index;
-		let match = this.raw.match(this.sep);
-		let result;
+		var match = this.raw.match(this.sep);
 		if (match !== null) {
-			result = match[0];
-			this.index += result.length;
+			this.index += match[0].length;
+			return match[0];
 		}
-		return result;
+	}
+
+	ReadParameter() {
+		var pattern = new RegExp(`^[^${SPACE}]+`, "y");
+		pattern.lastIndex = this.index;
+		var match = this.raw.match(pattern);
+		if (match !== null) {
+			this.index += match[0].length;
+			return match[0];
+		}
 	}
 
 	ReadWord(classes) {
-		let pattern = new RegExp(`^[${classes}a-zA-Z]+`, "y");
+		var pattern = new RegExp(`^[${classes}a-zA-Z]+`, "y");
 		pattern.lastIndex = this.index;
-		let match = this.raw.match(pattern);
-		let result;
+		var match = this.raw.match(pattern);
 		if (match !== null) {
-			result = match[0];
-			this.index += result.length;
+			this.index += match[0].length;
+			return match[0];
 		}
-		return result;
 	}
 
 	ReadNumber() {
-		// parseFloat
-		// Parse the first set of characters, up to the first separator.
+		var param = ReadParameter();
+		if (param !== null) {
+			var number = parseFloat(param);
+			if (!isNaN(number)) {
+				return number;
+			}
+		}
 	}
 
 	ReadUser() {
