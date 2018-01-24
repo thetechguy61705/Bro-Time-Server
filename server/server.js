@@ -39,7 +39,9 @@ config.TOKENS.forEach(token => {
 	});
 
 	fs.readdirSync(__dirname + "/preload").forEach(file => {
-		console.log("Preloading: " + "preload/" + file.match(/^(.*)\.js$/));
+		var match = file.match(/^(.*)\.js$/);
+		if (match !== null)
+			console.log("Preloading: " + "preload/" + match[1]);
 	});
 
 	client.login(token);
