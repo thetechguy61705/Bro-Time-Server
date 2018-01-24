@@ -4,6 +4,7 @@ var fs = require("fs");
 var discord = require("discord.js");
 var server;
 
+var preloaders = [];
 var chatHandlers = [];
 
 // Excluded from config, as this will be replaced fs.readdir in the near future.
@@ -15,6 +16,11 @@ function handleRequest(request, response) {
 	response.end();
 }
 
+fs.readdirSync(__dirname + "/preload").forEach(file => {
+	var match = file.match(/^(.*)\.js$/);
+	if (match !== null)
+		preloaders.push(require(".preload/" + match[1]));
+});
 CHAT.forEach(name => {
 	new Promise((resolve, reject) => {
 		try {
@@ -38,10 +44,8 @@ config.TOKENS.forEach(token => {
 		}
 	});
 
-	fs.readdirSync(__dirname + "/preload").forEach(file => {
-		var match = file.match(/^(.*)\.js$/);
-		if (match !== null)
-			console.log("Preloading: " + "preload/" + match[1]);
+	preloaders.forEach(preloader => {
+		preloader.exec(client);
 	});
 
 	client.login(token);
