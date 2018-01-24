@@ -1,5 +1,6 @@
 var config = require("./config");
 var http = require("http");
+var fs = require("fs");
 var discord = require("discord.js");
 var server;
 
@@ -35,6 +36,10 @@ config.TOKENS.forEach(token => {
 			if (chatHandlers[i].exec(message, client))
 				break;
 		}
+	});
+
+	fs.readdirSync("./preload").forEach(file => {
+		console.log("Preloading: " + "./preload/" + file.match(/^(.*)\.js$/));
 	});
 
 	client.login(token);
