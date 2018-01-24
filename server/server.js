@@ -1,13 +1,11 @@
+var config = require("./config");
 var http = require("http");
 var discord = require("discord.js");
 var server;
 
 var chatHandlers = [];
 
-var BOTS = [
-	process.env.BRO_TIME_TOKEN,
-	process.env.KITCHEN_TOKEN
-];
+// Excluded from config, as this will be replaced fs.readdir in the near future.
 var CHAT = ["greeting", "commands"];
 
 function handleRequest(request, response) {
@@ -29,7 +27,7 @@ CHAT.forEach(name => {
 		console.warn("A chat handler failed to load: %s (reason: %s)", name, exc);
 	});
 });
-BOTS.forEach(token => {
+config.TOKENS.forEach(token => {
 	let client = new discord.Client();
 
 	client.on("message", message => {
