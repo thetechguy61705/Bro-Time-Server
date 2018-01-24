@@ -7,9 +7,6 @@ var server;
 var preloaders = [];
 var chatHandlers = [];
 
-// Excluded from config, as this will be replaced fs.readdir in the near future.
-var CHAT = ["greeting", "commands"];
-
 function handleRequest(request, response) {
 	response.setHeader("Location", "https://github.com/cloewen8/Bro-Time-Server");
 	response.statusCode = 307;
@@ -21,18 +18,21 @@ fs.readdirSync(__dirname + "/preload").forEach(file => {
 	if (match !== null)
 		preloaders.push(require(".preload/" + match[1]));
 });
-CHAT.forEach(name => {
-	new Promise((resolve, reject) => {
-		try {
-			resolve(require("./chat/" + name));
-		} catch (exc) {
-			reject(exc);
-		}
-	}).then(handler => {
-		chatHandlers.push(handler);
-	}, exc => {
-		console.warn("A chat handler failed to load: %s (reason: %s)", name, exc);
-	});
+fs.readdirSync(__dirname + "/chat").forEach(file => {
+	var match = file.match(/^(.*)\.js$/);
+	if (match !== null) {
+		new Promise((resolve, reject) => {
+			try {
+				resolve(require("./chat/" + match[1]));
+			} catch (exc) {
+				reject(exc);
+			}
+		}).then(handler => {
+			chatHandlers.push(handler);
+		}, exc => {
+			console.warn("A chat handler failed to load: %s (reason: %s)", match[1], exc);
+		});
+	}
 });
 config.TOKENS.forEach(token => {
 	let client = new discord.Client();
