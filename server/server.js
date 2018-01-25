@@ -4,7 +4,7 @@ var fs = require("fs");
 var discord = require("discord.js");
 var server;
 
-var preloaders = [];
+var loaders = [];
 var chatHandlers = [];
 
 function handleRequest(request, response) {
@@ -13,10 +13,10 @@ function handleRequest(request, response) {
 	response.end();
 }
 
-fs.readdirSync(__dirname + "/preload").forEach(file => {
+fs.readdirSync(__dirname + "/load").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
 	if (match !== null)
-		preloaders.push(require(".preload/" + match[1]));
+		loaders.push(require("./load/" + match[1]));
 });
 fs.readdirSync(__dirname + "/chat").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
@@ -37,15 +37,17 @@ fs.readdirSync(__dirname + "/chat").forEach(file => {
 config.TOKENS.forEach(token => {
 	let client = new discord.Client();
 
+	client.on("ready", () => {
+		loaders.forEach(loader => {
+			loader.exec(client);
+		});
+	});
+
 	client.on("message", message => {
 		for (var i = 0; i < chatHandlers.length; i++) {
 			if (chatHandlers[i].exec(message, client))
 				break;
 		}
-	});
-
-	preloaders.forEach(preloader => {
-		preloader.exec(client);
 	});
 
 	client.login(token);

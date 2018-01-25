@@ -5,7 +5,7 @@ class Paramaters {
 		// Store the guild for role access.
 		this.sep = new RegExp(`^[${SPACE}]+`, "y");
 		this.raw = message.content;
-		this.guild = message.guild
+		this.guild = message.guild;
 		this.index = 0;
 	}
 
@@ -43,7 +43,7 @@ class Paramaters {
 	}
 
 	ReadNumber() {
-		var param = ReadParameter();
+		var param = this.ReadParameter();
 		if (param !== null) {
 			var number = parseFloat(param);
 			if (!isNaN(number)) {
