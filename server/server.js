@@ -1,17 +1,10 @@
 var config = require("./config");
-var http = require("http");
 var fs = require("fs");
 var discord = require("discord.js");
 var server;
 
 var loaders = [];
 var chatHandlers = [];
-
-function handleRequest(request, response) {
-	response.setHeader("Location", "https://github.com/cloewen8/Bro-Time-Server");
-	response.statusCode = 307;
-	response.end();
-}
 
 fs.readdirSync(__dirname + "/load").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
@@ -51,13 +44,4 @@ config.TOKENS.forEach(token => {
 	});
 
 	client.login(token);
-});
-
-server = http.createServer(handleRequest);
-server.listen(process.env.PORT || 8080, (err) => {
-	if (err) {
-		return console.error(err);
-	}
-
-	console.log(`Server started on port ${process.env.PORT || 8080}`);
 });
