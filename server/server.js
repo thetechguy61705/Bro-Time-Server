@@ -1,7 +1,6 @@
 var config = require("./config");
 var fs = require("fs");
 var discord = require("discord.js");
-var server;
 
 var loaders = [];
 var chatHandlers = [];
