@@ -1,4 +1,5 @@
 var config = require("../config");
+var discord = require("discord.js");
 const {Pool} = require("pg");
 
 const pool = new Pool({
@@ -24,8 +25,13 @@ class DataAccess {
 }
 
 class BotAccess extends DataAccess {
-	constructor() {
+	constructor(area) {
 		super();
+		if (area instanceof discord.Channel) {
+			this.dm = area;
+		} else {
+			this.server = area;
+		}
 	}
 }
 

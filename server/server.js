@@ -3,13 +3,9 @@ var fs = require("fs");
 var discord = require("discord.js");
 
 var loaders = [];
+var areaLoaders = [];
 var chatHandlers = [];
 
-fs.readdirSync(__dirname + "/load").forEach(file => {
-	var match = file.match(/^(.*)\.js$/);
-	if (match !== null)
-		loaders.push(require("./load/" + match[1]));
-});
 fs.readdirSync(__dirname + "/chat").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
 	if (match !== null) {
@@ -26,8 +22,19 @@ fs.readdirSync(__dirname + "/chat").forEach(file => {
 		});
 	}
 });
+fs.readdirSync(__dirname + "/load").forEach(file => {
+	var match = file.match(/^(.*)\.js$/);
+	if (match !== null)
+		loaders.push(require("./load/" + match[1]));
+});
+fs.readdirSync(__dirname + "/areaLoad").forEach(file => {
+	var match = file.match(/^(.*)\.js$/);
+	if (match !== null)
+		areaLoaders.push(require("./areaLoad/" + match[1]));
+});
 config.TOKENS.forEach(token => {
 	let client = new discord.Client();
+	let loadedAreas = new discord.Collection();
 
 	client.on("ready", () => {
 		console.log("Loading " + client.user.username);
@@ -38,6 +45,13 @@ config.TOKENS.forEach(token => {
 	});
 
 	client.on("message", message => {
+		let area = message.guid || message.channel;
+		if (!loadedAreas.has(area.id)) {
+			loadedAreas.set(area.id, true);
+			areaLoaders.forEach(loader => {
+				loader.exec(area);
+			});
+		}
 		for (var i = 0; i < chatHandlers.length; i++) {
 			if (chatHandlers[i].exec(message, client))
 				break;
