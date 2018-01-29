@@ -1,4 +1,4 @@
-var config = require("./config");
+var config = require("../config");
 var fs = require("fs");
 var discord = require("discord.js");
 
@@ -30,9 +30,11 @@ config.TOKENS.forEach(token => {
 	let client = new discord.Client();
 
 	client.on("ready", () => {
+		console.log("Loading " + client.user.username);
 		loaders.forEach(loader => {
 			loader.exec(client);
 		});
+		console.log("Finished loading " + client.user.username);
 	});
 
 	client.on("message", message => {
