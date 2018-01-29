@@ -5,4 +5,4 @@ module.exports = {
 		area.data = new BotAccess(area);
 		area.data.load();
 	}
-}
+};
