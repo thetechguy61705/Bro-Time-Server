@@ -30,18 +30,21 @@ CREATE TABLE IF NOT EXISTS User_Settings (
 		CONSTRAINT User_Settings_Value_C CHECK (pg_column_size(Value) <= 128160),
 	Namespace varchar(32),
 	CONSTRAINT User_Settings_PK PRIMARY KEY (User_Id, Namespace)
+	CONSTRAINT User_Settings_FK FOREIGN KEY (Namespace) REFERENCES Settings(Namespace)
 );
 
 CREATE TABLE IF NOT EXISTS Servers (
 	Server_Id bigint
 		CONSTRAINT Servers_Server_Id_PK PRIMARY KEY,
-	Bot_Id bigint,
+	Bot_Id bigint
+		CONSTRAINT Server_Bot_Id_FK REFERENCES Bots(Bot_Id),
 	Prefix varchar(32) DEFAULT "/"
 );
 
 CREATE TABLE IF NOT EXISTS Bots (
 	Bot_Id bigint,
-	Server_Id bigint,
+	Server_Id bigint
+		CONSTRAINT Bots_Bot_Id_FK REFERENCES Servers(Server_Id),
 	CONSTRAINT Bots_PK PRIMARY KEY (Bot_Id, Server_Id)
 );
 
@@ -57,14 +60,17 @@ CREATE TABLE IF NOT EXISTS Triggers (
 	CONSTRAINT Triggers_PK PRIMARY KEY (Trigger_Id, Server_Id)
 	CONSTRAINT Triggers_Trigger_Id_C CHECK (Trigger_Id SIMILAR TO "[a-zA-Z]")
 	CONSTRAINT Triggers_Server_Id_C CHECK (Server_Id SIMILAR TO "[a-zA-Z]")
+	CONSTRAINT Triggers_Server_Id_FK FOREIGN KEY (Server_Id) REFERENCES Servers(Server_Id)
 );
 
 CREATE TABLE IF NOT EXISTS Commands (
 	Command_Id varchar(32),
-	Bot_Id bigint,
+	Bot_Id bigint
+		CONSTRAINT Commands_Bot_Id_FK REFERENCES Bots(Bot_Id),
 	Server_Id bigint,
 	CONSTRAINT Commands_PK PRIMARY KEY (Command_Id, Server_Id)
 	CONSTRAINT Commands_Command_Id_C CHECK (Command_Id SIMILAR TO "[a-zA-Z]")
+	CONSTRAINT Commands_Server_Id FOREIGN KEY Server_Id REFERENCES Servers(Server_Id)
 );
 
 CREATE TABLE IF NOT EXISTS Restrictions (
@@ -74,6 +80,7 @@ CREATE TABLE IF NOT EXISTS Restrictions (
 		CONSTRAINT Restrictions_Ids_C CHECK (array_length(Ids, 1) <= 1000),
 	Command_Id varchar(32),
 	CONSTRAINT Restrictions_PK PRIMARY KEY (Restriction_Type, Restriction_Method, Command_Id)
+	CONSTRAINT Restrictions_Command_Id_FK FOREIGN KEY Command_Id REFERENCES Commands(Command_Id)
 );
 
 -- Add procedure to add bot and server rows.
