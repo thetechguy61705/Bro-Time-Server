@@ -1,7 +1,8 @@
 var config = require("../config");
 var discord = require("discord.js");
 const {Pool} = require("pg");
-var fs = require("fs");
+
+const DM_PREFIX = "/";
 
 const pool = new Pool({
 	max: config.DB_CONNECTIONS,
@@ -36,8 +37,9 @@ class CommandAccess extends DataAccess {
 }
 
 class BotAccess extends DataAccess {
-	constructor(area) {
+	constructor(area, client) {
 		super();
+		this._client = client;
 		if (area instanceof discord.Channel) {
 			this.dm = area;
 		} else {
@@ -49,10 +51,15 @@ class BotAccess extends DataAccess {
 		super.load();
 		if (this.server !== null) {
 			var client = await this._pool.connect();
-			await client.query(fs.readFileSync(__dirname + "/setup.sql", "utf8"));
-			// Call the procedure to add bot (and optionally server) settings.
-			// If server, get the server prefix and set it, else, set to forward slash.
+			// Provide the bot id and server id.
+			await client.query("SELECT discord.AddBot($1, $2) FOR UPDATE", [this._client.user.id, this.server.id]);
+			this.prefix = await client.query(`SELECT Prefix
+			                                  FROM discord.Servers
+			                                  WHERE Server_Id = $1`, [this.server.id])[0];
+			console.log(this.prefix);
 			client.release();
+		} else {
+			this.prefix = DM_PREFIX;
 		}
 	}
 

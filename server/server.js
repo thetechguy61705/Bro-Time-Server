@@ -45,11 +45,11 @@ config.TOKENS.forEach(token => {
 	});
 
 	client.on("message", message => {
-		let area = message.guid || message.channel;
+		let area = message.channel.guild || message.channel;
 		if (!loadedAreas.has(area.id)) {
 			loadedAreas.set(area.id, true);
 			areaLoaders.forEach(loader => {
-				loader.exec(area);
+				loader.exec(area, client);
 			});
 		}
 		for (var i = 0; i < chatHandlers.length; i++) {
@@ -59,4 +59,6 @@ config.TOKENS.forEach(token => {
 	});
 
 	client.login(token);
+	
+	// TODO: Connect to SIGTERM to destroy the client (I'm tired of waiting for the client to timeout while testing).
 });

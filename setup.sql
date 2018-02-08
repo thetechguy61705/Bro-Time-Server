@@ -77,7 +77,8 @@ CREATE TABLE IF NOT EXISTS discord.Servers (
 		CONSTRAINT Servers_Server_Id_PK PRIMARY KEY,
 	Prefix varchar(32) DEFAULT '/'
 		CONSTRAINT Servers_Prefix_NN NOT NULL,
-    Command_Id varchar(32),
+    Command_Id varchar(32)
+    	CONSTRAINT Servers_Command_Id_N NULL,
     CONSTRAINT Servers_Command_Id_FK FOREIGN KEY (Server_Id, Command_Id) REFERENCES discord.Commands(Server_Id, Command_Id)
 );
 
@@ -107,7 +108,17 @@ CREATE TABLE IF NOT EXISTS discord.Triggers (
 	CONSTRAINT Triggers_Server_Id_FK FOREIGN KEY (Server_Id) REFERENCES discord.Servers(Server_Id)
 );
 
--- Add procedure to add bot and server rows.
--- Add function to get the server prefix.
-
-
+-- Adds initial bot records.
+CREATE OR REPLACE FUNCTION discord.AddBot(P_Bot_Id bigint, P_Server_Id bigint) RETURNS void AS $$
+BEGIN
+	INSERT INTO discord.Bots(Bot_Id)
+		VALUES(P_Bot_Id)
+	ON CONFLICT ON CONSTRAINT Bots_PK DO NOTHING;
+    INSERT INTO discord.Servers(Server_Id)
+		VALUES(P_Server_Id)
+	ON CONFLICT ON CONSTRAINT Servers_Server_Id_PK DO NOTHING;
+    INSERT INTO discord.ServerBots(Server_Id, Bot_Id)
+		VALUES(P_Server_Id, P_Bot_Id)
+	ON CONFLICT ON CONSTRAINT ServerBots_PK DO NOTHING;
+END;
+$$ LANGUAGE plpgsql;
