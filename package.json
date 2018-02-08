@@ -4,7 +4,7 @@
   "description": "The server implementation for the Discord Bro Time community (https://discord.gg/bnjGyuU).",
   "main": "server/server.js",
   "engines": {
-    "node": ">= 6.0.0"
+    "node": ">= 7.10.1"
   },
   "scripts": {
     "start": "node server/server.js",

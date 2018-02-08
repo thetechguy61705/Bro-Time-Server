@@ -1,6 +1,7 @@
 var config = require("../config");
 var discord = require("discord.js");
 const {Pool} = require("pg");
+var fs = require("fs");
 
 const pool = new Pool({
 	max: config.DB_CONNECTIONS,
@@ -24,6 +25,17 @@ class DataAccess {
 	}
 }
 
+class CommandAccess extends DataAccess {
+	constructor() {
+		super();
+	}
+	
+	load() {
+		super.load();
+		
+	}
+}
+
 class BotAccess extends DataAccess {
 	constructor(area) {
 		super();
@@ -32,6 +44,24 @@ class BotAccess extends DataAccess {
 		} else {
 			this.server = area;
 		}
+	}
+	
+	 async load() {
+		super.load();
+		if (this.server !== null) {
+			var client = await this._pool.connect();
+			await client.query(fs.readFileSync(__dirname + "/setup.sql", 'utf8'));
+			// Call the procedure to add bot (and optionally server) settings.
+			// If server, get the server prefix and set it, else, set to forward slash.
+			client.release();
+			console.log("done!");
+		}
+	}
+	
+	forCommand() {
+		let data = new CommandAccess();
+		data.load();
+		return data;
 	}
 }
 
