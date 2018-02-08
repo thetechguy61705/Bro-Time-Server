@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/cloewen8/Bro-Time-Server#readme",
   "dependencies": {
+    "babel-eslint": "^8.2.1",
     "discord.js": "^11.2.1",
     "pg": "^7.4.1"
   },

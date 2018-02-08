@@ -29,10 +29,9 @@ class CommandAccess extends DataAccess {
 	constructor() {
 		super();
 	}
-	
+
 	load() {
 		super.load();
-		
 	}
 }
 
@@ -45,19 +44,18 @@ class BotAccess extends DataAccess {
 			this.server = area;
 		}
 	}
-	
-	 async load() {
+
+	async load() {
 		super.load();
 		if (this.server !== null) {
 			var client = await this._pool.connect();
-			await client.query(fs.readFileSync(__dirname + "/setup.sql", 'utf8'));
+			await client.query(fs.readFileSync(__dirname + "/setup.sql", "utf8"));
 			// Call the procedure to add bot (and optionally server) settings.
 			// If server, get the server prefix and set it, else, set to forward slash.
 			client.release();
-			console.log("done!");
 		}
 	}
-	
+
 	forCommand() {
 		let data = new CommandAccess();
 		data.load();
