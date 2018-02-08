@@ -13,6 +13,10 @@ const pool = new Pool({
 	password: config.DB_PASSWPRD
 });
 
+process.on("SIGTERM", async () => {
+	await pool.end();
+});
+
 class DataAccess {
 	constructor() {
 		this._pool = pool;
