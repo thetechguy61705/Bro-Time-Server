@@ -59,7 +59,7 @@ config.TOKENS.forEach(token => {
 	});
 
 	client.login(token);
-	
+
 	// TODO: Connect to SIGTERM to destroy the client (I'm tired of waiting for the client to timeout while testing).
 	process.on("SIGTERM", async () => {
 		await client.destroy();

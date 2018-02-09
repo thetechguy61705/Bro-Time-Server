@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "node server/server.js",
-    "test": "eslint . && eslint test/. --env mocha && mocha"
+    "test": "eslint . && eslint test/. --env mocha && mocha",
+    "fix": "eslint . --fix && eslint test/. --env mocha --fix"
   },
   "repository": {
     "type": "git",
@@ -27,13 +28,13 @@
   },
   "homepage": "https://github.com/cloewen8/Bro-Time-Server#readme",
   "dependencies": {
-    "babel-eslint": "^8.2.1",
     "discord.js": "^11.2.1",
     "pg": "^7.4.1"
   },
   "devDependencies": {
     "eslint": "^4.13.1",
     "eslint-plugin-json": "^1.2.0",
+    "babel-eslint": "^8.2.1",
     "mocha": "^4.0.1"
   }
 }
