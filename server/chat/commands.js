@@ -1,13 +1,9 @@
 var modules = {};
-var Parameters = require("./utility/paramaters")
+var Parameters = require("./utility/paramaters");
 var util = require("util");
 var prefixPattern = "^(<@%d>|%s)";
 
 var COMMANDS = ["ping"];
-
-function escapeRegExp(str) {
-	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-}
 
 // TODO: Load commands.
 COMMANDS.forEach(name => {
@@ -18,7 +14,7 @@ COMMANDS.forEach(name => {
 			reject(exc);
 		}
 	}).then(module => {
-		
+
 		modules[module.id] = module;
 	}, exc => {
 		console.warn("A command failed to load: %s (reason: %s)", name, exc);
@@ -27,7 +23,9 @@ COMMANDS.forEach(name => {
 
 module.exports = {
 	exec: function(message, client) {
-		var prefix = message.content.match(new RegExp(util.format(prefixPattern, client.user.id, escapeRegExp(message.data.prefix)), "i"));
+		var prefix = message.content.match(new RegExp(util.format(prefixPattern,
+			client.user.id,
+			message.data.prefix), "i"));
 		if (prefix !== null) {
 			var params = new Parameters(message);
 			params.Offset(prefix[0].length);

@@ -47,7 +47,7 @@ config.TOKENS.forEach(token => {
 	client.on("message", message => {
 		if (!message.author.bot) {
 			var area = message.channel.guild || message.channel;
-			var isServer = !(area instanceof discord.Channel)
+			var isServer = !(area instanceof discord.Channel);
 			var task = () => {
 				if (isServer)
 					loadedAreas.set(area.id, true);
@@ -61,7 +61,7 @@ config.TOKENS.forEach(token => {
 			// Load area data.
 			if (!isServer || !loadedAreas.has(area.id)) {
 				let promises = [];
-				for (i = 0; i < areaLoaders.length; i++)
+				for (var i = 0; i < areaLoaders.length; i++)
 					promises.push(areaLoaders[i].exec(area, client));
 				Promise.all(promises).then(task).catch((error) => {
 					console.warn("Unable to load area:", error);

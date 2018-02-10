@@ -4,6 +4,11 @@ const {Pool} = require("pg");
 
 const DM_PREFIX = "/";
 
+function escapeRegExp(str) {
+	// eslint-disable-next-line
+	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+}
+
 const pool = new Pool({
 	max: config.DB_CONNECTIONS,
 	host: config.DB_HOST,
@@ -38,7 +43,7 @@ class CommandAccess extends DataAccess {
 
 	load() {
 		super.load();
-		
+
 	}
 }
 
@@ -69,6 +74,7 @@ class BotAccess extends DataAccess {
 	}
 
 	async setPrefix(newPrefix) {
+		newPrefix = escapeRegExp(newPrefix);
 		await this._pool.query(`UPDATE discord.Servers
 		                        SET Prefix = $2
 		                        WHERE Server_Id = $1`, [this.server.id, newPrefix]);
