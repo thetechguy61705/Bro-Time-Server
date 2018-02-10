@@ -65,8 +65,8 @@ class BotAccess extends DataAccess {
 			// Provide the bot id and server id.
 			await client.query("SELECT discord.AddBot($1) FOR UPDATE", [this.server.id]);
 			this.prefix = (await client.query(`SELECT Prefix
-			                                FROM discord.Servers
-			                                WHERE Server_Id = $1`, [this.server.id])).rows[0].prefix;
+			                                   FROM discord.Servers
+			                                   WHERE Server_Id = $1`, [this.server.id])).rows[0].prefix;
 			client.release();
 		} else {
 			this.prefix = DM_PREFIX;
