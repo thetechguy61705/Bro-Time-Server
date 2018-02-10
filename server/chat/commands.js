@@ -1,6 +1,13 @@
 var modules = {};
+var Parameters = require("./utility/paramaters")
+var util = require("util");
+var prefixPattern = "^(<@%d>|%s)";
 
 var COMMANDS = ["ping"];
+
+function escapeRegExp(str) {
+	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+}
 
 // TODO: Load commands.
 COMMANDS.forEach(name => {
@@ -11,9 +18,7 @@ COMMANDS.forEach(name => {
 			reject(exc);
 		}
 	}).then(module => {
-		// Verify the integrity of the module.
-		// Load serializable data.
-		// Call the load method.
+		
 		modules[module.id] = module;
 	}, exc => {
 		console.warn("A command failed to load: %s (reason: %s)", name, exc);
@@ -21,11 +26,15 @@ COMMANDS.forEach(name => {
 });
 
 module.exports = {
-	exec: function() {
-		// message, client
-		// Search for the loaded command and run it.
-		// Check permissions.
-		// Run the command.
-		// Save changes.
+	exec: function(message, client) {
+		var prefix = message.content.match(new RegExp(util.format(prefixPattern, client.user.id, escapeRegExp(message.data.prefix)), "i"));
+		if (prefix !== null) {
+			var params = new Parameters(message);
+			params.Offset(prefix[0].length);
+			// params.ReadParameter(); - command name
+			// params.ReadSeparator();
+			// Check restrictions.
+			// Call the command.
+		}
 	}
 };

@@ -1,12 +1,16 @@
-var SPACE = "/s,";
+var SPACE = "\\s,";
 
 class Paramaters {
 	constructor(message) {
 		// Store the guild for role access.
-		this.sep = new RegExp(`^[${SPACE}]+`, "y");
+		this.sep = new RegExp(`[${SPACE}]+`, "y");
 		this.raw = message.content;
 		this.guild = message.guild;
 		this.index = 0;
+	}
+
+	Offset(offset) {
+		this.index += offset;
 	}
 
 	ReadRaw() {
@@ -23,7 +27,7 @@ class Paramaters {
 	}
 
 	ReadParameter() {
-		var pattern = new RegExp(`^[^${SPACE}]+`, "y");
+		var pattern = new RegExp(`[^${SPACE}]+`, "y");
 		pattern.lastIndex = this.index;
 		var match = this.raw.match(pattern);
 		if (match !== null) {
@@ -33,7 +37,7 @@ class Paramaters {
 	}
 
 	ReadWord(classes) {
-		var pattern = new RegExp(`^[${classes}a-zA-Z]+`, "y");
+		var pattern = new RegExp(`[${classes}a-zA-Z]+`, "y");
 		pattern.lastIndex = this.index;
 		var match = this.raw.match(pattern);
 		if (match !== null) {
