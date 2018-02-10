@@ -45,22 +45,38 @@ config.TOKENS.forEach(token => {
 	});
 
 	client.on("message", message => {
-		let area = message.channel.guild || message.channel;
-		if (!loadedAreas.has(area.id)) {
-			loadedAreas.set(area.id, true);
-			areaLoaders.forEach(loader => {
-				loader.exec(area, client);
-			});
-		}
-		for (var i = 0; i < chatHandlers.length; i++) {
-			if (chatHandlers[i].exec(message, client))
-				break;
+		if (!message.author.bot) {
+			var area = message.channel.guild || message.channel;
+			var isServer = !(area instanceof discord.Channel)
+			var task = () => {
+				if (isServer)
+					loadedAreas.set(area.id, true);
+				message.data = area.data;
+				// Process the message.
+				for (var i = 0; i < chatHandlers.length; i++) {
+					if (chatHandlers[i].exec(message, client))
+						break;
+				}
+			};
+			// Load area data.
+			if (!isServer || !loadedAreas.has(area.id)) {
+				let promises = [];
+				for (i = 0; i < areaLoaders.length; i++)
+					promises.push(areaLoaders[i].exec(area, client));
+				Promise.all(promises).then(task).catch((error) => {
+					console.warn("Unable to load area:", error);
+					message.reply("Unable to load. Retry in a few seconds.");
+					if (isServer)
+						loadedAreas.delete(area.id);
+				});
+			} else {
+				task();
+			}
 		}
 	});
 
 	client.login(token);
 
-	// TODO: Connect to SIGTERM to destroy the client (I'm tired of waiting for the client to timeout while testing).
 	process.on("SIGTERM", async () => {
 		await client.destroy();
 	});

@@ -39,59 +39,14 @@ CREATE TABLE IF NOT EXISTS discord.User_Settings (
 	Value jsonb
 		CONSTRAINT User_Settings_Value_NN NOT NULL
 		CONSTRAINT User_Settings_Value_C CHECK (pg_column_size(Value) <= 128160),
-	Namespace varchar(32),
-	CONSTRAINT User_Settings_PK PRIMARY KEY (User_Id, Namespace),
-	CONSTRAINT User_Settings_FK FOREIGN KEY (Namespace) REFERENCES discord.Settings(Namespace)
-);
-
-CREATE TABLE IF NOT EXISTS discord.Bots (
-	Bot_Id bigint
-		CONSTRAINT Bots_PK PRIMARY KEY
-);
-
-CREATE TABLE IF NOT EXISTS discord.Restrictions (
-	Restriction_Type discord.accessType,
-	Restriction_Method discord.accessMethod,
-	Ids bigint[]
-		CONSTRAINT Restrictions_Ids_NN NOT NULL
-		CONSTRAINT Restrictions_Ids_C CHECK (array_length(Ids, 1) <= 1000),
-	Command_Id varchar(32),
-	CONSTRAINT Restrictions_PK PRIMARY KEY (Restriction_Type, Restriction_Method, Command_Id)
-);
-
-CREATE TABLE IF NOT EXISTS discord.Commands (
-	Command_Id varchar(32),
-	Bot_Id bigint
-		CONSTRAINT Commands_Bot_Id_NN NOT NULL
-		CONSTRAINT Commands_Bot_Id_FK REFERENCES discord.Bots(Bot_Id),
-	Server_Id bigint,
-    Restriction_Type discord.accessType,
-    Restriction_Method discord.accessMethod,
-	CONSTRAINT Commands_PK PRIMARY KEY (Command_Id, Server_Id),
-	CONSTRAINT Commands_Command_Id_C CHECK (Command_Id SIMILAR TO '[a-zA-Z]'),
-    CONSTRAINT Commands_Restriction_FK FOREIGN KEY (Command_Id, Restriction_Type, Restriction_Method) REFERENCES discord.Restrictions(Command_Id, Restriction_Type, Restriction_Method)
-);
-
-CREATE TABLE IF NOT EXISTS discord.Servers (
-	Server_Id bigint
-		CONSTRAINT Servers_Server_Id_PK PRIMARY KEY,
-	Prefix varchar(32) DEFAULT '/'
-		CONSTRAINT Servers_Prefix_NN NOT NULL,
-    Command_Id varchar(32)
-    	CONSTRAINT Servers_Command_Id_N NULL,
-    CONSTRAINT Servers_Command_Id_FK FOREIGN KEY (Server_Id, Command_Id) REFERENCES discord.Commands(Server_Id, Command_Id)
-);
-
-CREATE TABLE IF NOT EXISTS discord.ServerBots (
-	Server_Id bigint,
-    Bot_Id bigint,
-    CONSTRAINT ServerBots_PK PRIMARY KEY (Server_Id, Bot_Id),
-    CONSTRAINT ServerBots_Server_Id_FK FOREIGN KEY (Server_Id) REFERENCES discord.Servers(Server_Id),
-    CONSTRAINT ServerBots_Bot_Id_FK FOREIGN KEY (Bot_Id) REFERENCES discord.Bots(Bot_Id)
+	Namespace varchar(32)
+    	CONSTRAINT User_Settings_Namepsace_FK REFERENCES discord.Settings(Namespace),
+	CONSTRAINT User_Settings_PK PRIMARY KEY (User_Id, Namespace)
 );
 
 CREATE TABLE IF NOT EXISTS discord.Triggers (
-	Trigger_Id varchar(32),
+	Trigger_Id varchar(32)
+    	CONSTRAINT Triggers_Trigger_Id_C CHECK (Trigger_Id SIMILAR TO '[a-zA-Z]'),
 	Event_Id varchar(32)
 		CONSTRAINT Triggers_EVENT_Id_NN NOT NULL
 		CONSTRAINT Triggers_Event_Id_C CHECK (Event_Id SIMILAR TO '[a-zA-Z]'),
@@ -103,22 +58,58 @@ CREATE TABLE IF NOT EXISTS discord.Triggers (
 	Response_Parameters varchar(1024)
 		CONSTRAINT Triggers_Response_Parameters_N NULL,
 	Server_Id bigint,
-	CONSTRAINT Triggers_PK PRIMARY KEY (Trigger_Id, Server_Id),
-	CONSTRAINT Triggers_Trigger_Id_C CHECK (Trigger_Id SIMILAR TO '[a-zA-Z]'),
-	CONSTRAINT Triggers_Server_Id_FK FOREIGN KEY (Server_Id) REFERENCES discord.Servers(Server_Id)
+	CONSTRAINT Triggers_PK PRIMARY KEY (Trigger_Id, Server_Id)
 );
 
--- Adds initial bot records.
-CREATE OR REPLACE FUNCTION discord.AddBot(P_Bot_Id bigint, P_Server_Id bigint) RETURNS void AS $$
+CREATE TABLE IF NOT EXISTS discord.Servers (
+	Server_Id bigint
+		CONSTRAINT Servers_Server_Id_PK PRIMARY KEY,
+	Prefix varchar(32) DEFAULT '/'
+		CONSTRAINT Servers_Prefix_NN NOT NULL,
+    Trigger_Id varchar(32)
+    	CONSTRAINT Servers_Trigger_Id_N NULL,
+    Command_Id varchar(32)
+    	CONSTRAINT Servers_Command_Id_N NULL,
+    CONSTRAINT Servers_Triggers_FK FOREIGN KEY (Trigger_Id, Server_Id) REFERENCES discord.Triggers(Trigger_Id, Server_Id)
+);
+
+CREATE TABLE IF NOT EXISTS discord.Restrictions (
+	Restriction_Type discord.accessType,
+	Restriction_Method discord.accessMethod,
+	Ids bigint[]
+		CONSTRAINT Restrictions_Ids_NN NOT NULL
+		CONSTRAINT Restrictions_Ids_C CHECK (array_length(Ids, 1) <= 1000),
+	Command_Id varchar(32),
+    Server_Id bigint,
+	CONSTRAINT Restrictions_PK PRIMARY KEY (Restriction_Type, Restriction_Method, Command_Id)
+);
+
+CREATE TABLE IF NOT EXISTS discord.Commands (
+	Command_Id varchar(32)
+    	CONSTRAINT Commands_Command_Id_PK PRIMARY KEY
+    	CONSTRAINT Commands_Command_Id_C CHECK (Command_Id SIMILAR TO '[a-zA-Z]'),
+    Restriction_Type discord.accessType
+    	CONSTRAINT Commands_Restriction_Type_NN NOT NULL,
+    Restriction_Method discord.accessMethod
+    	CONSTRAINT Commands_Restriction_Method_NN NOT NULL,
+    Server_Id bigint
+    	CONSTRAINT Commands_Servers_FK REFERENCES discord.Servers(Server_Id)
+    	CONSTRAINT Commands_Server_Id_N NULL,
+    CONSTRAINT Commands_Restrictions_FK FOREIGN KEY (Command_Id, Restriction_Type, Restriction_Method) REFERENCES discord.Restrictions(Command_Id, Restriction_Type, Restriction_Method)
+);
+
+DO $$ BEGIN
+	ALTER TABLE discord.Restrictions
+		ADD CONSTRAINT Restrictions_Servers_FK FOREIGN KEY (Server_Id) REFERENCES discord.Servers(Server_Id);
+EXCEPTION
+	WHEN duplicate_object THEN null;
+END $$;
+
+-- Adds initial server records.
+CREATE OR REPLACE FUNCTION discord.AddBot(P_Server_Id bigint) RETURNS void AS $$
 BEGIN
-	INSERT INTO discord.Bots(Bot_Id)
-		VALUES(P_Bot_Id)
-	ON CONFLICT ON CONSTRAINT Bots_PK DO NOTHING;
     INSERT INTO discord.Servers(Server_Id)
 		VALUES(P_Server_Id)
 	ON CONFLICT ON CONSTRAINT Servers_Server_Id_PK DO NOTHING;
-    INSERT INTO discord.ServerBots(Server_Id, Bot_Id)
-		VALUES(P_Server_Id, P_Bot_Id)
-	ON CONFLICT ON CONSTRAINT ServerBots_PK DO NOTHING;
 END;
 $$ LANGUAGE plpgsql;

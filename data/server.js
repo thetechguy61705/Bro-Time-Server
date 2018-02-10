@@ -31,12 +31,14 @@ class DataAccess {
 }
 
 class CommandAccess extends DataAccess {
-	constructor() {
+	constructor(command) {
 		super();
+		this._command = command;
 	}
 
 	load() {
 		super.load();
+		
 	}
 }
 
@@ -56,7 +58,7 @@ class BotAccess extends DataAccess {
 		if (this.server !== null) {
 			var client = await this._pool.connect();
 			// Provide the bot id and server id.
-			await client.query("SELECT discord.AddBot($1, $2) FOR UPDATE", [this._client.user.id, this.server.id]);
+			await client.query("SELECT discord.AddBot($1) FOR UPDATE", [this.server.id]);
 			this.prefix = (await client.query(`SELECT Prefix
 			                                FROM discord.Servers
 			                                WHERE Server_Id = $1`, [this.server.id])).rows[0].prefix;
@@ -66,11 +68,15 @@ class BotAccess extends DataAccess {
 		}
 	}
 
-	forCommand() {
-		let data = new CommandAccess();
-		data.load();
-		return data;
+	async setPrefix(newPrefix) {
+		await this._pool.query(`UPDATE discord.Servers
+		                        SET Prefix = $2
+		                        WHERE Server_Id = $1`, [this.server.id, newPrefix]);
+		this.prefix = newPrefix;
 	}
 }
 
-module.exports = BotAccess;
+module.exports = {
+	BotAccess: BotAccess,
+	CommandAccess: CommandAccess
+};

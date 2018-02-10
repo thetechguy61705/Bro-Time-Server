@@ -1,8 +1,8 @@
-var BotAccess = require("../../data/server");
+var { BotAccess } = require("../../data/server");
 
 module.exports = {
-	exec: function(area, client) {
+	async exec(area, client) {
 		area.data = new BotAccess(area, client);
-		area.data.load();
+		await area.data.load();
 	}
 };
