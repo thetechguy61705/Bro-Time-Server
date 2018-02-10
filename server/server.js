@@ -2,6 +2,8 @@ var config = require("../config");
 var fs = require("fs");
 var discord = require("discord.js");
 
+require("./sentry");
+
 var loaders = [];
 var areaLoaders = [];
 var chatHandlers = [];
