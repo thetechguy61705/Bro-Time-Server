@@ -9,15 +9,15 @@ class Paramaters {
 		this.index = 0;
 	}
 
-	Offset(offset) {
+	offset(offset) {
 		this.index += offset;
 	}
 
-	ReadRaw() {
+	readRaw() {
 		return this.raw.substring(this.index);
 	}
 
-	ReadSeparator() {
+	readSeparator() {
 		this.sep.lastIndex = this.index;
 		var match = this.raw.match(this.sep);
 		if (match !== null) {
@@ -26,7 +26,7 @@ class Paramaters {
 		}
 	}
 
-	ReadParameter() {
+	readParameter() {
 		var pattern = new RegExp(`[^${SPACE}]+`, "y");
 		pattern.lastIndex = this.index;
 		var match = this.raw.match(pattern);
@@ -36,7 +36,7 @@ class Paramaters {
 		}
 	}
 
-	ReadWord(classes) {
+	readWord(classes) {
 		var pattern = new RegExp(`[${classes}a-zA-Z]+`, "y");
 		pattern.lastIndex = this.index;
 		var match = this.raw.match(pattern);
@@ -46,8 +46,8 @@ class Paramaters {
 		}
 	}
 
-	ReadNumber() {
-		var param = this.ReadParameter();
+	readNumber() {
+		var param = this.readParameter();
 		if (param !== null) {
 			var number = parseFloat(param);
 			if (!isNaN(number)) {
@@ -56,16 +56,16 @@ class Paramaters {
 		}
 	}
 
-	ReadUser() {
+	readUser() {
 		// client
 		// Get the user from client.users that matches the most recent parameter.
 	}
 
-	ReadRole() {
+	readRole() {
 		// Get the role from a guild that matches the most recent parameter.
 	}
 
-	ReadChannel() {
+	readChannel() {
 		// Get the channel from a guild that matches the most recent parameter.
 	}
 }

@@ -28,9 +28,9 @@ module.exports = {
 			message.data.prefix), "i"));
 		if (prefix !== null) {
 			var params = new Parameters(message);
-			params.Offset(prefix[0].length);
-			// params.ReadParameter(); - command name
-			// params.ReadSeparator();
+			params.offset(prefix[0].length);
+			// params.readParameter(); - command name
+			// params.readSeparator();
 			// Check restrictions.
 			// Call the command.
 		}
