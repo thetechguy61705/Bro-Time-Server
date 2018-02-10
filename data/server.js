@@ -5,7 +5,7 @@ const {Pool} = require("pg");
 const DM_PREFIX = "/";
 
 function escapeRegExp(str) {
-	// eslint-disable-next-line
+	// eslint-disable-next-line no-useless-escape
 	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 }
 
