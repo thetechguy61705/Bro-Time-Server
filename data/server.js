@@ -1,6 +1,6 @@
 var config = require("../config");
 var discord = require("discord.js");
-const { Pool, Cursor } = require("pg");
+const { Pool } = require("pg");
 
 const DM_PREFIX = "/";
 
@@ -35,12 +35,6 @@ class DataAccess {
 	}
 }
 
-class Restriction {
-	constructor() { // result
-		
-	}
-}
-
 class CommandAccess extends DataAccess {
 	constructor(command) {
 		super();
@@ -49,17 +43,15 @@ class CommandAccess extends DataAccess {
 
 	load() {
 		super.load();
-		// Load all restrictions.
-		this.restrictions = [];
-		
 	}
-	
-	canAccess() { // message
+
+	canAccess() {
+		// message
 		return false;
 	}
-	
+
 	get nonGuildAllowed() {
-		
+
 	}
 }
 

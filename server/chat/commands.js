@@ -1,6 +1,7 @@
 var modules = {};
 var Parameters = require("./utility/paramaters");
-var { CommandAccess } = require('./../../data/server');
+var { CommandAccess } = require("./../../data/server");
+var fs = require("fs");
 var util = require("util");
 var prefixPattern = "^(<@%d>|%s)";
 var data = {};
@@ -10,14 +11,14 @@ fs.readdirSync(__dirname + "/../commands").forEach(file => {
 	if (match !== null) {
 		new Promise((resolve, reject) => {
 			try {
-				resolve(require("../commands/" + name));
+				resolve(require("../commands/" + match));
 			} catch (exc) {
 				reject(exc);
 			}
 		}).then(module => {
 			modules[module.id] = module;
 		}, exc => {
-			console.warn("A command failed to load: %s (reason: %s)", name, exc);
+			console.warn("A command failed to load: %s (reason: %s)", match, exc);
 		});
 	}
 });
@@ -39,7 +40,7 @@ module.exports = {
 			params.offset(prefix[0].length);
 			params.readSeparator();
 			var command = modules[params.readParameter()];
-			
+
 			if (command !== null) {
 				console.log("command found.");
 				var data = load(command);
