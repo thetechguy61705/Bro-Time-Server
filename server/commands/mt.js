@@ -9,6 +9,6 @@ module.exports = {
     let role = message.guild.roles.find(r=> r.name.toLowerCase() === prefix+rolename);
     if(role) role.setMentionable(!role.mentionable);
   }
-  message.delete()
+  message.delete();
 	}
 };
