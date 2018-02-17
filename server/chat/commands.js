@@ -40,7 +40,9 @@ module.exports = {
 			using = true;
 		} else {
 			prefix = message.content.match("^" + MessageMentions.USERS_PATTERN.source);
-			using = prefix !== null && message.mentions.users.size === 1 && message.mentions.users.first().id == client.user.id;
+			using = prefix !== null &&
+				message.mentions.users.size === 1 &&
+				message.mentions.users.first().id == client.user.id;
 		}
 		if (using) {
 			var params = new Parameters(message);
