@@ -41,7 +41,7 @@ module.exports = {
 			params.readSeparator();
 			var command = modules[params.readParameter()];
 
-			if (command !== null) {
+			if (command !== undefined) {
 				var data = load(command);
 				if (data.canAccess(message)) {
 					params.readSeparator();
