@@ -1,8 +1,6 @@
 module.exports = {
 	id: "ping",
-	load: () => {
-		
-	},
+	load: () => {},
 	execute: (call) => {
 		var delay = Math.max(Date.now() - call.message.createdTimestamp, 0);
 		var diag;
