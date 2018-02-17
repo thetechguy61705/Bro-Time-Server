@@ -47,7 +47,7 @@ class CommandAccess extends DataAccess {
 
 	canAccess() {
 		// message
-		return false;
+		return true;
 	}
 
 	get nonGuildAllowed() {

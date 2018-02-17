@@ -11,21 +11,21 @@ fs.readdirSync(__dirname + "/../commands").forEach(file => {
 	if (match !== null) {
 		new Promise((resolve, reject) => {
 			try {
-				resolve(require("../commands/" + match));
+				resolve(require("../commands/" + match[1]));
 			} catch (exc) {
 				reject(exc);
 			}
 		}).then(module => {
 			modules[module.id] = module;
 		}, exc => {
-			console.warn("A command failed to load: %s (reason: %s)", match, exc);
+			console.warn("A command failed to load: %s (reason: %s)", match[1], exc);
 		});
 	}
 });
 
 function load(command) {
 	var commandData = data[command.id];
-	if (commandData === null)
+	if (commandData === undefined)
 		commandData = new CommandAccess(command);
 	return commandData;
 }
@@ -42,12 +42,11 @@ module.exports = {
 			var command = modules[params.readParameter()];
 
 			if (command !== null) {
-				console.log("command found.");
 				var data = load(command);
 				if (data.canAccess(message)) {
-					console.log("command available.");
 					params.readSeparator();
 					// Call the command.
+					command.execute({message: message, client: client, params: params});
 				}
 			}
 		}
