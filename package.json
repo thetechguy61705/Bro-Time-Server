@@ -30,7 +30,9 @@
   "dependencies": {
     "discord.js": "^11.2.1",
     "pg": "^7.4.1",
-    "raven": "^2.4.1"
+    "raven": "^2.4.1",
+    "yargs": "^11.0.0",
+    "prompt-confirm": "^1.2.0"
   },
   "devDependencies": {
     "eslint": "^4.13.1",

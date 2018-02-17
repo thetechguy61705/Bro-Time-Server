@@ -45,7 +45,6 @@ module.exports = {
 				var data = load(command);
 				if (data.canAccess(message)) {
 					params.readSeparator();
-					// Call the command.
 					command.execute({message: message, client: client, params: params});
 				}
 			}
