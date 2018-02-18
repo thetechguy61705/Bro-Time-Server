@@ -6,7 +6,7 @@ module.exports = {
 			let qotd = call.params.readRaw(" ");
 			let qotdrole = call.message.guild.roles.get("387375439745908747");
 			qotdrole.setMentionable(true);
-			call.message.channel.send(`<@&387375439745908747>: ${qotd}\nPosted by ${call.message.author}`);
+			call.message.channel.send(`<@&387375439745908747>: **${qotd}**\n*Posted by ${call.message.author}*`);
 			qotdrole.setMentionable(false);
 
 		}
