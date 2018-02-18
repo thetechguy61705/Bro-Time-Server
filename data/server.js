@@ -85,11 +85,10 @@ class BotAccess extends DataAccess {
 
 	async setPrefix(newPrefix) {
 		newPrefix = escapeRegExp(newPrefix);
-		if (this._pool !== null) {
-		await this._pool.query(`UPDATE discord.Servers
-		                        SET Prefix = $2
-		                        WHERE Server_Id = $1`, [this.server.id, newPrefix]);
-		}
+		if (this._pool !== null)
+			await this._pool.query(`UPDATE discord.Servers
+		                            SET Prefix = $2
+		                            WHERE Server_Id = $1`, [this.server.id, newPrefix]);
 		this.prefix = newPrefix;
 	}
 }
