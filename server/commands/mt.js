@@ -4,11 +4,10 @@ module.exports = {
 	execute: (call) => {
 		let rolename = call.params.readParameter(" ").toLowerCase();
 		const prefixes = ["", "-g- ", "[f] ", "[c] "];
-		if(call.message.member.roles.has("414603140399366145")) {
-			for (const prefix of prefixes) {
-				let role = call.message.guild.roles.find(r=> r.name.toLowerCase() === prefix+rolename);
-				if(role) role.setMentionable(!role.mentionable);}
-		} else if (call.message.member.roles.has("414605974205235201")) {
+		// console.log(call.message.member.roles.array())
+		if(["414568002181398552", "414605900792201216"]
+			.some(r => {return call.message.member.roles.array()
+				.indexOf(r) !== -1;})) {
 			for (const prefix of prefixes) {
 				let role = call.message.guild.roles.find(r=> r.name.toLowerCase() === prefix+rolename);
 				if(role) role.setMentionable(!role.mentionable);}
