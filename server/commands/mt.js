@@ -6,9 +6,9 @@ module.exports = {
   const prefixes = ["", "-g- ", "[f] ", "[c] "];
 
   for (const prefix of prefixes) {
-    let role = message.guild.roles.find(r=> r.name.toLowerCase() === prefix+rolename);
+    let role = call.message.guild.roles.find(r=> r.name.toLowerCase() === prefix+rolename);
     if(role) role.setMentionable(!role.mentionable);
   }
-  message.delete();
+  call.message.delete();
 	}
 };
