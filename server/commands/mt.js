@@ -4,7 +4,7 @@ module.exports = {
 	execute: (call) => {
 		let rolename = call.params.readParameter(" ").toLowerCase();
 		const prefixes = ["", "-g- ", "[f] ", "[c] "];
-		console.log(call.message.member.roles.array())
+		// console.log(call.message.member.roles.array())
 		if(["414603140399366145", "414605974205235201"]
 			.some(r => {return call.message.member.roles.array()
 				.indexOf(r) !== -1;})) {
