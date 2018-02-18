@@ -2,7 +2,7 @@ module.exports = {
 	id: "mt",
 	load: () => {},
 	execute: (call) => {
-		let rolename = call.args.join(" ").toLowerCase();
+		let rolename = call.params.join(" ").toLowerCase();
 		const prefixes = ["", "-g- ", "[f] ", "[c] "];
 
 		for (const prefix of prefixes) {
