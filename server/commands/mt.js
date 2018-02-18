@@ -5,7 +5,7 @@ module.exports = {
 		let rolename = call.params.readParameter(" ").toLowerCase();
 		const prefixes = ["", "-g- ", "[f] ", "[c] "];
 		if(call.message.member.roles
-			.some(r=>["414603140399366145","414605974205235201"]
+			.some(r=>["414603140399366145", "414605974205235201"]
 				.includes(r.id)) ) {
 			for (const prefix of prefixes) {
 				let role = call.message.guild.roles.find(r=> r.name.toLowerCase() === prefix+rolename);
