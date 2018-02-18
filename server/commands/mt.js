@@ -5,8 +5,9 @@ module.exports = {
 		let rolename = call.params.readParameter(" ").toLowerCase();
 		const prefixes = ["", "-g- ", "[f] ", "[c] "];
 		if(call.message.member.roles.array()
-			.some(r=>["414603140399366145", "414605974205235201"]
-				.includes(r.id)) ) {
+		.some(r => {return ["414603140399366145", "414605974205235201"]
+			.indexOf(r) !== -1;})) {
+			
 			for (const prefix of prefixes) {
 				let role = call.message.guild.roles.find(r=> r.name.toLowerCase() === prefix+rolename);
 				if(role) role.setMentionable(!role.mentionable);}
