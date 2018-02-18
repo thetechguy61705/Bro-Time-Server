@@ -11,11 +11,7 @@ function escapeRegExp(str) {
 
 const pool = new Pool({
 	max: config.DB_CONNECTIONS,
-	host: config.DB_HOST,
-	port: config.DB_PORT,
-	database: config.DB_NAME,
-	user: config.DB_USER,
-	password: config.DB_PASSWPRD
+	connectionString: config.DB
 });
 
 process.on("SIGTERM", async () => {
