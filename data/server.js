@@ -1,6 +1,11 @@
 var config = require("../config");
 var discord = require("discord.js");
 const { Pool } = require("pg");
+/**
+ * normal - Operate as normal.
+ * idm - Operate without persistence.
+ */
+var mode = process.argv[2] || "normal";
 
 const DM_PREFIX = "/";
 
@@ -9,14 +14,15 @@ function escapeRegExp(str) {
 	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 }
 
-const pool = new Pool({
+const pool = mode !== "idm" ? new Pool({
 	max: config.DB_CONNECTIONS,
 	connectionString: config.DB
-});
+}) : null;
 
-process.on("SIGTERM", async () => {
-	await pool.end();
-});
+if (pool !== null)
+	process.on("SIGTERM", async () => {
+		await pool.end();
+	});
 
 class DataAccess {
 	constructor() {
@@ -64,7 +70,7 @@ class BotAccess extends DataAccess {
 
 	async load() {
 		super.load();
-		if (this.server !== null) {
+		if (this._pool !== null && this.server !== null) {
 			var client = await this._pool.connect();
 			// Provide the bot id and server id.
 			await client.query("SELECT discord.AddBot($1) FOR UPDATE", [this.server.id]);
@@ -79,9 +85,11 @@ class BotAccess extends DataAccess {
 
 	async setPrefix(newPrefix) {
 		newPrefix = escapeRegExp(newPrefix);
+		if (this._pool !== null) {
 		await this._pool.query(`UPDATE discord.Servers
 		                        SET Prefix = $2
 		                        WHERE Server_Id = $1`, [this.server.id, newPrefix]);
+		}
 		this.prefix = newPrefix;
 	}
 }
