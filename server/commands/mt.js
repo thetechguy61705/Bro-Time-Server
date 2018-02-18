@@ -8,9 +8,9 @@ module.exports = {
 			for (const prefix of prefixes) {
 				let role = call.message.guild.roles.find(r=> r.name.toLowerCase() === prefix+rolename);
 				if(role) role.setMentionable(!role.mentionable);
-			} 
+			}
 		} else {
-			call.message.channel.send(`${call.message.author}, you do not have permission to use this command!`)
+			call.message.channel.send(`${call.message.author}, you do not have permission to use this command!`);
 		}
 		call.message.delete();
 	}
