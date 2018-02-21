@@ -33,7 +33,7 @@ module.exports = {
 			color = color.toLowerCase();
 
 			if (call.message.member.roles.find("name", "Bro Time Deluxe")) {
-				if (deluxecolors.find((value) => {return value == color;}) !== null) {
+				if (deluxecolors.includes(color)) {
 					let role = call.message.guild.roles.find("name", `${color}`);
 					removeColorRoles(call.message.guild.roles, deluxecolors, call.message.member);
 					call.message.member.addRole(role);
@@ -42,7 +42,7 @@ module.exports = {
 					error(call.message.channel);
 				}
 			} else if (call.message.member.roles.find("name", "Bro Time Premium")) {
-				if (premiumcolors.find((value) => {return value == color;}) !== null) {
+				if (premiumcolors.includes(color)) {
 					let role = call.message.guild.roles.find("name", `${color}`);
 					removeColorRoles(call.message.guild.roles, premiumcolors, call.message.member);
 					call.message.member.addRole(role);
@@ -51,7 +51,7 @@ module.exports = {
 					error(call.message.channel);
 				}
 			} else if (call.message.member.roles.find("name", "Bro Time Plus")) {
-				if (pluscolors.find((value) => {return value == color;}) !== null) {
+				if (pluscolors.includes(color)) {
 					let role = call.message.guild.roles.find("name", `${color}`);
 					removeColorRoles(call.message.guild.roles, pluscolors, call.message.member);
 					call.message.member.addRole(role);
@@ -60,7 +60,7 @@ module.exports = {
 					error(call.message.channel);
 				}
 			} else {
-				if (freecolors.find((value) => {return value == color;}) !== null) {
+				if (freecolors.includes(color)) {
 					let role = call.message.guild.roles.find("name", `${color}`);
 					removeColorRoles(call.message.guild.roles, freecolors, call.message.member);
 					call.message.member.addRole(role);
