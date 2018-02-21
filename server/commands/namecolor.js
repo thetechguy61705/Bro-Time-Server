@@ -1,4 +1,4 @@
-var deluxecolors = ["red", "blue", "orange", "green", "black", "purple", "pink",
+var deluxecolors = ["red", "blue", "orange", "green", "black", "purple", "pink", "yellow",
 	"hotpink", "indigo", "bronze", "cyan", "lightgreen", "silver", "brightred", "hotbrown",
 	"darkviolet", "gold"];
 var premiumcolors = ["red", "blue", "orange", "green", "black", "purple", "pink",
