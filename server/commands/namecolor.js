@@ -8,8 +8,8 @@ var pluscolors = ["red", "blue", "orange", "green", "black", "purple", "pink",
 	"hotpink", "indigo", "bronze", "cyan", "lightgreen"];
 var freecolors = ["red", "blue", "orange", "green", "black", "purple"];
 
-function removeColorRoles(roles, colors, user) {
-	colors.forEach((color) => {
+function removeColorRoles(roles, user) {
+	deluxecolors.forEach((color) => {
 		if (user.roles.find("name", color)) {
 			user.removeRole(roles.find("name", color));
 		}
@@ -35,7 +35,7 @@ module.exports = {
 			if (call.message.member.roles.find("name", "Bro Time Deluxe")) {
 				if (deluxecolors.includes(color)) {
 					let role = call.message.guild.roles.find("name", `${color}`);
-					removeColorRoles(call.message.guild.roles, deluxecolors, call.message.member);
+					removeColorRoles(call.message.guild.roles, call.message.member);
 					call.message.member.addRole(role);
 					success(call.message.channel, color);
 				} else {
@@ -44,7 +44,7 @@ module.exports = {
 			} else if (call.message.member.roles.find("name", "Bro Time Premium")) {
 				if (premiumcolors.includes(color)) {
 					let role = call.message.guild.roles.find("name", `${color}`);
-					removeColorRoles(call.message.guild.roles, premiumcolors, call.message.member);
+					removeColorRoles(call.message.guild.roles, call.message.member);
 					call.message.member.addRole(role);
 					success(call.message.channel, color);
 				} else {
@@ -53,7 +53,7 @@ module.exports = {
 			} else if (call.message.member.roles.find("name", "Bro Time Plus")) {
 				if (pluscolors.includes(color)) {
 					let role = call.message.guild.roles.find("name", `${color}`);
-					removeColorRoles(call.message.guild.roles, pluscolors, call.message.member);
+					removeColorRoles(call.message.guild.roles, call.message.member);
 					call.message.member.addRole(role);
 					success(call.message.channel, color);
 				} else {
@@ -62,7 +62,7 @@ module.exports = {
 			} else {
 				if (freecolors.includes(color)) {
 					let role = call.message.guild.roles.find("name", `${color}`);
-					removeColorRoles(call.message.guild.roles, freecolors, call.message.member);
+					removeColorRoles(call.message.guild.roles, call.message.member);
 					call.message.member.addRole(role);
 					success(call.message.channel, color);
 				} else {
