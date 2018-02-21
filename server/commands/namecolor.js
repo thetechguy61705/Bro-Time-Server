@@ -6,7 +6,7 @@ var premiumcolors = ["red", "blue", "orange", "green", "black", "purple", "pink"
 	"darkviolet"];
 var pluscolors = ["red", "blue", "orange", "green", "black", "purple", "pink", "yellow",
 	"hotpink", "indigo", "bronze", "cyan", "lightgreen"];
-var freecolors = ["red", "blue", "orange", "green", "black", "purple" "yellow"];
+var freecolors = ["red", "blue", "orange", "green", "black", "purple", "yellow"];
 
 function removeColorRoles(roles, user) {
 	deluxecolors.forEach((color) => {
