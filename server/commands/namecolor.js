@@ -30,43 +30,43 @@ module.exports = {
 	execute: (call) => {
 		let color = call.params.readParameter().toLowerCase();
 
-		if (call.message.member.roles.find("name", color)) {
-			removeColorRoles(call.message.guild.roles, call.message.member);
-		} else if (call.message.member.roles.find("name", "Bro Time Deluxe")) {
-			if (deluxecolors.includes(color)) {
-				let role = call.message.guild.roles.find("name", `${color}`);
-				removeColorRoles(call.message.guild.roles, call.message.member);
-				call.message.member.addRole(role);
-				success(call.message.channel, color);
+		if (!call.message.member.roles.find("name", color)) {
+			if (call.message.member.roles.find("name", "Bro Time Deluxe")) {
+				if (deluxecolors.includes(color)) {
+					let role = call.message.guild.roles.find("name", `${color}`);
+					removeColorRoles(call.message.guild.roles, call.message.member);
+					call.message.member.addRole(role);
+					success(call.message.channel, color);
+				} else {
+					error(call.message.channel);
+				}
+			} else if (call.message.member.roles.find("name", "Bro Time Premium")) {
+				if (premiumcolors.includes(color)) {
+					let role = call.message.guild.roles.find("name", `${color}`);
+					removeColorRoles(call.message.guild.roles, call.message.member);
+					call.message.member.addRole(role);
+					success(call.message.channel, color);
+				} else {
+					error(call.message.channel);
+				}
+			} else if (call.message.member.roles.find("name", "Bro Time Plus")) {
+				if (pluscolors.includes(color)) {
+					let role = call.message.guild.roles.find("name", `${color}`);
+					removeColorRoles(call.message.guild.roles, call.message.member);
+					call.message.member.addRole(role);
+					success(call.message.channel, color);
+				} else {
+					error(call.message.channel);
+				}
 			} else {
-				error(call.message.channel);
-			}
-		} else if (call.message.member.roles.find("name", "Bro Time Premium")) {
-			if (premiumcolors.includes(color)) {
-				let role = call.message.guild.roles.find("name", `${color}`);
-				removeColorRoles(call.message.guild.roles, call.message.member);
-				call.message.member.addRole(role);
-				success(call.message.channel, color);
-			} else {
-				error(call.message.channel);
-			}
-		} else if (call.message.member.roles.find("name", "Bro Time Plus")) {
-			if (pluscolors.includes(color)) {
-				let role = call.message.guild.roles.find("name", `${color}`);
-				removeColorRoles(call.message.guild.roles, call.message.member);
-				call.message.member.addRole(role);
-				success(call.message.channel, color);
-			} else {
-				error(call.message.channel);
-			}
-		} else {
-			if (freecolors.includes(color)) {
-				let role = call.message.guild.roles.find("name", `${color}`);
-				removeColorRoles(call.message.guild.roles, call.message.member);
-				call.message.member.addRole(role);
-				success(call.message.channel, color);
-			} else {
-				error(call.message.channel);
+				if (freecolors.includes(color)) {
+					let role = call.message.guild.roles.find("name", `${color}`);
+					removeColorRoles(call.message.guild.roles, call.message.member);
+					call.message.member.addRole(role);
+					success(call.message.channel, color);
+				} else {
+					error(call.message.channel);
+				}
 			}
 		}
 	}
