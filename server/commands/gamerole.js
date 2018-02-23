@@ -7,22 +7,20 @@ module.exports = {
 	id: "gamerole",
 	load: () => {},
 	execute: (call) => {
-		let game = call.params.readRaw();
+		let game = call.params.readRaw().toLowerCase();
 		if (game !== null) {
-			let game = game.toLowerCase();
 			if (games.includes(game)) {
 				if (call.message.member.roles.find("name", game)) {
 					call.message.member.removeRole(call.message.guild.roles.find("name", game));
-					call.message.channel.send(`Since you already had the \`${game}\` game role,
-					 it has been removed from you!`);
+					call.message.channel
+						.send(`Since you already had the \`${game}\` game role, it has been removed from you!`);
 				} else {
 					call.message.member.addRole(call.message.guild.roles.find("name", game));
 					call.message.channel.send(`Successfully given you the \`${game}\` game role!`);
 				}
 			} else {
-				call.message.channel.send(`${game} is not a valid game. A list of games can be found running
-				the MantaroBot command \`.gameroles\`. If it is a valid game and you would  like to see it
-				here in the near future, dm \`@ethanlaj#8805\`.`);
+				call.message.channel
+					.send(`\`${game}\` is not a valid game option.`);
 			}
 		} else {
 			call.message.channel.send("You didn't ask for any game role. \n Usage: `/gamerole (gamname)`");
