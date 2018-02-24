@@ -12,25 +12,26 @@ module.exports = {
 	id: "gamerole",
 	load: () => {},
 	execute: (call) => {
+		var gamerole;
 		if (ucfgames.includes(game)) {
-			var gamerole = game.charAt(0).toUpperCase() + game.slice(1);
+			gamerole = game.charAt(0).toUpperCase() + game.slice(1);
 		} else if (acgames.includes(game)) {
-			var gamerole = call.params.readRaw().toUpperCase();
+			gamerole = call.params.readRaw().toUpperCase();
 		} else if (wgames.includes(game)) {
 			if (game == "vrchat") {
-				var gamerole = "VRChat";
+				gamerole = "VRChat";
 			} else if (game == "clash of clans") {
-				var gamerole = "Clash of Clans";
+				gamerole = "Clash of Clans";
 			} else if (game == "clash royale") {
-				var gamerole = "Clash Royale";
+				gamerole = "Clash Royale";
 			} else if (game == "rocket league") {
-				var gamerole = "Rocket League";
+				gamerole = "Rocket League";
 			} else if (game == "hat in time") {
-				var gamerole = "Hat in Time";
+				gamerole = "Hat in Time";
 			} else if (game == "garry's mod"||game == "garry’s mod"||game == "garrys mod") {
-				var gamerole = "Garry's Mod";
+				gamerole = "Garry's Mod";
 			} else if (game == "call of duty") {
-				var gamerole = "Call of Duty";
+				gamerole = "Call of Duty";
 			}
 		}
 		let game = call.params.readRaw().toLowerCase();
