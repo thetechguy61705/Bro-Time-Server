@@ -34,7 +34,7 @@ module.exports = {
 				gamerole = "Call of Duty";
 			}
 		}
-		let game = call.params.readRaw().toLowerCase();
+		var game = call.params.readRaw().toLowerCase();
 		if (game !== null) {
 			if (games.includes(game)) {
 				if (call.message.member.roles.find("name", gamerole)) {
