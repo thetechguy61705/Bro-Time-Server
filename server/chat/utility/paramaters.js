@@ -58,7 +58,7 @@ class Paramaters {
 		}
 	}
 
-	readObject(objects, name = "name", mentions = /(.+)/, allowPartial = true) {
+	readObject(objects, name = "name", mentions = /(.+)/, allowPartial = true, filter = () => { return true; }) {
 		var param = this.readParameter().toLowerCase();
 		var mention = param.match(mentions);
 		if (mention !== null) {
@@ -66,34 +66,38 @@ class Paramaters {
 		}
 		// Check for objects by name.
 		var object = objects.find((candidate) => {
-			return candidate[name].toLowerCase() == param;
+			return candidate[name].toLowerCase() == param && filter(candidate);
 		});
 		if (object === null) {
 			// Check for objects by id.
 			var id = parseFloat(param);
 			if (!isNaN(id)) {
 				object = objects.get(id);
+				
+				if (object !== null && !filter(object)) {
+					object = null;
+				}
 			}
 		}
 		if (object === null && allowPartial) {
 			// Check for objects by partial name.
 			object = objects.find((candidate) => {
-				return candidate[name].toLowerCase().includes(param);
+				return candidate[name].toLowerCase().includes(param) && filter(candidate);
 			});
 		}
 		return object;
 	}
 
-	readUser(allowPartial = true) {
-		return this.readObject(this.client.users, "username", /<@!?(\d+)>/, allowPartial);
+	readUser(allowPartial = true, filter = () => { return true; }) {
+		return this.readObject(this.client.users, "username", /<@!?(\d+)>/, allowPartial, filter);
 	}
 
-	readRole(allowPartial = true) {
-		return this.readObject(this.guild.roles, "name", /<@&(\d+)>/, allowPartial);
+	readRole(allowPartial = true, filter = () => { return true; }) {
+		return this.readObject(this.guild.roles, "name", /<@&(\d+)>/, allowPartial, filter);
 	}
 
-	readChannel(allowPartial = true) {
-		return this.readObject(this.guild.channels, "name", /<#(\d+)>/, allowPartial);
+	readChannel(allowPartial = true, filter = () => { return true; }) {
+		return this.readObject(this.guild.channels, "name", /<#(\d+)>/, allowPartial, filter);
 	}
 }
 
