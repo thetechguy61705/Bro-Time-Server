@@ -12,29 +12,30 @@ module.exports = {
 	id: "gamerole",
 	load: () => {},
 	execute: (call) => {
+		if (ucfgames.includes(game)) {
+			var gamerole = game.charAt(0).toUpperCase() + game.slice(1);
+		} else if (acgames.includes(game)) {
+			var gamerole = call.params.readRaw().toUpperCase();
+		} else if (wgames.includes(game)) {
+			if (game == "vrchat") {
+				var gamerole = "VRChat";
+			} else if (game == "clash of clans") {
+				var gamerole = "Clash of Clans";
+			} else if (game == "clash royale") {
+				var gamerole = "Clash Royale";
+			} else if (game == "rocket league") {
+				var gamerole = "Rocket League";
+			} else if (game == "hat in time") {
+				var gamerole = "Hat in Time";
+			} else if (game == "garry's mod"||game == "garry’s mod"||game == "garrys mod") {
+				var gamerole = "Garry's Mod";
+			} else if (game == "call of duty") {
+				var gamerole = "Call of Duty";
+			}
+		}
 		let game = call.params.readRaw().toLowerCase();
 		if (game !== null) {
 			if (games.includes(game)) {
-				if (ucfgames.includes(game)) {
-					var gamerole = game.charAt(0).toUpperCase() + game.slice(1);
-				} else if (acgames.includes(game)) {
-					var gamerole = call.params.readRaw().toUpperCase();
-				} else if (wgames.includes(game)) {
-					if (game == "vrchat") {
-						var gamerole = "VRChat";
-					} else if (game == "clash of clans") {
-						var gamerole = "Clash of Clans";
-					} else if (game == "clash royale") {
-						var gamerole = "Clash Royale";
-					} else if (game == "rocket league") {
-						var gamerole = "Rocket League";
-					} else if (game == "hat in time") {
-						var gamerole = "Hat in Time";
-					} else if (game == "garry's mod"||game == "garry’s mod"||game == "garrys mod") {
-						var gamerole = "Garry's Mod";
-					} else if (game == "call of duty") {
-						var gamerole = "Call of Duty";
-					}
 				}
 				if (call.message.member.roles.find("name", gamerole)) {
 					call.message.member.removeRole(call.message.guild.roles.find("name", gamerole));
