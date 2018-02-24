@@ -36,7 +36,6 @@ module.exports = {
 		let game = call.params.readRaw().toLowerCase();
 		if (game !== null) {
 			if (games.includes(game)) {
-				}
 				if (call.message.member.roles.find("name", gamerole)) {
 					call.message.member.removeRole(call.message.guild.roles.find("name", gamerole));
 					call.message.channel
