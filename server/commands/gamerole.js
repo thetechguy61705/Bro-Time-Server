@@ -12,6 +12,7 @@ module.exports = {
 	id: "gamerole",
 	load: () => {},
 	execute: (call) => {
+		var game = call.params.readRaw().toLowerCase();
 		var gamerole;
 		if (ucfgames.includes(game)) {
 			gamerole = game.charAt(0).toUpperCase() + game.slice(1);
@@ -34,7 +35,6 @@ module.exports = {
 				gamerole = "Call of Duty";
 			}
 		}
-		var game = call.params.readRaw().toLowerCase();
 		if (game !== null) {
 			if (games.includes(game)) {
 				if (call.message.member.roles.find("name", gamerole)) {
