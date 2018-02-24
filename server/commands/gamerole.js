@@ -21,7 +21,7 @@ module.exports = {
 					var gamerole = call.params.readRaw().toUpperCase();
 				} else if (wgames.includes(game)) {
 					if (game == "vrchat") {
-            					var gamerole = "VRChat";
+						var gamerole = "VRChat";
 					} else if (game == "clash of clans") {
 						var gamerole = "Clash of Clans";
 					} else if (game == "clash royale") {
