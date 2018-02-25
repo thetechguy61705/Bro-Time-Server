@@ -7,23 +7,26 @@ module.exports = {
 	id: "gamerole",
 	load: () => {},
 	execute: (call) => {
-		let game = call.params.readRaw().toLowerCase();
-		if (game !== null) {
-			if (games.includes(game)) {
-				if (call.message.member.roles.find("name", game)) {
-					call.message.member.removeRole(call.message.guild.roles.find("name", game));
+		var role = call.params.readRole();
+		var game = role.name.toLowerCase();
+		if (games.includes(game)) {
+			if(call.message.member.roles.has(role.id)) {
+				call.message.member.removeRole(role).then(() => {
 					call.message.channel
 						.send(`Since you already had the \`${game}\` game role, it has been removed from you!`);
-				} else {
-					call.message.member.addRole(call.message.guild.roles.find("name", game));
-					call.message.channel.send(`Successfully given you the \`${game}\` game role!`);
-				}
+				}).catch(() => {
+					call.message.channel.send(`Unable to remove the \`${game}\` game role!`);
+				});
 			} else {
-				call.message.channel
-					.send(`\`${game}\` is not a valid game option.`);
+				call.message.member.addRole(role).then(() => {
+					call.message.channel.send(`Successfully given you the \`${game}\` game role!`);
+				}).catch(() => {
+					call.message.channel.send(`Unable to give you the \`${game}\` game role!`);
+				});
 			}
 		} else {
-			call.message.channel.send("You didn't ask for any game role. \n Usage: `/gamerole (gamname)`");
+			call.message.channel
+				.send(`\`${game} \` is not a valid game option.`);
 		}
 	}
 };
