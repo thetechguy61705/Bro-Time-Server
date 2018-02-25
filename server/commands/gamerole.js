@@ -20,7 +20,7 @@ module.exports = {
 				call.message.channel.send(`Successfully given you the \`${game}\` game role!`);
 			}
 		} else {
-				call.message.channel
+			call.message.channel
 				.send(`\`${game} \` is not a valid game option.`);
 		}
 	}
