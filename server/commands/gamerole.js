@@ -10,8 +10,7 @@ module.exports = {
 		let game = call.params.readRaw().toLowerCase();
 		if (games.includes(game)) {
 			var role = call.params.readRole();
-			var roleid = role.toString().substr(3).slice(0, -1);
-			if(call.message.member.roles.has(roleid)) {
+			if(call.message.member.roles.has(role.id)) {
 				call.message.member.removeRole(role);
 				call.message.channel
 					.send(`Since you already had the \`${game}\` game role, it has been removed from you!`);
