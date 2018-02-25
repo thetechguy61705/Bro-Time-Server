@@ -2,7 +2,7 @@ module.exports = {
 	id: "ping",
 	load: () => {},
 	execute: (call) => {
-		var delay = Math.max(Date.now() - call.message.createdTimestamp, 0);
+		var delay = call.client.ping;
 		var diag;
 		if (delay <= 0) {
 			diag = "impossible";
