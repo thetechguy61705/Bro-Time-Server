@@ -1,12 +1,14 @@
+var joinableroles = ["[F] QOTD", "[F] ANN", "[F] GW"];
+
 module.exports = {
 	id: "freerole",
 	load: () => {},
 	execute: (call) => {
-		var finput = call.params.readRaw();
+		var finput = "[F] "+call.params.readRaw().toUpperCase();
 		var role = call.params.readRole(true, (candidate) => { return candidate.name.startsWith("[F] "); });
-		if (role !== null) {
+		if (joinableroles.includes(finput)) {
 			finput = role.name;
-			if(call.message.member.roles.has(role.id)) {
+			if (call.message.member.roles.has(role.id)) {
 				call.message.member.removeRole(role).then(() => {
 					call.message.channel.send(`Successfully removed the \`${finput}\` free role from you.`);
 				}).catch(() => {
@@ -20,7 +22,7 @@ module.exports = {
 				});
 			}
 		} else {
-			call.message.channel.send(`\`${finput} \` is not a valid freerole option`);
+			call.message.channel.send(`\`${call.params.readRaw();} \` is not a valid freerole option`);
 		}
 	}
 };
