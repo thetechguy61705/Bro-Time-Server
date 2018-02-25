@@ -7,16 +7,22 @@ module.exports = {
 	id: "gamerole",
 	load: () => {},
 	execute: (call) => {
-		let game = call.params.readRaw().toLowerCase();
+		var role = call.params.readRole();
+		var game = role.name.toLowerCase();
 		if (games.includes(game)) {
-			var role = call.params.readRole();
 			if(call.message.member.roles.has(role.id)) {
-				call.message.member.removeRole(role);
-				call.message.channel
-					.send(`Since you already had the \`${game}\` game role, it has been removed from you!`);
+				call.message.member.removeRole(role).then(() => {
+					call.message.channel
+						.send(`Since you already had the \`${game}\` game role, it has been removed from you!`);
+				}).catch(() => {
+					call.message.channel.send(`Unable to remove the \`${game}\` game role!`);
+				});
 			} else {
-				call.message.member.addRole(role);
-				call.message.channel.send(`Successfully given you the \`${game}\` game role!`);
+				call.message.member.addRole(role).then(() => {
+					call.message.channel.send(`Successfully given you the \`${game}\` game role!`);
+				}).catch(() => {
+					call.message.channel.send(`Unable to give you the \`${game}\` game role!`);
+				});
 			}
 		} else {
 			call.message.channel
