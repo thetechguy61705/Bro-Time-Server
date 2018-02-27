@@ -1,4 +1,4 @@
-async function awaitReply(message, question, limit = 60000){
+async function aR(message, question, limit = 60000){
 	const filter = m => m.author.id === message.author.id;
 	await message.channel.send(question);
 	try {
@@ -10,12 +10,12 @@ async function awaitReply(message, question, limit = 60000){
 }
 
 async function makerole(message, digit) {
-	const n = await awaitReply(message, "Please specify the name of your role.", 60000);
+	const n = await aR(message, "Please specify the name of your role.", 60000);
 	if (n == "cancel") return message.channel.send("**Cancelled Prompt.**");
 	if (n.length > 62) {
 		message.channel.send("Length of role is too long. Max length is 62 characters");
 	} else {
-		const c = await awaitReply(message, "Please specify the hex color of your role.", 60000);
+		const c = await aR(message, "Please specify the hex color of your role.", 60000);
 		if (c == "cancel") return message.channel.send("**Cancelled Prompt.**");
 		var color = c;
 		var ishex  = /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(`${c}`);
@@ -46,17 +46,17 @@ async function makerole(message, digit) {
 }
 
 async function deleterole(message) {
-	const dc = await awaitReply(message, "Which color role do you want to remove (first digit of role name)?", 60000);
+	const dc = await aR(message, "Which color role do you want to remove (first digit of role name)?", 60000);
 	if (dc == "cancel") return message.channel.send("**Canceled Prompt.**");
 	if (!isNaN(dc)) {
 		if (dc <= 5 && dc >= 1) {
-			const n = await awaitReply(message, "Please recite the name of the color role (only the custom name part)", 60000);
+			const n = await aR(message, "What is the custom role name?", 60000);
 			if (n == "cancel") return message.channel.send("**Canceled Prompt.**");
 			let rolename = `${dc}${message.author.id} ${n}`;
 			if (message.guild.roles.find("name", rolename)) {
-				const approval = await awaitReply(message, "Are you sure you would like to delete this custom role?", 60000);
-				if (approval == "cancel") return message.channel.send("**Canceled Prompt.**");
-				if (approval.toLowerCase() == "yes") {
+				const yesno = await aR(message, "Are you sure you want to delete this custom role?", 60000);
+				if (yesno == "cancel") return message.channel.send("**Canceled Prompt.**");
+				if (yesno.toLowerCase() == "yes") {
 					let role = message.guild.roles.find(r=> r.name.toLowerCase() === rolename.toLowerCase());
 					role.delete();
 					let role1 = message.guild.roles.find("name", `${dc}`);
@@ -82,7 +82,7 @@ module.exports = {
 	load: () => {},
 	execute: async (call) => {
 		var input1 = call.params.readRaw().toLowerCase();
-		const c = await awaitReply(call.message, "Would you like to create a custom color role, or delete one?", 60000);
+		const c = await aR(call.message, "Would you like to create a custom color role, or delete one?", 60000);
 		var choice = c.toLowerCase();
 		if (choice == "cancel") return call.message.channel.send("**Canceled Prompt.**");
 		if (choice=="create"||choice=="add"||choice=="make") {
