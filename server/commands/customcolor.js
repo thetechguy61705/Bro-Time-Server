@@ -1,29 +1,29 @@
 async function awaitReply(message, question, limit = 60000){
-    const filter = m => m.author.id === message.author.id;
-    await message.channel.send(question);
-    try {
-      const collected = await message.channel.awaitMessages(filter, { max: 1, time: limit, errors: ['time'] });
-      return collected.first().content;
-    } catch (error) {
-      console.log(error)
-      return false;
-    }
-  }
+	const filter = m => m.author.id === message.author.id;
+	await message.channel.send(question);
+	try {
+		const collected = await message.channel.awaitMessages(filter, { max: 1, time: limit, errors: ["time"] });
+		return collected.first().content;
+	} catch (error) {
+		console.log(error)
+		return false;
+	}
+}
 
 async function makerole(message, digit) {
 	const n = await awaitReply(message, "Please specify the name of your role.", 60000);
 	if (n == "cancel") return message.channel.send("**Cancelled Prompt.**");
 	if (n.length > 62) {
-		message.channel.send("Length of role is too long. Max length is 62 characters")
+		message.channel.send("Length of role is too long. Max length is 62 characters");
 	} else {
 		const c = await awaitReply(message, "Please specify the hex color of your role.", 60000);
 		if (c == "cancel") return message.channel.send("**Cancelled Prompt.**");
-		var color = c
-		var ishex  = /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(`${c}`)
-		var ishextag = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(`${c}`)
+		var color = c;
+		var ishex  = /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(`${c}`);
+		var ishextag = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(`${c}`);
 		if (ishex == true||ishextag == true) {
 			if (ishex = true) {
-				color = "#"+color
+				color = "#"+color;
 			}
 			message.guild.createRole({
 				name: `${digit}${message.author.id} ${n}`,
@@ -53,26 +53,26 @@ async function deleterole(message) {
 		if (dc <= 5 && dc >= 1) {
 			if (message.member.roles.has(`${dc}`)) {
 				message.channel
-				.send(`You already have the token role (${dc}), therefore you do not have a custom role under ${dc}`)
+				.send(`You already have the token role (${dc}), therefore you do not have a custom role under ${dc}`);
 			} else {
 				const n = await awaitReply(message, "Please recite the name of the color role (only the custom name part)", 60000);
 				if (n == "cancel") return message.channel.send("**Canceled Prompt.**");
-				let rolename = `${dc}${message.author.id} ${n}`
+				let rolename = `${dc}${message.author.id} ${n}`;
 				if (message.guild.roles.find("name", rolename)) {
 					const approval = await awaitReply(message, "Are you sure you would like to delete this custom role?", 60000);
 					if (approval == "cancel") return message.channel.send("**Canceled Prompt.**");
 					if (approval.toLowerCase() == "yes") {
 						let role = message.guild.roles.find(r=> r.name.toLowerCase() === rolename.toLowerCase());
-						role.delete()
-						let role1 = message.guild.roles.find("name", `${dc}`)
+						role.delete();
+						let role1 = message.guild.roles.find("name", `${dc}`);
 						message.member.addRole(role1);
 						message.channel
-						.send(`Successfully deleted the custom color role! \`${rolename}\``)
+						.send(`Successfully deleted the custom color role! \`${rolename}\``);
 					} else {
 						message.channel.send("Assuming you didn't mean to say yes, I cancelled the prompt.");
 					}
 				} else {
-					message.channel.send("Could not find that role.")
+					message.channel.send("Could not find that role.");
 				}
 			}
 		} else {
@@ -93,20 +93,20 @@ module.exports = {
 		if (choice == "cancel") return call.message.channel.send("**Canceled Prompt.**");
 		if (choice=="create"||choice=="add"||choice=="make") {
 			if (call.message.member.roles.find("name", "1")) {
-				makerole(call.message, 1)
+				makerole(call.message, 1);
 			} else if (call.message.member.roles.find("name", "2")) {
-				makerole(call.message, 2)
+				makerole(call.message, 2);
 			} else if (call.message.member.roles.find("name", "3")) {
-				makerole(call.message, 3)
+				makerole(call.message, 3);
 			} else if (call.message.member.roles.find("name", "4")) {
-				makerole(call.message, 4)
+				makerole(call.message, 4);
 			} else if (call.message.member.roles.find("name", "5")) {
-				makerole(call.message, 5)
+				makerole(call.message, 5);
 			} else {
-				call.message.channel.send("You do not have any remaining custom roles.")
+				call.message.channel.send("You do not have any remaining custom roles.");
 			}
 		} else if (choice=="remove"||chice=="rem"||input1=="delete"||input1=="del") {
-			deleterole(call.message)
+			deleterole(call.message);
 		}
 	}
 };
