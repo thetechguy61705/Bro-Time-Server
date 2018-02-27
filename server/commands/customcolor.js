@@ -21,7 +21,7 @@ async function makerole(message, digit) {
 		var ishex  = /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(`${c}`);
 		var ishextag = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(`${c}`);
 		if (ishex == true||ishextag == true) {
-			if (ishex = true) {
+			if (ishex) {
 				color = "#"+color;
 			}
 			message.guild.createRole({
