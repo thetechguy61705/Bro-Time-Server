@@ -50,29 +50,24 @@ async function deleterole(message) {
 	if (dc == "cancel") return message.channel.send("**Canceled Prompt.**");
 	if (!isNaN(dc)) {
 		if (dc <= 5 && dc >= 1) {
-			if (message.member.roles.has(`${dc}`)) {
-				message.channel
-					.send(`You already have the token role (${dc}), therefore you do not have a custom role under ${dc}`);
-			} else {
-				const n = await awaitReply(message, "Please recite the name of the color role (only the custom name part)", 60000);
-				if (n == "cancel") return message.channel.send("**Canceled Prompt.**");
-				let rolename = `${dc}${message.author.id} ${n}`;
-				if (message.guild.roles.find("name", rolename)) {
-					const approval = await awaitReply(message, "Are you sure you would like to delete this custom role?", 60000);
-					if (approval == "cancel") return message.channel.send("**Canceled Prompt.**");
-					if (approval.toLowerCase() == "yes") {
-						let role = message.guild.roles.find(r=> r.name.toLowerCase() === rolename.toLowerCase());
-						role.delete();
-						let role1 = message.guild.roles.find("name", `${dc}`);
-						message.member.addRole(role1);
-						message.channel
-							.send(`Successfully deleted the custom color role! \`${rolename}\``);
-					} else {
-						message.channel.send("Assuming you didn't mean to say yes, I cancelled the prompt.");
-					}
+			const n = await awaitReply(message, "Please recite the name of the color role (only the custom name part)", 60000);
+			if (n == "cancel") return message.channel.send("**Canceled Prompt.**");
+			let rolename = `${dc}${message.author.id} ${n}`;
+			if (message.guild.roles.find("name", rolename)) {
+				const approval = await awaitReply(message, "Are you sure you would like to delete this custom role?", 60000);
+				if (approval == "cancel") return message.channel.send("**Canceled Prompt.**");
+				if (approval.toLowerCase() == "yes") {
+					let role = message.guild.roles.find(r=> r.name.toLowerCase() === rolename.toLowerCase());
+					role.delete();
+					let role1 = message.guild.roles.find("name", `${dc}`);
+					message.member.addRole(role1);
+					message.channel
+						.send(`Successfully deleted the custom color role! \`${rolename}\``);
 				} else {
-					message.channel.send("Could not find that role.");
+					message.channel.send("Assuming you didn't mean to say yes, I cancelled the prompt.");
 				}
+			} else {
+				message.channel.send("Could not find that role.");
 			}
 		} else {
 			message.channel.send(`\`${dc} \` must be a number between 1 - 5.`);
