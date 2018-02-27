@@ -35,7 +35,7 @@ async function makerole(message, digit) {
 				message.member.removeRole(message.guild.roles.find("name", `${digit}`));
 				message.member.addRole(role);
 				message.channel
-				.send(`Successfully created the role and given you it! To remove the role say \`/customcolor remove ${digit}\``);
+					.send(`Successfully created the role! To remove the role say \`/customcolor remove ${digit}\``);
 			}).catch(() => {
 				message.channel.send("🤖 Something went wrong and I could not make the role! 🤖");
 			});
@@ -46,7 +46,7 @@ async function makerole(message, digit) {
 }
 
 async function deleterole(message) {
-	const dc = await awaitReply(message, "Which color role would you like to remove (first digit of role name)?", 60000);
+	const dc = await awaitReply(message, "Which color role do you want to remove (first digit of role name)?", 60000);
 	if (dc == "cancel") return message.channel.send("**Canceled Prompt.**");
 	if (!isNaN(dc)) {
 		if (dc <= 5 && dc >= 1) {
