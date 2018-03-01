@@ -32,19 +32,21 @@ module.exports = {
 		if (call.message.member.roles.has("380900721828298753")) {
 			const game = await awaitReply(call.message, "what is the game you want to host on?", 60000);
 			if (game == "cancel") return call.message.channel.send("**Canceled Prompt.**");
+			var gamerole;
 			if (games.includes(game)) {
-				var gamerole = call.message.guild.roles.find(r=> r.name.toLowerCase() === game.toLowerCase());
+				gamerole = call.message.guild.roles.find(r=> r.name.toLowerCase() === game.toLowerCase());
 			} else {
-				var gamerole = game;
+				gamerole = game;
 			}
 			const link = await awaitReply(call.message, "what is the link of your game? If none respond with `none`.", 60000);
 			if (link == "cancel") return call.message.channel.send("**Canceled Prompt.**");
 			var islink = isURL(link);
 			if (islink || link.toLowerCase() == "none") {
+				var varlink;
 				if (link.toLowerCase() == "none") {
 					var varlink = "`none`";
 				} else {
-					var varlink = link;
+					varlink = link;
 				}
 				const other = await awaitReply(call.message, "any other information you would like to add about your hosting?", 60000);
 				if (other == "cancel") return call.message.channel.send("**Canceled Prompt.**");
