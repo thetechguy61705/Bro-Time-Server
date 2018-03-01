@@ -57,10 +57,10 @@ module.exports = {
 					gamerole.setMentionable(false);
 				}
 			} else {
-				call.message.channel.send(`Error: invalid link: \`${link}\``)
+				call.message.channel.send(`Error: invalid link: \`${link}\``);
 			}
 		} else {
-			call.message.channel.send("Error: missing role: `Game Night Host`")
+			call.message.channel.send("Error: missing role: `Game Night Host`");
 		}
 	}
 };
