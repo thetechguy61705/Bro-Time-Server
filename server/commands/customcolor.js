@@ -10,7 +10,7 @@ async function awaitReply(message, question, limit = 60000){
 }
 
 async function makerole(message, digit) {
-	var cancel = "\n Say `cancel` to cancel prompt."
+	var cancel = "\n Say `cancel` to cancel prompt.";
 	const name = await awaitReply(message, "Please specify the name of your role."+cancel, 60000);
 	if (name == "cancel") return message.channel.send("**Cancelled Prompt.**");
 	if (name.length > 99-message.author.id.length) {
@@ -27,7 +27,7 @@ async function makerole(message, digit) {
 			}
 			message.guild.createRole({
 				name: `${digit}${message.author.id} ${name}`,
-				color: color,
+				color: c,
 			}).then(() => {
 				let rolename = `${digit}${message.author.id} ${name}`;
 				let role = message.guild.roles.find(r=> r.name.toLowerCase() === rolename.toLowerCase());
@@ -47,7 +47,7 @@ async function makerole(message, digit) {
 }
 
 async function deleterole(message) {
-	var cancel = "\n Say `cancel` to cancel prompt."
+	var cancel = "\n Say `cancel` to cancel prompt.";
 	const digitchoice = await awaitReply(message, "Which color role do you want to remove (first digit of role name)?"+cancel, 60000);
 	if (digitchoice == "cancel") return message.channel.send("**Canceled Prompt.**");
 	if (!isNaN(digitchoice)) {
@@ -121,7 +121,7 @@ module.exports = {
 			} else if (choice=="remove"||choice=="rem"||choice=="delete"||choice=="del") {
 				deleterole(call.message);
 			} else {
-				message.channel.send("Invalid choice. Please rerun the command and choose either `create` or `delete`.")
+				call.message.channel.send("Invalid choice. Please rerun the command and choose either `create` or `delete`.");
 			}
 		}
 	}
