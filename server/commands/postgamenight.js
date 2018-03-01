@@ -46,13 +46,13 @@ module.exports = {
 				} else {
 					var varlink = link;
 				}
-				const other = await awaitReply(call.message, `any other information you would like to add about your hosting?`, 60000);
-				if (other == "cancel") return message.channel.send("**Canceled Prompt.**");
+				const other = await awaitReply(call.message, "any other information you would like to add about your hosting?", 60000);
+				if (other == "cancel") return call.message.channel.send("**Canceled Prompt.**");
 				let annchannel = call.message.guild.channels.find("name", "announcements");
 				if (games.includes(game)) {
 					gamerole.setMentionable(true);
 				}
-				annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other}\`\n*Posted by ${call.message.author}*`)
+				annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other}\`\n*Posted by ${call.message.author}*`);
 				if (games.includes(game)) {
 					gamerole.setMentionable(false);
 				}
