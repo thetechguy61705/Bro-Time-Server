@@ -44,7 +44,7 @@ module.exports = {
 			if (islink || link.toLowerCase() == "none") {
 				var varlink;
 				if (link.toLowerCase() == "none") {
-					var varlink = "`none`";
+					varlink = "`none`";
 				} else {
 					varlink = link;
 				}
