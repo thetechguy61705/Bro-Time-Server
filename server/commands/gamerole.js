@@ -23,7 +23,7 @@ module.exports = {
 				});
 			} else {
 				call.message.member.addRole(role).then(() => {
-					call.message..reply(`successfully given you the \`${rawinput}\` game role!`);
+					call.message.reply(`successfully given you the \`${rawinput}\` game role!`);
 				}).catch(() => {
 					call.message.reply(`unable to give you the \`${rawinput}\` game role!`);
 				});
