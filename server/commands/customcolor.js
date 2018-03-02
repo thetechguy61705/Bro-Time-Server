@@ -1,6 +1,6 @@
 async function awaitReply(message, question, limit = 60000){
 	const filter = m => m.author.id === message.author.id;
-	await message.channel.reply(question);
+	await message.reply(question);
 	try {
 		const collected = await message.channel.awaitMessages(filter, { max: 1, time: limit, errors: ["time"] });
 		return collected.first().content;
@@ -14,7 +14,7 @@ async function makerole(message, digit) {
 	const name = await awaitReply(message, "Please specify the name of your role."+cancel, 60000);
 	if (name == "cancel") return message.channel.send("**Cancelled Prompt.**");
 	if (name.length > 99-message.author.id.length) {
-		message.channel.send(`the length of the role is too long. Max length is ${99-message.author.id.length} characters`);
+		message.reply(`the length of the role is too long. Max length is ${99-message.author.id.length} characters`);
 	} else {
 		const color = await awaitReply(message, "please specify the hex color of your role. Example `#ff0000` or `ff0000`"+cancel, 60000);
 		if (color == "cancel") return message.channel.send("**Cancelled Prompt.**");
@@ -35,13 +35,12 @@ async function makerole(message, digit) {
 				message.guild.setRolePosition(role, goldpos+1, false);
 				message.member.removeRole(message.guild.roles.find("name", `${digit}`));
 				message.member.addRole(role);
-				message.channel
-					.send(`Successfully created the role! To remove the role say \`/customcolor remove\` then \`${digit}\``);
+				message.reply(`successfully created the role! To remove the role say \`/customcolor remove\` then \`${digit}\``);
 			}).catch(() => {
-				message.channel.send("🤖 Something went wrong and I could not make the role! 🤖");
+				message.reply("something went wrong and I could not make the role! ");
 			});
 		} else {
-			message.channel.send("Invalid hex code. Hex code example `#ff0000` or `ff0000`.");
+			message.reply("invalid hex code. Hex code example `#ff0000` or `ff0000`.");
 		}
 	}
 }
@@ -63,19 +62,18 @@ async function deleterole(message) {
 					role.delete();
 					let role1 = message.guild.roles.find("name", `${digitchoice}`);
 					message.member.addRole(role1);
-					message.channel
-						.send(`Successfully deleted the custom color role! \`${rolename}\``);
+					message.reply(`successfully deleted the custom color role! \`${rolename}\``);
 				} else {
-					message.channel.send("Assuming you didn't mean to say yes, I cancelled the prompt.");
+					message.reply("assuming you didn't mean to say yes, I cancelled the prompt.");
 				}
 			} else {
-				message.channel.send("Could not find that role.");
+				message.reply("I could not find that role.");
 			}
 		} else {
-			message.channel.send(`\`${digitchoice} \` must be a number between 1 - 5.`);
+			message.reply(`\`${digitchoice} \` must be a number between 1 - 5.`);
 		}
 	} else {
-		message.channel.send(`\`${digitchoice} \` is not a number.`);
+		message.reply(`\`${digitchoice} \` is not a number.`);
 	}
 }
 
@@ -121,7 +119,7 @@ module.exports = {
 			} else if (choice=="remove"||choice=="rem"||choice=="delete"||choice=="del") {
 				deleterole(call.message);
 			} else {
-				call.message.channel.send("Invalid choice. Please rerun the command and choose either `create` or `delete`.");
+				call.message.reply("invalid choice. Please rerun the command and choose either `create` or `delete`.");
 			}
 		}
 	}
