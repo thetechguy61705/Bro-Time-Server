@@ -52,7 +52,7 @@ async function deleterole(message) {
 	if (digitchoice == "cancel") return message.channel.send("**Canceled Prompt.**");
 	if (!isNaN(digitchoice)) {
 		if (digitchoice <= 5 && digitchoice >= 1) {
-			const name = await awaitReply(message, "what is the custom role name? (only the custom part)"+cancel, 60000);
+			const name = await awaitReply(message, "what is the custom role name (only the custom part)?"+cancel, 60000);
 			if (name == "cancel") return message.channel.send("**Canceled Prompt.**");
 			let rolename = `${digitchoice}${message.author.id} ${name}`;
 			if (message.guild.roles.find("name", rolename)) {
