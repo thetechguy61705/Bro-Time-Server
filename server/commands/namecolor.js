@@ -21,46 +21,46 @@ module.exports = {
 	id: "namecolor",
 	load: () => {},
 	execute: (call) => {
-		let color = call.params.readRaw().toLowerCase();
+		let rawinput = call.params.readRaw();
 		let role = call.params.readRole();
-		if (allroles.includes(color)) {
+		if (allroles.includes(rawinput.toLowerCase())) {
 			if (call.message.member.roles.find("name", "Bro Time Deluxe")) {
 				call.message.member.addRole(role);
 				removeColorRoles(call.message.guild.roles, call.message.member);
 				call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`);
 			} else if (call.message.member.roles.find("name", "Bro Time Premium")) {
-				if (premiumcolors.includes(color)||pluscolors.includes(color)||freecolors.includes(color)) {
+				if (premiumcolors.includes(rawinput.toLowerCase())||pluscolors.includes(rawinput.toLowerCase())||freecolors.includes(rawinput.toLowerCase())) {
 					call.message.member.addRole(role);
 					removeColorRoles(call.message.guild.roles, call.message.member);
 					call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`);
-				} else if (deluxecolors.includes(color)) {
+				} else if (deluxecolors.includes(rawinput.toLowerCase())) {
 					call.message.channel.send(`\`${role.name}\` is a deluxe only color. Your plan is premium.`);
 				}
 			} else if (call.message.member.roles.find("name", "Bro Time Plus")) {
-				if (pluscolors.includes(color)||freecolors.includes(color)) {
+				if (pluscolors.includes(rawinput.toLowerCase())||freecolors.includes(rawinput.toLowerCase())) {
 					call.message.member.addRole(role);
 					removeColorRoles(call.message.guild.roles, call.message.member);
 					call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`);
-				} else if (premiumcolors.includes(color)) {
+				} else if (premiumcolors.includes(rawinput.toLowerCase())) {
 					call.message.channel.send(`\`${role.name}\` is a premium and up color. Your plan is plus.`);
-				} else if (deluxecolors.includes(color)) {
+				} else if (deluxecolors.includes(rawinput.toLowerCase())) {
 					call.message.channel.send(`\`${role.name}\` is a deluxe only color. Your plan is plus.`);
 				}
 			} else {
-				if (freecolors.includes(color)) {
+				if (freecolors.includes(rawinput.toLowerCase())) {
 					call.message.member.addRole(role);
 					removeColorRoles(call.message.guild.roles, call.message.member);
 					call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`);
-				} else if (pluscolors.includes(color)) {
+				} else if (pluscolors.includes(rawinput.toLowerCase())) {
 					call.message.channel.send(`\`${role.name}\` is a plus and up color. Your plan is free.`);
-				} else if (premiumcolors.includes(color)) {
+				} else if (premiumcolors.includes(rawinput.toLowerCase())) {
 					call.message.channel.send(`\`${role.name}\` is a premium and up color. Your plan is free.`);
-				} else if (deluxecolors.includes(color)) {
+				} else if (deluxecolors.includes(rawinput.toLowerCase())) {
 					call.message.channel.send(`\`${role.name}\` is a deluxe only color. Your plan is free.`);
 				}
 			}
 		} else {
-			call.message.channel.send(`\`${color} \` is not a valid color role. Make sure it contains no spaces.`);
+			call.message.channel.send(`\`${rawinput} \` is not a valid color role. Make sure it contains no spaces.`);
 		}
 	}
 };
