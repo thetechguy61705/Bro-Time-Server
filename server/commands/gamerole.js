@@ -14,20 +14,20 @@ module.exports = {
 			if (call.message.member.roles.has(role.id)) {
 				call.message.member.removeRole(role).then(() => {
 					call.message.channel
-						.send(`Since you already had the \`${rawinput}\` game role, it has been removed from you!`);
+						.reply(`since you already had the \`${rawinput}\` game role, it has been removed from you!`);
 				}).catch(() => {
-					call.message.channel.send(`Unable to remove the \`${rawinput}\` game role!`);
+					call.message.channel.reply(`unable to remove the \`${rawinput}\` game role!`);
 				});
 			} else {
 				call.message.member.addRole(role).then(() => {
 					call.message.channel.send(`Successfully given you the \`${rawinput}\` game role!`);
 				}).catch(() => {
-					call.message.channel.send(`Unable to give you the \`${rawinput}\` game role!`);
+					call.message.channel.reply(`unable to give you the \`${rawinput}\` game role!`);
 				});
 			}
 		} else {
 			call.message.channel
-				.send(`\`${rawinput} \` is not a valid game option.`);
+				.reply(`\`${rawinput} \` is not a valid game option.`);
 		}
 	}
 };
