@@ -32,7 +32,7 @@ class Paramaters {
 		var pattern = new RegExp(`[^${SPACE}]+`, "y");
 		pattern.lastIndex = this.index;
 		var match = this.raw.match(pattern);
-		if (match !== null) {
+		if (match !== null && match !== undefined) {
 			this.index += match[0].length;
 			return match[0];
 		}
