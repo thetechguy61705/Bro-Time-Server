@@ -22,44 +22,52 @@ class Paramaters {
 	readSeparator() {
 		this.sep.lastIndex = this.index;
 		var match = this.raw.match(this.sep);
+		var value;
 		if (match !== null) {
 			this.index += match[0].length;
-			return match[0];
+			value = match[0];
 		}
+		return value || null;
 	}
 
 	readParameter() {
 		var pattern = new RegExp(`[^${SPACE}]+`, "y");
 		pattern.lastIndex = this.index;
 		var match = this.raw.match(pattern);
+		var value;
 		if (match !== null) {
 			this.index += match[0].length;
-			return match[0];
+			value = match[0];
 		}
+		return value || null;
 	}
 
 	readWord(classes) {
 		var pattern = new RegExp(`[${classes}a-zA-Z]+`, "y");
 		pattern.lastIndex = this.index;
 		var match = this.raw.match(pattern);
+		var value;
 		if (match !== null) {
 			this.index += match[0].length;
-			return match[0];
+			value = match[0];
 		}
+		return value || null;
 	}
 
 	readNumber() {
 		var param = this.readParameter();
+		var value;
 		if (param !== null) {
 			var number = parseFloat(param);
 			if (!isNaN(number)) {
-				return number;
+				value = number;
 			}
 		}
+		return value || null;
 	}
 
 	readObject(objects, name = "name", mentions = /(.+)/, allowPartial = true, filter = () => { return true; }) {
-		var param = this.readParameter().toLowerCase();
+		var param = (this.readParameter() || "").toLowerCase();
 		var mention = param.match(mentions);
 		if (mention !== null) {
 			param = mention[1];
@@ -85,7 +93,7 @@ class Paramaters {
 				return candidate[name].toLowerCase().includes(param) && filter(candidate);
 			});
 		}
-		return object;
+		return object || null;
 	}
 
 	readUser(allowPartial = true, filter = () => { return true; }) {
