@@ -1,4 +1,4 @@
-var ua = require('universal-analytics');
+var ua = require("universal-analytics");
 var { Collection } = require("discord.js");
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
 		function getVisit(id) {
 			return visitors.get(id) || ua(settings.TRACKING, {https: true, uid: id}).debug(process.env.NODE_ENV !== "production");
 		}
-		
+
 		client.on("guildMemberAdd", (member) => {
 			visitors.set(member.id, getVisit(member.id));
 		});
@@ -20,7 +20,7 @@ module.exports = {
 					visitors.delete(visit);
 			});
 		});
-		
+
 		client.on("message", (message) => {
 			getVisit(message.author.id).event("Message", "Post", message.guild.name, 0, {qt: Math.max(message.createdTimestamp - Date.now(), 0)});
 		});
