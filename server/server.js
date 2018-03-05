@@ -34,14 +34,15 @@ fs.readdirSync(__dirname + "/areaLoad").forEach(file => {
 	if (match !== null)
 		areaLoaders.push(require("./areaLoad/" + match[1]));
 });
-config.TOKENS.forEach(token => {
+for (let token in config.BOTS) {
+	let settings = config.BOTS[token];
 	let client = new discord.Client();
 	let loadedAreas = new discord.Collection();
 
 	client.on("ready", () => {
 		console.log("Loading " + client.user.username);
 		loaders.forEach(loader => {
-			loader.exec(client);
+			loader.exec(client, settings);
 		});
 		console.log("Finished loading " + client.user.username);
 	});
@@ -82,4 +83,4 @@ config.TOKENS.forEach(token => {
 	process.on("SIGTERM", async () => {
 		await client.destroy();
 	});
-});
+}
