@@ -7,6 +7,28 @@ var util = require("util");
 var prefixPattern = "^(%s)";
 var data = {};
 
+class Call {
+	constructor(commands, message, client, params) {
+		this.commands = commands;
+		this.message = message;
+		this.client = client;
+		this.params = params;
+	}
+
+	requestInput(settings) {
+		return new Promise((resolve, reject) => {
+			this.commands._requests.set(this.message.author.id, {resolve: resolve, reject: reject, settings: settings});
+		}.bind(this));
+	}
+
+	denyInput(author = this.message.author) {
+		if (this.commands._requests.has(author.id)) {
+			this.commands._requests.get(author.id).reject();
+			this.commands._requests.delete(author.id);
+		}
+	}
+}
+
 fs.readdirSync(__dirname + "/../commands").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
 	if (match !== null) {
@@ -32,7 +54,7 @@ function load(command) {
 }
 
 module.exports = {
-	_steps: new Collection();
+	_requests: new Collection(),
 
 	exec: function(message, client) {
 		var used = false;
@@ -57,14 +79,11 @@ module.exports = {
 				var data = load(command);
 				if (data.canAccess(message)) {
 					params.readSeparator();
-					command.execute({message: message, client: client, params: params});
+					command.execute(new Call(this, message, client, params));
 					used = true;
 				}
 			}
 		}
 		return used;
-	},
-	requestInput(call, settings) {
-		return new Promise(() => {}.bind(this));
 	}
 };
