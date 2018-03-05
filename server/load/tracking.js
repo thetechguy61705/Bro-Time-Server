@@ -5,7 +5,11 @@ module.exports = {
 	exec: (client, settings) => {
 		var visitors = new Collection();
 		function getVisit(id) {
-			return visitors.get(id) || ua(settings.TRACKING, {https: true, uid: id}).debug(process.env.NODE_ENV !== "production");
+			return visitors.get(id) || ua(settings.TRACKING, {
+				https: true,
+				ds: client.user.username,
+				uid: id
+			}).debug(process.env.NODE_ENV !== "production");
 		}
 
 		client.on("guildMemberAdd", (member) => {
