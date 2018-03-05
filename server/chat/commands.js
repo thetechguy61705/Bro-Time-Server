@@ -1,5 +1,5 @@
 var modules = {};
-var { MessageMentions } = require("discord.js");
+var { Collection, MessageMentions } = require("discord.js");
 var Parameters = require("./utility/paramaters");
 var { CommandAccess } = require("./../../data/server");
 var fs = require("fs");
@@ -32,7 +32,10 @@ function load(command) {
 }
 
 module.exports = {
+	_steps: new Collection();
+
 	exec: function(message, client) {
+		var used = false;
 		var prefix = message.content.match(new RegExp(util.format(prefixPattern,
 			message.data.prefix), "i"));
 		var using;
@@ -55,8 +58,13 @@ module.exports = {
 				if (data.canAccess(message)) {
 					params.readSeparator();
 					command.execute({message: message, client: client, params: params});
+					used = true;
 				}
 			}
 		}
+		return used;
+	},
+	requestInput(call, settings) {
+		return new Promise(() => {}.bind(this));
 	}
 };
