@@ -16,9 +16,9 @@ class Call {
 	}
 
 	requestInput(settings) {
-		return new Promise((resolve, reject) => {
+		return new Promise(((resolve, reject) => {
 			this.commands._requests.set(this.message.author.id, {resolve: resolve, reject: reject, settings: settings});
-		}.bind(this));
+		}).bind(this));
 	}
 
 	denyInput(author = this.message.author) {
