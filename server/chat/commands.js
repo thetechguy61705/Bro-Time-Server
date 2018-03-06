@@ -26,8 +26,10 @@ fs.readdirSync(__dirname + "/../commands").forEach(file => {
 
 function load(command) {
 	var commandData = data[command.id];
-	if (commandData === undefined)
+	if (commandData === undefined) {
 		commandData = new CommandAccess(command);
+		commandData.load();
+	}
 	return commandData;
 }
 

@@ -44,16 +44,13 @@ class CommandAccess extends DataAccess {
 	}
 
 	load() {
+		this._command.load(this);
 		super.load();
 	}
 
 	canAccess() {
 		// message
 		return true;
-	}
-
-	get nonGuildAllowed() {
-
 	}
 }
 
