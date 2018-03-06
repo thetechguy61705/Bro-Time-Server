@@ -16,6 +16,7 @@ class Call {
 	}
 
 	requestInput(settings) {
+		settings = settings|MULTISTEP_DEFAULTS;
 		return new Promise(((resolve, reject) => {
 			this.commands._requests.set(this.message.author.id, {
 				resolve: resolve,
@@ -62,6 +63,7 @@ function load(command) {
 }
 
 module.exports = {
+	MULTISTEP_DEFAULTS: 0,
 	ANYONE: 0x00000001,
 
 	_requests: new Collection(),
