@@ -17,7 +17,13 @@ class Call {
 
 	requestInput(settings) {
 		return new Promise(((resolve, reject) => {
-			this.commands._requests.set(this.message.author.id, {resolve: resolve, reject: reject, settings: settings});
+			this.commands._requests.set(this.message.author.id, {
+				resolve: resolve,
+				reject: reject,
+				settings: settings,
+				author: this.message.author.id,
+				channel: this.message.channel.id
+			});
 		}).bind(this));
 	}
 
@@ -56,33 +62,47 @@ function load(command) {
 }
 
 module.exports = {
+	ANYONE: 0x00000001,
+
 	_requests: new Collection(),
 
 	exec: function(message, client) {
 		var used = false;
-		var prefix = message.content.match(new RegExp(util.format(prefixPattern,
-			message.data.prefix), "i"));
-		var using;
-		if (prefix !== null) {
-			using = true;
-		} else {
-			prefix = message.content.match("^" + MessageMentions.USERS_PATTERN.source);
-			using = prefix !== null &&
-				message.mentions.users.size === 1 &&
-				message.mentions.users.first().id == client.user.id;
+		var requests = this._requests.filter((request) => request.channel === message.channel.id);
+		var request = null;
+		if (requests.has(message.author.id)) {
+			request = requests.get(message.author.id);
+		} else if (requests.some((request) => request.settings&this.ANYONE !== 0)) {
+			request = requests.find((request) => request.settings&this.ANYONE !== 0);
 		}
-		if (using) {
-			var params = new Parameters(message);
-			params.offset(prefix[0].length);
-			params.readSeparator();
-			var command = modules[params.readParameter()];
+		if (request !== null) {
+			request.resolve(new Call(this, message, client, new Parameters(message)));
+			this._requests.delete(request.author);
+		} else {
+			var prefix = message.content.match(new RegExp(util.format(prefixPattern,
+				message.data.prefix), "i"));
+			var using;
+			if (prefix !== null) {
+				using = true;
+			} else {
+				prefix = message.content.match("^" + MessageMentions.USERS_PATTERN.source);
+				using = prefix !== null &&
+					message.mentions.users.size === 1 &&
+					message.mentions.users.first().id == client.user.id;
+			}
+			if (using) {
+				var params = new Parameters(message);
+				params.offset(prefix[0].length);
+				params.readSeparator();
+				var command = modules[params.readParameter()];
 
-			if (command !== undefined) {
-				var data = load(command);
-				if (data.canAccess(message)) {
-					params.readSeparator();
-					command.execute(new Call(this, message, client, params));
-					used = true;
+				if (command !== undefined) {
+					var data = load(command);
+					if (data.canAccess(message)) {
+						params.readSeparator();
+						command.execute(new Call(this, message, client, params));
+						used = true;
+					}
 				}
 			}
 		}
