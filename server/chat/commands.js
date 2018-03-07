@@ -96,20 +96,25 @@ module.exports = {
 				using = prefix !== null &&
 					message.mentions.users.size === 1 &&
 					message.mentions.users.first().id == client.user.id;
-			}
-			if (using) {
+			} if (using) {
 				var params = new Parameters(message);
 				params.offset(prefix[0].length);
 				params.readSeparator();
-				var command = modules[params.readParameter()];
+				var id = params.readParameter();
+				try {
+					var command = modules[id];
 
-				if (command !== undefined) {
-					var data = load(command);
-					if (data.canAccess(message)) {
-						params.readSeparator();
-						command.execute(new Call(this, message, client, params));
-						used = true;
+					if (command !== undefined) {
+						var data = load(command);
+						if (data.canAccess(message)) {
+							params.readSeparator();
+							command.execute(new Call(this, message, client, params));
+							used = true;
+						}
 					}
+				} catch (error) {
+					console.warn(`The ${id} command failed to execute: {$error}`);
+					message.channel.send("The ${id} command failed to load.");
 				}
 			}
 		}

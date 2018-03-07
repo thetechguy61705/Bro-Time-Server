@@ -57,8 +57,12 @@ for (let token in config.BOTS) {
 				message.data = area.data;
 				// Process the message.
 				for (var i = 0; i < chatHandlers.length; i++) {
-					if (chatHandlers[i].exec(message, client))
-						break;
+					try {
+						if (chatHandlers[i].exec(message, client))
+							break;
+					} catch (error) {
+						console.warn("A chat handler failed to execute: ", error);
+					}
 				}
 			};
 			// Load area data.
