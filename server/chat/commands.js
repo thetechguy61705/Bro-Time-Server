@@ -7,6 +7,8 @@ var util = require("util");
 var prefixPattern = "^(%s)";
 var data = {};
 
+const TESTING = process.env.NODE_ENV !== "production";
+
 class Call {
 	constructor(commands, message, client, params) {
 		this.commands = commands;
@@ -42,7 +44,9 @@ fs.readdirSync(__dirname + "/../commands").forEach(file => {
 	if (match !== null) {
 		new Promise((resolve, reject) => {
 			try {
-				resolve(require("../commands/" + match[1]));
+				var module = require("../commands/" + match[1]);
+				if (TESTING || module.test !== true)
+					resolve(module);
 			} catch (exc) {
 				reject(exc);
 			}
