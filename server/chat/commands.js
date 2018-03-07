@@ -18,9 +18,9 @@ class Call {
 	}
 
 	requestInput(settings) {
-		settings = settings|MULTISTEP_DEFAULTS;
+		settings = settings|this.commands.MULTISTEP_DEFAULTS;
 		return new Promise(((resolve, reject) => {
-			denyInput();
+			this.denyInput();
 			this.commands._requests.set(this.message.author.id, {
 				resolve: resolve,
 				reject: reject,
