@@ -17,7 +17,7 @@ class Call {
 		this.params = params;
 	}
 
-	requestInput(settings) {
+	requestInput(settings = 0) {
 		settings = settings|this.commands.MULTISTEP_DEFAULTS;
 		return new Promise(((resolve, reject) => {
 			this.denyInput();
