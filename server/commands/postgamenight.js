@@ -53,9 +53,14 @@ module.exports = {
 				if (other == "cancel") return call.message.channel.send("**Canceled Prompt.**");
 				let annchannel = call.message.guild.channels.find("name", "announcements");
 				if (games.includes(game)) {
-					gamerole.setMentionable(true);
+					gamerole.setMentionable(true).then(() => {
++						annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other}\`\n*Posted by ${call.message.author}*`);
++					}).catch(() => {
++						call.message.channel.send("Something went wrong and I couldn't toggle the role mentionability.);
++					});
+				} else {
+					annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other}\`\n*Posted by ${call.message.author}*`);	
 				}
-				annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other}\`\n*Posted by ${call.message.author}*`);
 				if (games.includes(game)) {
 					gamerole.setMentionable(false);
 				}
