@@ -59,7 +59,7 @@ module.exports = {
 						call.message.channel.send("Something went wrong and I couldn't toggle the role mentionability.");
 					});
 				} else {
-					annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other}\`\n*Posted by ${call.message.author}*`);	
+					annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other}\`\n*Posted by ${call.message.author}*`);
 				}
 				if (games.includes(game)) {
 					gamerole.setMentionable(false);
