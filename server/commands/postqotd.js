@@ -10,7 +10,7 @@ module.exports = {
 				ann.send(`<@&387375439745908747>: **${qotd}**\n*Posted by ${call.message.author}*`);
 				qotdrole.setMentionable(false);
 			}).catch(() => {
-				call.message.channel.send("Something went wrong and I couldn't send the QoTD);
+				call.message.channel.send("Something went wrong and I couldn't send the QoTD");
 			});
 
 		}
