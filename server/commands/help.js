@@ -1,5 +1,5 @@
 module.exports = {
-	id: "freerole",
+	id: "help",
 	load: () => {},
 	execute: (call) => {
 		var pfx = call.message.data.prefix
