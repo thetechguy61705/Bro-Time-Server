@@ -23,7 +23,8 @@ module.exports = {
 				.setColor(0x00AE86)
 				.setFooter(`Run by ${call.message.author.username}`, `${call.message.author.avatarURL}`)
 				.addField("Information Commands", `**${pfx}help [command]** - ${help}\n**${pfx}ping** - ${ping}`)
-				.addField("Role Commands", `**${pfx}freerole (ANN/GW/QOTD)** - ${freerole}\n**${pfx}gamerole (game)** - ${gamerole}\n**${pfx}namecolor (color)** ${namecolor}`)
+				.addField("Role Commands", `**${pfx}freerole (ANN/GW/QOTD)** - \
+					${freerole}\n**${pfx}gamerole (game)** - ${gamerole}\n**${pfx}namecolor (color)** ${namecolor}`)
 				.addField("Event Posting Commands", `**${pfx}postqotd (qotd)** - ${postqotd}\n**${pfx}postgamenight** - ${postgamenight}`)
 				.addField("Utility Commands", `**${pfx}mt (role)** - ${mt}`)
 				.addField("Donator Commands", `**${pfx}customcolor** - ${customcolor}`);
