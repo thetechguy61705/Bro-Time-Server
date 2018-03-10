@@ -1,7 +1,8 @@
-const Discord = require("discord.js");
-
-module.exports.run = async (bot, message, args) => {
-  var pfx = call.message.data.prefix
+module.exports = {
+	id: "freerole",
+	load: () => {},
+	execute: (call) => {
+		var pfx = call.message.data.prefix
   var param1 = call.params
   var help = "Returns information and commands on the bot.";
   var ping = "Returns the response time of the bot in milliseconds.";
@@ -71,7 +72,5 @@ module.exports.run = async (bot, message, args) => {
       .setColor(0x00AE86)
   }
   message.channel.send({embed: helpembed})
-}
-module.exports.help = {
-  name: "help"
-}
+	}
+};
