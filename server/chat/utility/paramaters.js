@@ -1,5 +1,5 @@
 var SPACE = "\\s,";
-var QUOTES = "\"'"
+var QUOTES = "\"'";
 
 class Paramaters {
 	constructor(message) {
