@@ -32,7 +32,7 @@ class Paramaters {
 	}
 
 	readParameter() {
-		var pattern = new RegExp(`([${QUOTES}]).*?\1|[^${SPACE}]+`, "y");
+		var pattern = new RegExp(`([${QUOTES}]).*?\\1|[^${SPACE}]+`, "y");
 		pattern.lastIndex = this.index;
 		var match = this.raw.match(pattern);
 		var value;
