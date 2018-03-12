@@ -10,8 +10,9 @@ var data = {};
 const TESTING = process.env.NODE_ENV !== "production";
 
 class Call {
-	constructor(commands, message, client, params) {
+	constructor(commands, name, message, client, params) {
 		this.commands = commands;
+		this.name = name;
 		this.message = message;
 		this.client = client;
 		this.params = params;
@@ -100,15 +101,15 @@ module.exports = {
 				var params = new Parameters(message);
 				params.offset(prefix[0].length);
 				params.readSeparator();
-				var id = params.readParameter();
+				var name = params.readParameter();
 				try {
-					var command = modules[id.toLowerCase()];
+					var command = modules[name.toLowerCase()] || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
 
 					if (command !== undefined) {
 						var data = load(command);
 						if (data.canAccess(message)) {
 							params.readSeparator();
-							command.execute(new Call(this, message, client, params));
+							command.execute(new Call(this, name, message, client, params));
 							used = true;
 						}
 					}
