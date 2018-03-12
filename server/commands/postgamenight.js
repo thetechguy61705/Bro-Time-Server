@@ -31,7 +31,7 @@ module.exports = {
 	load: () => {},
 	execute: async (call) => {
 		if (call.message.member.roles.has("380900721828298753")) {
-			const game = await awaitReply(call.message, "what is the game you want to host on?", 60000);
+			const game = await awaitReply(call.message, "What is the game you want to host on?", 60000);
 			if (game == "cancel") return call.message.channel.send("**Canceled Prompt.**");
 			var gamerole;
 			if (games.includes(game)) {
@@ -39,7 +39,7 @@ module.exports = {
 			} else {
 				gamerole = game;
 			}
-			const link = await awaitReply(call.message, "what is the link of your game? If none respond with `none`.", 60000);
+			const link = await awaitReply(call.message, "What is the link of your game? If none respond with `none`.", 60000);
 			if (link == "cancel") return call.message.channel.send("**Canceled Prompt.**");
 			var islink = isURL(link);
 			if (islink || link.toLowerCase() == "none") {
@@ -49,13 +49,18 @@ module.exports = {
 				} else {
 					varlink = link;
 				}
-				const other = await awaitReply(call.message, "any other information you would like to add about your hosting?", 60000);
+				const other = await awaitReply(call.message, "Any other information? If none respond with `none`.", 60000);
 				if (other == "cancel") return call.message.channel.send("**Canceled Prompt.**");
 				let annchannel = call.message.guild.channels.find("name", "announcements");
 				if (games.includes(game)) {
-					gamerole.setMentionable(true);
+					gamerole.setMentionable(true).then(() => {
+						annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other}\`\n*Posted by ${call.message.author}*`);
+					}).catch(() => {
+						call.message.channel.send("Something went wrong and I couldn't toggle the role mentionability.");
+					});
+				} else {
+					annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other}\`\n*Posted by ${call.message.author}*`);
 				}
-				annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other}\`\n*Posted by ${call.message.author}*`);
 				if (games.includes(game)) {
 					gamerole.setMentionable(false);
 				}
