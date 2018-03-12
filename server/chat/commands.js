@@ -102,7 +102,7 @@ module.exports = {
 				params.readSeparator();
 				var id = params.readParameter();
 				try {
-					var command = modules[id];
+					var command = modules[id.toLowerCase()];
 
 					if (command !== undefined) {
 						var data = load(command);
