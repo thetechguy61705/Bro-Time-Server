@@ -114,8 +114,8 @@ module.exports = {
 						}
 					}
 				} catch (error) {
-					console.warn(`The ${id} command failed to execute: {$error}`);
-					message.channel.send("The ${id} command failed to load.");
+					console.warn(`The ${name} command failed to execute: {$error}`);
+					message.channel.send(`The ${name} command failed to load.`);
 				}
 			}
 		}
