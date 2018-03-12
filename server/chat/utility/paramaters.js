@@ -1,4 +1,5 @@
 var SPACE = "\\s,";
+var QUOTES = "\"'"
 
 class Paramaters {
 	constructor(message) {
@@ -31,13 +32,15 @@ class Paramaters {
 	}
 
 	readParameter() {
-		var pattern = new RegExp(`[^${SPACE}]+`, "y");
+		var pattern = new RegExp(`([${QUOTES}]).*?\1|[^${SPACE}]+`, "y");
 		pattern.lastIndex = this.index;
 		var match = this.raw.match(pattern);
 		var value;
-		if (match !== null) {
-			this.index += match[0].length;
+		if (match != null) {
 			value = match[0];
+			this.index += value.length;
+			if (value.length > 1)
+				value.replace(new RegExp(`^[${QUOTES}]|[${QUOTES}]$`), "");
 		}
 		return value || null;
 	}
@@ -48,8 +51,8 @@ class Paramaters {
 		var match = this.raw.match(pattern);
 		var value;
 		if (match !== null) {
-			this.index += match[0].length;
 			value = match[0];
+			this.index += value.length;
 		}
 		return value || null;
 	}
