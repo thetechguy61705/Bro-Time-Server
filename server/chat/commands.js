@@ -102,20 +102,22 @@ module.exports = {
 				params.offset(prefix[0].length);
 				params.readSeparator();
 				var name = params.readParameter();
-				try {
-					var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
-
-					if (command != null) {
-						var data = load(command);
-						if (data.canAccess(message)) {
-							params.readSeparator();
-							command.execute(new Call(this, name, message, client, params));
-							used = true;
+				if (name != null) {
+					try {
+						var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
+	
+						if (command != null) {
+							var data = load(command);
+							if (data.canAccess(message)) {
+								params.readSeparator();
+								command.execute(new Call(this, name, message, client, params));
+								used = true;
+							}
 						}
+					} catch (error) {
+						console.warn(`The ${name} command failed to execute: ${error}`);
+						message.channel.send(`The ${name} command failed to load.`);
 					}
-				} catch (error) {
-					console.warn(`The ${name} command failed to execute: ${error}`);
-					message.channel.send(`The ${name} command failed to load.`);
 				}
 			}
 		}
