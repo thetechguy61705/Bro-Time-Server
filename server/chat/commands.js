@@ -105,7 +105,7 @@ module.exports = {
 				if (name != null) {
 					try {
 						var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
-	
+
 						if (command != null) {
 							var data = load(command);
 							if (data.canAccess(message)) {
