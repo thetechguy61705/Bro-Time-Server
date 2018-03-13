@@ -1,5 +1,5 @@
-var modules = {};
 var { Collection, MessageMentions } = require("discord.js");
+var modules = new Collection();
 var Parameters = require("./utility/paramaters");
 var { CommandAccess } = require("./../../data/server");
 var fs = require("fs");
@@ -52,7 +52,7 @@ fs.readdirSync(__dirname + "/../commands").forEach(file => {
 				reject(exc);
 			}
 		}).then(module => {
-			modules[module.id] = module;
+			modules.set(module.id, module);
 		}, exc => {
 			console.warn("A command failed to load: %s (reason: %s)", match[1], exc);
 		});
@@ -103,9 +103,9 @@ module.exports = {
 				params.readSeparator();
 				var name = params.readParameter();
 				try {
-					var command = modules[name.toLowerCase()] || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
+					var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
 
-					if (command !== undefined) {
+					if (command != null) {
 						var data = load(command);
 						if (data.canAccess(message)) {
 							params.readSeparator();
@@ -114,7 +114,7 @@ module.exports = {
 						}
 					}
 				} catch (error) {
-					console.warn(`The ${name} command failed to execute: {$error}`);
+					console.warn(`The ${name} command failed to execute: ${error}`);
 					message.channel.send(`The ${name} command failed to load.`);
 				}
 			}
