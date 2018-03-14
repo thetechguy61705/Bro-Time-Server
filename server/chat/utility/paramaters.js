@@ -3,13 +3,22 @@ var QUOTES = "\"'";
 
 class Paramaters {
 	constructor(message) {
-		this.sep = new RegExp(`[${SPACE}]+`, "y");
+		this.sep = new RegExp(`[${SPACE}]`, "y");
+		this.sepGreedy = new RegExp(`[${SPACE}]+`, "y");
+		this.param = new RegExp(`([${QUOTES}]).*?\\1|[^${SPACE}]+`, "y");
+		this.paramGreedy = new RegExp(`([${QUOTES}]).*?\\1|[^${QUOTES}]+`, "y");
 		this.raw = message.content;
 		// Store the client for user access.
 		this.client = message.client;
 		// Store the guild for role access.
 		this.guild = message.guild;
 		this.index = 0;
+	}
+
+	static normalizeParam(str) {
+		if (str.length > 1)
+			str.trim().replace(new RegExp(`^[${QUOTES}]|[${QUOTES}]$`), "");
+		return str;
 	}
 
 	offset(offset) {
@@ -20,9 +29,9 @@ class Paramaters {
 		return this.raw.substring(this.index);
 	}
 
-	readSeparator() {
+	readSeparator(greedy = true) {
 		this.sep.lastIndex = this.index;
-		var match = this.raw.match(this.sep);
+		var match = this.raw.match(greedy ? this.sepGreedy : this.sep);
 		var value;
 		if (match !== null) {
 			this.index += match[0].length;
@@ -31,16 +40,15 @@ class Paramaters {
 		return value || null;
 	}
 
-	readParameter() {
-		var pattern = new RegExp(`([${QUOTES}]).*?\\1|[^${SPACE}]+`, "y");
+	readParameter(greedy = false) {
+		var pattern = greedy ? this.paramGreedy : this.param;
 		pattern.lastIndex = this.index;
 		var match = this.raw.match(pattern);
 		var value;
 		if (match != null) {
 			value = match[0];
 			this.index += value.length;
-			if (value.length > 1)
-				value.replace(new RegExp(`^[${QUOTES}]|[${QUOTES}]$`), "");
+			value = this.normalizeParam(str);
 		}
 		return value || null;
 	}
@@ -70,6 +78,7 @@ class Paramaters {
 	}
 
 	readObject(objects, name = "name", mentions = /(.+)/, allowPartial = true, filter = () => { return true; }) {
+		// TODO: Implement greedy object matching.
 		var param = (this.readParameter() || "").toLowerCase();
 		var mention = param.match(mentions);
 		if (mention !== null) {
