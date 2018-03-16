@@ -48,7 +48,7 @@ class Paramaters {
 		if (match != null) {
 			value = match[0];
 			this.index += value.length;
-			value = this.normalizeParam(value);
+			value = Paramaters.normalizeParam(value);
 		}
 		return value || null;
 	}
