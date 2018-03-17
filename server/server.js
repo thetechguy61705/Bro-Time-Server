@@ -35,56 +35,60 @@ fs.readdirSync(__dirname + "/areaLoad").forEach(file => {
 		areaLoaders.push(require("./areaLoad/" + match[1]));
 });
 for (let token in config.BOTS) {
-	let settings = config.BOTS[token];
-	let client = new discord.Client();
-	let loadedAreas = new discord.Collection();
+	if (token !== "undefined") {
+		let settings = config.BOTS[token];
+		let client = new discord.Client();
+		let loadedAreas = new discord.Collection();
 
-	client.on("ready", () => {
-		console.log("Loading " + client.user.username);
-		loaders.forEach(loader => {
-			loader.exec(client, settings);
+		client.on("ready", () => {
+			console.log("Loading " + client.user.username);
+			loaders.forEach(loader => {
+				loader.exec(client, settings);
+			});
+			console.log("Finished loading " + client.user.username);
 		});
-		console.log("Finished loading " + client.user.username);
-	});
 
-	client.on("message", message => {
-		if (!message.author.bot) {
-			var area = message.channel.guild || message.channel;
-			var isServer = !(area instanceof discord.Channel);
-			var task = () => {
-				if (isServer)
-					loadedAreas.set(area.id, true);
-				message.data = area.data;
-				// Process the message.
-				for (var i = 0; i < chatHandlers.length; i++) {
-					try {
-						if (chatHandlers[i].exec(message, client))
-							break;
-					} catch (error) {
-						console.warn("A chat handler failed to execute: ", error);
-					}
-				}
-			};
-			// Load area data.
-			if (!isServer || !loadedAreas.has(area.id)) {
-				let promises = [];
-				for (var i = 0; i < areaLoaders.length; i++)
-					promises.push(areaLoaders[i].exec(area, client));
-				Promise.all(promises).then(task).catch((error) => {
-					console.warn("Unable to load area:", error);
-					message.reply("Unable to load. Retry in a few seconds.");
+		client.on("message", message => {
+			if (!message.author.bot) {
+				var area = message.channel.guild || message.channel;
+				var isServer = !(area instanceof discord.Channel);
+				var task = () => {
 					if (isServer)
-						loadedAreas.delete(area.id);
-				});
-			} else {
-				task();
+						loadedAreas.set(area.id, true);
+					message.data = area.data;
+					// Process the message.
+					for (var i = 0; i < chatHandlers.length; i++) {
+						try {
+							if (chatHandlers[i].exec(message, client))
+								break;
+						} catch (error) {
+							console.warn("A chat handler failed to execute: ", error);
+						}
+					}
+				};
+				// Load area data.
+				if (!isServer || !loadedAreas.has(area.id)) {
+					let promises = [];
+					for (var i = 0; i < areaLoaders.length; i++)
+						promises.push(areaLoaders[i].exec(area, client));
+					Promise.all(promises).then(task).catch((error) => {
+						console.warn("Unable to load area:", error);
+						message.reply("Unable to load. Retry in a few seconds.");
+						if (isServer)
+							loadedAreas.delete(area.id);
+					});
+				} else {
+					task();
+				}
 			}
-		}
-	});
+		});
 
-	client.login(token);
+		client.login(token);
 
-	process.on("SIGTERM", async () => {
-		await client.destroy();
-	});
+		process.on("SIGTERM", async () => {
+			await client.destroy();
+		});
+	} else {
+		console.log("Skipped missing token.");
+	}
 }
