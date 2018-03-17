@@ -31,6 +31,7 @@ class Paramaters {
 
 	readSeparator(greedy = true) {
 		this.sep.lastIndex = this.index;
+		this.sepGreedy.lastIndex = this.index;
 		var match = this.raw.match(greedy ? this.sepGreedy : this.sep);
 		var value;
 		if (match !== null) {
@@ -49,8 +50,8 @@ class Paramaters {
 			value = match[0];
 			this.index += value.length;
 			value = Paramaters.normalizeParam(value);
+			this.readSeparator();
 		}
-		this.readSeparator();
 		return value || null;
 	}
 
