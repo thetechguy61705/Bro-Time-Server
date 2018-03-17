@@ -50,6 +50,7 @@ class Paramaters {
 			this.index += value.length;
 			value = Paramaters.normalizeParam(value);
 		}
+		this.readSeparator();
 		return value || null;
 	}
 
