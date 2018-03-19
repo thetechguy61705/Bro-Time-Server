@@ -16,8 +16,9 @@ module.exports = {
 			if (param == "cancel") {
 				cancel = true;
 				param = null;
-			} else if (param !== null && typeof call.commands[param] === "number")
+			} else if (param != null && typeof call.commands[param] === "number") {
 				settings = settings|call.commands[param];
+			}
 		} while (param !== null);
 
 		if (cancel) {

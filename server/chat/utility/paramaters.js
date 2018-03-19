@@ -55,7 +55,7 @@ class Paramaters {
 		return value || null;
 	}
 
-	readWord(classes) {
+	readWord(classes = "") {
 		var pattern = new RegExp(`[${classes}a-zA-Z]+`, "y");
 		pattern.lastIndex = this.index;
 		var match = this.raw.match(pattern);
