@@ -7,13 +7,18 @@ module.exports = {
 	id: "gamerole",
 	load: () => {},
 	execute: (call) => {
-		var role = call.params.readRole();
-		var game = role.name.toLowerCase();
-		if (games.includes(game)) {
-			if(call.message.member.roles.has(role.id)) {
+		var rawinput = call.params.readRaw();
+		if (rawinput === "") return call.message.reply("You must specify a gamerole!");
+		var game = games.find(function(g) {
+			return g.toLowerCase().startsWith(rawinput.toLowerCase());
+		});
+		if (game !== undefined) {
+			game = game[0];
+			var role = call.message.guild.roles.find("name", game);
+			game = role.name.toLowerCase();
+			if (call.message.member.roles.has(role.id)) {
 				call.message.member.removeRole(role).then(() => {
-					call.message.channel
-						.send(`Since you already had the \`${game}\` game role, it has been removed from you!`);
+					call.message.channel.send(`Since you already had the \`${game}\` game role, it has been removed from you!`);
 				}).catch(() => {
 					call.message.channel.send(`Unable to remove the \`${game}\` game role!`);
 				});
@@ -25,8 +30,7 @@ module.exports = {
 				});
 			}
 		} else {
-			call.message.channel
-				.send(`\`${game} \` is not a valid game option.`);
+			call.message.channel.send(`\`${rawinput} \` is not a valid game option.`);
 		}
 	}
 };
