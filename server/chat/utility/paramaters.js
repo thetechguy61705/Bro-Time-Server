@@ -80,33 +80,32 @@ class Paramaters {
 	}
 
 	readObject(objects, name = "name", mentions = /(.+)/, allowPartial = true, filter = () => { return true; }) {
-		// TODO: Implement greedy object matching.
-		var param = (this.readParameter() || "").toLowerCase();
+		var param = (this.readParameter(true) || "").toLowerCase();
 		var mention = param.match(mentions);
+		var object;
+		var gap = Infinity;
 		if (mention !== null) {
 			param = mention[1];
 		}
-		// Check for objects by name.
-		var object = objects.find((candidate) => {
-			return candidate[name].toLowerCase() == param && filter(candidate);
-		});
-		if (object === null) {
-			// Check for objects by id.
-			var id = parseFloat(param);
-			if (!isNaN(id)) {
-				object = objects.get(id);
-
-				if (object !== null && !filter(object)) {
-					object = null;
+		objects = objects.filter(filter);
+		var id = parseFloat(param);
+		
+		if (!isNaN(id)) {
+			object = object.get(id);
+		} else {
+			objects.forEach((candidate) => {
+				if (candidate[name].toLowerCase().includes(param)) {
+					// Calculate the gap between the match.
+					var newGap = candidate[name].length - param.length;
+					// Only allow smaller gaps or if partial results are allowed, no gap.
+					if (newGap < gap && (allowPartial || gap === 0)) {
+						object = candidate;
+						gap = newGap
+					}
 				}
-			}
-		}
-		if (object === null && allowPartial) {
-			// Check for objects by partial name.
-			object = objects.find((candidate) => {
-				return candidate[name].toLowerCase().includes(param) && filter(candidate);
 			});
 		}
+		
 		return object || null;
 	}
 
