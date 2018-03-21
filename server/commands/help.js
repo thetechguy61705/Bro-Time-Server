@@ -16,7 +16,7 @@ module.exports = {
 		var customcolor = "Allows the user to create their own role, with a custom name and color.";
 		var mt = "Toggles the mentionability of a role.";
 		var helpembed;
-		if (param1 == null) {
+		if (param1 == null || param1 == undefined || param1 == "") {
 			helpembed = new Discord.RichEmbed()
 				.setTitle("Commands")
 				.setDescription("Hey! I'm Bro Bot. My developers stride to keep Bro Time as simple (and fun) as possible.")
