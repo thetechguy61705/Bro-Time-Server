@@ -7,7 +7,7 @@ module.exports = {
 		var pfx = call.message.data.prefix;
 		var param1 = call.params.readRaw();
 		var help = "Returns information and commands on the bot.";
-		var ping = "Returns the response time of the bot in milliseconds.";
+		var ping = "Returns the response time of the bot in milliseconds, as well as a diagnostic.";
 		var freerole = "Gives the user the specified role if it is QOTD, ANN or GW.";
 		var gamerole = "Gives the user the specified role if it is a part of .gameroles.";
 		var namecolor = "Gives the user the specified role if it is a part of .colors.";
@@ -15,6 +15,7 @@ module.exports = {
 		var postgamenight = "Posts the specified \"Gamenight\" in <#330920609435353090>.";
 		var customcolor = "Allows the user to create their own role, with a custom name and color.";
 		var mt = "Toggles the mentionability of a role.";
+		var roleCommands = `\`${pfx}freerole (freerole)\` - ${freerole}\n\`${pfx}gamerole (game)\` - ${gamerole}\n\`${pfx}namecolor (color)\` - ${namecolor}`;
 		var helpembed;
 		if (param1 == null || param1 == undefined || param1 == "") {
 			helpembed = new Discord.RichEmbed()
@@ -22,10 +23,9 @@ module.exports = {
 				.setDescription("Hey! I'm Bro Bot. My developers stride to keep Bro Time as simple (and fun) as possible.")
 				.setColor(0x00AE86)
 				.setFooter(`Run by ${call.message.author.username}`, `${call.message.author.avatarURL}`)
-				.addField("Information Commands", `**${pfx}help [command]** - ${help}\n**${pfx}ping** - ${ping}`)
-				.addField("Role Commands", `**${pfx}freerole (ANN/GW/QOTD)** - \
-					${freerole}\n**${pfx}gamerole (game)** - ${gamerole}\n**${pfx}namecolor (color)** ${namecolor}`)
-				.addField("Event Posting Commands", `**${pfx}postqotd (qotd)** - ${postqotd}\n**${pfx}postgamenight** - ${postgamenight}`)
+				.addField("Information Commands", `\`${pfx}help [command]\` - ${help}\n\`${pfx}ping\` - ${ping}`)
+				.addField("Role Commands", roleCommands)
+				.addField("Event Posting Commands", `\`${pfx}postqotd (qotd)\` - ${postqotd}\n\`${pfx}postgamenight\` - ${postgamenight}`)
 				.addField("Utility Commands", `**${pfx}mt (role)** - ${mt}`)
 				.addField("Donator Commands", `**${pfx}customcolor** - ${customcolor}`);
 		} else if (param1.toLowerCase() == "help") {
