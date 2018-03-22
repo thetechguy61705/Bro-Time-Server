@@ -2,6 +2,7 @@ var { Collection, MessageMentions } = require("discord.js");
 var modules = new Collection();
 var Parameters = require("./utility/paramaters");
 var { CommandAccess } = require("./../../data/server");
+var report = require("./../report");
 var fs = require("fs");
 var util = require("util");
 var prefixPattern = "^(%s)";
@@ -54,7 +55,7 @@ fs.readdirSync(__dirname + "/../commands").forEach(file => {
 		}).then(module => {
 			modules.set(module.id, module);
 		}, exc => {
-			console.warn("A command failed to load: %s (reason: %s)", match[1], exc);
+			report("A command failed to load: ${match[1]} (reason: ${exc})");
 		});
 	}
 });
@@ -115,7 +116,7 @@ module.exports = {
 							}
 						}
 					} catch (error) {
-						console.warn(`The ${name} command failed to execute: ${error}`);
+						report(`The ${name} command failed to execute: ${error}`);
 						message.channel.send(`The ${name} command failed to load.`);
 					}
 				}
