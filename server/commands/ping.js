@@ -19,6 +19,6 @@ module.exports = {
 		} else {
 			diag = "worse than dial up";
 		}
-		call.message.channel.send(`Pong! Recieved in \`${delay}ms\``);
+		call.message.channel.send(`Pong \`${delay}ms: ${diag}\`!`);
 	}
 };
