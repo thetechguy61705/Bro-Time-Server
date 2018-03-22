@@ -1,5 +1,5 @@
 module.exports = {
-	id: "freerole",
+	id: "ad",
 	load: () => {},
 	execute: (call) => {
 		var choice = call.params.readRaw();
