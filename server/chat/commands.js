@@ -55,7 +55,7 @@ fs.readdirSync(__dirname + "/../commands").forEach(file => {
 		}).then(module => {
 			modules.set(module.id, module);
 		}, exc => {
-			report("A command failed to load: ${match[1]} (reason: ${exc})");
+			report(exc, {tags: {category: "commands", action: "load", item: match[1]}});
 		});
 	}
 });
@@ -115,8 +115,8 @@ module.exports = {
 								used = true;
 							}
 						}
-					} catch (error) {
-						report(`The ${name} command failed to execute: ${error}`);
+					} catch (exc) {
+						report(exc, {tags: {category: "commands", action: "execute", item: name}});
 						message.channel.send(`The ${name} command failed to load.`);
 					}
 				}
