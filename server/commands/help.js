@@ -15,7 +15,7 @@ module.exports = {
 		var postgamenight = "Posts the specified \"Gamenight\" in <#330920609435353090>.";
 		var customcolor = "Allows the user to create their own role, with a custom name and color.";
 		var mt = "Toggles the mentionability of a role.";
-		var roleCommands = `\`${pfx}freerole (freerole)\` - ${freerole}\n\`${pfx}gamerole (game)\` - ${gamerole}\n\`${pfx}namecolor (color)\` - ${namecolor}`
+		var roleCommands = `\`${pfx}freerole (freerole)\` - ${freerole}\n\`${pfx}gamerole (game)\` - ${gamerole}\n\`${pfx}namecolor (color)\` - ${namecolor}`;
 		var helpembed;
 		if (param1 == null || param1 == undefined || param1 == "") {
 			helpembed = new Discord.RichEmbed()
