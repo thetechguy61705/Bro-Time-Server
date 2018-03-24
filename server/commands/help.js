@@ -26,8 +26,8 @@ module.exports = {
 				.addField("Information Commands", `\`${pfx}help [command]\` - ${help}\n\`${pfx}ping\` - ${ping}`)
 				.addField("Role Commands", roleCommands)
 				.addField("Event Posting Commands", `\`${pfx}postqotd (qotd)\` - ${postqotd}\n\`${pfx}postgamenight\` - ${postgamenight}`)
-				.addField("Utility Commands", `**${pfx}mt (role)** - ${mt}`)
-				.addField("Donator Commands", `**${pfx}customcolor** - ${customcolor}`);
+				.addField("Utility Commands", `\`${pfx}mt (role)\` - ${mt}`)
+				.addField("Donator Commands", `\`${pfx}customcolor\` - ${customcolor}`);
 		} else if (param1.toLowerCase() == "help") {
 			helpembed = new Discord.RichEmbed()
 				.setTitle(`${pfx}help`)
