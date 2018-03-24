@@ -96,8 +96,8 @@ async function gameRoles(message, Discord, prompt) {
 			message.reply("Invalid game role. Check `!info gameroles --> list`.");
 		}
 	} else {
-		var endMessage = games.join('\n')
-		var gameRoleEmbed = new Discord.RichEmbed()
+		var endMessage = games.join(\n");
+		gameRoleEmbed = new Discord.RichEmbed()
 			.setTitle("Gameroles")
 			.setDescription(endMessage)
 			.setColor(0x00AE86);
@@ -118,11 +118,12 @@ async function nameColors(message, Discord, prompt) {
 		"`Silver`", "`BrightRed`", "`DarkViolet`", "`HotBrown`", "`DarkGreen`", "`Gold`"
 	];
 	if (prompt.toLowerCase() === "preview") {
+		currentRole = message.guild.roles.find("name", colorRoles[0].substr(1).slice(0, -1));
 		var nameColorEmbed = new Discord.RichEmbed()
 			.setTitle(colorRoles[0])
-			.setDescription(`Hex: \`${message.guild.roles.find("name", colorRoles[0].substr(1).slice(0, -1)).hexColor}\`\nMembers: \`${message.guild.roles.find("name", colorRoles[0].substr(1).slice(0, -1)).members.size}\``)
+			.setDescription(`Hex: \`${currentRole.hexColor}\`\nMembers: \`${currentRole.members.size}\``)
 			.setColor(message.guild.roles.find("name", colorRoles[0].substr(1).slice(0, -1)).hexColor);
-		var emojiArray = ['◀', '▶'];
+		var emojiArray = ["◀", "▶"];
 		message.channel.send(nameColorEmbed).then(async function(embedMessage) {
 			var orderLoop = 0;
 			while (orderLoop != emojiArray.length) {
@@ -134,7 +135,7 @@ async function nameColors(message, Discord, prompt) {
 				time: 120000
 			});
 			var emojiNumber = 0;
-			reactions.on('collect', async function(reaction) {
+			reactions.on("collect", async function(reaction) {
 				if (reaction.emoji.name === emojiArray[0]) {
 					if (emojiNumber !== 0) {
 						emojiNumber = emojiNumber - 1;
@@ -158,7 +159,7 @@ async function nameColors(message, Discord, prompt) {
 					embed: nameColorEmbed
 				});
 			});
-			reactions.on('end', collected => embedMessage.edit("Interactive command ended: 2 minutes passed."));
+			reactions.on("end", collected => embedMessage.edit("Interactive command ended: 2 minutes passed."));
 		});
 	} else if (prompt.toLowerCase() === "specify") {
 		var prompt2 = await awaitReply(message, "What name color role do you want info on?");
@@ -178,8 +179,8 @@ async function nameColors(message, Discord, prompt) {
 			message.reply("Invalid name color role. Check `!info namecolors --> list`.");
 		}
 	} else {
-		var endMessage = endMessage.join('\n')
-		var nameColorEmbed = new Discord.RichEmbed()
+		endMessage = endMessage.join("\n");
+		nameColorEmbed = new Discord.RichEmbed()
 			.setTitle("Name colors")
 			.setDescription(endMessage)
 			.setColor(0x00AE86);
@@ -191,7 +192,8 @@ async function nameColors(message, Discord, prompt) {
 
 async function howToGetRole(message, Discord, prompt) {
 	var currentRole;
-	var obtainableRoles = ["`Story Teller`", "`Dolphin`", "`Meme Master`", "`Inviter`", "`Pro Inviter`", "`Cuber`", "`Artist`", "`Partner`", "`Contributor`", "`Donator`"];
+	var obtainableRoles = ["`Story Teller`", "`Dolphin`", "`Meme Master`", "`Inviter`", "`Pro Inviter`", "`Cuber`", "`Artist`", "`Partner`",
+		"`Contributor`", "`Donator`"];
 	var descriptions = ["Get part of your story on the starboard.",
 		"Tell cj your knowledge about dolphin’s dark deeds and he shall decide if you are worthy of the role.",
 		"Get one of your memes on the starboard.",
@@ -204,7 +206,7 @@ async function howToGetRole(message, Discord, prompt) {
 			.setTitle(obtainableRoles[0])
 			.setDescription(`Members: \`${message.guild.roles.find("name", obtainableRoles[0].substr(1).slice(0, -1)).members.size}\`\nObtain: \`${descriptions[0]}\``)
 			.setColor(message.guild.roles.find("name", obtainableRoles[0].substr(1).slice(0, -1)).hexColor);
-		var emojiArray = ['◀', '▶'];
+		var emojiArray = ["◀", "▶"];
 		message.channel.send(roleEmbed).then(async function(embedMessage) {
 			var orderLoop = 0;
 			while (orderLoop != emojiArray.length) {
