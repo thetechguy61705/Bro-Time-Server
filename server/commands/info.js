@@ -96,7 +96,7 @@ async function gameRoles(message, Discord, prompt) {
 			message.reply("Invalid game role. Check `!info gameroles --> list`.");
 		}
 	} else {
-		var endMessage = games.join(\n");
+		var endMessage = games.join("\n");
 		gameRoleEmbed = new Discord.RichEmbed()
 			.setTitle("Gameroles")
 			.setDescription(endMessage)
