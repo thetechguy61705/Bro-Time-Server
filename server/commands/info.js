@@ -218,7 +218,7 @@ async function howToGetRole(message, Discord, prompt) {
 				time: 120000
 			});
 			var emojiNumber = 0;
-			reactions.on('collect', async function(reaction) {
+			reactions.on("collect", async function(reaction) {
 				if (reaction.emoji.name === emojiArray[0]) {
 					if (emojiNumber !== 0) {
 						emojiNumber = emojiNumber - 1;
@@ -242,7 +242,7 @@ async function howToGetRole(message, Discord, prompt) {
 					embed: roleEmbed
 				});
 			});
-			reactions.on('end', collected => embedMessage.edit("Interactive command ended: 2 minutes passed."));
+			reactions.on("end", collected => embedMessage.edit("Interactive command ended: 2 minutes passed."));
 		});
 	} else if (prompt.toLowerCase() === "specify") {
 		var prompt2 = await awaitReply(message, "What obtainable role do you want info on?");
@@ -262,8 +262,8 @@ async function howToGetRole(message, Discord, prompt) {
 			message.reply("Invalid obtainable role. Check `!info howtogetrole --> list`.");
 		}
 	} else {
-		var endMessage = obtainableRoles.join('\n')
-		var roleEmbed = new Discord.RichEmbed()
+		var endMessage = obtainableRoles.join("\n");
+		roleEmbed = new Discord.RichEmbed()
 			.setTitle("Obtainable Roles")
 			.setDescription(endMessage)
 			.setColor(0x00AE86);
@@ -279,13 +279,13 @@ async function levelRoles(message, Discord, prompt) {
 		"`Legendary Bro`", "`OP Epic Bro`", "`Cool Epic Bro`", "`Epic Bro`", "`OP Senior Bro`", "`Cool Senior Bro`", "`Senior Bro`", "`OP Bro`",
 		"`Cool Bro`", "`Bro`", "`OP Junior Bro`", "`Cool Junior Bro`", "`Junior Bro`", "`Newbie Bro`"
 	];
-	var level = ['61', '60', '55', '51', '50', '45', '41', '40', '35', '31', '30', '25', '21', '20', '15', '11', '10', '5', '1', '0'];
+	var level = ["61", "60", "55", "51", "50", "45", "41", "40", "35", "31","30", "25", "21", "20", "15", "11", "10", "5", "1", "0"];
 	if (prompt.toLowerCase() === "preview") {
 		var roleEmbed = new Discord.RichEmbed()
 			.setTitle(levelRoles[0])
 			.setDescription(`Members: \`${message.guild.roles.find("name", levelRoles[0].substr(1).slice(0, -1)).members.size}\`\nObtain: \`${level[0]}\``)
 			.setColor(message.guild.roles.find("name", levelRoles[0].substr(1).slice(0, -1)).hexColor);
-		var emojiArray = ['◀', '▶'];
+		var emojiArray = ["◀", "▶"];
 		message.channel.send(roleEmbed).then(async function(embedMessage) {
 			var orderLoop = 0;
 			while (orderLoop != emojiArray.length) {
@@ -297,7 +297,7 @@ async function levelRoles(message, Discord, prompt) {
 				time: 120000
 			});
 			var emojiNumber = 0;
-			reactions.on('collect', async function(reaction) {
+			reactions.on("collect", async function(reaction) {
 				if (reaction.emoji.name === emojiArray[0]) {
 					if (emojiNumber !== 0) {
 						emojiNumber = emojiNumber - 1;
@@ -321,7 +321,7 @@ async function levelRoles(message, Discord, prompt) {
 					embed: roleEmbed
 				});
 			});
-			reactions.on('end', collected => embedMessage.edit("Interactive command ended: 2 minutes passed."));
+			reactions.on("end", collected => embedMessage.edit("Interactive command ended: 2 minutes passed."));
 		});
 	} else if (prompt.toLowerCase() === "specify") {
 		var prompt2 = await awaitReply(message, "What level role do you want info on?");
@@ -341,8 +341,8 @@ async function levelRoles(message, Discord, prompt) {
 			message.reply("Invalid level role. Check `!info levelroles --> list`.");
 		}
 	} else {
-		var endMessage = levelRoles.join('\n')
-		var roleEmbed = new Discord.RichEmbed()
+		var endMessage = levelRoles.join("\n");
+		roleEmbed = new Discord.RichEmbed()
 			.setTitle("Obtainable Roles")
 			.setDescription(endMessage)
 			.setColor(0x00AE86);
@@ -352,15 +352,15 @@ async function levelRoles(message, Discord, prompt) {
 	}
 }
 
-function donate(message, Discord) {
-	fs.readFile('../donateinfo.md', (data) => {
-		message.channel.send(data.toString('utf8'));
+function donate(message) {
+	fs.readFile("../donateinfo.md", (data) => {
+		message.channel.send(data.toString("utf8"));
 	});
 }
 
 async function infoTarget(message, prompt, Discord, choice) {
 	if (choice.toLowerCase() === "ad" || choice.toLowerCase() === "advertisement") {
-		prompt = await awaitReply(message, "Would you like to view the `mobile` ad (not in code block) or `computer` ad (in code block)? Default: Computer")
+		prompt = await awaitReply(message, "Would you like to view the `mobile` ad (not in code block) or `computer` ad (in code block)? Default: Computer");
 		ad(message, prompt);
 	} else if (choice.toLowerCase() === "gameroles" || choice.toLowerCase() === "gamerole") {
 		prompt = await awaitReply(message, "Would you like to `preview` all game roles, view a `list` of game roles or `specify` a specific role? Default: List");
@@ -369,13 +369,13 @@ async function infoTarget(message, prompt, Discord, choice) {
 		prompt = await awaitReply(message, "Would you like to `preview` all color roles, view a `list` of color roles or `specify` a specific role? Default: List");
 		nameColors(message, Discord, prompt);
 	} else if (choice.toLowerCase() === "getrole" || choice.toLowerCase() === "howtogetrole" || choice.toLowerCase() === "htgr") {
-		prompt = await awaitReply(message, "Would you like to `preview` all obtainable roles, view a `list` of obtainable roles or `specify` a specific role? Default: List")
-		howToGetRole(message, Discord, prompt)
+		prompt = await awaitReply(message, "Would you like to `preview` all obtainable roles, view a `list` of roles or `specify` a specific role? Default: List");
+		howToGetRole(message, Discord, prompt);
 	} else if (choice.toLowerCase() === "donate" || choice.toLowerCase() === "donations" || choice.toLowerCase() === "donateinfo") {
-		donate(message, Discord)
+		donate(message);
 	} else if (choice.toLowerCase() === "levelroles" || choice.toLowerCase() === "levels") {
 		prompt = await awaitReply(message, "Would you like to `preview` all level roles, view a `list` of level roles or `specify` a specific role? Default: List");
-		levelRoles(message, Discord, prompt)
+		levelRoles(message, Discord, prompt);
 	}
 }
 
@@ -391,9 +391,9 @@ module.exports = {
 		var plainOptions = ["advertisement", "gameroles", "namecolors", "howtogetrole", "donate", "levelroles"];
 		if (choice === "" || choice === undefined) {
 			var prompt;
-			choice = awaitReply (message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`).then(choice => {
-				if (!options.includes(choice.toLowerCase())) return message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
-				infoTarget (message, prompt, Discord, choice);
+			choice = awaitReply (call.message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`).then(choice => {
+				if (!options.includes(choice.toLowerCase())) return call.message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
+				infoTarget (call.message, prompt, Discord, choice);
 			});
 		} else {
 			var prompt;
