@@ -385,16 +385,15 @@ module.exports = {
         var plainOptions = ["advertisement", "gameroles", "namecolors", "howtogetrole", "donate", "levelroles"];
         if (choice === "" || choice === undefined) {
             var prompt;
-            const choice1 = await awaitReply(message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`);
-            if (!options.includes(choice.toLowerCase())) return message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
-            infoTarget(message, prompt, Discord, choice1);
+            var prompt;
+		    choice = awaitReply (message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`).then(choice => {
+			    if (!options.includes(choice.toLowerCase())) return message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
+			    infoTarget (message, prompt, Discord, choice);
+		    });
         } else {
             var prompt;
-            if (!options.includes(choice.toLowerCase())) return message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
-            infoTarget(message, prompt, Discord, choice);
+            if (!options.includes(choice.toLowerCase())) return call.message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
+            infoTarget (call.message, prompt, Discord, choice);
         }
     }
 };
-module.exports.help = {
-    name: "test"
-}
