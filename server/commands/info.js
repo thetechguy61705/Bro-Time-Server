@@ -396,8 +396,8 @@ module.exports = {
 				infoTarget (call.message, prompt, Discord, choice);
 			});
 		} else {
-			if (!options.includes(choice.toLowerCase())) return message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
-			infoTarget(message, prompt, Discord, choice);
+			if (!options.includes(choice.toLowerCase())) return call.message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
+			infoTarget(call.message, prompt, Discord, choice);
 		}
 	}
 };
