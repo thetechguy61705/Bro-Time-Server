@@ -29,6 +29,7 @@ function ad(message, prompt) {
 }
 
 async function gameRoles(message, Discord, prompt) {
+	var currentRole;
 	var games = ["`Roblox`", "`Minecraft`", "`Cuphead`", "`Fortnite`", "`Undertale`", "`Unturned`", "`VRChat`",
 		"`PUBG`", "`FNAF`", "`Clash of Clans`", "`Clash Royale`", "`Sims`", "`Terraria`", "`Subnautica`", "`Rocket League`",
 		"`Portal`", "`Hat in Time`", "`CSGO`", "`Splatoon`", "`Mario`", "`Starbound`", "`Garry's Mod`", "`Overwatch`",
@@ -39,7 +40,7 @@ async function gameRoles(message, Discord, prompt) {
 			.setTitle(games[0])
 			.setDescription(`Players: \`${message.guild.roles.find("name", games[0].substr(1).slice(0, -1)).members.size}\``)
 			.setColor(message.guild.roles.find("name", games[0].substr(1).slice(0, -1)).hexColor);
-		var emojiArray = ['◀', '▶'];
+		var emojiArray = ["◀", "▶"];
 		message.channel.send(gameRoleEmbed).then(async function(embedMessage) {
 			var orderLoop = 0;
 			while (orderLoop != emojiArray.length) {
@@ -51,7 +52,7 @@ async function gameRoles(message, Discord, prompt) {
 				time: 120000
 			});
 			var emojiNumber = 0;
-			reactions.on('collect', async function(reaction) {
+			reactions.on("collect", async function(reaction) {
 				if (reaction.emoji.name === emojiArray[0]) {
 					if (emojiNumber !== 0) {
 						emojiNumber = emojiNumber - 1;
@@ -75,7 +76,7 @@ async function gameRoles(message, Discord, prompt) {
 					embed: gameRoleEmbed
 				});
 			});
-			reactions.on('end', collected => embedMessage.edit("Interactive command ended: 2 minutes passed."));
+			reactions.on("end", collected => embedMessage.edit("Interactive command ended: 2 minutes passed."));
 		});
 	} else if (prompt.toLowerCase() === "specify") {
 		var prompt2 = await awaitReply(message, "What game role do you want info on?");
@@ -107,6 +108,7 @@ async function gameRoles(message, Discord, prompt) {
 }
 
 async function nameColors(message, Discord, prompt) {
+	var currentRole;
 	var endMessage = ["**Free**", "`Red`", "`Yellow`", "`Blue`", "`Orange`", "`Green`", "`Black`", "`Purple`",
 		"**Plus**", "`Pink`", "`Indigo`", "`Bronze`", "`HotPink`", "`Cyan`", "`LightGreen`", "**Premium**",
 		"`Silver`", "`BrightRed`", "`DarkViolet`", "`HotBrown`", "`DarkGreen`", "**Deluxe**", "`Gold`"
@@ -188,6 +190,7 @@ async function nameColors(message, Discord, prompt) {
 }
 
 async function howToGetRole(message, Discord, prompt) {
+	var currentRole;
 	var obtainableRoles = ["`Story Teller`", "`Dolphin`", "`Meme Master`", "`Inviter`", "`Pro Inviter`", "`Cuber`", "`Artist`", "`Partner`", "`Contributor`", "`Donator`"];
 	var descriptions = ["Get part of your story on the starboard.",
 		"Tell cj your knowledge about dolphin’s dark deeds and he shall decide if you are worthy of the role.",
@@ -269,6 +272,7 @@ async function howToGetRole(message, Discord, prompt) {
 }
 
 async function levelRoles(message, Discord, prompt) {
+	var currentRole;
 	var levelRoles = ["`True Bro`", "`OP Elite Bro`", "`Cool Elite Bro`", "`Elite Bro`", "`OP Legendary Bro`", "`Cool Legendary Bro`",
 		"`Legendary Bro`", "`OP Epic Bro`", "`Cool Epic Bro`", "`Epic Bro`", "`OP Senior Bro`", "`Cool Senior Bro`", "`Senior Bro`", "`OP Bro`",
 		"`Cool Bro`", "`Bro`", "`OP Junior Bro`", "`Cool Junior Bro`", "`Junior Bro`", "`Newbie Bro`"
