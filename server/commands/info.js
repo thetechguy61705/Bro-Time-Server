@@ -279,11 +279,11 @@ async function levelRoles(message, Discord, prompt) {
 		"`Legendary Bro`", "`OP Epic Bro`", "`Cool Epic Bro`", "`Epic Bro`", "`OP Senior Bro`", "`Cool Senior Bro`", "`Senior Bro`", "`OP Bro`",
 		"`Cool Bro`", "`Bro`", "`OP Junior Bro`", "`Cool Junior Bro`", "`Junior Bro`", "`Newbie Bro`"
 	];
-	var level = ["61", "60", "55", "51", "50", "45", "41", "40", "35", "31","30", "25", "21", "20", "15", "11", "10", "5", "1", "0"];
+	var level = ["61", "60", "55", "51", "50", "45", "41", "40", "35", "31", "30", "25", "21", "20", "15", "11", "10", "5", "1", "0"];
 	if (prompt.toLowerCase() === "preview") {
 		var roleEmbed = new Discord.RichEmbed()
 			.setTitle(levelRoles[0])
-			.setDescription(`Members: \`${message.guild.roles.find("name", levelRoles[0].substr(1).slice(0, -1)).members.size}\`\nObtain: \`${level[0]}\``)
+			.setDescription(`Members: \`${message.guild.roles.find("name", levelRoles[0].substr(1).slice(0, -1)).members.size}\`\nObtain: \`level ${level[0]}\``)
 			.setColor(message.guild.roles.find("name", levelRoles[0].substr(1).slice(0, -1)).hexColor);
 		var emojiArray = ["◀", "▶"];
 		message.channel.send(roleEmbed).then(async function(embedMessage) {
@@ -315,7 +315,7 @@ async function levelRoles(message, Discord, prompt) {
 				currentRole = message.guild.roles.find("name", levelRoles[emojiNumber].substr(1).slice(0, -1));
 				var roleEmbed = new Discord.RichEmbed()
 					.setTitle(levelRoles[emojiNumber].substr(1).slice(0, -1))
-					.setDescription(`Members: \`${currentRole.members.size}\`\nObtain: \`${level[emojiNumber]}\``)
+					.setDescription(`Members: \`${currentRole.members.size}\`\nObtain: \`level ${level[emojiNumber]}\``)
 					.setColor(currentRole.hexColor);
 				embedMessage.edit({
 					embed: roleEmbed
@@ -384,19 +384,18 @@ module.exports = {
 	aliases: ["information"],
 	load: () => {},
 	execute: (call) => {
+		var prompt;
 		var choice = call.params.readRaw();
 		var options = ["ad", "advertisement", "gamerole", "gameroles", "namecolors", "colors", "getrole", "howtogetrole", "htgr",
 			"donate", "donations", "donateinfo", "levelroles", "levels"
 		];
 		var plainOptions = ["advertisement", "gameroles", "namecolors", "howtogetrole", "donate", "levelroles"];
 		if (choice === "" || choice === undefined) {
-			var prompt;
 			choice = awaitReply (call.message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`).then(choice => {
 				if (!options.includes(choice.toLowerCase())) return call.message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
 				infoTarget (call.message, prompt, Discord, choice);
 			});
 		} else {
-			var prompt;
 			if (!options.includes(choice.toLowerCase())) return message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
 			infoTarget(message, prompt, Discord, choice);
 		}
