@@ -353,9 +353,12 @@ async function levelRoles(message, Discord, prompt) {
 }
 
 function donate(message) {
-	fs.readFile("../donateinfo.txt", (err, data) => {
-		if (err) return message.channel.send(err);
-		message.channel.send(data.toString("utf8"));
+	fs.readFile(__dirname + "/../info/donateinfo.md", (err, data) => {
+		if (err) {
+			throw err;
+		} else {
+			message.channel.send(data.toString("utf8"));
+		}
 	});
 }
 
