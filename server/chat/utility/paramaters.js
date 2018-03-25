@@ -89,7 +89,7 @@ class Paramaters {
 		}
 		objects = objects.filter(filter);
 		var id = parseFloat(param);
-		
+
 		if (!isNaN(id)) {
 			object = object.get(id);
 		} else {
@@ -100,12 +100,12 @@ class Paramaters {
 					// Only allow smaller gaps or if partial results are allowed, no gap.
 					if (newGap < gap && (allowPartial || gap === 0)) {
 						object = candidate;
-						gap = newGap
+						gap = newGap;
 					}
 				}
 			});
 		}
-		
+
 		return object || null;
 	}
 
