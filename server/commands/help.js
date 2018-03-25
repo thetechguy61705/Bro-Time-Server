@@ -22,7 +22,7 @@ module.exports = {
 				.setTitle("Commands")
 				.setDescription("Hey! I'm Bro Bot. My developers stride to keep Bro Time as simple (and fun) as possible.")
 				.setColor(0x00AE86)
-				.setFooter(`Run by ${call.message.author.username}`, `${call.message.author.avatarURL}`)
+				.setFooter(`Run by ${call.message.author.username}`, call.message.author.avatarURL)
 				.addField("Information Commands", `\`${pfx}help [command]\` - ${help}\n\`${pfx}ping\` - ${ping}`)
 				.addField("Role Commands", roleCommands)
 				.addField("Event Posting Commands", `\`${pfx}postqotd (qotd)\` - ${postqotd}\n\`${pfx}postgamenight\` - ${postgamenight}`)
