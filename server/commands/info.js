@@ -772,9 +772,8 @@ module.exports = {
 	load: () => {},
 	execute: (call) => {
 		var prompt;
-		var args = call.params.readRaw().split(" ").slice(1);
-		var choice = args[0];
-		var param = args[1];
+		var choice = call.params.readParameter;
+		var param = call.params.readParameter;
 		var options = ["ad", "advertisement", "gamerole", "gameroles", "namecolors", "colors", "getrole", "howtogetrole", "htgr",
 			"donate", "donations", "donateinfo", "levelroles", "levels"
 		];
