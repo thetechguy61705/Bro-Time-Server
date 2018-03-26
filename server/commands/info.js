@@ -791,5 +791,5 @@ module.exports = {
 			if (choice === undefined) return message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
 			infoTarget(message, prompt, Discord, choice, param);
 		}
-	};
-}
+	}
+};
