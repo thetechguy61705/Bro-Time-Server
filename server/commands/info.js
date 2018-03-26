@@ -794,4 +794,4 @@ module.exports = {
 			infoTarget(call.message, prompt, Discord, choice, param);
 		}
 	}
-};
+}
