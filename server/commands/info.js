@@ -778,8 +778,11 @@ module.exports = {
 			"donate", "donations", "donateinfo", "levelroles", "levels"
 		];
 		var plainOptions = ["advertisement", "gameroles", "namecolors", "howtogetrole", "donate", "levelroles"];
-		if (choice === "" || choice === undefined) {
+		if (choice === null) {
 			choice = awaitReply (message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`).then(choice => {
+				var choice = options.find(function(option) {
+					return option.toLowerCase().startsWith(choice.toLowerCase());
+				});
 				if (choice === undefined) return message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
 				infoTarget (message, prompt, Discord, choice, param);
 			});
