@@ -17,15 +17,15 @@ async function awaitReply(message, question, limit = 60000) {
 }
 
 function ad(message, prompt) {
-	var string1 = "__Bro Time__ \nWant to join a **fun**, **engaging** community?";
-	var string2 = "Do you enjoy participating in **giveaways**, posting **memes**, creating **stories**,";
-	var string3 = "talking with other **developers**, playing **games** with bots, listening to **music**, joining **game nights**, or answering **QOTDs**?";
-	var string4 = "\nThen You Should **Join The Community Today!** \nhttps://discord.gg/rjM8wdZ";
-	if (prompt.toLowerCase() === "mobile") {
-		message.channel.send(`${string1} ${string2} ${string3} ${string4}`);
-	} else {
-		message.channel.send(`\`\`\`${string1} ${string2} ${string3} ${string4}\`\`\``);
-	}
+	var toSend;
+	fs.readFile(__dirname + "/../info/ad.md", (err, data) => {
+ 		if (err) {
+ 			throw err;
+ 		} else {
+			if (prompt = "computer") toSend = `\`\`\`${data.toString("utf8")}\`\`\``;
+ 			message.channel.send(toSend);
+ 		}
+ 	});
 }
 
 async function gameRoles(message, Discord, prompt) {
