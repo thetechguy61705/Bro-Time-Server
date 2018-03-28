@@ -16,7 +16,7 @@ async function awaitReply(message, question, limit = 60000) {
 	}
 }
 
-function ad(message, prompt) {
+function ad(message, prompt, param) {
 	var toSend;
 	fs.readFile(__dirname + "/../info/ad.md", (err, data) => {
 		if(err) {
