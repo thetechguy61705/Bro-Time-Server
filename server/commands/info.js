@@ -414,6 +414,7 @@ module.exports = {
 	load: () => {},
 	execute: (call) => {
 		var prompt;
+		var choice1;
 		var choice = call.params.readParameter();
 		var param = call.params.readParameter();
 		var options = ["ad", "advertisement", "gamerole", "gameroles", "namecolors", "colors", "getrole", "howtogetrole", "htgr",
@@ -421,19 +422,25 @@ module.exports = {
 		];
 		var plainOptions = ["advertisement", "gameroles", "namecolors", "howtogetrole", "donate", "levelroles"];
 		if(choice === null) {
-			choice = awaitReply(call.message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`).then(choice => {
-				var choice = options.find(function(option) {
-					return option.toLowerCase().startsWith(choice.toLowerCase());
+			choice1 = awaitReply(call.message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`).then(userChoice => {
+				var choice2 = options.find(function(option) {
+					return option.toLowerCase().startsWith(userChoice.toLowerCase());
 				});
-				if(choice === undefined) return call.message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
-				infoTarget(mcall.essage, prompt, Discord, choice, param);
+				if(choice2 === undefined) {
+					call.message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
+				} else {
+					infoTarget(call.message, prompt, Discord, choice, param);
+				}
 			});
 		} else {
-			var choice = options.find(function(option) {
+			choice1 = options.find(function(option) {
 				return option.toLowerCase().startsWith(choice.toLowerCase());
 			});
-			if(choice === undefined) return call.message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
-			infoTarget(call.message, prompt, Discord, choice, param);
+			if(choice1 === undefined) {
+				call.message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
+			} else {
+				infoTarget(call.message, prompt, Discord, choice, param);	
+			}
 		}
 	},
 }
