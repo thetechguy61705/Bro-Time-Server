@@ -439,8 +439,8 @@ module.exports = {
 			if(choice1 === undefined) {
 				call.message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
 			} else {
-				infoTarget(call.message, prompt, Discord, choice, param);	
+				infoTarget(call.message, prompt, Discord, choice, param);
 			}
 		}
-	},
-}
+	}
+};
