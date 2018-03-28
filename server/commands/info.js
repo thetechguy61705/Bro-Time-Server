@@ -422,7 +422,7 @@ module.exports = {
 		];
 		var plainOptions = ["advertisement", "gameroles", "namecolors", "howtogetrole", "donate", "levelroles"];
 		if(choice === null) {
-			choice1 = awaitReply(call.message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`).then(userChoice => {
+			awaitReply(call.message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`).then(userChoice => {
 				if(!options.includes(userChoice.toLowerCase())) {
 					call.message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
 				} else {
