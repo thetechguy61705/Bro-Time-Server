@@ -32,7 +32,7 @@ async function gameRoles(message, Discord, prompt, param) {
 		var emojiArray = ["◀", "▶"];
 		message.channel.send(gameRoleEmbed).then(async function(embedMessage) {
 			var orderLoop = 0;
-			while(orderLoop != emojiArray.length) {
+			while (orderLoop != emojiArray.length) {
 				await embedMessage.react(emojiArray[orderLoop]);
 				orderLoop = orderLoop + 1;
 			}
