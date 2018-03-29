@@ -356,6 +356,7 @@ function donate(message) {
 }
 
 function ad(message, prompt, param) {
+	if(param !== undefined) prompt = param;
 	var toSend;
 	fs.readFile(__dirname + "/../info/ad.md", (err, data) => {
 		if(err) {
