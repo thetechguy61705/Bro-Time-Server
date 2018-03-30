@@ -7,12 +7,11 @@ module.exports = {
 	execute: (call) => {
 		var pfx = call.message.data.prefix;
 		var param1 = call.params.readRaw();
-		var commandDescs = [];
 		fs.readFile(__dirname + "/../info/commandinfo.md", (err, data) => {
 			if(err) {
 				throw err;
 			} else {
-				commandDescs = data.toString("utf8").split("\n");
+				var commandDescs = data.toString("utf8").split("\n");
 			}
 		});
 		var helpembed;
