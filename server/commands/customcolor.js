@@ -14,12 +14,12 @@ async function awaitReply(message, question, limit = 60000){
 async function makerole(message, digit) {
 	var cancel = "\n Say `cancel` to cancel prompt.";
 	const name = await awaitReply(message, "Please specify the name of your role."+cancel, 60000);
-	if (name == "cancel") return message.channel.send("**Cancelled Prompt.**");
+	if (name == "cancel") return message.channel.send("Cancelled prompt.");
 	if (name.length > 99-message.author.id.length) {
 		message.reply(`the length of the role is too long. Max length is ${99-message.author.id.length} characters`);
 	} else {
 		const color = await awaitReply(message, "please specify the hex color of your role. Example `#ff0000` or `ff0000`"+cancel, 60000);
-		if (color == "cancel") return message.channel.send("**Cancelled Prompt.**");
+		if (color == "cancel") return message.channel.send("Cancelled prompt.");
 		var c = color;
 		var ishex  = /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(`${color}`);
 		var ishextag = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(`${color}`);
@@ -50,15 +50,15 @@ async function makerole(message, digit) {
 async function deleterole(message) {
 	var cancel = "\n Say `cancel` to cancel prompt.";
 	const digitchoice = await awaitReply(message, "which color role do you want to remove (first digit of role name)?"+cancel, 60000);
-	if (digitchoice == "cancel") return message.channel.send("**Canceled Prompt.**");
+	if (digitchoice == "cancel") return message.channel.send("Cancelled prompt.");
 	if (!isNaN(digitchoice)) {
 		if (digitchoice <= 5 && digitchoice >= 1) {
 			const name = await awaitReply(message, "what is the custom role name (only the custom part)?"+cancel, 60000);
-			if (name == "cancel") return message.channel.send("**Canceled Prompt.**");
+			if (name == "cancel") return message.channel.send("Cancelled prompt.);
 			let rolename = `${digitchoice}${message.author.id} ${name}`;
 			if (message.guild.roles.find("name", rolename)) {
 				const approval = await awaitReply(message, "are you sure you want to delete this custom role?"+cancel, 60000);
-				if (approval == "cancel") return message.channel.send("**Canceled Prompt.**");
+				if (approval == "cancel") return message.channel.send("Cancelled prompt.");
 				if (approval.toLowerCase() == "yes") {
 					let role = message.guild.roles.find(r=> r.name.toLowerCase() === rolename.toLowerCase());
 					role.delete();
