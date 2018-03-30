@@ -15,7 +15,6 @@ module.exports = {
 				commandDescs = data.toString("utf8").split("\n");
 			}
 		});
-		var roleCommands = `\`${pfx}freerole (freerole)\` - ${freerole}\n\`${pfx}gamerole (game)\` - ${gamerole}\n\`${pfx}namecolor (color)\` - ${namecolor}`;
 		var helpembed;
 		if (param1 == null || param1 == undefined || param1 == "") {
 			helpembed = new Discord.RichEmbed()
@@ -23,11 +22,11 @@ module.exports = {
 				.setDescription("Hey! I'm Bro Bot. My developers stride to keep Bro Time as simple (and fun) as possible.")
 				.setColor(0x00AE86)
 				.setFooter(`Run by ${call.message.author.username}`, call.message.author.avatarURL)
-				.addField("Information Commands", `\`${pfx}help [command]\` - ${help}\n\`${pfx}ping\` - ${ping}`)
-				.addField("Role Commands", roleCommands)
-				.addField("Event Posting Commands", `\`${pfx}postqotd (qotd)\` - ${postqotd}\n\`${pfx}postgamenight\` - ${postgamenight}`)
-				.addField("Utility Commands", `\`${pfx}mt (role)\` - ${mt}`)
-				.addField("Donator Commands", `\`${pfx}customcolor\` - ${customcolor}`);
+				.addField("Information Commands", `\`${pfx}help [command]\`\n\`${pfx}ping\``)
+				.addField("Role Commands", `\`${pfx}freerole (freerole)\`\n\`${pfx}gamerole (game)\`\n\`${pfx}namecolor (color)\``)
+				.addField("Event Posting Commands", `\`${pfx}postqotd (qotd)\`\n\`${pfx}postgamenight\``)
+				.addField("Utility Commands", `\`${pfx}mt (role)\``)
+				.addField("Donator Commands", `\`${pfx}customcolor\``);
 		} else if (param1.toLowerCase() == "help") {
 			helpembed = new Discord.RichEmbed()
 				.setTitle(`${pfx}help`)
