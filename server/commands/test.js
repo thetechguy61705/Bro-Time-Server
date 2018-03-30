@@ -9,9 +9,7 @@ module.exports = {
 				throw err;
 			} else {
 				var eachCommand = data.toString("utf8").split("\n");
-				eachCommand.forEach(command => {
-					call.message.author.send(command);
-				});
+				call.message.author.send(eachCommand.join("\nNERD\n"));
 			}
 		});
 	}
