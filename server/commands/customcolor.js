@@ -1,4 +1,6 @@
 async function awaitReply(message, question, limit = 60000){
+	if (!message.channel.permissionsFor(message.guild.member(bot.user)).has("SEND_MESSAGES")) return message.author
+		.send(`You attempted to run the \`customcolor\` command in ${message.channel}, but I could not talk there`);
 	const filter = m => m.author.id === message.author.id;
 	await message.reply(question);
 	try {
@@ -70,10 +72,10 @@ async function deleterole(message) {
 				message.reply("I could not find that role.");
 			}
 		} else {
-			message.reply(`\`${digitchoice} \` must be a number between 1 - 5.`);
+			message.reply("Specified number must be between one and 5");
 		}
 	} else {
-		message.reply(`\`${digitchoice} \` is not a number.`);
+		message.reply("Invalid number.");
 	}
 }
 
