@@ -1,3 +1,5 @@
+const fs = require("fs")
+
 module.exports = {
 	id: "testyoyoyo",
 	load: () => {},
@@ -10,7 +12,7 @@ module.exports = {
 				commandDescs = data.toString("utf8");
 			}
 		});
-		message.channel.send("1: "+commandDescs);
-		message.channel.send("2: "+commandDescs.split("\n"));
+		call.message.channel.send("1: "+commandDescs);
+		call.channel.send("2: "+commandDescs.split("\n"));
 	}
 };
