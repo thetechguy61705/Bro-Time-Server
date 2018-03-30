@@ -7,21 +7,12 @@ module.exports = {
 	execute: (call) => {
 		var pfx = call.message.data.prefix;
 		var param1 = call.params.readRaw();
-		var help = "Returns information and commands on the bot.";
-		var ping = "Returns the response time of the bot in milliseconds, as well as a diagnostic.";
-		var freerole = "Gives the user the specified role if it is QOTD, ANN or GW.";
-		var gamerole = "Gives the user the specified role if it is a part of .gameroles.";
-		var namecolor = "Gives the user the specified role if it is a part of .colors.";
-		var postqotd = "Posts the specified \"Question of The Day\" in <#330920609435353090>.";
-		var postgamenight = "Posts the specified \"Gamenight\" in <#330920609435353090>.";
-		var customcolor = "Allows the user to create their own role, with a custom name and color.";
-		var mt = "Toggles the mentionability of a role.";
-		var commandDescs;
+		var commandDescs = [];
 		fs.readFile(__dirname + "/../info/commandinfo.md", (err, data) => {
 			if(err) {
 				throw err;
 			} else {
-				commandDescs = data.split("\n");
+				commandDescs = data.toString("utf8").split("\n");
 			}
 		});
 		var roleCommands = `\`${pfx}freerole (freerole)\` - ${freerole}\n\`${pfx}gamerole (game)\` - ${gamerole}\n\`${pfx}namecolor (color)\` - ${namecolor}`;
