@@ -7,7 +7,13 @@ module.exports = {
 	execute: (call) => {
 		var pfx = call.message.data.prefix;
 		var param1 = call.params.readRaw();
-		var commandDescs;
+		var cmdDescs;
+		var cmdNames = ["help", "ping", "freerole", "gamerole", "namecolor", "postqotd", "postgamenight", "customcolor",
+			"mt", "info"];
+		var cmdUsage = [" [command]", "", " (free role)", " (game role)", " (color role)", " (qotd)", "...prompt",
+			"...prompt", " (role name)", " (information topic)"];
+		var cmdReq = ["Nothing", "Nothing", "Nothing", "Nothing", "Nothing/Bro Time Plus/Bro Time Premium/Bro Time Deluxe",
+			"Role: QOTD Host", "Role: Game Night Host", "Donator", "Moderator permissions", "Nothing"];
 		var helpembed;
 		if(param1 == null || param1 == undefined || param1 == "") {
 			helpembed = new Discord.RichEmbed()
@@ -24,63 +30,18 @@ module.exports = {
 				embed: helpembed
 			});
 		} else {
+			param1 = param1.toLowerCase();
 			fs.readFile(__dirname + "/../info/commandinfo.md", (err, data) => {
 				if(err) {
 					throw err;
 				} else {
-					commandDescs = data.toString("utf8").split("\n");
-					if(param1.toLowerCase() == "help") {
+					cmdDescs = data.toString("utf8").split("\n");
+					if(cmdNames.includes(param1)) {
+						var num = cmdNames.indexOf(param1);
 						helpembed = new Discord.RichEmbed()
-							.setTitle(`${pfx}help`)
-							.setDescription(`Purpose: ${commandDescs[0]}\nUsage: \`${pfx}help [command]\`\nRequires: \`Nothing\``)
+							.setTitle(`${pfx}${param1}`)
+							.setDescription(`Purpose: ${cmdDescs[num]}\nUsage: \`${pfx}${param1}${cmdUsage[num]}\`\nRequires: \`${cmdReq[num]}\``)
 							.setColor(0x00AE86);
-					} else if(param1.toLowerCase() == "ping") {
-						helpembed = new Discord.RichEmbed()
-							.setTitle(`${pfx}ping`)
-							.setDescription(`Purpose: ${commandDescs[1]}\nUsage: \`${pfx}ping\`\nRequires: \`Nothing\``)
-							.setColor(0x00AE86);
-					} else if(param1.toLowerCase() == "freerole") {
-						helpembed = new Discord.RichEmbed()
-							.setTitle(`${pfx}freerole`)
-							.setDescription(`Purpose: ${commandDescs[2]}nUsage: \`${pfx}freerole ANN/GW/QOTD\`\nRequires: \`Nothing\``)
-							.setColor(0x00AE86);
-					} else if(param1.toLowerCase() == "gamerole") {
-						helpembed = new Discord.RichEmbed()
-							.setTitle(`${pfx}gamerole`)
-							.setDescription(`Purpose: ${commandDescs[3]}\nUsage: \`${pfx}gamerole (gamerole)\`\nRequires: \`Nothing\``)
-							.setColor(0x00AE86);
-					} else if(param1.toLowerCase() == "namecolor") {
-						helpembed = new Discord.RichEmbed()
-							.setTitle(`${pfx}namecolor`)
-							.setDescription(`Purpose: ${commandDescs[4]}\nUsage: \`${pfx}namecolor (color)\`\nRequires: \`Nothing/Plus/Premium/Deluxe\``)
-							.setColor(0x00AE86);
-					} else if(param1.toLowerCase() == "postqotd") {
-						helpembed = new Discord.RichEmbed()
-							.setTitle(`${pfx}postqotd`)
-							.setDescription(`Purpose: ${commandDescs[5]}\nUsage: \`${pfx}postqotd (qotd)\`\nRequires: \`QOTD Host\``)
-							.setColor(0x00AE86);
-					} else if(param1.toLowerCase() == "postgamenight") {
-						helpembed = new Discord.RichEmbed()
-							.setTitle(`${pfx}postgamenight`)
-							.setDescription(`Purpose: ${commandDescs[6]}\nUsage: \`${pfx}postgamenight...\`\nRequires: \`Game Night Host\``)
-							.setColor(0x00AE86);
-					} else if(param1.toLowerCase() == "customcolor") {
-						helpembed = new Discord.RichEmbed()
-							.setTitle(`${pfx}customcolor`)
-							.setDescription(`Purpose: ${commandDescs[7]}\nUsage: \`${pfx}customcolor...\`\nRequires: \`Bro Time Plus/Bro Time Premium/Bro Time Deluxe\``)
-							.setColor(0x00AE86);
-					} else if(param1.toLowerCase() == "mt") {
-						helpembed = new Discord.RichEmbed()
-							.setTitle(`${pfx}mt`)
-							.setDescription(`Purpose: ${commandDescs[8]}\nUsage: \`${pfx}mt (role)\`\nRequires: \`Moderator Permissions\``)
-							.setColor(0x00AE86);
-					} else if(param1.toLowerCase() == "info") {
-						helpembed = new Discord.RichEmbed()
-							.setTitle(`${pfx}info`)
-							.setDescription(`Purpose: ${commandDescs[9]}\nUsage: \`${pfx}info (topic)\`\nRequires: \`Nothing\``)
-							.setColor(0x00AE86);
-					} else {
-						call.message.reply(`Invalid command. Please try \`${pfx}help (command)\` or just \`${pfx}help\``);
 					}
 					if (helpembed != undefined) {
 						call.message.channel.send({
