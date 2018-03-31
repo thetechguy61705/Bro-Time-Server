@@ -18,7 +18,7 @@ module.exports = {
 		if(param1 == null || param1 == undefined || param1 == "") {
 			helpembed = new Discord.RichEmbed()
 				.setTitle("Commands")
-				.setDescription("Hey! I'm Bro Bot. My developers stride to keep Bro Time as simple (and fun) as possible.")
+				.setDescription(`Prefix: \`${pfx}\`\nUptime: \`soon™\``)
 				.setColor(0x00AE86)
 				.setFooter(`Run by ${call.message.author.username}`, call.message.author.avatarURL)
 				.addField("Information Commands", `\`${pfx}help [command]\`\n\`${pfx}ping\`\n\`${pfx}info [topic]\``)
@@ -55,7 +55,8 @@ module.exports = {
 						call.message.channel.send({
 							embed: helpembed
 						}).catch(() => {
-							call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
+							call.message.author
+								.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
 								.catch();
 						});
 					}
