@@ -40,7 +40,7 @@ module.exports = {
 						var num = cmdNames.indexOf(param1);
 						helpembed = new Discord.RichEmbed()
 							.setTitle(`${pfx}${param1}`)
-							.setDescription(`Purpose: ${cmdDescs[num]}\nUsage: \`${pfx}${param1}${cmdUsage[num]\`\nRequires: \`${cmdReq[num]}\``)
+							.setDescription(`Purpose: ${cmdDescs[num]}\nUsage: \`${pfx}${param1}${cmdUsage[num]}\`\nRequires: \`${cmdReq[num]}\``)
 							.setColor(0x00AE86);
 					}
 					if (helpembed != undefined) {
