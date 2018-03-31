@@ -50,7 +50,7 @@ module.exports = {
 			} else if (param1.toLowerCase() == "namecolor") {
 				helpembed = new Discord.RichEmbed()
 					.setTitle(`${pfx}namecolor`)
-					.setDescription(`Purpose: ${commandDescs[4]}\nUsage: \`${pfx}namecolor (color)\`\nRequires: \`Nothing/Bro Time Plus/Bro Time Premium/Bro Time Deluxe\``)
+					.setDescription(`Purpose: ${commandDescs[4]}\nUsage: \`${pfx}namecolor (color)\`\nRequires: \`Nothing/Plus/Premium/Deluxe\``)
 					.setColor(0x00AE86);
 			} else if (param1.toLowerCase() == "postqotd") {
 				helpembed = new Discord.RichEmbed()
