@@ -47,7 +47,7 @@ module.exports = {
 							.setColor(0x00AE86);
 					} else {
 						call.message.reply("Invalid command name. Please run `!help (command)` or just `!help`").catch(() => {
-							call.message.author(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`) 
+							call.message.author(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`)
 								.catch();
 						});
 					}
