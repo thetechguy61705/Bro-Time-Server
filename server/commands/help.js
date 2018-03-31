@@ -28,6 +28,9 @@ module.exports = {
 				.addField("Donator Commands", `\`${pfx}customcolor\``);
 			call.message.channel.send({
 				embed: helpembed
+			}).catch(() => {
+				call.message.author(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
+				.catch();
 			});
 		} else {
 			param1 = param1.toLowerCase();
@@ -42,10 +45,18 @@ module.exports = {
 							.setTitle(`${pfx}${param1}`)
 							.setDescription(`Purpose: ${cmdDescs[num]}\nUsage: \`${pfx}${param1}${cmdUsage[num]}\`\nRequires: \`${cmdReq[num]}\``)
 							.setColor(0x00AE86);
+					} else {
+						call.message.reply("Invalid command name. Please run `!help (command)` or just `!help`").catch(() => {
+							call.message.author(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`) 
+							.catch();
+						});
 					}
 					if (helpembed != undefined) {
 						call.message.channel.send({
 							embed: helpembed
+						}).catch(() => {
+							call.message.author(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
+							.catch();
 						});
 					}
 				}
