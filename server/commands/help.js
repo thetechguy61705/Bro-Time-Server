@@ -5,7 +5,7 @@ module.exports = {
 	id: "help",
 	load: () => {},
 	execute: (call) => {
-		/*var pfx = call.message.data.prefix;
+		var pfx = call.message.data.prefix;
 		var param1 = call.params.readRaw();
 		var cmdDescs;
 		var cmdNames = ["help", "ping", "freerole", "gamerole", "namecolor", "postqotd", "postgamenight", "customcolor",
@@ -61,6 +61,6 @@ module.exports = {
 					}
 				}
 			});
-		}*/
+		}
 	}
 };
