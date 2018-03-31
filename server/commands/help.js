@@ -7,7 +7,6 @@ module.exports = {
 	execute: (call) => {
 		var pfx = call.message.data.prefix;
 		var param1 = call.params.readRaw();
-		var cmdDescs;
 		var cmdNames = ["help", "ping", "freerole", "gamerole", "namecolor", "postqotd", "postgamenight", "customcolor",
 			"mt", "info"];
 		var cmdUsage = [" [command]", "", " (free role)", " (game role)", " (color role)", " (qotd)", "...prompt",
@@ -15,6 +14,7 @@ module.exports = {
 		var cmdReq = ["Nothing", "Nothing", "Nothing", "Nothing", "Nothing/Bro Time Plus/Bro Time Premium/Bro Time Deluxe",
 			"Role: QOTD Host", "Role: Game Night Host", "Donator", "Moderator permissions", "Nothing"];
 		var helpembed;
+		var cmdDescs;
 		if(param1 == null || param1 == undefined || param1 == "") {
 			helpembed = new Discord.RichEmbed()
 				.setTitle("Commands")
