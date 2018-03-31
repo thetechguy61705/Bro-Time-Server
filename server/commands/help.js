@@ -9,11 +9,11 @@ module.exports = {
 		var param1 = call.params.readRaw();
 		var cmdDescs;
 		var cmdNames = ["help", "ping", "freerole", "gamerole", "namecolor", "postqotd", "postgamenight", "customcolor",
-				"mt", "info"];
+			"mt", "info"];
 		var cmdUsage = [" [command]", "", " (free role)", " (game role)", " (color role)", " (qotd)", "...prompt",
-				"...prompt", " (role name)", " (information topic)"];
+			"...prompt", " (role name)", " (information topic)"];
 		var cmdReq = ["Nothing", "Nothing", "Nothing", "Nothing", "Nothing/Bro Time Plus/Bro Time Premium/Bro Time Deluxe",
-				"Role: QOTD Host", "Role: Game Night Host", "Donator", "Moderator permissions", "Nothing"];
+			"Role: QOTD Host", "Role: Game Night Host", "Donator", "Moderator permissions", "Nothing"];
 		var helpembed;
 		if(param1 == null || param1 == undefined || param1 == "") {
 			helpembed = new Discord.RichEmbed()
