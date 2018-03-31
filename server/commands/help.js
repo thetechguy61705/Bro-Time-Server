@@ -5,13 +5,6 @@ module.exports = {
 	id: "help",
 	load: () => {},
 	execute: (call) => {
-		fs.readFile(__dirname + "/../info/commandinfo.md", (err, data) => {
-			if(err) {
-				throw err;
-			} else {
-				commandDescs = data.toString("utf8").split("\n");
-			}
-		});
 		var pfx = call.message.data.prefix;
 		var param1 = call.params.readRaw();
 		var commandDescs;
