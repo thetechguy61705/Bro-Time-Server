@@ -77,13 +77,15 @@ module.exports = {
 							.setDescription(`Purpose: ${commandDescs[9]}\nUsage: \`${pfx}info (topic)\`\nRequires: \`Nothing\``)
 							.setColor(0x00AE86);
 					} else {
-						call.message.reply(`\`${param1} \` is not a valid command. Please try \`${pfx}help (command)\` or just \`${pfx}help\``);
+						call.message.reply(`Invalid command. Please try \`${pfx}help (command)\` or just \`${pfx}help\``);
+					}
+					if (helpembed != undefined) {
+						call.message.channel.send({
+							embed: helpembed
+						});
 					}
 				}
 			});
 		}
-		call.message.channel.send({
-			embed: helpembed
-		});
 	}
 };
