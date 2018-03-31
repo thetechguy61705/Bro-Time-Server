@@ -101,7 +101,7 @@ module.exports = {
 				call.message.channel.send("You do not have any remaining custom roles.");
 			}
 		} else {
-			const option = await awaitReply(call.message, "would you like to create a custom color role, or delete one?", 60000, client);
+			const option = await awaitReply(call.message, "would you like to create a custom color role, or delete one?", 60000, call.client);
 			var choice = option.toLowerCase();
 			if (choice == "cancel") return call.message.channel.send("Cancelled prompt.");
 			if (choice == "create" || choice == "add" || choice == "make") {
