@@ -36,7 +36,7 @@ module.exports = {
 				helpembed = new Discord.RichEmbed()
 					.setTitle(`${pfx}ping`)
 					.setDescription(`Purpose: ${commandDescs[1]}\nUsage: \`${pfx}ping\`\nRequires: \`Nothing\``)
-						.setColor(0x00AE86);
+					.setColor(0x00AE86);
 			} else if (param1.toLowerCase() == "freerole") {
 				helpembed = new Discord.RichEmbed()
 					.setTitle(`${pfx}freerole`)
@@ -80,7 +80,7 @@ module.exports = {
 			} else {
 				call.message.reply(`\`${param1} \` is not a valid command. Please try \`${pfx}help (command)\` or just \`${pfx}help\``);
 			}
-		call.message.channel.send({embed: helpembed});
+			call.message.channel.send({embed: helpembed});
 		});
 	}
 };
