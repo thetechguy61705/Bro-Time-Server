@@ -5,7 +5,7 @@ module.exports = {
 	id: "help",
 	load: () => {},
 	execute: (call) => {
-		var pfx = call.message.data.prefix;
+		/*var pfx = call.message.data.prefix;
 		var param1 = call.params.readRaw();
 		var cmdDescs;
 		var cmdNames = ["help", "ping", "freerole", "gamerole", "namecolor", "postqotd", "postgamenight", "customcolor",
@@ -30,7 +30,7 @@ module.exports = {
 				embed: helpembed
 			}).catch(() => {
 				call.message.author(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
-				.catch();
+					.catch();
 			});
 		} else {
 			param1 = param1.toLowerCase();
@@ -48,7 +48,7 @@ module.exports = {
 					} else {
 						call.message.reply("Invalid command name. Please run `!help (command)` or just `!help`").catch(() => {
 							call.message.author(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`) 
-							.catch();
+								.catch();
 						});
 					}
 					if (helpembed != undefined) {
@@ -56,11 +56,11 @@ module.exports = {
 							embed: helpembed
 						}).catch(() => {
 							call.message.author(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
-							.catch();
+								.catch()
 						});
 					}
 				}
 			});
-		}
+		}*/
 	}
 };
