@@ -29,7 +29,7 @@ module.exports = {
 			call.message.channel.send({
 				embed: helpembed
 			}).catch(() => {
-				call.message.author(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
+				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
 					.catch();
 			});
 		} else {
@@ -47,7 +47,7 @@ module.exports = {
 							.setColor(0x00AE86);
 					} else {
 						call.message.reply("Invalid command name. Please run `!help (command)` or just `!help`").catch(() => {
-							call.message.author(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`)
+							call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`)
 								.catch();
 						});
 					}
@@ -55,7 +55,7 @@ module.exports = {
 						call.message.channel.send({
 							embed: helpembed
 						}).catch(() => {
-							call.message.author(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
+							call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
 								.catch();
 						});
 					}
