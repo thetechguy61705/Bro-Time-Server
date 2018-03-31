@@ -11,14 +11,14 @@ async function awaitReply(message, question, limit = 60000, bot){
 	}
 }
 
-async function makerole(message, digit) {
+async function makerole(message, digit, client) {
 	var cancel = "\n Say `cancel` to cancel prompt.";
-	const name = await awaitReply(message, "Please specify the name of your role."+cancel, 60000, this.client);
+	const name = await awaitReply(message, "Please specify the name of your role."+cancel, 60000, client);
 	if (name == "cancel") return message.channel.send("Cancelled prompt.");
 	if (name.length > 99-message.author.id.length) {
 		message.reply(`the length of the role is too long. Max length is ${99-message.author.id.length} characters`);
 	} else {
-		const color = await awaitReply(message, "please specify the hex color of your role. Example `#ff0000` or `ff0000`"+cancel, 60000, this.client);
+		const color = await awaitReply(message, "please specify the hex color of your role. Example `#ff0000` or `ff0000`"+cancel, 60000, client);
 		if (color == "cancel") return message.channel.send("Cancelled prompt.");
 		var c = color;
 		var ishex  = /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(`${color}`);
@@ -47,17 +47,17 @@ async function makerole(message, digit) {
 	}
 }
 
-async function deleterole(message) {
+async function deleterole(message, client) {
 	var cancel = "\n Say `cancel` to cancel prompt.";
-	const digitchoice = await awaitReply(message, "which color role do you want to remove (first digit of role name)?"+cancel, 60000, this.client);
+	const digitchoice = await awaitReply(message, "which color role do you want to remove (first digit of role name)?"+cancel, 60000, client);
 	if (digitchoice == "cancel") return message.channel.send("Cancelled prompt.");
 	if (!isNaN(digitchoice)) {
 		if (digitchoice <= 5 && digitchoice >= 1) {
-			const name = await awaitReply(message, "what is the custom role name (only the custom part)?"+cancel, 60000, this.client);
+			const name = await awaitReply(message, "what is the custom role name (only the custom part)?"+cancel, 60000, client);
 			if (name == "cancel") return message.channel.send("Cancelled prompt.");
 			let rolename = `${digitchoice}${message.author.id} ${name}`;
 			if (message.guild.roles.find("name", rolename)) {
-				const approval = await awaitReply(message, "are you sure you want to delete this custom role?"+cancel, 60000, this.client);
+				const approval = await awaitReply(message, "are you sure you want to delete this custom role?"+cancel, 60000, client);
 				if (approval == "cancel") return message.channel.send("Cancelled prompt.");
 				if (approval.toLowerCase() == "yes") {
 					let role = message.guild.roles.find(r=> r.name.toLowerCase() === rolename.toLowerCase());
@@ -88,38 +88,38 @@ module.exports = {
 			deleterole(call.message);
 		} else if (input1 == "create" || input1 == "add" || input1 == "make") {
 			if (call.message.member.roles.find("name", "1")) {
-				makerole(call.message, 1);
+				makerole(call.message, 1, call.client);
 			} else if (call.message.member.roles.find("name", "2")) {
-				makerole(call.message, 2);
+				makerole(call.message, 2, call.client);
 			} else if (call.message.member.roles.find("name", "3")) {
-				makerole(call.message, 3);
+				makerole(call.message, 3, call.client);
 			} else if (call.message.member.roles.find("name", "4")) {
-				makerole(call.message, 4);
+				makerole(call.message, 4, call.client);
 			} else if (call.message.member.roles.find("name", "5")) {
-				makerole(call.message, 5);
+				makerole(call.message, 5, call.client);
 			} else {
 				call.message.channel.send("You do not have any remaining custom roles.");
 			}
 		} else {
-			const option = await awaitReply(call.message, "would you like to create a custom color role, or delete one?", 60000, this.client);
+			const option = await awaitReply(call.message, "would you like to create a custom color role, or delete one?", 60000, client);
 			var choice = option.toLowerCase();
 			if (choice == "cancel") return call.message.channel.send("Cancelled prompt.");
 			if (choice == "create" || choice == "add" || choice == "make") {
 				if (call.message.member.roles.find("name", "1")) {
-					makerole(call.message, 1);
+					makerole(call.message, 1, call.client);
 				} else if (call.message.member.roles.find("name", "2")) {
-					makerole(call.message, 2);
+					makerole(call.message, 2, call.client);
 				} else if (call.message.member.roles.find("name", "3")) {
-					makerole(call.message, 3);
+					makerole(call.message, 3, call.client);
 				} else if (call.message.member.roles.find("name", "4")) {
-					makerole(call.message, 4);
+					makerole(call.message, 4, call.client);
 				} else if (call.message.member.roles.find("name", "5")) {
-					makerole(call.message, 5);
+					makerole(call.message, 5, call.client);
 				} else {
 					call.message.channel.send("You do not have any remaining custom roles.");
 				}
 			} else if (choice=="remove"||choice=="rem"||choice=="delete"||choice=="del") {
-				deleterole(call.message);
+				deleterole(call.message, call.client);
 			} else {
 				call.message.reply("invalid choice. Please rerun the command and choose either `create` or `delete`.");
 			}
