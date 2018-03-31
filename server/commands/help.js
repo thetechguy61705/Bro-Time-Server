@@ -56,7 +56,7 @@ module.exports = {
 							embed: helpembed
 						}).catch(() => {
 							call.message.author(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
-								.catch()
+								.catch();
 						});
 					}
 				}
