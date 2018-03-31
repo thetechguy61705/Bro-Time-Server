@@ -20,6 +20,9 @@ module.exports = {
 				.addField("Event Posting Commands", `\`${pfx}postqotd (qotd)\`\n\`${pfx}postgamenight\``)
 				.addField("Utility Commands", `\`${pfx}mt (role)\``)
 				.addField("Donator Commands", `\`${pfx}customcolor\``);
+			call.message.channel.send({
+				embed: helpembed
+			});
 		} else {
 			fs.readFile(__dirname + "/../info/commandinfo.md", (err, data) => {
 				if(err) {
