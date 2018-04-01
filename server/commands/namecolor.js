@@ -25,8 +25,8 @@ module.exports = {
 		let role = call.params.readRole();
 		if (allroles.includes(color)) {
 			if (call.message.member.roles.find("name", "Bro Time Deluxe")) {
+				removeColorRoles(call.message.guild.roles, call.message.member);
 				call.message.member.addRole(role).then(() => {
-					removeColorRoles(call.message.guild.roles, call.message.member);
 					call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`).catch(() => {
 						call.message.author.send(`Successfully given you the \`${role.name}\` color role, note that I can not chat in ${call.message.channel}.`)
 							.catch(function(){});
@@ -39,8 +39,8 @@ module.exports = {
 				});
 			} else if (call.message.member.roles.find("name", "Bro Time Premium")) {
 				if (premiumcolors.includes(color) || pluscolors.includes(color) || freecolors.includes(color)) {
+					removeColorRoles(call.message.guild.roles, call.message.member);
 					call.message.member.addRole(role).then(() => {
-						removeColorRoles(call.message.guild.roles, call.message.member);
 						call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`).catch(() => {
 							call.message.author.send(`Successfully given you the \`${role.name}\` color role, note that I can not chat in ${call.message.channel}.`)
 								.catch(function(){});
@@ -59,8 +59,8 @@ module.exports = {
 				}
 			} else if (call.message.member.roles.find("name", "Bro Time Plus")) {
 				if (pluscolors.includes(color)||freecolors.includes(color)) {
+					removeColorRoles(call.message.guild.roles, call.message.member);
 					call.message.member.addRole(role).then(() => {
-						removeColorRoles(call.message.guild.roles, call.message.member);
 						call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`).catch(() => {
 							call.message.author.send(`Successfully given you the \`${role.name}\` color role, note that I can not chat in ${call.message.channel}.`)
 								.catch(function(){});
@@ -84,8 +84,8 @@ module.exports = {
 				}
 			} else {
 				if (freecolors.includes(color)) {
+					removeColorRoles(call.message.guild.roles, call.message.member);
 					call.message.member.addRole(role).then(() => {
-						removeColorRoles(call.message.guild.roles, call.message.member);
 						call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`).catch(() => {
 							call.message.author.send(`Successfully given you the \`${role.name}\` color role, note that I can not chat in ${call.message.channel}.`)
 								.catch(function(){});
