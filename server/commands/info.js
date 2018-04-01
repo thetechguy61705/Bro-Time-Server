@@ -275,7 +275,7 @@ async function howToGetRole(message, Discord, prompt, param) {
 			message.channel.send({
 				embed: roleEmbed
 			}).catch(() => {
-				call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+				call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch()
 			});
 		} else {
 			message.reply("Invalid obtainable role. Check `!info howtogetrole --> list`.").catch(() => {
