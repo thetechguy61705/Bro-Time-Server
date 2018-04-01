@@ -1,6 +1,6 @@
 async function awaitReply(message, question, limit = 60000){
 	const filter = m => m.author.id === message.author.id;
-	await message.reply(question).then(() => {
+	await message.reply(question).then(async function() {
 		try {
 			const collected = await message.channel.awaitMessages(filter, { max: 1, time: limit, errors: ["time"] });
 			return collected.first().content;
