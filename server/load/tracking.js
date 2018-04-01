@@ -1,4 +1,4 @@
-var ua = require("universal-analytics");
+/*var ua = require("universal-analytics");
 var { Collection } = require("discord.js");
 
 module.exports = {
@@ -37,3 +37,4 @@ module.exports = {
 		});
 	}
 };
+*/
