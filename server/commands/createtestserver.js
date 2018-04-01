@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 function reverse(str){
 	return str.split("").reverse().join("");
 }
