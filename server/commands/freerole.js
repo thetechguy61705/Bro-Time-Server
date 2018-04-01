@@ -31,7 +31,7 @@ module.exports = {
 		} else {
 			call.message.channel.send(`\`${finput} \` is not a valid freerole option`).catch(() => {
 				call.message.author.send(`You atttempted to use the \`freerole\` command in ${call.message.channel}, but I do not have permissions to chat there.`)
-				.catch();
+					.catch();
 			});
 		}
 	}
