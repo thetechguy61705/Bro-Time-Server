@@ -4,7 +4,7 @@ const fs = require("fs");
 async function awaitReply(message, question, limit = 60000) {
 	const filter = m => m.author.id === message.author.id;
 	try {
-		await message.reply(question).catch();
+		await message.reply(question);
 		const collected = await message.channel.awaitMessages(filter, {
 			max: 1,
 			time: limit,
