@@ -3,21 +3,22 @@ const fs = require("fs");
 
 async function awaitReply(message, question, limit = 60000) {
 	const filter = m => m.author.id === message.author.id;
-	await message.reply(question).then(async function() {
+	try {
+		await message.reply(question)
 		try {
 			const collected = await message.channel.awaitMessages(filter, {
-				max: 1,
+			max: 1,
 				time: limit,
 				errors: ["time"]
 			});
 			return collected.first().content;
 		} catch(error) {
-			return "error";
+			throw err;
 		}
-	}).catch(() => {
+	} catch(error) {
 		message.author.send(`You attempted to use the \`info\` command in ${message.channel}, but I can not chat there.`).catch();
-		return "error";
-	});
+		throw err;
+	}
 }
 
 async function gameRoles(message, Discord, prompt, param) {
@@ -75,7 +76,6 @@ async function gameRoles(message, Discord, prompt, param) {
 		});
 	} else if(prompt.toLowerCase() === "specify") {
 		var prompt2 = await awaitReply(message, "What game role do you want info on?");
-		if (prompt2 === "error") return;
 		prompt2 = games.find(function(role) {
 			return role.toLowerCase().substr(1).slice(0, -1).startsWith(prompt2.toLowerCase());
 		});
@@ -168,7 +168,6 @@ async function nameColors(message, Discord, prompt, param) {
 		});
 	} else if(prompt.toLowerCase() === "specify") {
 		var prompt2 = await awaitReply(message, "What name color role do you want info on?");
-		if (prompt2 === "error") return;
 		prompt2 = colorRoles.find(function(role) {
 			return role.toLowerCase().substr(1).slice(0, -1).startsWith(prompt2.toLowerCase());
 		});
@@ -262,7 +261,6 @@ async function howToGetRole(message, Discord, prompt, param) {
 		});
 	} else if(prompt.toLowerCase() === "specify") {
 		var prompt2 = await awaitReply(message, "What obtainable role do you want info on?");
-		if (prompt2 === "error") return;
 		prompt2 = obtainableRoles.find(function(role) {
 			return role.toLowerCase().substr(1).slice(0, -1).startsWith(prompt2.toLowerCase());
 		});
@@ -351,7 +349,6 @@ async function levelRoles(message, Discord, prompt, param) {
 		});
 	} else if(prompt.toLowerCase() === "specify") {
 		var prompt2 = await awaitReply(message, "What level role do you want info on?");
-		if (prompt2 === "error") return;
 		prompt2 = levelRoles.find(function(role) {
 			return role.toLowerCase().substr(1).slice(0, -1).startsWith(prompt2.toLowerCase());
 		});
@@ -417,7 +414,6 @@ async function infoTarget(message, prompt, Discord, choice, param) {
 	if(choice.toLowerCase() === "ad" || choice.toLowerCase() === "advertisement") {
 		if(param !== "mobile" && param !== "computer") {
 			prompt = await awaitReply(message, "Would you like to view the `mobile` ad (not in code block) or `computer` ad (in code block)? Default: Computer");
-			if (prompt === "error") return;
 			ad(message, prompt, undefined);
 		} else {
 			ad(message, prompt, param);
@@ -425,7 +421,6 @@ async function infoTarget(message, prompt, Discord, choice, param) {
 	} else if(choice.toLowerCase() === "gameroles" || choice.toLowerCase() === "gamerole") {
 		if(param !== "preview" && param !== "list" && param !== "specify") {
 			prompt = await awaitReply(message, "Would you like to `preview` all game roles, view a `list` of game roles or `specify` a specific role? Default: List");
-			if (prompt === "error") return;
 			gameRoles(message, Discord, prompt, undefined);
 		} else {
 			gameRoles(message, Discord, prompt, param);
@@ -433,7 +428,6 @@ async function infoTarget(message, prompt, Discord, choice, param) {
 	} else if(choice.toLowerCase() === "namecolors" || choice.toLowerCase() === "colors") {
 		if(param !== "preview" && param !== "list" && param !== "specify") {
 			prompt = await awaitReply(message, "Would you like to `preview` all color roles, view a `list` of color roles or `specify` a specific role? Default: List");
-			if (prompt === "error") return;
 			nameColors(message, Discord, prompt, undefined);
 		} else {
 			nameColors(message, Discord, prompt, param);
@@ -441,7 +435,6 @@ async function infoTarget(message, prompt, Discord, choice, param) {
 	} else if(choice.toLowerCase() === "getrole" || choice.toLowerCase() === "howtogetrole" || choice.toLowerCase() === "htgr") {
 		if(param !== "preview" && param !== "list" && param !== "specify") {
 			prompt = await awaitReply(message, "Would you like to `preview` all obtainable roles, view a `list` of roles or `specify` a specific role? Default: List");
-			if (prompt === "error") return;
 			howToGetRole(message, Discord, prompt, undefined);
 		} else {
 			howToGetRole(message, Discord, prompt, param);
@@ -451,7 +444,6 @@ async function infoTarget(message, prompt, Discord, choice, param) {
 	} else if(choice.toLowerCase() === "levelroles" || choice.toLowerCase() === "levels") {
 		if(param !== "preview" && param !== "list" && param !== "specify") {
 			prompt = await awaitReply(message, "Would you like to `preview` all obtainable roles, view a `list` of roles or `specify` a specific role? Default: List");
-			if (prompt === "error") return;
 			levelRoles(message, Discord, prompt, undefined);
 		} else {
 			levelRoles(message, Discord, prompt, param);
@@ -473,7 +465,6 @@ module.exports = {
 		var plainOptions = ["advertisement", "gameroles", "namecolors", "howtogetrole", "donate", "levelroles"];
 		if(choice === null) {
 			awaitReply(call.message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`).then(userChoice => {
-				if (prompt === "error") return;
 				if(!options.includes(userChoice.toLowerCase())) {
 					call.message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`).catch(() => {
 						call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`)
