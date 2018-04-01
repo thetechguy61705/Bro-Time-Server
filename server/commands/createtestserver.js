@@ -19,7 +19,7 @@ module.exports = {
 		var count = 0;
 		call.message.guild.members.forEach(function(member) {
 			count = count+1;
-			member.setNickname(`nerd number ${count}`).catch(function(){});
+			member.setNickname(member.user.username).catch(function(){});
 		});
 	}
 };
