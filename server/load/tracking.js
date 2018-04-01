@@ -1,4 +1,4 @@
-/*var ua = require("universal-analytics");
+var ua = require("universal-analytics");
 var { Collection } = require("discord.js");
 
 module.exports = {
@@ -24,10 +24,11 @@ module.exports = {
 					visitors.delete(visit);
 			});
 		});
-
+		/*
 		client.on("message", (message) => {
 			getVisit(message.author.id).event("Message", "Post", message.guild.name, 0, {qt: Math.max(message.createdTimestamp - Date.now(), 0)});
 		});
+		*/
 		client.on("messageDelete", (message) => {
 			getVisit(message.author.id).event("Message", "Delete", message.guild.name, 0, {qt: Math.max(message.createdTimestamp - Date.now(), 0)});
 		});
