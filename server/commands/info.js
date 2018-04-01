@@ -5,19 +5,14 @@ async function awaitReply(message, question, limit = 60000) {
 	const filter = m => m.author.id === message.author.id;
 	try {
 		await message.reply(question);
-		try {
-			const collected = await message.channel.awaitMessages(filter, {
-				max: 1,
-				time: limit,
-				errors: ["time"]
-			});
-			return collected.first().content;
-		} catch(error) {
-			throw error;
-		}
+		const collected = await message.channel.awaitMessages(filter, {
+  			max: 1,
+			time: limit,
+			errors: ["time"]
+		});
+		return collected.first().content;
 	} catch(error) {
 		message.author.send(`You attempted to use the \`info\` command in ${message.channel}, but I can not chat there.`).catch();
-		throw error;
 	}
 }
 
