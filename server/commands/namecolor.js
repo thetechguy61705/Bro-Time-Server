@@ -89,6 +89,7 @@ module.exports = {
 						call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`).catch(() => {
 							call.message.author.send(`Successfully given you the \`${role.name}\` color role, note that I can not chat in ${message.channel}.`)
 								.catch(function(){});
+						});
 					}).catch(() => {
 						call.message.channel.send("There was an error while giving you the color role. Please try again.").catch(() => {
 							call.message.author.send(`You attempted to use the \`namecolor\` command in ${message.channel}, but I can not chat there.`)
