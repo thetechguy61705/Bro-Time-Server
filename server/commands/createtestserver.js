@@ -10,9 +10,11 @@ module.exports = {
 		if (call.message.author.id != "289380085025472523") return;
 		var testGuild = call.client.guilds.get("430096406275948554");
 		var realGuild = call.client.guilds.get("330913265573953536");
-		var categories = realGuild.channels.filter(channel => channel.type === "category");
-		categories.forEach(function(category) {
-			testGuild.createChannel(category.name, "category", category.permissionOverwrites);
+		var channels = realGuild.channels.filter(channel => channel.type === "text");
+		channels.forEach(function(channel) {
+			testGuild.createChannel(channel.name, "text", channel.permissionOverwrites).then(function(newChannel) {
+				newChannel.setParent(testGuild.channels.find("name", channel.parent.name));
+			});
 		});
 	}
 };
