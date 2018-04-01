@@ -14,7 +14,7 @@ module.exports = {
 		var realGuild = call.client.guilds.get("330913265573953536");
 		var categories = realGuild.channels.filter(channel => channel.type === "category");
 		categories.forEach(function(category) {
-			realGuild.createChannel(category.name, "category", category.permissionOverwrites)
+			realGuild.createChannel(category.name, "category", category.permissionOverwrites);
 		});
 	}
 };
