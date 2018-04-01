@@ -71,7 +71,7 @@ async function gameRoles(message, Discord, prompt, param) {
 			});
 			reactions.on("end", () => embedMessage.edit("Interactive command ended: 2 minutes passed."));
 		}).catch(() => {
-			call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+			message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 		});
 	} else if(prompt.toLowerCase() === "specify") {
 		var prompt2 = await awaitReply(message, "What game role do you want info on?");
@@ -88,11 +88,11 @@ async function gameRoles(message, Discord, prompt, param) {
 			message.channel.send({
 				embed: roleEmbed
 			}).catch(() => {
-				call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
-			});;
+				message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+			});
 		} else {
 			message.reply("Invalid game role. Check `!info gameroles --> list`.").catch(() => {
-				call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+				message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 			});
 		}
 	} else {
@@ -104,8 +104,8 @@ async function gameRoles(message, Discord, prompt, param) {
 		message.channel.send({
 			embed: gameRoleEmbed
 		}).catch(() => {
-			call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
-		});;
+			message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+		});
 	}
 }
 
@@ -164,7 +164,7 @@ async function nameColors(message, Discord, prompt, param) {
 			});
 			reactions.on("end", () => embedMessage.edit("Interactive command ended: 2 minutes passed."));
 		}).catch(() => {
-			call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+			message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 		});
 	} else if(prompt.toLowerCase() === "specify") {
 		var prompt2 = await awaitReply(message, "What name color role do you want info on?");
@@ -181,11 +181,11 @@ async function nameColors(message, Discord, prompt, param) {
 			message.channel.send({
 				embed: roleEmbed
 			}).catch(() => {
-				call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+				message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 			});
 		} else {
 			message.reply("Invalid name color role. Check `!info namecolors --> list`.").catch(() => {
-				call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+				message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 			});
 		}
 	} else {
@@ -197,7 +197,7 @@ async function nameColors(message, Discord, prompt, param) {
 		message.channel.send({
 			embed: nameColorEmbed
 		}).catch(() => {
-			call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+			message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 		});
 	}
 }
@@ -256,7 +256,7 @@ async function howToGetRole(message, Discord, prompt, param) {
 					embed: roleEmbed
 				});
 			}).catch(() => {
-				call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+				message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 			});
 			reactions.on("end", () => embedMessage.edit("Interactive command ended: 2 minutes passed."));
 		});
@@ -275,11 +275,11 @@ async function howToGetRole(message, Discord, prompt, param) {
 			message.channel.send({
 				embed: roleEmbed
 			}).catch(() => {
-				call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+				message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 			});
 		} else {
 			message.reply("Invalid obtainable role. Check `!info howtogetrole --> list`.").catch(() => {
-				call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+				message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 			});
 		}
 	} else {
@@ -291,7 +291,7 @@ async function howToGetRole(message, Discord, prompt, param) {
 		message.channel.send({
 			embed: roleEmbed
 		}).catch(() => {
-			call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+			message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 		});
 	}
 }
@@ -345,7 +345,7 @@ async function levelRoles(message, Discord, prompt, param) {
 					embed: roleEmbed
 				});
 			}).catch(() => {
-				call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+				message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 			});
 			reactions.on("end", () => embedMessage.edit("Interactive command ended: 2 minutes passed."));
 		});
@@ -364,11 +364,11 @@ async function levelRoles(message, Discord, prompt, param) {
 			message.channel.send({
 				embed: roleEmbed
 			}).catch(() => {
-				call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+				message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 			});
 		} else {
 			message.reply("Invalid level role. Check `!info levelroles --> list`.").catch(() => {
-				call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+				message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 			});
 		}
 	} else {
@@ -380,7 +380,7 @@ async function levelRoles(message, Discord, prompt, param) {
 		message.channel.send({
 			embed: roleEmbed
 		}).catch(() => {
-			call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+			message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 		});
 	}
 }
@@ -391,7 +391,7 @@ function donate(message) {
 			throw err;
 		} else {
 			message.channel.send(data.toString("utf8")).catch(() => {
-				call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+				message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 			});
 		}
 	});
@@ -406,7 +406,7 @@ function ad(message, prompt, param) {
 			var toSend = data.toString("utf8");
 			if(prompt == "computer") toSend = `\`\`\`${toSend}\`\`\``;
 			message.channel.send(toSend).catch(() => {
-				call.message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
+				message.author.send(`You attempted to run the command \`info\` in ${message.channel}, but I could not chat there.`).catch();
 			});
 		}
 	});
@@ -417,7 +417,7 @@ async function infoTarget(message, prompt, Discord, choice, param) {
 	if(choice.toLowerCase() === "ad" || choice.toLowerCase() === "advertisement") {
 		if(param !== "mobile" && param !== "computer") {
 			prompt = await awaitReply(message, "Would you like to view the `mobile` ad (not in code block) or `computer` ad (in code block)? Default: Computer");
-			if (prompt1 === "error") return;
+			if (prompt === "error") return;
 			ad(message, prompt, undefined);
 		} else {
 			ad(message, prompt, param);
