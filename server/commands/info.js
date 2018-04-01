@@ -13,6 +13,7 @@ async function awaitReply(message, question, limit = 60000) {
 		return collected.first().content;
 	} catch(error) {
 		message.author.send(`You attempted to use the \`info\` command in ${message.channel}, but I can not chat there.`).catch(function(){});
+		throw error;
 	}
 }
 
