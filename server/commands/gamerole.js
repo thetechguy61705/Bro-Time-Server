@@ -24,12 +24,12 @@ module.exports = {
 							call.message.author.send(`Unable to remove the \`${game}\` game role from you.`).catch();
 						});
 					});
-					} else {
+				} else {
 					call.message.member.addRole(role).then(() => {
 						call.message.channel.send(`Successfully given you the \`${game}\` game role.`).catch(() => {
 							call.message.author.send(`Successfully given you the \`${game}\` game role.`).catch();
 						});
-					}).catch(() => {	
+					}).catch(() => {
 						call.message.channel.send(`Unable to give you the \`${game}\` game role.`).catch(() => {
 							call.message.author.send(`Unable to give you the \`${game}\` game role.`).catch();
 						});
@@ -37,7 +37,9 @@ module.exports = {
 				}
 			} else {
 				call.message.channel.send("Invalid game option. Game options can be found in `!info gameroles list`.").catch(() => {
-					call.message.author.send(`You attempted to use the \`gamerole\` command in ${call.message.channel}, but I do not have permission to chat there.`).catch();
+					call.message.author
+						.send(`You attempted to use the \`gamerole\` command in ${call.message.channel}, but I do not have permission to chat there.`)
+						.catch();
 				});
 			}
 		}).catch(() => {
