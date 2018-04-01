@@ -6,7 +6,7 @@ async function awaitReply(message, question, limit = 60000) {
 	try {
 		await message.reply(question);
 		const collected = await message.channel.awaitMessages(filter, {
-  			max: 1,
+			max: 1,
 			time: limit,
 			errors: ["time"]
 		});
