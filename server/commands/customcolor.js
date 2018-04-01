@@ -117,7 +117,7 @@ module.exports = {
 			}
 		} else {
 			const option = await awaitReply(call.message, "would you like to create a custom color role, or delete one?", 60000);
-			if (option === "error") return;
+			if (option == "error") return;
 			var choice = option.toLowerCase();
 			if (choice === "cancel") return call.message.channel.send("Cancelled prompt.");
 			if (choice == "create" || choice == "add" || choice == "make") {
