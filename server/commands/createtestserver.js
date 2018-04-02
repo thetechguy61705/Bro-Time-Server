@@ -12,11 +12,10 @@ module.exports = {
 		var realGuild = call.client.guilds.get("330913265573953536");
 		var count = 1;
 		var role;
-		while (count != realGuild.roles.size-1) {
+		realGuild.roles.forEach(function(role) {
 			role = realGuild.roles.array()[count];
-			testGuild.createRole(role.name, role.color, role.hoist, count).then(() => {
-				count = count+1;
-			});
-		}
+			testGuild.createRole(role.name, role.color, role.hoist, count);
+			count = count+1;
+		});
 	}
 };
