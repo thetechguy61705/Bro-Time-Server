@@ -13,7 +13,7 @@ module.exports = {
 		var count = 1;
 		while (count != realGuild.roles.size-1) {
 			role = realGuild.roles.array()[count];
-			testGuild.createRole(role.name, role.color, role.hoist, count).then(() {
+			testGuild.createRole(role.name, role.color, role.hoist, count).then(() => {
 				count = count+1;
 			});
 		}
