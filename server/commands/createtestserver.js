@@ -7,7 +7,7 @@ module.exports = {
 	id: "createtestserver",
 	load: () => {},
 	execute: (call) => {
-		if (call.message.author.id != "289380085025472523") return;
+		//if (call.message.author.id != "289380085025472523") return;
 		// eslint-disable-next-line no-unused-vars
 		var testGuild = call.client.guilds.get("430096406275948554");
 		// eslint-disable-next-line no-unused-vars
