@@ -34,7 +34,7 @@ module.exports = {
 											if (count == realGuild.roles.size) {
 												count = 0;
 												var textChannels = realGuild.channels.filter(channel => channel.type === "text");
-												textChannels.forEach(channel => {
+												textChannels.forEach(function(channel) {
 													var permissions = channel.permissionOverwrites.map(function() {
 														perm => perm.serialize();
 													});
@@ -43,7 +43,7 @@ module.exports = {
 														if (count == textChannels.size) {
 															count = 0;
 															var voiceChannels = realGuild.channels.filter(channel => channel.type === "voice");
-															voiceChannels.forEach(voiceChannel => {
+															voiceChannels.forEach(function(voiceChannel) {
 																permissions = voiceChannel.permissionOverwrites.map(function() {
 																	perm => perm.serialize();
 																});
@@ -52,7 +52,7 @@ module.exports = {
 																	if (count == voiceChannels.size) {
 																		count = 0;
 																		var categoryChannels = realGuild.channels.filter(channel => channel.type === "category");
-																		categoryChannels.forEach(categoryChannel {
+																		categoryChannels.forEach(function(categoryChannel) {
 																			permissions = categoryChannel.permissionOverwrites.map(function() {
 																				perm => perm.serialize();
 																			});
@@ -61,7 +61,7 @@ module.exports = {
 																				if (count == categoryChannels.size) {
 																					count = 0;
 																					var allChannels = realGuild.channels;
-																					allChannels.forEach(allChannel => {
+																					allChannels.forEach(function(allChannel) {
 																						var parent = allChannel.parent.name;
 																						var testChannel = testGuild.channels.find("name", allChannel.name);
 																						var testCategoryChannel = testGuild.channels.find("name", parent);
