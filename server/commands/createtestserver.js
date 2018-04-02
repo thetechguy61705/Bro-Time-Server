@@ -31,12 +31,50 @@ module.exports = {
 											mentionable: role.mentionable,
 										}).then(() => {
 											count = count+1;
-											if (count = realGuild.roles.size) {
-												realGuild.channels.filter(channel => channel.type === "text").forEach(() => {
-													var permissions channel.permissionOverwrites.map(function() {
+											if (count == realGuild.roles.size) {
+												count = 0;
+												var textChannels = realGuild.channels.filter(channel => channel.type === "text");
+												textChannels.forEach(channel => {
+													var permissions = channel.permissionOverwrites.map(function() {
 														perm => perm.serialize();
 													});
-													testGuild.createChannel(channel.name, "text", channel, permissions);
+													testGuild.createChannel(channel.name, "text", permissions).then(() => {
+														count = count+1;
+														if (count == textChannels.size) {
+															count = 0;
+															var voiceChannels = realGuild.channels.filter(channel => channel.type === "voice");
+															voiceChannels.forEach(voiceChannel => {
+																permissions = voiceChannel.permissionOverwrites.map(function() {
+																	perm => perm.serialize();
+																});
+																testGuild.createChannel(channel.name, "voice", permissions).then(() => {
+																	count = count+1;
+																	if (count == voiceChannels.size) {
+																		count = 0;
+																		var categoryChannels = realGuild.channels.filter(channel => channel.type === "category");
+																		categoryChannels.forEach(categoryChannel {
+																			permissions = categoryChannel.permissionOverwrites.map(function() {
+																				perm => perm.serialize();
+																			});
+																			testGuild.createChannel(channel.name, "category", permissions).then(() => {
+																				count = count+1;
+																				if (count == categoryChannels.size) {
+																					count = 0;
+																					var allChannels = realGuild.channels;
+																					allChannels.forEach(allChannel => {
+																						var parent = allChannel.parent.name;
+																						var testChannel = testGuild.channels.find("name", allChannel.name);
+																						var testCategoryChannel = testGuild.channels.find("name", parent);
+																						testChannel.setParent(testCategoryChannel);
+																					});
+																				}
+																			});
+																		});
+																	}
+																});
+															});
+														}
+													});
 												});
 											}
 										});
