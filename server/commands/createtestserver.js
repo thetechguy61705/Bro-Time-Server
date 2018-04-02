@@ -12,8 +12,8 @@ module.exports = {
 		var realGuild = call.client.guilds.get("330913265573953536");
 		var count = 1;
 		realGuild.roles.forEach(function(role) {
-			let role = realGuild.roles.array()[count];
-			testGuild.createRole(role.name, role.color, role.hoist, count);
+			let realRole = realGuild.roles.array()[count];
+			testGuild.createRole(realRole.name, realRole.color, realRole.hoist, count);
 			count = count+1;
 		});
 	}
