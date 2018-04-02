@@ -13,7 +13,7 @@ module.exports = {
 		realGuild.channels.forEach(async function(channel) {
 			var targetChannel = testGuild.channels.find("name", channel.name);
 			if (targetChannel.type === "text") targetChannel.setTopic(channel.topic);
-			if (targetChannel.type !== "category") targetChannel.setParent(testGuild.channels.find("name", channel.parent.name);
+			if (targetChannel.type !== "category") targetChannel.setParent(testGuild.channels.find("name", channel.parent.name));
 		});
 	}
 };
