@@ -11,78 +11,8 @@ module.exports = {
 		var testGuild = call.client.guilds.get("430096406275948554");
 		var realGuild = call.client.guilds.get("330913265573953536");
 		var count = 0;
-		testGuild.roles.forEach(function(role) {
-			role.delete().then(() => {
-				count = count+1;
-				if (count == testGuild.roles.size) {
-					count = 0;
-					testGuild.channels.forEach(function(channel) {
-						channel.delete().then(() => {
-							count = count+1;
-							if (count == testGuild.channels.size) {
-								count = 0;
-								realGuild.roles.forEach(function(role) {
-									testGuild.createRole({
-										name: role.name,
-										color: role.color,
-										hoist: role.hoist,
-										position: role.position,
-										mentionable: role.mentionable,
-									}).then(() => {
-										count = count+1;
-										if (count == realGuild.roles.size) {
-											count = 0;
-											var textChannels = realGuild.channels.filter(channel => channel.type === "text");
-											textChannels.forEach(function(textChannel) {
-												var permissions = textChannel.permissionOverwrites.map(function() {
-													perm => perm.serialize();
-												});
-												testGuild.createChannel(textChannel.name, "text", permissions).then(() => {
-													count = count+1;
-													if (count == textChannels.size) {
-														count = 0;
-														var voiceChannels = realGuild.channels.filter(channel => channel.type === "voice");
-														voiceChannels.forEach(function(voiceChannel) {
-															permissions = voiceChannel.permissionOverwrites.map(function() {
-																perm => perm.serialize();
-															});
-															testGuild.createChannel(voiceChannel.name, "voice", permissions).then(() => {
-																count = count+1;
-																if (count == voiceChannels.size) {
-																	count = 0;
-																	var categoryChannels = realGuild.channels.filter(channel => channel.type === "category");
-																	categoryChannels.forEach(function(categoryChannel) {
-																		permissions = categoryChannel.permissionOverwrites.map(function() {
-																			perm => perm.serialize();
-																		});
-																		testGuild.createChannel(categoryChannel.name, "category", permissions).then(() => {
-																			count = count+1;
-																			if (count == categoryChannels.size) {
-																				count = 0;
-																				var allChannels = realGuild.channels;
-																				allChannels.forEach(function(allChannel) {
-																					var parent = allChannel.parent.name;
-																					var testChannel = testGuild.channels.find("name", allChannel.name);
-																					var testCategoryChannel = testGuild.channels.find("name", parent);
-																					testChannel.setParent(testCategoryChannel);
-																				});
-																			}
-																		});
-																	});
-																}
-															});
-														});
-													}
-												});
-											});
-										}
-									});
-								});
-							}
-						});
-					});
-				}
-			});
+		realGuild.channels.forEach(async function(channel) {
+			await testGuild.createChannel(channel.name, channel.type);
 		});
 	}
 };
