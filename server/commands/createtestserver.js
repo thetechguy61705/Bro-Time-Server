@@ -8,8 +8,11 @@ module.exports = {
 	load: () => {},
 	execute: (call) => {
 		if (call.message.author.id != "289380085025472523") return;
+		// eslint-disable-next-line no-unused-vars
 		var testGuild = call.client.guilds.get("430096406275948554");
+		// eslint-disable-next-line no-unused-vars
 		var realGuild = call.client.guilds.get("330913265573953536");
+		// eslint-disable-next-line no-unused-vars
 		var count = 1;
 		testGuild.roles.forEach(function(role) {
 			role.delete();
