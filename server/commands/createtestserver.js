@@ -11,6 +11,7 @@ module.exports = {
 		var testGuild = call.client.guilds.get("430096406275948554");
 		var realGuild = call.client.guilds.get("330913265573953536");
 		var count = 1;
+		var role;
 		while (count != realGuild.roles.size-1) {
 			role = realGuild.roles.array()[count];
 			testGuild.createRole(role.name, role.color, role.hoist, count).then(() => {
