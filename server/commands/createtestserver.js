@@ -21,8 +21,8 @@ module.exports = {
 							count = count+1;
 							if (count == testGuild.channels.size) {
 								count = 0;
-								realGuild.roles.forEach(function(role) => {
-									var permissions = role.permissions.map(function(){
+								realGuild.roles.forEach(function(role) {
+									var permissions = role.permissions.map(function() {
 										testGuild.createRole({
 											name: role.name,
 											color: role.color,
@@ -36,7 +36,7 @@ module.exports = {
 													var permissions channel.permissionOverwrites.map(function() {
 														perm => perm.serialize();
 													});
-													testGuild.createChannel(channel.name, "text", channel, permissions)
+													testGuild.createChannel(channel.name, "text", channel, permissions);
 												});
 											}
 										});
