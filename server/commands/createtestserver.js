@@ -11,11 +11,11 @@ module.exports = {
 		var testGuild = call.client.guilds.get("430096406275948554");
 		var realGuild = call.client.guilds.get("330913265573953536");
 		var count = 1;
-		/*testGuild.roles.forEach(function(role) {
-			role.delete();
-		});*/
 		testGuild.roles.forEach(function(role) {
-			role.setPosition(realGuild.roles.find("name", role.name).position);
+			role.delete();
 		});
+		/*testGuild.roles.forEach(function(role) {
+			role.setPosition(realGuild.roles.find("name", role.name).position);
+		});*/
 	}
 };
