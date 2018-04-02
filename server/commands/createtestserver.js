@@ -12,7 +12,7 @@ module.exports = {
 		var realGuild = call.client.guilds.get("330913265573953536");
 		var count = 0;
 		realGuild.channels.forEach(async function(channel) {
-			await testGuild.createChannel(channel.name, channel.type);
+			await testGuild.createChannel(channel.name, channel.type)
 		});
 	}
 };
