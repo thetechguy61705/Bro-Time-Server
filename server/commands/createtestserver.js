@@ -14,16 +14,8 @@ module.exports = {
 		/*testGuild.roles.forEach(function(role) {
 			role.delete();
 		});*/
-		realGuild.roles.forEach(function() {
-			let realRole = realGuild.roles.array()[count];
-			testGuild.createRole({
-				name: realRole.name,
-				color: realRole.color,
-				hoist: realRole.hoist,
-				position: count,
-				mentionable: realRole.mentionable,
-			});
-			count = count+1;
+		testGuild.roles.forEach(function(role) {
+			role.setPosition(realGuild.roles.find("name", role.name).position);
 		});
 	}
 };
