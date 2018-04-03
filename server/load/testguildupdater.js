@@ -5,13 +5,15 @@ module.exports = {
 		var testGuild = client.guilds.get("430096406275948554");
 		var realGuild = client.guilds.get("330913265573953536");
 		client.on("message", (message) => {
-			if (!excludedUsers.includes(message.author.id)) {
-				if(message.guild.id === realGuild.id) {
-					testGuild.channels.find("name", message.channel.name).send(`**${message.author.tag}** (${message.author.id})\n\`\`\`${message.content} \`\`\``);
-				}
-			} else {
-				if(message.guild.id === realGuild.id) {
-					testGuild.channels.find("name", message.channel.name).send("**USER_TAG** (USER_ID)\n```MESSAGE CONTENT COULD NOT SEND: USER EXCLUDED```");
+			if (message.channel.type === "text") {
+				if (!excludedUsers.includes(message.author.id)) {
+					if(message.guild.id === realGuild.id) {
+						testGuild.channels.find("name", message.channel.name).send(`**${message.author.tag}** (${message.author.id})\n\`\`\`${message.content} \`\`\``);
+					}
+				} else {
+					if(message.guild.id === realGuild.id) {
+						testGuild.channels.find("name", message.channel.name).send("**USER_TAG** (USER_ID)\n```MESSAGE CONTENT COULD NOT SEND: USER EXCLUDED```");
+					}
 				}
 			}
 		});
