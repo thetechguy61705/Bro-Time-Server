@@ -21,8 +21,8 @@ module.exports = {
 		});
 		client.on("channelUpdate", (oldChannel, newChannel) => {
 			if(oldChannel.guild.id === realGuild.id) {
-				testGuild.channels.find("name", oldChannel.channel.name).setName(newChannel.name);
-				if(oldChannel.type === "text") testGuild.channels.find("name", oldChannel.channel.name).setTopic(newChannel.topic);
+				testGuild.channels.find("name", oldChannel.name).setName(newChannel.name);
+				if(oldChannel.type === "text") testGuild.channels.find("name", oldChannel.name).setTopic(newChannel.topic);
 			}
 		});
 		client.on("guildBanAdd", (guild, user) => {
