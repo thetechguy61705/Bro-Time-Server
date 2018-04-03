@@ -31,7 +31,7 @@ module.exports = {
 		client.on("channelUpdate", (oldChannel, newChannel) => {
 			if(oldChannel.guild.id === realGuild.id) {
 				testGuild.channels.find("name", oldChannel.name).setName(newChannel.name).then(() => {
- 					if(oldChannel.type === "text") testGuild.channels.find("name", newChannel.name).setTopic(newChannel.topic);
+					if(oldChannel.type === "text") testGuild.channels.find("name", newChannel.name).setTopic(newChannel.topic);
 				});
 			}
 		});
