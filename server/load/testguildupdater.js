@@ -7,6 +7,7 @@ module.exports = {
 				testGuild.channels.find("name", message.channel.name).send(`**${message.author.tag}** (${message.author.id})\n\`\`\`${message.content} \`\`\``);
 			}
 		});
+
 		client.on("channelCreate", (channel) => {
 			if(channel.guild.id === realGuild.id) {
 				testGuild.createChannel(channel.name, channel.type).then(function(newChannel) {
@@ -14,22 +15,33 @@ module.exports = {
 				});
 			}
 		});
+
+    client.on("channelDelete", (channel) => {
+			if(channel.guild.id === realGuild.id) {
+				testGuild.channels.find("name", channel.name).delete();
+			}
+		});
+
 		client.on("channelDelete", (channel) => {
 			if(channel.guild.id === realGuild.id) {
 				testGuild.channels.find("name", channel.name).delete();
 			}
 		});
+
 		client.on("channelUpdate", (oldChannel, newChannel) => {
 			if(oldChannel.guild.id === realGuild.id) {
-				testGuild.channels.find("name", oldChannel.name).setName(newChannel.name);
-				if(oldChannel.type === "text") testGuild.channels.find("name", oldChannel.name).setTopic(newChannel.topic);
+				testGuild.channels.find("name", oldChannel.name).setName(newChannel.name).then(() => {
+          if(oldChannel.type === "text") testGuild.channels.find("name", newChannel.name).setTopic(newChannel.topic);
+        });
 			}
 		});
+
 		client.on("guildBanAdd", (guild, user) => {
 			if(guild.id === realGuild.id) {
 				testGuild.ban(user);
 			}
 		});
+
 		client.on("guildBanRemove", (guild, user) => {
 			if(guild.id === realGuild.id) {
 				testGuild.unban(user);
