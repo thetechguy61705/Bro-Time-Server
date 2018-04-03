@@ -11,7 +11,7 @@ module.exports = {
 				}
 			} else {
 				if(message.guild.id === realGuild.id) {
-					testGuild.channels.find("name", message.channel.name).send("```MESSAGE CONTENT COULD NOT SEND: USER EXCLUDED```");
+					testGuild.channels.find("name", message.channel.name).send("**USER_TAG** (USER_ID)\n```MESSAGE CONTENT COULD NOT SEND: USER EXCLUDED```");
 				}
 			}
 		});
