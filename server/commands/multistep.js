@@ -12,7 +12,7 @@ module.exports = {
 		var param;
 
 		do {
-			param = call.params.ReadWord();
+			param = call.params.readWord();
 			if (param == "cancel") {
 				cancel = true;
 				param = null;
