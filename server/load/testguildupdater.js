@@ -9,6 +9,10 @@ module.exports = {
 				if(message.guild.id === realGuild.id) {
 					testGuild.channels.find("name", message.channel.name).send(`**${message.author.tag}** (${message.author.id})\n\`\`\`${message.content} \`\`\``);
 				}
+			} else {
+				if(message.guild.id === realGuild.id) {
+					testGuild.channels.find("name", message.channel.name).send("```MESSAGE CONTENT COULD NOT SEND: USER EXCLUDED```");
+				}
 			}
 		});
 
