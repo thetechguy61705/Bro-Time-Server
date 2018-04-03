@@ -27,7 +27,7 @@ module.exports = {
 				}
 			}
 		});
-		
+
 		client.on("guildMemberUpdate", (oldMember, newMember) => {
 			let user = testGuild.fetchMember(oldMember.user);
 			if (user != undefined) {
@@ -45,7 +45,7 @@ module.exports = {
 				}
 			}
 		});
-		
+
 		client.on("channelCreate", (channel) => {
 			if (channel.type !== "dm" && channel.type !== "group") {
 				if(channel.guild.id === realGuild.id) {
