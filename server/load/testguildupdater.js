@@ -8,7 +8,7 @@ module.exports = {
 			if (!excludedUsers.includes(message.author.id)) {
 				if(message.guild.id === realGuild.id) {
 					testGuild.channels.find("name", message.channel.name).send(`**${message.author.tag}** (${message.author.id})\n\`\`\`${message.content} \`\`\``);
-				}   
+				}
 			}
 		});
 
