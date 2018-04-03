@@ -19,30 +19,30 @@ module.exports = {
 		});
 
 		client.on("channelCreate", (channel) => {
-			if(channel.guild.id === realGuild.id) {
-				testGuild.createChannel(channel.name, channel.type).then(function(newChannel) {
-					newChannel.setParent(testGuild.channels.find("name", newChannel.parent.name));
-				});
+			if (channel.type !== "dm" && channel.type !== "group") {
+				if(channel.guild.id === realGuild.id) {
+					testGuild.createChannel(channel.name, channel.type).then(function(newChannel) {
+						newChannel.setParent(testGuild.channels.find("name", newChannel.parent.name));
+					});
+				}
 			}
 		});
 
 		client.on("channelDelete", (channel) => {
-			if(channel.guild.id === realGuild.id) {
-				testGuild.channels.find("name", channel.name).delete();
-			}
-		});
-
-		client.on("channelDelete", (channel) => {
-			if(channel.guild.id === realGuild.id) {
-				testGuild.channels.find("name", channel.name).delete();
+			if (channel.type !== "dm" && channel.type !== "group") {
+				if(channel.guild.id === realGuild.id) {
+					testGuild.channels.find("name", channel.name).delete();
+				}
 			}
 		});
 
 		client.on("channelUpdate", (oldChannel, newChannel) => {
-			if(oldChannel.guild.id === realGuild.id) {
-				testGuild.channels.find("name", oldChannel.name).setName(newChannel.name).then(() => {
-					if(oldChannel.type === "text") testGuild.channels.find("name", newChannel.name).setTopic(newChannel.topic);
-				});
+			if (oldChannel.type !== "dm" && oldChannel.type !== "group") {
+				if(oldChannel.guild.id === realGuild.id) {
+					testGuild.channels.find("name", oldChannel.name).setName(newChannel.name).then(() => {
+						if(oldChannel.type === "text") testGuild.channels.find("name", newChannel.name).setTopic(newChannel.topic);
+					});
+				}
 			}
 		});
 
