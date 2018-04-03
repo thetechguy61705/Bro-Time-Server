@@ -16,7 +16,7 @@ module.exports = {
 			}
 		});
 
-    client.on("channelDelete", (channel) => {
+		client.on("channelDelete", (channel) => {
 			if(channel.guild.id === realGuild.id) {
 				testGuild.channels.find("name", channel.name).delete();
 			}
@@ -31,8 +31,8 @@ module.exports = {
 		client.on("channelUpdate", (oldChannel, newChannel) => {
 			if(oldChannel.guild.id === realGuild.id) {
 				testGuild.channels.find("name", oldChannel.name).setName(newChannel.name).then(() => {
-          if(oldChannel.type === "text") testGuild.channels.find("name", newChannel.name).setTopic(newChannel.topic);
-        });
+ 					if(oldChannel.type === "text") testGuild.channels.find("name", newChannel.name).setTopic(newChannel.topic);
+				});
 			}
 		});
 
