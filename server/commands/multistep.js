@@ -9,7 +9,7 @@ module.exports = {
 	execute: (call) => {
 		var settings = 0;
 		var cancel = false;
-		var param = null;
+		var param;
 
 		do {
 			param = call.params.ReadWord();
@@ -19,7 +19,7 @@ module.exports = {
 			} else if (param != null && typeof call.commands[param] === "number") {
 				settings = settings|call.commands[param];
 			}
-		} while (param !== null);
+		} while (param != null);
 
 		if (cancel) {
 			call.denyInput();
