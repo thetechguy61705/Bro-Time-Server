@@ -19,6 +19,9 @@ module.exports = {
 		} else {
 			diag = "worse than dial up";
 		}
-		call.message.channel.send(`Pong, \`${delay}ms; ${diag}\`!`);
+		call.message.channel.send(`Pong, \`${delay}ms; ${diag}\`!`).catch(() => {
+			call.message.author.send(`You attempted to run the \`ping\` command in ${call.message.channel}, but I do not have permission to chat there.`)
+				.catch(function(){});
+		});
 	}
 };
