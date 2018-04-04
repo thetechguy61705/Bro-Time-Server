@@ -74,7 +74,8 @@ module.exports = {
 				if(oldChannel.guild.id === realGuild.id) {
 					testGuild.channels.find("name", oldChannel.name).setName(newChannel.name).then(() => {
 						if(oldChannel.type === "text") testGuild.channels.find("name", newChannel.name).setTopic(newChannel.topic);
-						if (oldChannel.type === "text" || oldChannel.type === "voice") testGuild.channels.find("name", newChannel.name).setPosition(newChannel.position-4);
+						if (oldChannel.type === "text" || oldChannel.type === "voice") testGuild.channels.find("name", newChannel.name)
+							.setPosition(newChannel.position-4);
 					});
 				}
 			}
