@@ -2,6 +2,7 @@ var { Collection, MessageMentions } = require("discord.js");
 var modules = new Collection();
 var Parameters = require("./utility/paramaters");
 var { CommandAccess } = require("./../../data/server");
+var report = require("./../report");
 var fs = require("fs");
 var util = require("util");
 var prefixPattern = "^(%s)";
@@ -18,8 +19,10 @@ class Call {
 		this.params = params;
 	}
 
-	requestInput(settings = 0) {
+	requestInput(settings = 0, prompt) {
 		settings = settings|this.commands.MULTISTEP_DEFAULTS;
+		if (prompt != null)
+			this.message.channel.send(prompt.toString());
 		return new Promise(((resolve, reject) => {
 			this.denyInput();
 			this.commands._requests.set(this.message.author.id, {
@@ -54,7 +57,7 @@ fs.readdirSync(__dirname + "/../commands").forEach(file => {
 		}).then(module => {
 			modules.set(module.id, module);
 		}, exc => {
-			console.warn("A command failed to load: %s (reason: %s)", match[1], exc);
+			report(exc, {tags: {category: "commands", action: "load", item: match[1]}});
 		});
 	}
 });
@@ -114,8 +117,8 @@ module.exports = {
 								used = true;
 							}
 						}
-					} catch (error) {
-						console.warn(`The ${name} command failed to execute: ${error}`);
+					} catch (exc) {
+						report(exc, {tags: {category: "commands", action: "execute", item: name}});
 						message.channel.send(`The ${name} command failed to load.`);
 					}
 				}

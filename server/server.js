@@ -1,8 +1,7 @@
 var config = require("../config");
 var fs = require("fs");
 var discord = require("discord.js");
-
-require("./sentry");
+var report = require("./report");
 
 var loaders = [];
 var areaLoaders = [];
@@ -20,7 +19,7 @@ fs.readdirSync(__dirname + "/chat").forEach(file => {
 		}).then(handler => {
 			chatHandlers.push(handler);
 		}, exc => {
-			console.warn("A chat handler failed to load: %s (reason: %s)", match[1], exc);
+			report(exc, {tags: {category: "chat", action: "load", item: match[1]}});
 		});
 	}
 });
@@ -61,8 +60,8 @@ for (let token in config.BOTS) {
 						try {
 							if (chatHandlers[i].exec(message, client))
 								break;
-						} catch (error) {
-							console.warn("A chat handler failed to execute: ", error);
+						} catch (exc) {
+							report(exc, {tags: {category: "chat", action: "execute", item: chatHandlers[i].id}});
 						}
 					}
 				};
@@ -71,8 +70,8 @@ for (let token in config.BOTS) {
 					let promises = [];
 					for (var i = 0; i < areaLoaders.length; i++)
 						promises.push(areaLoaders[i].exec(area, client));
-					Promise.all(promises).then(task).catch((error) => {
-						console.warn("Unable to load area:", error);
+					Promise.all(promises).then(task).catch((exc) => {
+						report(exc, {tags: {category: "areaLoad", action: "load"}});
 						message.reply("Unable to load. Retry in a few seconds.");
 						if (isServer)
 							loadedAreas.delete(area.id);
