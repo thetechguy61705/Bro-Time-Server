@@ -11,15 +11,14 @@ var data = {};
 const TESTING = process.env.NODE_ENV !== "production";
 
 class Call {
-	constructor(commands, name, message, client, params) {
+	constructor(commands, message, client, params) {
 		this.commands = commands;
-		this.name = name;
 		this.message = message;
 		this.client = client;
 		this.params = params;
 	}
 
-	requestInput(settings = 0, prompt) {
+	requestInput(settings = 0, prompt = null, timeout = 180000) {
 		settings = settings|this.commands.MULTISTEP_DEFAULTS;
 		if (prompt != null)
 			this.message.channel.send(prompt.toString());
@@ -30,14 +29,17 @@ class Call {
 				reject: reject,
 				settings: settings,
 				author: this.message.author.id,
-				channel: this.message.channel.id
+				channel: this.message.channel.id,
+				timeout: setTimeout(() => this.denyInput(), timeout)
 			});
 		}).bind(this));
 	}
 
 	denyInput(author = this.message.author) {
 		if (this.commands._requests.has(author.id)) {
-			this.commands._requests.get(author.id).reject();
+			var request = this.commands._requests.get(author.id);
+			clearTimeout(request.timeout);
+			request.reject();
 			this.commands._requests.delete(author.id);
 		}
 	}
@@ -113,7 +115,7 @@ module.exports = {
 							var data = load(command);
 							if (data.canAccess(message)) {
 								params.readSeparator();
-								command.execute(new Call(this, name, message, client, params));
+								command.execute(new Call(this, message, client, params));
 								used = true;
 							}
 						}
