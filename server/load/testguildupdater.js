@@ -21,11 +21,11 @@ module.exports = {
 		client.on("guildMemberAdd", (member) => {
 			realGuild.fetchMember(member.user).then(function(user) {
 				if (member.guild.id === testGuild.id) {
-					if (user != undefined) {
-						realGuild.fetchMember(member.user).roles.forEach(function(role) {
-							member.addRole(testGuild.roles.find("name", role.name));
+					testGuild.fetchMember(member.user).then(function(testMember) {
+						user.roles.forEach(function(role) {
+							testMember.addRole(testGuild.roles.find("name", role.name));
 						});
-					}
+					});
 				}
 			}).catch(function(){});
 		});
