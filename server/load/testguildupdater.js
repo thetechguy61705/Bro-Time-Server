@@ -3,7 +3,7 @@ var excludedUsers = ["140163987500302336", "320666152693006344", "39187881526309
 module.exports = {
 	exec: (client) => {
 		var testGuild = client.guilds.get("430096406275948554");
-		var noParentChannels = testGuild.channels.filter(c => c.parent === null && c.type !== "category");
+		var noParentChannels = testGuild.channels.filter(c => c.parent === null && c.type !== "category")
 		var realGuild = client.guilds.get("330913265573953536");
 		client.on("message", (message) => {
 			if (message.channel.type === "text") {
