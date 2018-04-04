@@ -1,5 +1,11 @@
 var util;
 
+function trim(output, max) {
+	if (output.length > max)
+		output = output.substring(0, max - 3).trimRight() + "...";
+	return output;
+}
+
 module.exports = {
 	id: "multistep",
 	test: true,
@@ -24,10 +30,8 @@ module.exports = {
 		if (cancel) {
 			call.denyInput();
 		} else {
-			call.requestInput(settings).then((input) => {
-				call.message.channel.send(`\`\`\`
-				                            ${util.inspect(input)}
-				                            \`\`\``);
+			call.requestInput(settings, "Enter input...").then((input) => {
+				call.message.channel.send(`\`\`\`\n${trim(util.inspect(input, {depth: 1}), 1992)}\n\`\`\``);
 			}).catch(() => {
 				call.message.channel.send("Input request cancelled.");
 			});
