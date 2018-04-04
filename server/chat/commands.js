@@ -19,8 +19,10 @@ class Call {
 		this.params = params;
 	}
 
-	requestInput(settings = 0) {
+	requestInput(settings = 0, prompt) {
 		settings = settings|this.commands.MULTISTEP_DEFAULTS;
+		if (prompt != null)
+			this.message.channel.send(prompt.toString());
 		return new Promise(((resolve, reject) => {
 			this.denyInput();
 			this.commands._requests.set(this.message.author.id, {
