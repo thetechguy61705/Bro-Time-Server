@@ -47,7 +47,6 @@ module.exports = {
 					}
 				}
 			}).catch(function(){});
-			
 		});
 
 		client.on("channelCreate", (channel) => {
