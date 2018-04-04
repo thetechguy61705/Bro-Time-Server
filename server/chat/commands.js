@@ -31,6 +31,7 @@ class Call {
 				timeout: setTimeout(() => this.denyInput(), timeout)
 			});
 		}).bind(this));
+		//eslint-disable-next-line
 		if (prompt != null)
 			this.message.channel.send(prompt.toString());
 	}
