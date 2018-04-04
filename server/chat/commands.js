@@ -20,8 +20,6 @@ class Call {
 
 	requestInput(settings = 0, prompt = null, timeout = 180000) {
 		settings = settings|this.commands.MULTISTEP_DEFAULTS;
-		if (prompt != null)
-			this.message.channel.send(prompt.toString());
 		return new Promise(((resolve, reject) => {
 			this.denyInput();
 			this.commands._requests.set(this.message.author.id, {
@@ -33,6 +31,8 @@ class Call {
 				timeout: setTimeout(() => this.denyInput(), timeout)
 			});
 		}).bind(this));
+		if (prompt != null)
+			this.message.channel.send(prompt.toString());
 	}
 
 	denyInput(author = this.message.author) {
@@ -88,18 +88,18 @@ module.exports = {
 		} else if (requests.some((request) => request.settings&this.ANYONE !== 0)) {
 			request = requests.find((request) => request.settings&this.ANYONE !== 0);
 		}
-		if (request !== null) {
+		if (request != null) {
 			request.resolve(new Call(this, message, client, new Parameters(message)));
 			this._requests.delete(request.author);
 		} else {
 			var prefix = message.content.match(new RegExp(util.format(prefixPattern,
 				message.data.prefix), "i"));
 			var using;
-			if (prefix !== null) {
+			if (prefix != null) {
 				using = true;
 			} else {
 				prefix = message.content.match("^" + MessageMentions.USERS_PATTERN.source);
-				using = prefix !== null &&
+				using = prefix != null &&
 					message.mentions.users.size === 1 &&
 					message.mentions.users.first().id == client.user.id;
 			} if (using) {
