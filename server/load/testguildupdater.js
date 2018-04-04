@@ -19,31 +19,35 @@ module.exports = {
 		});
 
 		client.on("guildMemberAdd", (member) => {
-			if (member.guild.id === testGuild.id) {
-				if (realGuild.fetchMember(member.user) != undefined) {
-					realGuild.fetchMember(member.user).roles.forEach(function(role) {
-						member.addRole(testGuild.roles.find("name", role.name));
-					});
+			realGuild.fetchMember(member.user).then(function(user) {
+				if (member.guild.id === testGuild.id) {
+					if (user != undefined) {
+						realGuild.fetchMember(member.user).roles.forEach(function(role) {
+							member.addRole(testGuild.roles.find("name", role.name));
+						});
+					}
 				}
-			}
+			}).catch(function(){});
 		});
 
 		client.on("guildMemberUpdate", (oldMember, newMember) => {
-			let user = testGuild.fetchMember(oldMember.user);
-			if (user != undefined) {
-				if (oldMember.guild.id === realGuild.id) {
-					oldMember.roles.forEach(function(role) {
-						if (!newMember.roles.has(role.id)) {
-							user.removeRole(testGuild.roles.find("name", role.name));
-						}
-					});
-					newMember.roles.forEach(function(role) {
-						if (!oldMember.roles.has(role.id)) {
-							user.addRole(testGuild.roles.find("name", role.name));
-						}
-					});
+			testGuild.fetchMember(oldMember.user).then(function(user) {
+				if (user != undefined) {
+					if (oldMember.guild.id === realGuild.id) {
+						oldMember.roles.forEach(function(role) {
+							if (!newMember.roles.has(role.id)) {
+								user.removeRole(testGuild.roles.find("name", role.name));
+							}
+						});
+						newMember.roles.forEach(function(role) {
+							if (!oldMember.roles.has(role.id)) {
+								user.addRole(testGuild.roles.find("name", role.name));
+							}
+						});
+					}
 				}
-			}
+			}).catch(function(){});
+			
 		});
 
 		client.on("channelCreate", (channel) => {
