@@ -23,7 +23,9 @@ module.exports = {
 				if (member.guild.id === testGuild.id) {
 					testGuild.fetchMember(member.user).then(function(testMember) {
 						user.roles.forEach(function(role) {
-							testMember.addRole(testGuild.roles.find("name", role.name));
+							if (role.name !== "@everyone") {
+								testMember.addRole(testGuild.roles.find("name", role.name));
+							}
 						});
 					});
 				}
