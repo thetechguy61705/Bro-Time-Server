@@ -32,8 +32,9 @@ class Call {
 			});
 		}).bind(this));
 		//eslint-disable-next-line
-		if (prompt != null)
+		if (prompt != null) {
 			this.message.channel.send(prompt.toString());
+		}
 	}
 
 	denyInput(author = this.message.author) {
