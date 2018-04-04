@@ -67,7 +67,7 @@ class BotAccess extends DataAccess {
 
 	async load() {
 		super.load();
-		if (this._pool !== null && this.server !== null) {
+		if (this._pool != null && this.server != null) {
 			var client = await this._pool.connect();
 			// Provide the bot id and server id.
 			await client.query("SELECT discord.AddBot($1) FOR UPDATE", [this.server.id]);
@@ -81,8 +81,10 @@ class BotAccess extends DataAccess {
 	}
 
 	async setPrefix(newPrefix) {
+		if (this.server == null)
+			throw new Error("Cannot set a prefix for non-server data.");
 		newPrefix = escapeRegExp(newPrefix);
-		if (this._pool !== null)
+		if (this._pool != null)
 			await this._pool.query(`UPDATE discord.Servers
 		                            SET Prefix = $2
 		                            WHERE Server_Id = $1`, [this.server.id, newPrefix]);

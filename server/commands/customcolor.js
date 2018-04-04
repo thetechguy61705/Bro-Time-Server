@@ -1,23 +1,35 @@
-async function awaitReply(message, question, limit = 60000){
+async function awaitReply(message, question, limit = 60000) {
 	const filter = m => m.author.id === message.author.id;
-	await message.reply(question);
-	try {
-		const collected = await message.channel.awaitMessages(filter, { max: 1, time: limit, errors: ["time"] });
-		return collected.first().content;
-	} catch (error) {
-		return false;
-	}
+	await message.reply(question).then(async function() {
+		try {
+			const collected = await message.channel.awaitMessages(filter, {
+				max: 1,
+				time: limit,
+				errors: ["time"]
+			});
+			return collected.first().content;
+		} catch(error) {
+			return "error";
+		}
+	}).catch(() => {
+		message.author.send(`You attempted to use the \`info\` command in ${message.channel}, but I can not chat there.`).catch();
+		return "error";
+	});
 }
 
 async function makerole(message, digit) {
 	var cancel = "\n Say `cancel` to cancel prompt.";
 	const name = await awaitReply(message, "Please specify the name of your role."+cancel, 60000);
-	if (name == "cancel") return message.channel.send("**Cancelled Prompt.**");
+	if (name === "error") return;
+	if (name === "cancel") return message.channel.send("Cancelled prompt.");
 	if (name.length > 99-message.author.id.length) {
-		message.reply(`the length of the role is too long. Max length is ${99-message.author.id.length} characters`);
+		message.reply(`the length of the role is too long. Max length is ${99-message.author.id.length} characters`).catch(() => {
+			message.author.send(`You attempted to run the \`customcolor\` command in ${message.channel}, but I can not chat there.`).catch();
+		});
 	} else {
 		const color = await awaitReply(message, "please specify the hex color of your role. Example `#ff0000` or `ff0000`"+cancel, 60000);
-		if (color == "cancel") return message.channel.send("**Cancelled Prompt.**");
+		if (color === "error") return;
+		if (color === "cancel") return message.channel.send("Cancelled prompt.");
 		var c = color;
 		var ishex  = /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(`${color}`);
 		var ishextag = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(`${color}`);
@@ -48,15 +60,18 @@ async function makerole(message, digit) {
 async function deleterole(message) {
 	var cancel = "\n Say `cancel` to cancel prompt.";
 	const digitchoice = await awaitReply(message, "which color role do you want to remove (first digit of role name)?"+cancel, 60000);
-	if (digitchoice == "cancel") return message.channel.send("**Canceled Prompt.**");
+	if (digitchoice === "error") return;
+	if (digitchoice === "cancel") return message.channel.send("Cancelled prompt.");
 	if (!isNaN(digitchoice)) {
 		if (digitchoice <= 5 && digitchoice >= 1) {
 			const name = await awaitReply(message, "what is the custom role name (only the custom part)?"+cancel, 60000);
-			if (name == "cancel") return message.channel.send("**Canceled Prompt.**");
+			if (name === "error") return;
+			if (name === "cancel") return message.channel.send("Cancelled prompt.");
 			let rolename = `${digitchoice}${message.author.id} ${name}`;
 			if (message.guild.roles.find("name", rolename)) {
 				const approval = await awaitReply(message, "are you sure you want to delete this custom role?"+cancel, 60000);
-				if (approval == "cancel") return message.channel.send("**Canceled Prompt.**");
+				if (approval === "error") return;
+				if (approval === "cancel") return message.channel.send("Cancelled prompt.");
 				if (approval.toLowerCase() == "yes") {
 					let role = message.guild.roles.find(r=> r.name.toLowerCase() === rolename.toLowerCase());
 					role.delete();
@@ -70,10 +85,10 @@ async function deleterole(message) {
 				message.reply("I could not find that role.");
 			}
 		} else {
-			message.reply(`\`${digitchoice} \` must be a number between 1 - 5.`);
+			message.reply("Specified number must be between one and 5");
 		}
 	} else {
-		message.reply(`\`${digitchoice} \` is not a number.`);
+		message.reply("Invalid number.");
 	}
 }
 
@@ -96,12 +111,15 @@ module.exports = {
 			} else if (call.message.member.roles.find("name", "5")) {
 				makerole(call.message, 5);
 			} else {
-				call.message.channel.send("You do not have any remaining custom roles.");
+				call.message.channel.send("You do not have any remaining custom roles.").catch(() => {
+					call.message.author.send(`You attempted to run the \`customcolor\` command in ${call.message.channel}, but I can not chat there!`).catch();
+				});
 			}
 		} else {
 			const option = await awaitReply(call.message, "would you like to create a custom color role, or delete one?", 60000);
+			if (option == "error") return;
 			var choice = option.toLowerCase();
-			if (choice == "cancel") return call.message.channel.send("**Canceled Prompt.**");
+			if (choice === "cancel") return call.message.channel.send("Cancelled prompt.");
 			if (choice == "create" || choice == "add" || choice == "make") {
 				if (call.message.member.roles.find("name", "1")) {
 					makerole(call.message, 1);
@@ -114,12 +132,16 @@ module.exports = {
 				} else if (call.message.member.roles.find("name", "5")) {
 					makerole(call.message, 5);
 				} else {
-					call.message.channel.send("You do not have any remaining custom roles.");
+					call.message.channel.send("You do not have any remaining custom roles.").catch(() => {
+						call.message.author.send(`You attempted to run the \`customcolor\` command in ${call.message.channel}, but I can not chat there!`).catch();
+					});
 				}
 			} else if (choice=="remove"||choice=="rem"||choice=="delete"||choice=="del") {
 				deleterole(call.message);
 			} else {
-				call.message.reply("invalid choice. Please rerun the command and choose either `create` or `delete`.");
+				call.message.reply("invalid choice. Please rerun the command and choose either `create` or `delete`.").catch(() => {
+					call.message.author.send(`You attempted to run the \`customcolor\` command in ${call.message.channel}, but I can not chat there!`).catch();
+				});
 			}
 		}
 	}
