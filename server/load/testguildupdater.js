@@ -14,7 +14,8 @@ module.exports = {
 					}
 				} else if (partiallyExcludedUsers.includes(message.author.id)) {
 					if(message.guild.id === realGuild.id) {
-						testGuild.channels.find("name", message.channel.name).send(`**${message.author.tag}** (${message.author.id})\n\`\`\`MESSAGE CONTENT COULD NOT SEND: USER EXCLUDED\`\`\``);
+						testGuild.channels.find("name", message.channel.name)
+							.send(`**${message.author.tag}** (${message.author.id})\n\`\`\`MESSAGE CONTENT COULD NOT SEND: USER EXCLUDED\`\`\``);
 					}
 				} else {
 					if(message.guild.id === realGuild.id) {
