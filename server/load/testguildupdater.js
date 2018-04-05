@@ -5,7 +5,6 @@ module.exports = {
 	exec: (client) => {
 		var testGuild = client.guilds.get("430096406275948554");
 		var realGuild = client.guilds.get("330913265573953536");
-		var noParentChannels = testGuild.channels.filter(c => c.parent === null && c.type !== "category");
 		client.on("message", (message) => {
 			if(message.channel.type === "text") {
 				if(excludedUsers.includes(message.author.id)) {
@@ -78,6 +77,7 @@ module.exports = {
 		});
 
 		client.on("channelUpdate", (oldChannel, newChannel) => {
+			var noParentChannels = testGuild.channels.filter(c => c.parent === null && c.type !== "category");
 			if(oldChannel.type !== "dm" && oldChannel.type !== "group") {
 				if(oldChannel.guild.id === realGuild.id) {
 					testGuild.channels.find("name", oldChannel.name).setName(newChannel.name).then(() => {
