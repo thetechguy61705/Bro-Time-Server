@@ -20,6 +20,8 @@ class Call {
 
 	requestInput(settings = 0, prompt = null, timeout = 180000) {
 		settings = settings|this.commands.MULTISTEP_DEFAULTS;
+		if (prompt != null)
+			this.message.channel.send(prompt.toString());
 		return new Promise(((resolve, reject) => {
 			this.denyInput();
 			this.commands._requests.set(this.message.author.id, {
@@ -31,10 +33,6 @@ class Call {
 				timeout: setTimeout(() => this.denyInput(), timeout)
 			});
 		}).bind(this));
-		//eslint-disable-next-line
-		if (prompt != null) {
-			this.message.channel.send(prompt.toString());
-		}
 	}
 
 	denyInput(author = this.message.author) {
