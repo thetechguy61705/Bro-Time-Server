@@ -30,7 +30,7 @@ module.exports = {
 	id: "postgamenight",
 	load: () => {},
 	execute: async (call) => {
-		if (call.message.member.roles.has("380900721828298753")) {
+		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host"))) {
 			const game = await awaitReply(call.message, "What is the game you want to host on?", 60000);
 			if (game == "cancel") return call.message.channel.send("**Canceled Prompt.**");
 			var gamerole;
