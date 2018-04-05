@@ -15,7 +15,7 @@ module.exports = {
 
 		} else {
 			call.message.reply("Invalid permissions: requires role: `QOTD Host`").catch(() => {
-				call.message.author.send(`You attempted to run the \`postqotd\` command in ${call.message.channel}, but I can not chat there.")
+				call.message.author.send(`You attempted to run the \`postqotd\` command in ${call.message.channel}, but I can not chat there.`)
 					.catch(function(){});
 			});
 		}
