@@ -91,7 +91,7 @@ class Paramaters {
 		var id = parseFloat(param);
 
 		if (!isNaN(id)) {
-			object = object.get(id);
+			object = objects.get(id);
 		} else {
 			objects.forEach((candidate) => {
 				if (candidate[name].toLowerCase().includes(param)) {
