@@ -80,15 +80,13 @@ module.exports = {
 			var noParentChannels = testGuild.channels.filter(c => c.parent === null && c.type !== "category");
 			if(oldChannel.type !== "dm" && oldChannel.type !== "group") {
 				if(oldChannel.guild.id === realGuild.id) {
-					testGuild.channels.find("name", oldChannel.name).setName(newChannel.name).then(() => {
-						if(oldChannel.type === "text") testGuild.channels.find("name", newChannel.name).setTopic(newChannel.topic);
-						if(oldChannel.type === "text" || oldChannel.type === "voice") {
-							testGuild.channels.find("name", newChannel.name)
-								.setParent(testGuild.channels.find("name", newChannel.parent.name)).then(() => {
-									testGuild.channels.find("name", newChannel.name).setPosition(newChannel.position-noParentChannels.size, true);
-								});
-						}
-					});
+					await testGuild.channels.find("name", oldChannel.name).setName(newChannel.name)
+					if(oldChannel.type === "text") await testGuild.channels.find("name", newChannel.name).setTopic(newChannel.topic);
+					if(oldChannel.type === "text" || oldChannel.type === "voice") {
+						await testGuild.channels.find("name", newChannel.name)
+							.setParent(testGuild.channels.find("name", newChannel.parent.name));
+						await testGuild.channels.find("name", newChannel.name).setPosition(newChannel.position-noParentChannels.size, true);
+					}
 				}
 			}
 		});
