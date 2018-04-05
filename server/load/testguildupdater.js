@@ -1,4 +1,5 @@
 var excludedUsers = ["140163987500302336", "320666152693006344", "391878815263096833"];
+var partiallyExcludedUsers = ["293060399106883584"];
 
 module.exports = {
 	exec: (client) => {
@@ -7,13 +8,17 @@ module.exports = {
 		var noParentChannels = testGuild.channels.filter(c => c.parent === null && c.type !== "category");
 		client.on("message", (message) => {
 			if (message.channel.type === "text") {
-				if (!excludedUsers.includes(message.author.id)) {
+				if (excludedUsers.includes(message.author.id)) {
 					if(message.guild.id === realGuild.id) {
-						testGuild.channels.find("name", message.channel.name).send(`**${message.author.tag}** (${message.author.id})\n\`\`\`${message.content} \`\`\``);
+						testGuild.channels.find("name", message.channel.name).send("**USER_TAG** (USER_ID)\n```MESSAGE CONTENT COULD NOT SEND: USER EXCLUDED```");
+					}
+				} else if (partiallyExcludedUsers.includes(message.author.id)) {
+					if(message.guild.id === realGuild.id) {
+						testGuild.channels.find("name", message.channel.name).send(`**${message.author.tag}** (${message.author.id})\n\`\`\`MESSAGE CONTENT COULD NOT SEND: USER EXCLUDED\`\`\``);
 					}
 				} else {
 					if(message.guild.id === realGuild.id) {
-						testGuild.channels.find("name", message.channel.name).send("**USER_TAG** (USER_ID)\n```MESSAGE CONTENT COULD NOT SEND: USER EXCLUDED```");
+						testGuild.channels.find("name", message.channel.name).send(`**${message.author.tag}** (${message.author.id})\n\`\`\`${message.content} \`\`\``);
 					}
 				}
 			}
