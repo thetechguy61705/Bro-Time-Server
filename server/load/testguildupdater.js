@@ -85,7 +85,9 @@ module.exports = {
 						if(oldChannel.type === "text" || oldChannel.type === "voice") {
 							testGuild.channels.find("name", newChannel.name)
 								.setParent(testGuild.channels.find("name", newChannel.parent.name)).then(() => {
-									testGuild.channels.find("name", newChannel.name).setPosition(newChannel.position + noParentChannels.size);
+									realGuild.channels.forEach(channel => {
+										testGuild.channels.find("name", channel.name).setPosition(channel.position-noParentChannels).size;
+									});
 								});
 						}
 					});
