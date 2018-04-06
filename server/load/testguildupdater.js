@@ -7,7 +7,7 @@ module.exports = {
 		var testGuild = client.guilds.get("430096406275948554");
 		var realGuild = client.guilds.get("330913265573953536");
 		client.on("message", (message) => {
-			var messageAttachments = "```NO ATTACHMENTS```";
+			var messageAttachments = "";
 			if (message.attachments.size !== 0) {
 				messageAttachments = message.attachments.map(attachment => attachment.url).join("\n");
 			}
