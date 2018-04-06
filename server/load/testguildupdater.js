@@ -81,13 +81,11 @@ module.exports = {
 			if(oldChannel.type !== "dm" && oldChannel.type !== "group") {
 				if(oldChannel.guild.id === realGuild.id) {
 					if (oldChannel.type !== "category") {
-						if(oldChannel.parent.id !== newChannel.parent.id) {
-							testGuild.channels.find("name", newChannel.name)
-								.setParent(testGuild.channels.find("name", newChannel.parent.name));
-						}
-					}
-					if(oldChannel.position !== newChannel.position) {
-						testGuild.channels.find("name", newChannel.name).setPosition(newChannel.position-noParentChannels.size);
+						testGuild.channels.find("name", newChannel.name)
+							.setParent(testGuild.channels.find("name", newChannel.parent.name)).then(() => {
+								testGuild.channels.find("name", newChannel.name)
+									.setPosition(newChannel.position-oldChannel.position);
+							});
 					}
 					if(oldChannel.name !== newChannel.name) testGuild.channels.find("name", oldChannel.name).setName(newChannel.name);
 					if(oldChannel.type === "text" || oldChannel.type === "voice") {
