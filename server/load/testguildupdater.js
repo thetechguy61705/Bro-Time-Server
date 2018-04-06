@@ -77,7 +77,7 @@ module.exports = {
 		});
 
 		client.on("channelUpdate", (oldChannel, newChannel) => {
-			var noParentChannels = testGuild.channels.filter(c => c.parent === null && c.type !== "category");
+			//var noParentChannels = testGuild.channels.filter(c => c.parent === null && c.type !== "category");
 			if(oldChannel.type !== "dm" && oldChannel.type !== "group") {
 				if(oldChannel.guild.id === realGuild.id) {
 					if (oldChannel.type !== "category") {
