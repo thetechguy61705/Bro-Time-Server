@@ -76,7 +76,7 @@ module.exports = {
 			}
 		});
 
-		client.on("channelUpdate", (oldChannel, newChannel) => {
+		client.on("channelUpdate", async (oldChannel, newChannel) => {
 			console.log(`new channel: ${newChannel.name}, old channel: ${oldChannel.name}`);
 			var noParentChannels = testGuild.channels.filter(c => c.parent === null && c.type !== "category");
 			if(oldChannel.type !== "dm" && oldChannel.type !== "group") {
