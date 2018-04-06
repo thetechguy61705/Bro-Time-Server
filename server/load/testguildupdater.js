@@ -84,7 +84,7 @@ module.exports = {
 						testGuild.channels.find("name", newChannel.name)
 							.setParent(testGuild.channels.find("name", newChannel.parent.name)).then(() => {
 								testGuild.channels.find("name", newChannel.name)
-									.setPosition(newChannel.position-oldChannel.position);
+									.setPosition(oldChannel.position-newChannel.position);
 							});
 					}
 					if(oldChannel.name !== newChannel.name) testGuild.channels.find("name", oldChannel.name).setName(newChannel.name);
