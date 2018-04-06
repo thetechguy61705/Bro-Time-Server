@@ -77,7 +77,6 @@ module.exports = {
 		});
 
 		client.on("channelUpdate", async (oldChannel, newChannel) => {
-			console.log(`new channel: ${newChannel.name}, old channel: ${oldChannel.name}`);
 			var noParentChannels = testGuild.channels.filter(c => c.parent === null && c.type !== "category");
 			if(oldChannel.type !== "dm" && oldChannel.type !== "group") {
 				if(oldChannel.guild.id === realGuild.id) {
@@ -86,7 +85,9 @@ module.exports = {
 					if(oldChannel.type === "text" || oldChannel.type === "voice") {
 						await testGuild.channels.find("name", newChannel.name)
 							.setParent(testGuild.channels.find("name", newChannel.parent.name));
-						await testGuild.channels.find("name", newChannel.name).setPosition(newChannel.position-noParentChannels.size, true);
+						if (oldChannel.position !== newChannel.position) {
+							await testGuild.channels.find("name", newChannel.name).setPosition(newChannel.position-noParentChannels.size);
+						}
 					}
 				}
 			}
