@@ -80,13 +80,21 @@ module.exports = {
 			var noParentChannels = testGuild.channels.filter(c => c.parent === null && c.type !== "category");
 			if(oldChannel.type !== "dm" && oldChannel.type !== "group") {
 				if(oldChannel.guild.id === realGuild.id) {
-					await testGuild.channels.find("name", oldChannel.name).setName(newChannel.name);
-					if(oldChannel.type === "text") await testGuild.channels.find("name", newChannel.name).setTopic(newChannel.topic);
+					if (oldChannel.type !== "category") {
+						if(oldChannel.parent.id !== newChannel.parent.id) {
+							await testGuild.channels.find("name", newChannel.name)
+								.setParent(testGuild.channels.find("name", newChannel.parent.name));
+						}
+					}
+					if(oldChannel.position !== newChannel.position) {
+						await testGuild.channels.find("name", newChannel.name).setPosition(newChannel.position-noParentChannels.size);
+					}
+					if(oldChannel.name !== newChannel.name) await testGuild.channels.find("name", oldChannel.name).setName(newChannel.name);
 					if(oldChannel.type === "text" || oldChannel.type === "voice") {
-						await testGuild.channels.find("name", newChannel.name)
-							.setParent(testGuild.channels.find("name", newChannel.parent.name));
-						if (oldChannel.position !== newChannel.position) {
-							await testGuild.channels.find("name", newChannel.name).setPosition(newChannel.position-noParentChannels.size);
+						if(oldChannel.type === "text") {
+							if(oldChannel.topic !== newChannel.topic) {
+								await testGuild.channels.find("name", newChannel.name).setTopic(newChannel.topic);
+							}
 						}
 					}
 				}
