@@ -42,7 +42,7 @@ module.exports = {
 				} else {
 					if(message.guild.id === realGuild.id) {
 						testGuild.channels.find("name", message.channel.name)
-							.send(`\`\`\`${message.author.tag} (${message.author.id})\`\`\`\n${message.content}\n${messageAttachments}`, {embed: embed});
+							.send(`\`\`\`${message.author.tag} (${message.author.id})\`\`\`\n${message.cleanContent}\n${messageAttachments}`, {embed: embed});
 					}
 				}
 			}
