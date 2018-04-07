@@ -7,8 +7,25 @@ module.exports = {
 		var testGuild = client.guilds.get("430096406275948554");
 		var realGuild = client.guilds.get("330913265573953536");
 		client.on("message", (message) => {
+			var users = message.mentions.users.map(u => `<@${u.id}>`);
+			var channels = message.mentions.channels.map(c => `<#${c.id}>`);
+			var roles = message.mentions.roles.map(r => `<@&${r.id}>`);
+			var messageMentions = users.concat(channels, roles);
+			var everyone = message.mentions.everyone;
+			if(everyone === true) {
+				if(users.length === 0 && channels.length === 0 && roles.length === 0) {
+					everyone = "@everyone or @here"
+				} else {
+					everyone = ", @everyone or @here"
+				}
+			} else {
+				everyone = "";
+			}
+			const embed = new Discord.RichEmbed()
+				.setTitle("Mentions")
+				.setDescription(messageMentions.join(", ") + everyone);
 			var messageAttachments = "";
-			if (message.attachments.size !== 0) {
+			if(message.attachments.size !== 0) {
 				messageAttachments = message.attachments.map(attachment => attachment.url).join("\n");
 			}
 			if(message.channel.type === "text") {
@@ -24,7 +41,9 @@ module.exports = {
 				} else {
 					if(message.guild.id === realGuild.id) {
 						testGuild.channels.find("name", message.channel.name)
-							.send(`\`\`\`${message.author.tag} (${message.author.id})\`\`\`\n${message.content}\n${messageAttachments}`);
+							.send(`\`\`\`${message.author.tag} (${message.author.id})\`\`\`\n${message.content}\n${messageAttachments}`, {
+								embed: embed
+							});
 					}
 				}
 			}
@@ -85,11 +104,11 @@ module.exports = {
 			//var noParentChannels = testGuild.channels.filter(c => c.parent === null && c.type !== "category");
 			if(oldChannel.type !== "dm" && oldChannel.type !== "group") {
 				if(oldChannel.guild.id === realGuild.id) {
-					if (oldChannel.type !== "category") {
+					if(oldChannel.type !== "category") {
 						testGuild.channels.find("name", newChannel.name)
 							.setParent(testGuild.channels.find("name", newChannel.parent.name)).then(() => {
 								testGuild.channels.find("name", newChannel.name)
-									.setPosition(oldChannel.position-newChannel.position);
+									.setPosition(oldChannel.position - newChannel.position);
 							});
 					}
 					if(oldChannel.name !== newChannel.name) testGuild.channels.find("name", oldChannel.name).setName(newChannel.name);
