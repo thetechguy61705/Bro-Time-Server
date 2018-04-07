@@ -15,9 +15,9 @@ module.exports = {
 			var everyone = message.mentions.everyone;
 			if (everyone === true) {
 				if (users.length === 0 && channels.length === 0 && roles.length === 0) {
-					everyone = "@everyone or @here"
+					everyone = "@everyone or @here";
 				} else {
-					everyone = ", @everyone or @here"
+					everyone = ", @everyone or @here";
 				}
 			} else {
 				everyone = "";
