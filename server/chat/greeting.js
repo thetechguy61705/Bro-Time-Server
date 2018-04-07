@@ -1,4 +1,4 @@
-var responses = require("./utility/greetingResponses");
+var responses = require("app/greetingResponses");
 var util = require("util");
 
 var OPTIONS = "img";
