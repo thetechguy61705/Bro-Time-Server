@@ -1,8 +1,8 @@
 var { Collection, MessageMentions } = require("discord.js");
 var modules = new Collection();
-var Parameters = require("./utility/paramaters");
+var Parameters = require("app/paramaters");
 var { CommandAccess } = require("./../../data/server");
-var report = require("./../report");
+var report = require("app/report");
 var fs = require("fs");
 var util = require("util");
 var prefixPattern = "^(%s)";

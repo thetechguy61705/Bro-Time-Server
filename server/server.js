@@ -1,7 +1,7 @@
 var config = require("../config");
 var fs = require("fs");
 var discord = require("discord.js");
-var report = require("./report");
+var report = require("app/report");
 
 var loaders = [];
 var areaLoaders = [];
