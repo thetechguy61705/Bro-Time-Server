@@ -4,9 +4,6 @@ var caproles = ["Red", "Blue", "Orange", "Green", "Black", "Purple", "Pink", "Ye
 var allroles = ["red", "blue", "orange", "green", "black", "purple", "pink", "yellow",
 	"hotpink", "indigo", "bronze", "cyan", "lightgreen", "silver", "brightred", "hotbrown",
 	"darkviolet", "gold"];
-var deluxecolors = ["gold"];
-var premiumcolors = ["silver", "brightred", "darkviolet", "hotbrown", "darkgreen"];
-var pluscolors = ["pink", "indigo", "bronze", "hotpink", "cyan", "lightgreen"];
 var freecolors = ["red", "blue", "orange", "green", "black", "purple", "yellow", "white"];
 
 function removeColorRoles(roles, user) {
