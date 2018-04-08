@@ -16,7 +16,7 @@ module.exports = {
 					loopNumber = 0;
 				}
 				multiColorRole.setColor(guild.roles.find("name", colors[loopNumber]).hexColor);
-			}, 500)
+			}, 500);
 		}, 10000);
 	}
 };
