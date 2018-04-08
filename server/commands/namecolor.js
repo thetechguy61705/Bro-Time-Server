@@ -24,7 +24,7 @@ module.exports = {
 		let color = call.params.readRaw().toLowerCase();
 		let role = call.params.readRole();
 		if (allroles.includes(color)) {
-			if (call.message.member.roles.find("name", "Bro Time Deluxe")) {
+			if (call.message.member.roles.find("name", "Bro Time Premium")) {
 				removeColorRoles(call.message.guild.roles, call.message.member);
 				call.message.member.addRole(role).then(() => {
 					call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`).catch(() => {
@@ -37,51 +37,6 @@ module.exports = {
 							.catch(function(){});
 					});
 				});
-			} else if (call.message.member.roles.find("name", "Bro Time Premium")) {
-				if (premiumcolors.includes(color) || pluscolors.includes(color) || freecolors.includes(color)) {
-					removeColorRoles(call.message.guild.roles, call.message.member);
-					call.message.member.addRole(role).then(() => {
-						call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`).catch(() => {
-							call.message.author.send(`Successfully given you the \`${role.name}\` color role, note that I can not chat in ${call.message.channel}.`)
-								.catch(function(){});
-						});
-					}).catch(() => {
-						call.message.channel.send("There was an error while giving you the color role. Please try again.").catch(() => {
-							call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
-								.catch(function(){});
-						});
-					});
-				} else if (deluxecolors.includes(color)) {
-					call.message.channel.send(`\`${role.name}\` is a deluxe only color. Your plan is premium.`).catch(() => {
-						call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
-							.catch(function(){});
-					});
-				}
-			} else if (call.message.member.roles.find("name", "Bro Time Plus")) {
-				if (pluscolors.includes(color)||freecolors.includes(color)) {
-					removeColorRoles(call.message.guild.roles, call.message.member);
-					call.message.member.addRole(role).then(() => {
-						call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`).catch(() => {
-							call.message.author.send(`Successfully given you the \`${role.name}\` color role, note that I can not chat in ${call.message.channel}.`)
-								.catch(function(){});
-						});
-					}).catch(() => {
-						call.message.channel.send("There was an error while giving you the color role. Please try again.").catch(() => {
-							call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
-								.catch(function(){});
-						});
-					});
-				} else if (premiumcolors.includes(color)) {
-					call.message.channel.send(`\`${role.name}\` is a premium and up color. Your plan is plus.`).catch(() => {
-						call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
-							.catch(function(){});
-					});
-				} else if (deluxecolors.includes(color)) {
-					call.message.channel.send(`\`${role.name}\` is a deluxe only color. Your plan is plus.`).catch(() => {
-						call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
-							.catch(function(){});
-					});
-				}
 			} else {
 				if (freecolors.includes(color)) {
 					removeColorRoles(call.message.guild.roles, call.message.member);
@@ -96,18 +51,8 @@ module.exports = {
 								.catch(function(){});
 						});
 					});
-				} else if (pluscolors.includes(color)) {
-					call.message.channel.send(`\`${role.name}\` is a plus and up color. Your plan is free.`).catch(() => {
-						call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
-							.catch(function(){});
-					});
-				} else if (premiumcolors.includes(color)) {
-					call.message.channel.send(`\`${role.name}\` is a premium and up color. Your plan is free.`).catch(() => {
-						call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
-							.catch(function(){});
-					});
-				} else if (deluxecolors.includes(color)) {
-					call.message.channel.send(`\`${role.name}\` is a deluxe only color. Your plan is free.`).catch(() => {
+				} else {
+					call.message.channel.send(`\`${role.name}\` is a premium color. Your plan is free.`).catch(() => {
 						call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
 							.catch(function(){});
 					});
