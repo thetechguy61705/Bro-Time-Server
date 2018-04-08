@@ -5,7 +5,7 @@ module.exports = {
 			"HotPink", "Indigo", "Bronze", "Cyan", "LightGreen", "Silver", "BrightRed", "HotBrown",
 			"DarkViolet", "Gold"
 		];
-		var guild = bot.guilds.get("330913265573953536");
+		var guild = client.guilds.get("330913265573953536");
 		var multiColorRole = guild.roles.find("name", "Multicolored");
 		setInterval(() => {
 			loopNumber = loopNumber + 1;
@@ -15,6 +15,6 @@ module.exports = {
 				loopNumber = 0;
 			}
 			multiColorRole.setColor(guild.roles.find("name", colors[loopNumber]).hexColor);
-		}, 500)
+		}, 500);
 	}
 };
