@@ -4,9 +4,9 @@ module.exports = {
 	load: () => {},
 	execute: (call) => {
 		const uptime = call.client.uptime;
-		const hours = `\`${(uptime) - (uptime % 3600000)}\` hours, `;
-		const minutes = `\`${(uptime % 3600000) - (uptime % 3600000) % (60000)}\` minutes, `;
-		const seconds = `\`${((uptime % 3600000) % 60000) - (((uptime % 3600000) % 60000) % 1000)}\` seconds and `;
+		const hours = `\`${((uptime) - (uptime % 3600000))/3600000}\` hours, `;
+		const minutes = `\`${((uptime % 3600000) - (uptime % 3600000) % (60000))/60000}\` minutes, `;
+		const seconds = `\`${((uptime % 3600000) % 60000) - (((uptime % 3600000) % 60000) % 1000)/1000}\` seconds and `;
 		const milliseconds = `\`${(((uptime % 3600000) % 60000) % 1000) - (((uptime % 3600000) % 60000) % 1)}\` milliseconds.`;
 		call.message.channel
 			.send("The bot has been online for "+hours+minutes+seconds+milliseconds)
