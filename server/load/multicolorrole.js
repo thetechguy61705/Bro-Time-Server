@@ -15,7 +15,9 @@ module.exports = {
 				} else {
 					loopNumber = 0;
 				}
-				multiColorRole.setColor(realGuild.roles.find("name", colors[loopNumber]).hexColor);
+				multiColorRole.setColor(realGuild.roles.find("name", colors[loopNumber]).hexColor).then(() => {
+					console.log("success!");
+				});
 			}, 500);
 		});
 	}
