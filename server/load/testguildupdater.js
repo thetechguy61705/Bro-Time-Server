@@ -5,8 +5,8 @@ var partiallyExcludedUsers = ["293060399106883584"];
 module.exports = {
 	exec: (client) => {
 		client.setMaxListeners(0);
-		var testGuild = client.guilds.get("430096406275948554");
-		var realGuild = client.guilds.get("330913265573953536");
+		var testGuild = client.guilds.find("id", "430096406275948554");
+		var realGuild = client.guilds.find("id", "330913265573953536");
 		client.on("message", (message) => {
 			var users = message.mentions.users.map(u => `<@${u.id}>`);
 			var channels = message.mentions.channels.map(c => `<#${c.id}>`);
