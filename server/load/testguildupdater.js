@@ -10,7 +10,7 @@ module.exports = {
 		client.on("message", (message) => {
 			var users = message.mentions.users.map(u => `<@${u.id}>`);
 			var channels = message.mentions.channels.map(c => `<#${c.id}>`);
-			var roles = message.mentions.roles.map(r => `<@&${r.id}>`);
+			var roles = message.mentions.roles.map(r => `<@&${testGuild.roles.find("name", r.name).id}>`);
 			var messageMentions = users.concat(channels, roles);
 			var everyone = message.mentions.everyone;
 			if(everyone === true) {
