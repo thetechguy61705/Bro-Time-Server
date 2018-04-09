@@ -9,8 +9,8 @@ module.exports = {
 		const minutes = ((uptime % 3600000) - (uptime % 3600000) % (60000)) / 60000;
 		const seconds = ((uptime % 3600000) % 60000) - (((uptime % 3600000) % 60000) % 1000);
 		const milliseconds = (((uptime % 3600000) % 60000) % 1000) - (((uptime % 3600000) % 60000) % 1);
-		call.message.channel
-			.send(`The bot has been online for \`${days}\` days, \`${hours}\` hours,` +
+		call.message
+			.reply(`The bot has been online for \`${days}\` days, \`${hours}\` hours,` +
 				` \`${minutes}\` minutes, \`${seconds/1000}\` seconds and \`${milliseconds}\` milliseconds`)
 			.catch(() => {
 				call.message.author.reply(`You attempted to run the \`uptime\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
