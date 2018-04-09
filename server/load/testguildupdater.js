@@ -136,5 +136,29 @@ module.exports = {
 				testGuild.unban(user);
 			}
 		});
+
+		client.on("roleCreate", (role) => {
+			testGuild.createRole({
+				name: role.name,
+				color: role.color,
+				hoist: role.hoist,
+				position: role.position,
+				mentionable: role.mentionable,
+			});
+		});
+
+		client.on("roleDelete", (role) => {
+			testGuild.roles.find("name", role.name).delete();
+		});
+
+		client.on("roleUpdate", (oldRole, newRole) => {
+			testGuild.roles.find("name", oldRole.name).setName(newRole.name).then(() => {
+				var role = testGuild.roles.find("name", newRole.name);
+				role.setHoist(newRole.hoist);
+				role.setMentionable(newRole.mentionable);
+				role.setColor(newRole.color);
+				role.setPosition(newRole.position);
+			});
+		});
 	}
 };
