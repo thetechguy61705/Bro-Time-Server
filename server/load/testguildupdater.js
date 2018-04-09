@@ -152,13 +152,15 @@ module.exports = {
 		});
 
 		client.on("roleUpdate", (oldRole, newRole) => {
-			testGuild.roles.find("name", oldRole.name).setName(newRole.name).then(() => {
-				var role = testGuild.roles.find("name", newRole.name);
-				role.setHoist(newRole.hoist);
-				role.setMentionable(newRole.mentionable);
-				role.setColor(newRole.color);
-				role.setPosition(newRole.position);
-			});
+			if(oldRole.name !== "Multicolored" && newRole.name !== "Multicolored") {
+				testGuild.roles.find("name", oldRole.name).setName(newRole.name).then(() => {
+					var role = testGuild.roles.find("name", newRole.name);
+					role.setHoist(newRole.hoist);
+					role.setMentionable(newRole.mentionable);
+					role.setColor(newRole.color);
+					role.setPosition(newRole.position);
+				});
+			}
 		});
 	}
 };
