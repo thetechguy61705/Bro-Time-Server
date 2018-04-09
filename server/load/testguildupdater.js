@@ -157,7 +157,7 @@ module.exports = {
 				role.setHoist(newRole.hoist);
 				role.setMentionable(newRole.mentionable);
 				role.setColor(newRole.color);
-				role.setPosition(newRole.position
+				role.setPosition(newRole.position);
 			});
 		});
 	}
