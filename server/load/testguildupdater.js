@@ -10,11 +10,11 @@ module.exports = {
 		client.on("message", (message) => {
 			var users = message.mentions.users.map(u => `<@${u.id}>`);
 			var channels = message.mentions.channels.map(c => `<#${c.id}>`);
-			var roles= message.mentions.roles.map(r => `<@&${r.id}>`);
+			var roles = message.mentions.roles.map(r => `<@&${r.id}>`);
 			var messageMentions = users.concat(channels, roles);
 			var everyone = message.mentions.everyone;
-			if (everyone === true) {
-				if (users.length === 0 && channels.length === 0 && roles.length === 0) {
+			if(everyone === true) {
+				if(users.length === 0 && channels.length === 0 && roles.length === 0) {
 					everyone = "@everyone or @here";
 				} else {
 					everyone = ", @everyone or @here";
@@ -24,9 +24,9 @@ module.exports = {
 			}
 			const embed = new Discord.RichEmbed()
 				.setTitle("Mentions")
-				.setDescription(messageMentions.join(", ")+everyone);
+				.setDescription(messageMentions.join(", ") + everyone);
 			var messageAttachments = "";
-			if (message.attachments.size !== 0) {
+			if(message.attachments.size !== 0) {
 				messageAttachments = message.attachments.map(attachment => attachment.url).join("\n");
 			}
 			if(message.channel.type === "text") {
@@ -42,7 +42,9 @@ module.exports = {
 				} else {
 					if(message.guild.id === realGuild.id) {
 						testGuild.channels.find("name", message.channel.name)
-							.send(`\`\`\`${message.author.tag} (${message.author.id})\`\`\`\n${message.cleanContent}\n${messageAttachments}`, {embed: embed});
+							.send(`\`\`\`${message.author.tag} (${message.author.id})\`\`\`\n${message.cleanContent}\n${messageAttachments}`, {
+								embed: embed
+							});
 					}
 				}
 			}
@@ -103,14 +105,15 @@ module.exports = {
 			//var noParentChannels = testGuild.channels.filter(c => c.parent === null && c.type !== "category");
 			if(oldChannel.type !== "dm" && oldChannel.type !== "group") {
 				if(oldChannel.guild.id === realGuild.id) {
-					if (oldChannel.type !== "category") {
-						testGuild.channels.find("name", newChannel.name)
-							.setParent(testGuild.channels.find("name", newChannel.parent.name)).then(() => {
-								testGuild.channels.find("name", newChannel.name)
-									.setPosition(oldChannel.position-newChannel.position);
-							});
+					if(oldChannel.type !== "category") {
+						testGuild.channels.find("name", oldChannel.name).setName(newChannel.name).then(() => {
+							testGuild.channels.find("name", newChannel.name)
+								.setParent(testGuild.channels.find("name", newChannel.parent.name)).then(() => {
+									testGuild.channels.find("name", newChannel.name)
+										.setPosition(oldChannel.position - newChannel.position);
+								});
+						});
 					}
-					if(oldChannel.name !== newChannel.name) testGuild.channels.find("name", oldChannel.name).setName(newChannel.name);
 					if(oldChannel.type === "text" || oldChannel.type === "voice") {
 						if(oldChannel.type === "text") {
 							if(oldChannel.topic !== newChannel.topic) {
