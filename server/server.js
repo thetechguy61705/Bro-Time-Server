@@ -39,6 +39,8 @@ for (let token in config.BOTS) {
 		let client = new discord.Client();
 		let loadedAreas = new discord.Collection();
 
+		client.setMaxListeners(30);
+
 		client.on("ready", () => {
 			console.log("Loading " + client.user.username);
 			loaders.forEach(loader => {
