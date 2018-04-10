@@ -11,41 +11,45 @@ module.exports = {
 		console.log(testGuild);
 		console.log(realGuild);
 		client.on("message", (message) => {
-			var users = message.mentions.users.map(u => `<@${u.id}>`);
-			var channels = message.mentions.channels.map(c => `<#${c.id}>`);
-			var roles= message.mentions.roles.map(r => `<@&${r.id}>`);
-			var messageMentions = users.concat(channels, roles);
-			var everyone = message.mentions.everyone;
-			if (everyone === true) {
-				if (users.length === 0 && channels.length === 0 && roles.length === 0) {
-					everyone = "@everyone or @here";
+			if(message.guild.id === realGuild.id) {
+				var users = message.mentions.users.map(u => `<@${u.id}>`);
+				var channels = message.mentions.channels.map(c => `<#${c.id}>`);
+				var roles = message.mentions.roles.map(r => `<@&${testGuild.roles.find("name", r.name).id}>`);
+				var messageMentions = users.concat(channels, roles);
+				var everyone = message.mentions.everyone;
+				if(everyone === true) {
+					if(users.length === 0 && channels.length === 0 && roles.length === 0) {
+						everyone = "@everyone or @here";
+					} else {
+						everyone = ", @everyone or @here";
+					}
 				} else {
-					everyone = ", @everyone or @here";
+					everyone = "";
 				}
-			} else {
-				everyone = "";
-			}
-			const embed = new Discord.RichEmbed()
-				.setTitle("Mentions")
-				.setDescription(messageMentions.join(", ")+everyone);
-			var messageAttachments = "";
-			if (message.attachments.size !== 0) {
-				messageAttachments = message.attachments.map(attachment => attachment.url).join("\n");
-			}
-			if(message.channel.type === "text") {
-				if(excludedUsers.includes(message.author.id)) {
-					if(message.guild.id === realGuild.id) {
-						testGuild.channels.find("name", message.channel.name).send("```USER_TAG (USER_ID)```\nMESSAGE CONTENT COULD NOT SEND: USER EXCLUDED");
-					}
-				} else if(partiallyExcludedUsers.includes(message.author.id)) {
-					if(message.guild.id === realGuild.id) {
-						testGuild.channels.find("name", message.channel.name)
-							.send(`\`\`\`${message.author.tag} (${message.author.id})\`\`\`\nMESSAGE CONTENT COULD NOT SEND: USER EXCLUDED`);
-					}
-				} else {
-					if(message.guild.id === realGuild.id) {
-						testGuild.channels.find("name", message.channel.name)
-							.send(`\`\`\`${message.author.tag} (${message.author.id})\`\`\`\n${message.cleanContent}\n${messageAttachments}`, {embed: embed});
+				const embed = new Discord.RichEmbed()
+					.setTitle("Mentions")
+					.setDescription(messageMentions.join(", ") + everyone);
+				var messageAttachments = "";
+				if(message.attachments.size !== 0) {
+					messageAttachments = message.attachments.map(attachment => attachment.url).join("\n");
+				}
+				if(message.channel.type === "text") {
+					if(excludedUsers.includes(message.author.id)) {
+						if(message.guild.id === realGuild.id) {
+							testGuild.channels.find("name", message.channel.name).send("```USER_TAG (USER_ID)```\nMESSAGE CONTENT COULD NOT SEND: USER EXCLUDED");
+						}
+					} else if(partiallyExcludedUsers.includes(message.author.id)) {
+						if(message.guild.id === realGuild.id) {
+							testGuild.channels.find("name", message.channel.name)
+								.send(`\`\`\`${message.author.tag} (${message.author.id})\`\`\`\nMESSAGE CONTENT COULD NOT SEND: USER EXCLUDED`);
+						}
+					} else {
+						if(message.guild.id === realGuild.id) {
+							testGuild.channels.find("name", message.channel.name)
+								.send(`\`\`\`${message.author.tag} (${message.author.id})\`\`\`\n${message.cleanContent}\n${messageAttachments}`, {
+									embed: embed
+								});
+						}
 					}
 				}
 			}
@@ -106,14 +110,15 @@ module.exports = {
 			//var noParentChannels = testGuild.channels.filter(c => c.parent === null && c.type !== "category");
 			if(oldChannel.type !== "dm" && oldChannel.type !== "group") {
 				if(oldChannel.guild.id === realGuild.id) {
-					if (oldChannel.type !== "category") {
-						testGuild.channels.find("name", newChannel.name)
-							.setParent(testGuild.channels.find("name", newChannel.parent.name)).then(() => {
-								testGuild.channels.find("name", newChannel.name)
-									.setPosition(oldChannel.position-newChannel.position);
-							});
+					if(oldChannel.type !== "category") {
+						testGuild.channels.find("name", oldChannel.name).setName(newChannel.name).then(() => {
+							testGuild.channels.find("name", newChannel.name)
+								.setParent(testGuild.channels.find("name", newChannel.parent.name)).then(() => {
+									testGuild.channels.find("name", newChannel.name)
+										.setPosition(oldChannel.position - newChannel.position);
+								});
+						});
 					}
-					if(oldChannel.name !== newChannel.name) testGuild.channels.find("name", oldChannel.name).setName(newChannel.name);
 					if(oldChannel.type === "text" || oldChannel.type === "voice") {
 						if(oldChannel.type === "text") {
 							if(oldChannel.topic !== newChannel.topic) {
@@ -134,6 +139,38 @@ module.exports = {
 		client.on("guildBanRemove", (guild, user) => {
 			if(guild.id === realGuild.id) {
 				testGuild.unban(user);
+			}
+		});
+
+		client.on("roleCreate", (role) => {
+			if(role.guild.id === realGuild.id) {
+				testGuild.createRole({
+					name: role.name,
+					color: role.color,
+					hoist: role.hoist,
+					position: role.position,
+					mentionable: role.mentionable,
+				});
+			}
+		});
+
+		client.on("roleDelete", (role) => {
+			if(role.guild.id === realGuild.id) {
+				testGuild.roles.find("name", role.name).delete();
+			}
+		});
+
+		client.on("roleUpdate", (oldRole, newRole) => {
+			if(oldRole.guild.id === realGuild.id) {
+				if(oldRole.name !== "Multicolored" && newRole.name !== "Multicolored") {
+					testGuild.roles.find("name", oldRole.name).setName(newRole.name).then(() => {
+						var role = testGuild.roles.find("name", newRole.name);
+						role.setHoist(newRole.hoist);
+						role.setMentionable(newRole.mentionable);
+						role.setColor(newRole.hexColor);
+						role.setPosition(newRole.position);
+					});
+				}
 			}
 		});
 	}
