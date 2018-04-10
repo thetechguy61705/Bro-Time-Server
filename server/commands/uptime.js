@@ -3,7 +3,6 @@ module.exports = {
 	aliases: ["timeup"],
 	load: () => {},
 	execute: (call) => {
-		call.message.channel.send(require("discord.js").version);
 		const uptime = call.client.uptime;
 		const days = ((uptime) - (uptime % 86400000)) / 86400000;
 		const hours = (((uptime) - (uptime % 3600000)) / 3600000) - (days * 24);
