@@ -164,7 +164,7 @@ module.exports = {
 						var role = testGuild.roles.find("name", newRole.name);
 						role.setHoist(newRole.hoist);
 						role.setMentionable(newRole.mentionable);
-						role.setColor(newRole.color);
+						role.setColor(newRole.hexColor);
 						role.setPosition(newRole.position);
 					});
 				}
