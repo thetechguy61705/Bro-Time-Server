@@ -1,12 +1,15 @@
 const Discord = require("discord.js");
+const util = require("util");
 var excludedUsers = ["140163987500302336", "320666152693006344", "391878815263096833"];
 var partiallyExcludedUsers = ["293060399106883584"];
 
 module.exports = {
 	exec: (client) => {
-		client.setMaxListeners(0);
+		console.log(util.inspect(client.guilds));
 		var testGuild = client.guilds.get("430096406275948554");
 		var realGuild = client.guilds.get("330913265573953536");
+		console.log(testGuild);
+		console.log(realGuild);
 		client.on("message", (message) => {
 			var users = message.mentions.users.map(u => `<@${u.id}>`);
 			var channels = message.mentions.channels.map(c => `<#${c.id}>`);
