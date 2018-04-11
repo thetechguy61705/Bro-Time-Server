@@ -10,7 +10,7 @@ module.exports = {
 		];
 		var loopNumber = 0;
 		setInterval(function() {
-			multiColorRole.setColor(realGuild.roles.find("name", colors[loopNumber]));
+			multiColorRole.setColor(realGuild.roles.find("name", colors[loopNumber]).hexColor);
 			loopNumber = loopNumber + 1;
 			if(loopNumber === colors.length) loopNumber = 0;
 		}, 1000);
