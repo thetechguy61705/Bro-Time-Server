@@ -156,16 +156,15 @@ module.exports = {
 			}
 		});
 
-		client.on("roleUpdate", (oldRole, newRole) => {
+		client.on("roleUpdate", async function(oldRole, newRole) {
 			if(oldRole.guild.id === realGuild.id) {
 				if(oldRole.name !== "Multicolored" && newRole.name !== "Multicolored") {
-					testGuild.roles.find("name", oldRole.name).setName(newRole.name).then(() => {
-						var role = testGuild.roles.find("name", newRole.name);
-						role.setHoist(newRole.hoist);
-						role.setMentionable(newRole.mentionable);
-						role.setColor(newRole.hexColor);
-						role.setPosition(newRole.position);
-					});
+					var role = testGuild.roles.find("name", oldRole.name);
+					await role.setHoist(newRole.hoist);
+					await role.setMentionable(newRole.mentionable);
+					await role.setColor(newRole.hexColor);
+					await role.setPosition(newRole.position);
+					await role.setName(newRole.name);
 				}
 			}
 		});
