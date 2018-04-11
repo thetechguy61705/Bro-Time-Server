@@ -17,7 +17,7 @@ module.exports = {
 		const realGuild = call.client.guilds.get("330913265573953536");
 		var loopNumber = 0;
 		var loopThroughColors = setInterval(function() {
-			changeColors(realGuild, colors, loopNumber)
+			changeColors(realGuild, colors, loopNumber);
 		}, 1000);
 		if(realGuild.roles.find("name", "Multicolored").hexColor !== "#000001") {
 			clearInterval(loopThroughColors);
