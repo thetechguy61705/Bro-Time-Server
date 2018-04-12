@@ -13,8 +13,8 @@ module.exports = {
 							.setAuthor(`${oldMessage.author.tag} (${oldMessage.author.id})`)
 							.setColor("BLUE")
 							.setTitle("Message Update")
-							.addField("Old Message", `\`\`\`${oldMessage.content} \`\`\`\nAt: \`${oldMessage.createdAt}\``)
-							.addField("New Message", `\`\`\`${newMessage.content} \`\`\`\nAt: \`${newMessage.createdAt}\``);
+							.addField("Old Message", `\`\`\`${oldMessage.content} \`\`\`\nIn: ${oldMessage.channel}\nAt: \`${oldMessage.createdAt}\``)
+							.addField("New Message", `\`\`\`${newMessage.content} \`\`\`\nIn: ${oldMessage.channel}\nAt: \`${newMessage.createdAt}\``);
 						superLogChannel.send({
 							embed: updateEmbed
 						});
@@ -32,7 +32,7 @@ module.exports = {
 							.setAuthor(`${message.author.tag} (${message.author.id})`)
 							.setColor("RED")
 							.setTitle("Message Delete")
-							.addField("Message", `\`\`\`${message.content} \`\`\`\nDeleted in: \`${message.channel}\`\nDeleted at: \`${Date.new()}\``);
+							.addField("Message", `\`\`\`${message.content} \`\`\`\nDeleted in: ${message.channel}\nDeleted at: \`${Date.new()}\``);
 						superLogChannel.send({
 							embed: updateEmbed
 						});
