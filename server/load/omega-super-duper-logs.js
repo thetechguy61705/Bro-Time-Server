@@ -72,7 +72,7 @@ module.exports = {
 						var channelCreateEmbed = new Discord.RichEmbed()
 							.setAuthor(`${executor.tag} (${executor.id})`)
 							.setColor("RED")
-							.addField("Channel Delete", `Name: \`${channel.name}\`\Topic: \`${channel.topic}\``);
+							.addField("Channel Delete", `Name: \`${channel.name}\`\nTopic: \`${channel.topic}\``);
 						superLogChannel.send({
 							embed: channelCreateEmbed
 						});
