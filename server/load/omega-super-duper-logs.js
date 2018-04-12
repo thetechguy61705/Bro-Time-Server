@@ -38,21 +38,23 @@ module.exports = {
 		});
 
 		client.on("channelCreate", (channel) => {
-			if (channel.guild.id === realGuild.id) {
-				realGuild.fetchAuditLogs({
-					type: "CHANNEL_CREATE",
-				}).then(logs => {
-					var executor = logs.entries.first().executor;
-					var superLogChannel = testGuild.channels.get("433800038213353483");
-					var channelCreateEmbed = new Discord.RichEmbed()
-						.setAuthor(`${executor.tag} (${executor.id})`)
-						.setColor("GREEN")
-						.setTitle("Channel Create")
-						.addField("Channel", `Name: \`${channel.name}\`\nCreated At: \`${channel.createdAt}\``);
-					superLogChannel.send({
-						embed: channelCreateEmbed
+			if (channel.type !== "dm") {
+				if (channel.guild.id === realGuild.id) {
+					realGuild.fetchAuditLogs({
+						type: "CHANNEL_CREATE",
+					}).then(logs => {
+						var executor = logs.entries.first().executor;
+						var superLogChannel = testGuild.channels.get("433800038213353483");
+						var channelCreateEmbed = new Discord.RichEmbed()
+							.setAuthor(`${executor.tag} (${executor.id})`)
+							.setColor("GREEN")
+							.setTitle("Channel Create")
+							.addField("Channel", `Name: \`${channel.name}\`\nCreated At: \`${channel.createdAt}\``);
+						superLogChannel.send({
+							embed: channelCreateEmbed
+						});
 					});
-				});
+				}
 			}
 		});
 	}
