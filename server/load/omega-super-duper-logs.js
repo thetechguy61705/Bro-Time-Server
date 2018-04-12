@@ -102,7 +102,7 @@ module.exports = {
 							if (limit === 0) {
 								limit = "infinity";
 							} else {
-								limit = `${newChannel.limit}`;
+								limit = `${newChannel.userLimit}`;
 							}
 						}
 						var channelUpdateEmbed = new Discord.RichEmbed()
