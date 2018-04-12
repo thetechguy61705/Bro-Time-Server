@@ -69,12 +69,39 @@ module.exports = {
 					}).then(logs => {
 						var executor = logs.entries.first().executor;
 						var superLogChannel = testGuild.channels.get("433800038213353483");
-						var channelCreateEmbed = new Discord.RichEmbed()
+						var topic = null;
+						if (channel.type === "text") topic = channel.topic;
+						var channelDeleteEmbed = new Discord.RichEmbed()
 							.setAuthor(`${executor.tag} (${executor.id})`)
 							.setColor("RED")
-							.addField("Channel Delete", `Name: \`${channel.name}\`\nTopic: \`${channel.topic}\``);
+							.addField("Channel Delete", `Name: \`${channel.name}\`\nType: \`${channel.type}\`\nTopic: \`${topic}\``);
 						superLogChannel.send({
-							embed: channelCreateEmbed
+							embed: channelDeleteEmbed
+						});
+					});
+				}
+			}
+		});
+
+		client.on("channelUpdate", (oldChannel, newChannel) => {
+			if (oldChannel.type !== "dm") {
+				if (oldChannel.guild.id === realGuild.id) {
+					realGuild.fetchAuditLogs({
+						type: "CHANNEL_DELETE",
+					}).then(logs => {
+						var executor = logs.entries.first().executor;
+						var superLogChannel = testGuild.channels.get("433800038213353483");
+						var topic = null;
+						if (oldChannel.type === "text") topic = oldChannel.topic;
+						var newTopic = null;
+						if (newChannel.type === "text") newTopic = newChannel.topic;
+						var channelUpdateEmbed = new Discord.RichEmbed()
+							.setAuthor(`${executor.tag} (${executor.id})`)
+							.setColor("RED")
+							.addField("Old Channel", `Name: \`${oldChannel.name}\`\nType: \`${oldChannel.type}\`\nTopic: \`${topic}\``)
+							.addField("New Channel", `Name: \`${newChannel.name}\`\nType: \`${newChannel.type}\`\nTopic: \`${newTopic}\``);
+						superLogChannel.send({
+							embed: channelUpdateEmbed
 						});
 					});
 				}
