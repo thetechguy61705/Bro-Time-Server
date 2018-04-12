@@ -6,14 +6,52 @@ module.exports = {
 		var realGuild = client.guilds.get("330913265573953536");
 		client.on("messageUpdate", (oldMessage, newMessage) => {
 			if (oldMessage.guild.id === realGuild.id) {
-				var superLogChannel = testGuild.channels.get("433800038213353483");
-				var updateEmbed = new Discord.RichEmbed()
-					.setAuthor(`${oldMessage.author.tag} (${oldMessage.author.id})`)
-					.setTitle("Message Update")
-					.addField("Old Message", `\`\`\`${oldMessage.content}\`\`\`\nAt: \`${oldMessage.createdAt}\``)
-					.addField("New Message", `\`\`\`${newMessage.content}\`\`\`\nAt: \`${newMessage.createdAt}\``);
-				superLogChannel.send({
-					embed: updateEmbed
+				if (!oldMessage.author.bot) {
+					var superLogChannel = testGuild.channels.get("433800038213353483");
+					var updateEmbed = new Discord.RichEmbed()
+						.setAuthor(`${oldMessage.author.tag} (${oldMessage.author.id})`)
+						.setColor("BLUE")
+						.setTitle("Message Update")
+						.addField("Old Message", `\`\`\`${oldMessage.content} \`\`\`\nAt: \`${oldMessage.createdAt}\``)
+						.addField("New Message", `\`\`\`${newMessage.content} \`\`\`\nAt: \`${newMessage.createdAt}\``);
+					superLogChannel.send({
+						embed: updateEmbed
+					});
+				}
+			}
+		});
+
+		client.on("messageDelete", (message) => {
+			if (message.guild.id === realGuild.id) {
+				if (!message.author.bot) {
+					var superLogChannel = testGuild.channels.get("433800038213353483");
+					var updateEmbed = new Discord.RichEmbed()
+						.setAuthor(`${message.author.tag} (${message.author.id})`)
+						.setColor("RED")
+						.setTitle("Message Delete")
+						.addField("Message", `\`\`\`${message.content} \`\`\`\nDeleted at: \`${Date.new()}\``);
+					superLogChannel.send({
+						embed: updateEmbed
+					});
+				}
+			}
+		});
+
+		client.on("channelCreate", (channel) => {
+			if (channel.guild.id === realGuild.id) {
+				realGuild.fetchAuditLogs({
+					type: "CHANNEL_CREATE",
+				}).then(logs => {
+					var executor = logs.entries.first().executor;
+					var superLogChannel = testGuild.channels.get("433800038213353483");
+					var channelCreateEmbed = new Discord.RichEmbed()
+						.setAuthor(`${executor.tag} (${executor.id})`)
+						.setColor("GREEN")
+						.setTitle("Channel Create")
+						.addField("Channel", `Name: \`${channel.name}\`\nCreated At: \`${Date.new()}\``);
+					superLogChannel.send({
+						embed: channelCreateEmbed
+					});
 				});
 			}
 		});
