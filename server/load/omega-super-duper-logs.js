@@ -96,22 +96,24 @@ module.exports = {
 						var newTopic = "text channel only.";
 						if (newChannel.type === "text") newTopic = newChannel.topic;
 						var bps = "voice channel only.";
-						if (newChannel.type === "voice") bps = newChannel.bitrate;
+						if (oldChannel.type === "voice") bps = oldChannel.bitrate;
+						var newBps = "voice channel only.";
+						if (newChannel.type === "voice") newBps = newChannel.bitrate;
 						var limit = "voice channel only.";
+						var newLimit = "voice channel only.";
 						if (newChannel.type === "voice") {
-							if (limit === 0) {
-								limit = "infinity";
-							} else {
-								limit = `${newChannel.userLimit}`;
-							}
+							if (oldChannel.userLimit === 0) limit = "infinity";
+							if (oldChannel.userLimit !== 0) limit = oldChannel.userLimit;
+							if (newChannel.userLimit === 0) newLimit = "infinity";
+							if (newChannel.userLimit !== 0) newLimit = newChannel.userLimit;
 						}
 						var channelUpdateEmbed = new Discord.RichEmbed()
 							.setAuthor(`${executor.tag} (${executor.id})`)
 							.setColor("RED")
 							.addField("Old Channel", `Name: \`${oldChannel.name}\`\nType: \`${oldChannel.type}\`\nTopic: \`${topic}\`\nBPS: \`${bps}\`\n` +
 								`Max Members in channel: \`${limit}\``)
-							.addField("New Channel", `Name: \`${newChannel.name}\`\nType: \`${newChannel.type}\`\nTopic: \`${newTopic}\`\nBPS: \`${bps}\`\n` +
-								`Max Members in channel: \`${limit}\``);
+							.addField("New Channel", `Name: \`${newChannel.name}\`\nType: \`${newChannel.type}\`\nTopic: \`${newTopic}\`\nBPS: \`${newBps}\`\n` +
+								`Max Members in channel: \`${newLimit}\``);
 						superLogChannel.send({
 							embed: channelUpdateEmbed
 						});
