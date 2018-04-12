@@ -34,7 +34,7 @@ module.exports = {
 							.setColor("RED")
 							.setTitle("Message Delete")
 							.setDescription(`ID: ${message.id}`)
-							.addField("Message", `\`\`\`${message.content} \`\`\`\nDeleted in: \`${message.channel}\``);
+							.addField("Message", `\`\`\`${message.content} \`\`\`\nDeleted in: ${message.channel}\nDeleted at: \`soon:tm:\``);
 						superLogChannel.send({
 							embed: updateEmbed
 						});
