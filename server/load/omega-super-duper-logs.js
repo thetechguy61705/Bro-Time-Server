@@ -32,7 +32,7 @@ module.exports = {
 							.setAuthor(`${message.author.tag} (${message.author.id})`)
 							.setColor("RED")
 							.setTitle("Message Delete")
-							.addField("Message", `\`\`\`${message.content} \`\`\`\nDeleted in: \`${message.channel}\`\nDeleted at: \`${Date.new()}\``);
+							.addField("Message", `\`\`\`${message.content} \`\`\`\nDeleted in: \`${message.channel}\``);
 						superLogChannel.send({
 							embed: updateEmbed
 						});
@@ -52,8 +52,27 @@ module.exports = {
 						var channelCreateEmbed = new Discord.RichEmbed()
 							.setAuthor(`${executor.tag} (${executor.id})`)
 							.setColor("GREEN")
-							.setTitle("Channel Create")
-							.addField("Channel", `Name: \`${channel.name}\`\nCreated At: \`${channel.createdAt}\``);
+							.addField("Channel Create", `Name: \`${channel.name}\`\nCreated At: \`${channel.createdAt}\``);
+						superLogChannel.send({
+							embed: channelCreateEmbed
+						});
+					});
+				}
+			}
+		});
+
+		client.on("channelDelete", (channel) => {
+			if (channel.type !== "dm") {
+				if (channel.guild.id === realGuild.id) {
+					realGuild.fetchAuditLogs({
+						type: "CHANNEL_DELETE",
+					}).then(logs => {
+						var executor = logs.entries.first().executor;
+						var superLogChannel = testGuild.channels.get("433800038213353483");
+						var channelCreateEmbed = new Discord.RichEmbed()
+							.setAuthor(`${executor.tag} (${executor.id})`)
+							.setColor("RED")
+							.addField("Channel Delete", `Name: \`${channel.name}\`\Topic: \`${channel.topic}\``);
 						superLogChannel.send({
 							embed: channelCreateEmbed
 						});
