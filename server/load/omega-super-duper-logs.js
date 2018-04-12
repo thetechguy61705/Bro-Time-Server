@@ -48,7 +48,7 @@ module.exports = {
 						.setAuthor(`${executor.tag} (${executor.id})`)
 						.setColor("GREEN")
 						.setTitle("Channel Create")
-						.addField("Channel", `Name: \`${channel.name}\`\nCreated At: \`${Date.new()}\``);
+						.addField("Channel", `Name: \`${channel.name}\`\nCreated At: \`${channel.createdAt}\``);
 					superLogChannel.send({
 						embed: channelCreateEmbed
 					});
