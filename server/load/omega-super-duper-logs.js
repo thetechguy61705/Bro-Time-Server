@@ -100,9 +100,9 @@ module.exports = {
 						var limit = "voice channel only.";
 						if (newChannel.type === "voice") {
 							if (limit === 0) {
-								limit = `infinity`;
+								limit = "infinity";
 							} else {
-								limit = `${newChannel.limit}`
+								limit = `${newChannel.limit}`;
 							}
 						}
 						var channelUpdateEmbed = new Discord.RichEmbed()
