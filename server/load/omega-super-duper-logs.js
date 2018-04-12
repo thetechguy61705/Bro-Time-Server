@@ -10,8 +10,8 @@ module.exports = {
 				var updateEmbed = new Discord.RichEmbed()
 					.setAuthor(`${oldMessage.author.tag} (${oldMessage.author.id})`)
 					.setTitle("Message Update")
-					.setField("Old Message", `\`\`\`${oldMessage.content}\`\`\`\nAt: \`${oldMessage.createdAt}\``)
-					.setField("New Message", `\`\`\`${newMessage.content}\`\`\`\nAt: \`${newMessage.createdAt}\``);
+					.addField("Old Message", `\`\`\`${oldMessage.content}\`\`\`\nAt: \`${oldMessage.createdAt}\``)
+					.addField("New Message", `\`\`\`${newMessage.content}\`\`\`\nAt: \`${newMessage.createdAt}\``);
 				superLogChannel.send({
 					embed: updateEmbed
 				});
