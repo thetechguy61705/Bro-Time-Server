@@ -54,7 +54,7 @@ module.exports = {
 						var topic = null;
 						if (channel.type === "text") topic = channel.topic;
 						var channelCreateEmbed = new Discord.RichEmbed()
-							.setAuthor(`${executor..executor.tag} (${executor.excutor.id})`)
+							.setAuthor(`${executor.executor.tag} (${executor.excutor.id})`)
 							.setColor("GREEN")
 							.addField("Channel Create", `Name: \`${channel.name}\`\nType: \`${channel.type}\`\nTopic: \`${topic}\`\nID: \`${channel.id}\``);
 						superLogChannel.send({
