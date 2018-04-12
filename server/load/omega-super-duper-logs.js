@@ -13,8 +13,8 @@ module.exports = {
 							.setAuthor(`${oldMessage.author.tag} (${oldMessage.author.id})`)
 							.setColor("BLUE")
 							.setTitle("Message Update")
-							.addField("Old Message", `\`\`\`${oldMessage.content} \`\`\`\nAt: \`${oldMessage.createdAt}\``)
-							.addField("New Message", `\`\`\`${newMessage.content} \`\`\`\nAt: \`${newMessage.createdAt}\``);
+							.addField("Old Message", `\`\`\`${oldMessage.content} \`\`\`\nIn: ${oldMessage.channel}\nAt: \`${oldMessage.createdAt}\``)
+							.addField("New Message", `\`\`\`${newMessage.content} \`\`\`\nIn: ${newMessage.channel}\nAt: \`${newMessage.createdAt}\``);
 						superLogChannel.send({
 							embed: updateEmbed
 						});
