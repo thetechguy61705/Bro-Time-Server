@@ -13,7 +13,7 @@ module.exports = {
 			.reply(`The bot has been online for \`${days}\` days, \`${hours}\` hours,` +
 				` \`${minutes}\` minutes, \`${seconds/1000}\` seconds and \`${milliseconds}\` milliseconds`)
 			.catch(() => {
-				call.message.author.reply(`You attempted to run the \`uptime\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+				call.message.author.send(`You attempted to run the \`uptime\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 			});
 	}
 };
