@@ -6,7 +6,7 @@ module.exports = {
 		const testGuild = client.guilds.get("430096406275948554");
 		const realGuild = client.guilds.get("330913265573953536");
 		client.on("messageReactionAdd", (messageReaction) => {
-			if (messageReaction.message.guild.id === testGuild.id) {
+			if (messageReaction.message.guild.id === realGuild.id) {
 				var starReactions = messageReaction.message.reactions.find(reaction => reaction.emoji.name === "⭐");
 				var count = starReactions.count;
 				if (starReactions.users.get(messageReaction.message.author.id)) count = count - 1;
