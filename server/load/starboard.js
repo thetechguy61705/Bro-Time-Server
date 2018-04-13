@@ -3,8 +3,8 @@ const Discord = require("discord.js");
 module.exports = {
 	exec: (client) => {
 		const amountUntilStarboard = 4;
-		var testGuild = client.guilds.get("430096406275948554");
-		var realGuild = client.guilds.get("330913265573953536");
+		const testGuild = client.guilds.get("430096406275948554");
+		const realGuild = client.guilds.get("330913265573953536");
 		client.on("messageReactionAdd", (messageReaction) => {
 			if (messageReaction.message.guild.id === testGuild.id) {
 				var starReactions = messageReaction.message.reactions.find(reaction => reaction.emoji.name === "⭐");
