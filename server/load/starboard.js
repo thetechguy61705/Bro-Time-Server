@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 module.exports = {
 	exec: (client) => {
-		const amountUntilStarboard = 4;
+		const amountUntilStarboard = 1;
 		const testGuild = client.guilds.get("430096406275948554");
 		const realGuild = client.guilds.get("330913265573953536");
 		client.on("messageReactionAdd", (messageReaction) => {
