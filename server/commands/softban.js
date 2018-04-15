@@ -28,7 +28,7 @@ module.exports = {
 									}).then(() => {
 										call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`)
 											.then(msg => msg.delete(5000)
-											.catch(function() {}));
+												.catch(function() {}));
 									}).catch(() => {
 										call.message.reply(`Failed to unban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
 									});
@@ -46,7 +46,7 @@ module.exports = {
 									}).then(() => {
 										call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`)
 											.then(msg => msg.delete(5000)
-											.catch(function() {}));
+												.catch(function() {}));
 									}).catch(() => {
 										call.message.reply(`Failed to unban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
 									});
