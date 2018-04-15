@@ -17,13 +17,13 @@ module.exports = {
 					}
 					if (target.kickable) {
 						target.send(`You have been kicked from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`).then(() => {
-							target.kick().then(() => {
+							target.kick(`Kicked by ${call.message.author.tag} for ${reason}`).then(() => {
 								call.message.channel.send(`***Successfully kicked \`${target.user.tag}\`.***`).then(msg => msg.delete(5000).catch(function() {}));
 							}).catch(() => {
 								call.message.channel.send(`Failed to kick \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
 							});
 						}).catch(() => {
-							target.kick().then(() => {
+							target.kick(`Kicked by ${call.message.author.tag} for ${reason}`).then(() => {
 								call.message.channel.send(`***Successfully kicked \`${target.user.tag}\`.***`).then(msg => msg.delete(5000).catch(function() {}));
 							}).catch(() => {
 								call.message.channel.send(`Failed to kick \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
