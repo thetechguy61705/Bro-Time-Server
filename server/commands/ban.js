@@ -2,16 +2,14 @@ module.exports = {
 	id: "ban",
 	load: () => {},
 	execute: (call) => {
-		const parameterOne = call.params.readParameter();
-		console.log(`PARAMETER ONE: ${parameterOne}`);
-		const parameterTwo = call.params.readParameter();
-		console.log(`PARAMETER TWO: ${parameterTwo}`);
-		console.log(`READ RAW: ${call.params.readRaw()}`);
+		const rawContent = call.params.readRaw();
+		const parameterOne = rawContent.split(" ")[0];
+		const parameterTwo = rawContent.split(" ")[1];
 		if (call.message.member.roles.some(role => ["330919872630358026", "402175094312665098", "395265037356236810", "387768886096953355"].includes(role.id))) {
 			const target = call.message.guild.members.find(m => parameterOne.includes(`${m.user.id}`));
 			var reason;
-			if (parameterTwo != "" && parameterTwo != undefined) {
-				reason = "`" + call.params.readRaw().substr(parameterOne.length + 1) + "`";
+			if (parameterTwo !== undefined) {
+				reason = "`" + call.message.content.substr(parameterOne.length + 1) + "`";
 			} else {
 				reason = "`No reason specified.`";
 			}
