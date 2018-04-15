@@ -8,7 +8,7 @@ module.exports = {
 		if (call.message.member.roles.some(role => ["330919872630358026", "402175094312665098", "395265037356236810", "387768886096953355"].includes(role.id))) {
 			const target = call.message.guild.members.find(m => parameterOne.includes(`${m.user.id}`));
 			if (target !== null) {
-				if (call.message.member.highestRole.position <= target.highestRole.position) {
+				if (call.message.member.highestRole.position > target.highestRole.position) {
 					var reason;
 					if (parameterTwo != undefined) {
 						reason = "`" + rawContent.substr(parameterOne.length + 1) + "`";
