@@ -18,7 +18,7 @@ module.exports = {
 			}
 			if (target != undefined) {
 				if (target.bannable) {
-					target.send(`You have been banned from the \`${call.message.guild.name}\` Discord server by \`${call.message.author.tag}\` for ${reason}`).then(() => {
+					target.send(`You have been banned from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`).then(() => {
 						target.ban(7).then(() => {
 							call.message.channel.send(`***Successfully banned \`${target.user.tag}\`.***`).then(msg => msg.delete(5000).catch(function() {}));
 						}).catch(() => {
