@@ -12,7 +12,7 @@ module.exports = {
 			const target = call.message.guild.members.find(m => parameterOne.includes(`${m.user.id}`));
 			var reason;
 			if (parameterTwo != undefined) {
-				reason = "`" + call.message.content.substr(parameterOne.length + 1) + "`";
+				reason = "`" + rawContent.substr(parameterOne.length + 1) + "`";
 			} else {
 				reason = "`No reason specified.`";
 			}
