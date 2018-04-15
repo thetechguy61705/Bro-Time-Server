@@ -17,14 +17,18 @@ module.exports = {
 					}
 					if (target.bannable) {
 						target.send(`You have been banned from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`).then(() => {
-							target.ban(7, `Banned by ${call.message.author.tag} for ${reason}`).then(() => {
+							target.ban({
+								days:7,
+								reason:`Banned by ${call.message.author.tag} for ${reason}`
+							}).then(() => {
 								call.message.channel.send(`***Successfully banned \`${target.user.tag}\`.***`).then(msg => msg.delete(5000).catch(function() {}));
 							}).catch(() => {
 								call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
 							});
 						}).catch(() => {
-							target.ban(7, `Banned by ${call.message.author.tag} for ${reason}`).then(() => {
-								call.message.channel.send(`***Successfully banned \`${target.user.tag}\`.***`).then(msg => msg.delete(5000).catch(function() {}));
+							target.ban({
+								days:7,
+								reason:`Banned by ${call.message.author.tag} for ${reason}`
 							}).catch(() => {
 								call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
 							});
