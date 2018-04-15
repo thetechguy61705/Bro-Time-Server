@@ -35,7 +35,10 @@ module.exports = {
 								.catch(function() {});
 						});
 					}
-
+				} else {
+					call.message.reply("That user is too far up in this guild's hierarchy to be kicked by you.").catch(() => {
+						call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+					});
 				}
 			} else {
 				call.message.reply("Please mention or supply the id of a valid user.").catch(() => {
