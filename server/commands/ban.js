@@ -4,7 +4,7 @@ module.exports = {
 	execute: (call) => {
 		const parameterOne = call.params.readParameter();
 		console.log(`PARAMETER ONE: ${parameterOne}`);
-		const parameterTwo = call.params.readParameter()
+		const parameterTwo = call.params.readParameter();
 		console.log(`PARAMETER TWO: ${parameterTwo}`);
 		console.log(`READ RAW: ${call.params.readRaw()}`);
 		if (call.message.member.roles.some(role => ["330919872630358026", "402175094312665098", "395265037356236810", "387768886096953355"].includes(role.id))) {
