@@ -23,7 +23,7 @@ module.exports = {
 									reason: `Softbanned by ${call.message.author.tag} for ${reason}`
 								}).then(() => {
 									call.message.guild.unban({
-										user: target.user,
+										user: target,
 										reason: `Softbanned by ${call.message.author.tag} for ${reason}`
 									}).then(() => {
 										call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`)
