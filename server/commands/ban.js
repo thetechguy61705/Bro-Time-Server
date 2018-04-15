@@ -31,7 +31,8 @@ module.exports = {
 						});
 					} else {
 						call.message.channel.send("I do not have permission to ban this user.").catch(() => {
-							call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+							call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`)
+								.catch(function() {});
 						});
 					}
 				} else {
