@@ -13,15 +13,15 @@ module.exports = {
 				reason = "No reason specified.";
 			}
 			if (target != undefined) {
-				target.send(`You have been banned from the ${message.guild.name} Discord server by ${message.author} for ${reason}`);
+				target.send(`You have been banned from the ${call.message.guild.name} Discord server by ${call.message.author} for ${reason}`);
 			} else {
 				call.message.reply("Please mention or supply the id of a valid user.").catch(() => {
-					call.message.author.send(`You attempted to use the \`ban\` command in ${message.channel}, but I can not chat there.`).catch(function() {});
+					call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 				});
 			}
 		} else {
 			call.message.reply("You do not have permissions to trigger this command.").catch(() => {
-				call.message.author.send(`You attempted to use the \`ban\` command in ${message.channel}, but I can not chat there.`).catch(function() {});
+				call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 			});
 		}
 	}
