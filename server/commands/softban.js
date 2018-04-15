@@ -16,39 +16,40 @@ module.exports = {
 						reason = "`No reason specified.`";
 					}
 					if (target.bannable) {
-						target.send(`You have been softbanned/kicked from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`).then(() => {
-							target.ban({
-								days: 7,
-								reason: `Softbanned by ${call.message.author.tag} for ${reason}`
-							}).then(() => {
-								call.message.guild.unban({
-									user: target.user,
+						target.send(`You have been softbanned/kicked from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`)
+							.then(() => {
+								target.ban({
+									days: 7,
 									reason: `Softbanned by ${call.message.author.tag} for ${reason}`
 								}).then(() => {
-									call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`).then(msg => msg.delete(5000).catch(function() {}));
+									call.message.guild.unban({
+										user: target.user,
+										reason: `Softbanned by ${call.message.author.tag} for ${reason}`
+									}).then(() => {
+										call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`).then(msg => msg.delete(5000).catch(function() {}));
+									}).catch(() => {
+										call.message.reply(`Failed to unban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
+									});
 								}).catch(() => {
-									call.message.reply(`Failed to unban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
+									call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
 								});
 							}).catch(() => {
-								call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
-							});
-						}).catch(() => {
-							target.ban({
-								days: 7,
-								reason: `Banned by ${call.message.author.tag} for ${reason}`
-							}).then(() => {
-								call.message.guild.unban({
-									user: target.user,
-									reason: `Softbanned by ${call.message.author.tag} for ${reason}`
+								target.ban({
+									days: 7,
+									reason: `Banned by ${call.message.author.tag} for ${reason}`
 								}).then(() => {
-									call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`).then(msg => msg.delete(5000).catch(function() {}));
+									call.message.guild.unban({
+										user: target.user,
+										reason: `Softbanned by ${call.message.author.tag} for ${reason}`
+									}).then(() => {
+										call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`).then(msg => msg.delete(5000).catch(function() {}));
+									}).catch(() => {
+										call.message.reply(`Failed to unban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
+									});
 								}).catch(() => {
-									call.message.reply(`Failed to unban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
+									call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
 								});
-							}).catch(() => {
-								call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
 							});
-						});
 					} else {
 						call.message.reply("I do not have permission to ban this user.").catch(() => {
 							call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`)
