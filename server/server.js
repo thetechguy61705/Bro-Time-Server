@@ -1,3 +1,4 @@
+var errorHandler = require("app/errorHandler");
 var config = require("../config");
 var fs = require("fs");
 var discord = require("discord.js");
@@ -39,6 +40,7 @@ for (let token in config.BOTS) {
 		let client = new discord.Client();
 		let loadedAreas = new discord.Collection();
 
+		errorHandler(client);
 		client.setMaxListeners(30);
 
 		client.on("ready", () => {
