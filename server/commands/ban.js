@@ -30,13 +30,13 @@ module.exports = {
 							});
 						});
 					} else {
-						call.message.channel.send("I do not have permission to ban this user.").catch(() => {
+						call.message.reply("I do not have permission to ban this user.").catch(() => {
 							call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`)
 								.catch(function() {});
 						});
 					}
 				} else {
-					call.message.reply("That user is too far up in this guilds hierarchy to be banned by you").catch(() => {
+					call.message.reply("That user is too far up in this guild's hierarchy to be banned by you.").catch(() => {
 						call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 					});
 				}
