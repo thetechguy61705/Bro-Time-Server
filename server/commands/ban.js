@@ -35,7 +35,10 @@ module.exports = {
 								.catch(function() {});
 						});
 					}
-
+				} else {
+					call.message.reply("That user is too far up in this guilds hierarchy to be banned by you").catch(() => {
+						call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+					});
 				}
 			} else {
 				call.message.reply("Please mention or supply the id of a valid user.").catch(() => {
