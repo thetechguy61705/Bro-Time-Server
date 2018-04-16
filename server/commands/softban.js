@@ -27,10 +27,14 @@ module.exports = {
 											.then(msg => msg.delete(5000)
 												.catch(function() {})).catch(function() {});
 									}).catch(() => {
-										call.message.reply(`Failed to unban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {})).catch(function() {});
+										call.message.reply(`Failed to unban \`${target.user.tag}\`.`)
+											.then(msg => msg.delete(5000).catch(function() {}))
+											.catch(function() {});
 									});
 								}).catch(() => {
-									call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {})).catch(function() {});
+									call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`)
+										.then(msg => msg.delete(5000).catch(function() {}))
+										.catch(function() {});
 								});
 							}).catch(() => {
 								target.ban({
@@ -45,10 +49,14 @@ module.exports = {
 											.then(msg => msg.delete(5000)
 												.catch(function() {}));
 									}).catch(() => {
-										call.message.reply(`Failed to unban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {})).catch(function() {});
+										call.message.reply(`Failed to unban \`${target.user.tag}\`.`)
+											.then(msg => msg.delete(5000).catch(function() {}))
+											.catch(function() {});
 									});
 								}).catch(() => {
-									call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {})).catch(function() {});
+									call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`)
+										.then(msg => msg.delete(5000).catch(function() {}))
+										.catch(function() {});
 								});
 							});
 					} else {
