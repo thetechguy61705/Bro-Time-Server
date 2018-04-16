@@ -22,18 +22,15 @@ module.exports = {
 									days: 7,
 									reason: `Softbanned by ${call.message.author.tag} for ${reason}`
 								}).then(() => {
-									call.message.guild.unban({
-										user: target,
-										reason: `Softbanned by ${call.message.author.tag} for ${reason}`
-									}).then(() => {
+									call.message.guild.unban(target.user, `Softbanned by ${call.message.author.tag} for ${reason}`).then(() => {
 										call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`)
 											.then(msg => msg.delete(5000)
-												.catch(function() {}));
+												.catch(function() {})).catch(function() {});
 									}).catch(() => {
-										call.message.reply(`Failed to unban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
+										call.message.reply(`Failed to unban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {})).catch(function() {});
 									});
 								}).catch(() => {
-									call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
+									call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {})).catch(function() {});
 								});
 							}).catch(() => {
 								target.ban({
@@ -48,10 +45,10 @@ module.exports = {
 											.then(msg => msg.delete(5000)
 												.catch(function() {}));
 									}).catch(() => {
-										call.message.reply(`Failed to unban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
+										call.message.reply(`Failed to unban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {})).catch(function() {});
 									});
 								}).catch(() => {
-									call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {}));
+									call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).then(msg => msg.delete(5000).catch(function() {})).catch(function() {});
 								});
 							});
 					} else {
