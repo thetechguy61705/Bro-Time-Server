@@ -45,12 +45,14 @@ module.exports = {
 								.catch(function() {});
 						}).catch(() => {
 							call.message.reply("There was an error removing roles from that user.").catch(() => {
-								call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+								call.message.author
+									.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 							});
 						});
 					} else {
 						call.message.reply("Please specify a valid user.").catch(() => {
-							call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+							call.message.author
+								.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 						});
 					}
 				} else if (paramaterOne === "in") {
@@ -81,17 +83,20 @@ module.exports = {
 								});
 							} else {
 								call.message.reply("Please specify a valid role to give below your (or my) hierarchy. Example: `!role in Nerds, Dumb`.").catch(() => {
-									call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+									call.message.author
+										.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 								});
 							}
 						} else {
 							call.message.reply("Please specify a valid role target. Example: `!role in Nerds, Dumb`.").catch(() => {
-								call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+								call.message.author
+									.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 							});
 						}
 					} else {
 						call.message.reply(`Expected 2 parameters seperated by \`, \`. Got \`${roles.length}\`. Example: \`!role in Nerds, Dumb\`.`).catch(() => {
-							call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+							call.message.author
+								.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 						});
 					}
 				} else if (paramaterOne === "all") {
@@ -126,7 +131,8 @@ module.exports = {
 							});
 						} else {
 							call.message.reply("Everyone is either already in this role, or everyone is not in this role.").catch(() => {
-								call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+								call.message.author
+									.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 							});
 						}
 					}
@@ -162,7 +168,8 @@ module.exports = {
 							});
 						} else {
 							call.message.reply("Every human is either already in this role, or every human is not in this role.").catch(() => {
-								call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+								call.message.author
+									.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 							});
 						}
 					}
@@ -177,7 +184,6 @@ module.exports = {
 						}
 					});
 					if (roleTarget !== null) {
-						var usersToRole;
 						if (paramaterTwo.startsWith("-")) {
 							usersToRole = call.message.guild.members.filter(m => m.user.bot && m.roles.has(roleTarget.id)).size;
 						} else {
@@ -199,7 +205,8 @@ module.exports = {
 							});
 						} else {
 							call.message.reply("Every bot is either already in this role, or every bot is not in this role.").catch(() => {
-								call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+								call.message.author
+									.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 							});
 						}
 					}
