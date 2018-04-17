@@ -270,7 +270,7 @@ async function levelRoles(message, Discord, prompt, param) {
 	var levelRoles = [ "`​Newbie Bro`​", "`​Junior Bro`​", "`​Cool Junior Bro`​", "`​OP Junior Bro`​", "`​Bro`​", "`​Cool Bro`​", "`​OP Bro`​",
 		"`​Senior Bro`​", "`​Cool Senior Bro`​", "`​OP Senior Bro`​", "`​Epic Bro`​", "`​Cool Epic Bro`​", "`​OP Epic Bro`​",
 		"`​Legendary Bro`​", "`​Cool Legendary Bro`​", "`​OP Legendary Bro`​", "`​Elite Bro`​", "`​Cool Elite Bro`​", "`​OP Elite Bro`​",
-		"`​True Bro`​" 
+		"`​True Bro`​"
 	];
 	var level = [ "0", "1", "5", "10", "11", "15", "20", "21", "25", "30", "31", "35", "40", "41", "45", "50", "51", "55", "60", "61" ];
 	if (prompt.toLowerCase() === "preview") {
