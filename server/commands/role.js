@@ -5,6 +5,8 @@ module.exports = {
 		var roles = call.params.readRaw().split(" ").slice(1).join(" ").split(", ").filter(r => r !== "");
 		const paramaterOne = call.params.readRaw().split(" ")[0];
 		const paramaterTwo = call.params.readRaw().split(" ")[1];
+		var usersToRole;
+		var timeEstimate = "";
 		var target = call.message.guild.members
 			.find(member => paramaterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(paramaterOne.toLowerCase()));
 		var roleTarget;
@@ -18,11 +20,11 @@ module.exports = {
 				var messageToSend = "";
 				if (rolesToAdd.length !== 0) {
 					target.addRoles(rolesToAdd).catch(function() {});
-					messageToSend = messageToSend + `\nRole(s) added to \`${target.user.tag}\`: \`${rolesToAdd.map(rM => rM.name).join("`, `")}\``
+					messageToSend = messageToSend + `\nRole(s) added to \`${target.user.tag}\`: \`${rolesToAdd.map(rM => rM.name).join("`, `")}\``;
 				}
 				if (rolesToRemove.length !== 0) {
 					target.removeRoles(rolesToRemove).catch(function() {});
-					messageToSend = messageToSend + `\nRole(s) removed from \`${target.user.tag}\`: \`${rolesToRemove.map(rM => rM.name).join("`, `")}\``
+					messageToSend = messageToSend + `\nRole(s) removed from \`${target.user.tag}\`: \`${rolesToRemove.map(rM => rM.name).join("`, `")}\``;
 				}
 				if (messageToSend !== "") {
 					call.message.channel.send(messageToSend).catch(function() {});
@@ -52,7 +54,7 @@ module.exports = {
 						});
 					}
 				} else if (paramaterOne === "in") {
-					roles = args.slice(1).join(" ").split(", ").slice(0, 2).filter(r => r !== "");
+					roles = call.params.readRaw().split(" ").slice(1).join(" ").split(", ").slice(0, 2).filter(r => r !== "");
 					if (roles.length === 2) {
 						roleTarget = call.message.guild.roles.find(role => role.name.toLowerCase().startsWith(roles[0].toLowerCase()));
 						var roleToChangeFromTarget = call.message.guild.roles.find(role => {
@@ -103,14 +105,12 @@ module.exports = {
 						}
 					});
 					if (roleTarget !== null) {
-						var usersToRole;
 						if (paramaterTwo.startsWith("-")) {
 							usersToRole = call.message.guild.members.filter(m => m.roles.has(roleTarget.id)).size;
 						} else {
 							usersToRole = call.message.guild.members.filter(m => !m.roles.has(roleTarget.id)).size;
 						}
 						if (usersToRole !== 0) {
-							var timeEstimate = "";
 							if (usersToRole > 100) timeEstimate = "This may take some time.";
 							call.message.channel.send(`Changing roles for \`${usersToRole}\` members. ${timeEstimate}`).catch(function() {});
 							call.message.guild.members.forEach(member => {
@@ -120,7 +120,7 @@ module.exports = {
 									}
 								} else {
 									if (!member.roles.has(roleTarget.id)) {
-										member.addRole(roleTarget0).catch(function() {});
+										member.addRole(roleTarget).catch(function() {});
 									}
 								}
 							});
@@ -141,14 +141,12 @@ module.exports = {
 						}
 					});
 					if (roleTarget !== null) {
-						var usersToRole;
 						if (paramaterTwo.startsWith("-")) {
 							usersToRole = call.message.guild.members.filter(m => !m.user.bot && m.roles.has(roleTarget.id)).size;
 						} else {
 							usersToRole = call.message.guild.members.filter(m => !m.user.bot && !m.roles.has(roleTarget.id)).size;
 						}
 						if (usersToRole !== 0) {
-							var timeEstimate = "";
 							if (usersToRole > 100) timeEstimate = "This may take some time.";
 							call.message.channel.send(`Changing roles for \`${usersToRole}\` members. ${timeEstimate}`).catch(function() {});
 							call.message.guild.members.filter(m => !m.user.bot).forEach(member => {
@@ -186,7 +184,6 @@ module.exports = {
 							usersToRole = call.message.guild.members.filter(m => m.user.bot && !m.roles.has(roleTarget.id)).size;
 						}
 						if (usersToRole !== 0) {
-							var timeEstimate = "";
 							if (usersToRole > 100) timeEstimate = "This may take some time.";
 							call.message.channel.send(`Changing roles for \`${usersToRole}\` members. ${timeEstimate}`).catch(function() {});
 							call.message.guild.members.filter(m => m.user.bot).forEach(member => {
