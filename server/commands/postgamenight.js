@@ -35,7 +35,7 @@ module.exports = {
 	id: "postgamenight",
 	load: () => {},
 	execute: async (call) => {
-		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host"))) {
+		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {
 			const game = await awaitReply(call.message, "What is the game you want to host on?", 60000);
 			if (game == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
 			var gamerole;
