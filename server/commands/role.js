@@ -15,17 +15,17 @@ module.exports = {
 					.filter(role => call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position);
 				var rolesToAdd = rolesToChange.filter(role => role !== null).filter(role => !target.roles.find("name", role.name))
 					.filter(role => call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position);
-				var call.messageToSend = "";
+				var messageToSend = "";
 				if (rolesToAdd.length !== 0) {
 					target.addRoles(rolesToAdd).catch(function() {});
-					call.messageToSend = call.messageToSend + `\nRole(s) added to \`${target.user.tag}\`: \`${rolesToAdd.map(rM => rM.name).join("`, `")}\``
+					messageToSend = messageToSend + `\nRole(s) added to \`${target.user.tag}\`: \`${rolesToAdd.map(rM => rM.name).join("`, `")}\``
 				}
 				if (rolesToRemove.length !== 0) {
 					target.removeRoles(rolesToRemove).catch(function() {});
-					call.messageToSend = call.messageToSend + `\nRole(s) removed from \`${target.user.tag}\`: \`${rolesToRemove.map(rM => rM.name).join("`, `")}\``
+					messageToSend = messageToSend + `\nRole(s) removed from \`${target.user.tag}\`: \`${rolesToRemove.map(rM => rM.name).join("`, `")}\``
 				}
-				if (call.messageToSend !== "") {
-					call.message.channel.send(call.messageToSend).catch(function() {});
+				if (messageToSend !== "") {
+					call.message.channel.send(messageToSend).catch(function() {});
 				} else {
 					call.message.reply("You did not specify any valid roles, or you did not specify a role below your (or my) hierarchy.").catch(() => {
 						call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
