@@ -5,11 +5,15 @@ module.exports = {
 		var roles = call.params.readRaw().split(" ").slice(1).join(" ").split(", ").filter(r => r !== "");
 		const paramaterOne = call.params.readRaw().split(" ")[0];
 		const paramaterTwo = call.params.readRaw().split(" ")[1];
-		var usersToRole;
+		var options = ["removeall", "all", "bots", "humans", "in"];
 		var timeEstimate = "";
-		var target = call.message.guild.members
-			.find(member => paramaterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(paramaterOne.toLowerCase()));
+		var target = null;
+		var usersToRole;
 		var roleTarget;
+		if (!options.includes(paramaterOne.toLowerCase())) {
+			target = call.message.guild.members
+				.find(member => paramaterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(paramaterOne.toLowerCase()));
+		}
 		if (call.message.member.roles.some(role => ["330919872630358026", "402175094312665098", "395265037356236810", "387768886096953355"].includes(role.id))) {
 			if (target !== null) {
 				var rolesToChange = roles.map(roleToMap => call.message.guild.roles.find(r => r.name.toLowerCase().startsWith(roleToMap.toLowerCase())));
