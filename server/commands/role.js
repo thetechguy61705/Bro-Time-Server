@@ -74,6 +74,8 @@ module.exports = {
 						});
 						if (roleTarget !== null) {
 							if (roleToChangeFromTarget !== null) {
+								message.channel.send(`Changing roles for people in the \`${roleTarget.name}\` role with the \`${roleToChangeFromTarget.name}\` role.`)
+									.catch(function() {});
 								roleTarget.members.forEach(member => {
 									if (roles[1].startsWith("-")) {
 										if (member.roles.has(roleToChangeFromTarget.id)) {
@@ -81,7 +83,7 @@ module.exports = {
 										}
 									} else {
 										if (!member.roles.has(roleToChangeFromTarget.id)) {
-											member.addRole(roleToChangeFromTarget).catch(function() {});
+											member.addRole(roleToChangeFromTarget).catch(function() {})
 										}
 									}
 								});
