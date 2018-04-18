@@ -10,6 +10,7 @@ module.exports = {
 		var target = null;
 		var usersToRole;
 		var roleTarget;
+		var roleToChangeFromTarget;
 		if (!options.includes(paramaterOne.toLowerCase())) {
 			target = call.message.guild.members
 				.find(member => paramaterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(paramaterOne.toLowerCase()));
@@ -63,7 +64,7 @@ module.exports = {
 					roles = call.params.readRaw().split(" ").slice(1).join(" ").split(", ").slice(0, 2).filter(r => r !== "");
 					if (roles.length === 2) {
 						roleTarget = call.message.guild.roles.find(role => role.name.toLowerCase().startsWith(roles[0].toLowerCase()));
-						var roleToChangeFromTarget = call.message.guild.roles.find(role => {
+						roleToChangeFromTarget = call.message.guild.roles.find(role => {
 							if (roles[1].startsWith("-")) {
 								return role.name.toLowerCase().startsWith(roles[1].substr(1).toLowerCase()) &&
 									call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position;
@@ -221,7 +222,7 @@ module.exports = {
 					roles = call.params.readRaw().split(" ").slice(1).join(" ").split(", ").slice(0, 2).filter(r => r !== "");
 					if (roles.length === 2) {
 						roleTarget = call.message.guild.roles.find(role => role.name.toLowerCase().startsWith(roles[0].toLowerCase()));
-						var roleToChangeFromTarget = call.message.guild.roles.find(role => {
+						roleToChangeFromTarget = call.message.guild.roles.find(role => {
 							if (roles[1].startsWith("-")) {
 								return role.name.toLowerCase().startsWith(roles[1].substr(1).toLowerCase()) &&
 									call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position;
