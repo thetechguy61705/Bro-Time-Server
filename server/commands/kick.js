@@ -5,7 +5,8 @@ module.exports = {
 		const rawContent = call.params.readRaw();
 		const parameterOne = rawContent.split(" ")[0];
 		const parameterTwo = rawContent.split(" ")[1];
-		if (call.message.member.roles.some(role => ["330919872630358026", "402175094312665098", "395265037356236810", "387768886096953355"].includes(role.id))) {
+		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
+		if (call.message.member.roles.some(role => modRoles.includes(role.id))) {
 			const target = call.message.guild.members.find(m => parameterOne.includes(`${m.user.id}`));
 			if (target !== null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
