@@ -234,7 +234,7 @@ module.exports = {
 						if (roleTarget !== null) {
 							if (roleToChangeFromTarget !== null) {
 								call.message.channel
-									.send(`Changing roles for people in the \`${roleTarget.name}\` role with the \`${roleToChangeFromTarget.name}\` role.`)
+									.send(`Changing roles for peoplen ot in the \`${roleTarget.name}\` role with the \`${roleToChangeFromTarget.name}\` role.`)
 									.catch(function() {});
 								call.message.guild.members.forEach(member => {
 									if (roleTarget.members.find(m => member.user.id === m.user.id) === null) {
