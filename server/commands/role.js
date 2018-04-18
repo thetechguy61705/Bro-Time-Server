@@ -5,11 +5,12 @@ module.exports = {
 		var roles = call.params.readRaw().split(" ").slice(1).join(" ").split(", ").filter(r => r !== "");
 		const paramaterOne = call.params.readRaw().split(" ")[0];
 		const paramaterTwo = call.params.readRaw().split(" ")[1];
-		var options = ["removeall", "all", "bots", "humans", "in"];
+		var options = ["removeall", "all", "bots", "humans", "in", "status"];
 		var timeEstimate = "";
 		var target = null;
 		var usersToRole;
 		var roleTarget;
+		var roleToChangeFromTarget;
 		if (!options.includes(paramaterOne.toLowerCase())) {
 			target = call.message.guild.members
 				.find(member => paramaterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(paramaterOne.toLowerCase()));
@@ -63,7 +64,7 @@ module.exports = {
 					roles = call.params.readRaw().split(" ").slice(1).join(" ").split(", ").slice(0, 2).filter(r => r !== "");
 					if (roles.length === 2) {
 						roleTarget = call.message.guild.roles.find(role => role.name.toLowerCase().startsWith(roles[0].toLowerCase()));
-						var roleToChangeFromTarget = call.message.guild.roles.find(role => {
+						roleToChangeFromTarget = call.message.guild.roles.find(role => {
 							if (roles[1].startsWith("-")) {
 								return role.name.toLowerCase().startsWith(roles[1].substr(1).toLowerCase()) &&
 									call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position;
@@ -216,6 +217,55 @@ module.exports = {
 									.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 							});
 						}
+					}
+				} else if (paramaterOne === "not-in") {
+					roles = call.params.readRaw().split(" ").slice(1).join(" ").split(", ").slice(0, 2).filter(r => r !== "");
+					if (roles.length === 2) {
+						roleTarget = call.message.guild.roles.find(role => role.name.toLowerCase().startsWith(roles[0].toLowerCase()));
+						roleToChangeFromTarget = call.message.guild.roles.find(role => {
+							if (roles[1].startsWith("-")) {
+								return role.name.toLowerCase().startsWith(roles[1].substr(1).toLowerCase()) &&
+									call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position;
+							} else {
+								return role.name.toLowerCase().startsWith(roles[1].toLowerCase()) &&
+									call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position;
+							}
+						});
+						if (roleTarget !== null) {
+							if (roleToChangeFromTarget !== null) {
+								call.message.channel
+									.send(`Changing roles for people in the \`${roleTarget.name}\` role with the \`${roleToChangeFromTarget.name}\` role.`)
+									.catch(function() {});
+								call.message.guild.members.forEach(member => {
+									if (roleTarget.members.find(m => member.user.id === m.user.id) === null) {
+										if (roles[1].startsWith("-")) {
+											if (member.roles.has(roleToChangeFromTarget.id)) {
+												member.removeRole(roleToChangeFromTarget).catch(function() {});
+											}
+										} else {
+											if (!member.roles.has(roleToChangeFromTarget.id)) {
+												member.addRole(roleToChangeFromTarget).catch(function() {});
+											}
+										}
+									}
+								});
+							} else {
+								call.message.reply("Please specify a valid role to give below your (or my) hierarchy. Example: `!role in Nerds, Dumb`.").catch(() => {
+									call.message.author
+										.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+								});
+							}
+						} else {
+							call.message.reply("Please specify a valid role target. Example: `!role in Nerds, Dumb`.").catch(() => {
+								call.message.author
+									.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+							});
+						}
+					} else {
+						call.message.reply(`Expected 2 parameters seperated by \`, \`. Got \`${roles.length}\`. Example: \`!role in Nerds, Dumb\`.`).catch(() => {
+							call.message.author
+								.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+						});
 					}
 				} else {
 					call.message.reply("Please specify a valid user.").catch(() => {
