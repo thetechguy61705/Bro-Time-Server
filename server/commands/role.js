@@ -5,6 +5,7 @@ module.exports = {
 		var roles = call.params.readRaw().split(" ").slice(1).join(" ").split(", ").filter(r => r !== "");
 		const paramaterOne = call.params.readRaw().split(" ")[0];
 		const paramaterTwo = call.params.readRaw().split(" ")[1];
+		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
 		var options = ["removeall", "all", "bots", "humans", "in", "status"];
 		var timeEstimate = "";
 		var target = null;
@@ -15,7 +16,7 @@ module.exports = {
 			target = call.message.guild.members
 				.find(member => paramaterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(paramaterOne.toLowerCase()));
 		}
-		if (call.message.member.roles.some(role => ["330919872630358026", "402175094312665098", "395265037356236810", "387768886096953355"].includes(role.id))) {
+		if (call.message.member.roles.some(role => modRoles.includes(role.id))) {
 			if (target !== null) {
 				var rolesToChange = roles.map(roleToMap => call.message.guild.roles.find(r => r.name.toLowerCase().startsWith(roleToMap.toLowerCase())));
 				var rolesToRemove = rolesToChange.filter(role => role !== null).filter(role => target.roles.find("name", role.name))
