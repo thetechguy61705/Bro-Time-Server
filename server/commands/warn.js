@@ -1,3 +1,5 @@
+const Discord = require("discord.js");
+
 module.exports = {
 	id: "warn",
 	load: () => {},
@@ -8,7 +10,7 @@ module.exports = {
 		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
 		if (call.message.member.roles.some(role => modRoles.includes(role.id))) {
 			const target = call.message.guild.members
-				.find(member => paramaterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(paramaterOne.toLowerCase()));
+				.find(member => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
 			if (target !== null) {
 				var reason;
 				if (parameterTwo != undefined) {
@@ -21,7 +23,7 @@ module.exports = {
 					const warnEmbed = new Discord.RichEmbed()
 						.setAuthor(target.tag, target.avatarURL)
 						.setDescription(reason)
-						.setFooter(`Warned by ${message.author.tag} (${message.author.id})`)
+						.setFooter(`Warned by ${call.message.author.tag} (${call.message.author.id})`)
 						.setTimestamp();
 					call.client.channels.get("436353363786072104").send({ embed: warnEmbed }).catch(function() {});
 				});
