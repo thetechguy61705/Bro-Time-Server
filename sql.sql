@@ -1,3 +1,7 @@
+-- Drop everything related to the server.
+DROP SCHEMA IF EXISTS discord CASCADE;
+
+
 -- Create the Discord schema.
 CREATE SCHEMA IF NOT EXISTS discord;
 
