@@ -11,6 +11,7 @@ module.exports = {
 		if (call.message.member.roles.some(role => modRoles.includes(role.id))) {
 			const target = call.message.guild.members
 				.find(member => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
+			
 			if (target !== null) {
 				if (!target.user.bot) {
 					if (target.highestRole.position < message.member.highestRole.position) {
