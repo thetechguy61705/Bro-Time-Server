@@ -18,12 +18,13 @@ module.exports = {
 				} else {
 					reason = "`No reason specified.`";
 				}
-				target.send(`You have been banned from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`).then(() => {
+				target.send(`You have been banned from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}.`).then(() => {
 					call.message.channel.send(`***Successfully warned \`${target.user.tag}\`.***`).catch(function() {});
 					const warnEmbed = new Discord.RichEmbed()
-						.setAuthor(target.tag, target.avatarURL)
+						.setAuthor(target.user.tag, target.user.avatarURL)
 						.setDescription(reason)
 						.setFooter(`Warned by ${call.message.author.tag} (${call.message.author.id})`)
+						.setColor("ORANGE")
 						.setTimestamp();
 					call.client.channels.get("436353363786072104").send({ embed: warnEmbed }).catch(function() {});
 				});
