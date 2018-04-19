@@ -1,98 +1,47 @@
-var games = ["roblox", "minecraft", "cuphead", "fortnite", "undertale", "unturned", "vrchat",
-	"pubg", "fnaf", "clash of clans", "clash royale", "sims", "terraria", "subnautica", "rocket league",
-	"portal", "hat in time", "csgo", "splatoon", "mario", "starbound", "garry's mod", "overwatch",
-	"call of duty", "destiny", "psych"];
-
-function isURL(str) {
-	var pattern = new RegExp("^(https?:\\/\\/)?"+
-	"((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|"+
-	"((\\d{1,3}\\.){3}\\d{1,3}))"+
-	"(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*"+
-	"(\\?[;&a-z\\d%_.~+=-]*)?"+
-	"(\\#[-a-z\\d_]*)?$", "i");
-	return pattern.test(str);
-	// credit to Tom Gullen https://stackoverflow.com/users/356635/tom-gullen from stackoverflow <3
-}
-
-async function awaitReply(message, question, limit = 60000){
-	const filter = m => m.author.id === message.author.id;
-	message.reply(question).then(async function(){
-		try {
-			const collected = await message.channel.awaitMessages(filter, { max: 1, time: limit, errors: ["time"] });
-			return collected.first().content;
-		} catch (error) {
-			return false;
-		}
-	}).catch(function(){
-		message.channel.send(`You attempted to run the \`postgamenigh\` command in ${message.channel}, but I can not chat there`)
-			.catch(function(){});
-		return "cancel";
-	});
-}
-
+var games = ["Roblox", "Minecraft", "Cuphead", "Fortnite", "Undertale", "Unturned", "VRChat",
+	"PUBG", "FNAF", "Clash of Clans", "Clash Royale", "Sims", "Terraria", "Subnautica", "Rocket League",
+	"Portal", "Hat in Time", "CSGO", "Splatoon", "Mario", "Starbound", "Garry's Mod", "Overwatch",
+	"Call of Duty", "Destiny", "Psych"];
 
 module.exports = {
-	id: "postgamenight",
+	id: "gamerole",
 	load: () => {},
-	execute: async (call) => {
-		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {
-			const game = await awaitReply(call.message, "What is the game you want to host on?", 60000);
-			if (game == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
-			var gamerole;
-			if (games.includes(game)) {
-				gamerole = call.message.guild.roles.find(r=> r.name.toLowerCase() === game.toLowerCase());
-			} else {
-				gamerole = game;
-			}
-			const link = await awaitReply(call.message, "What is the link of your game? If none respond with `none`.", 60000);
-			if (link == "cancel") return call.message.channel.send("Canceled Prompt.").catch(function(){});
-			var islink = isURL(link);
-			if (islink || link.toLowerCase() == "none") {
-				var varlink;
-				if (link.toLowerCase() == "none") {
-					varlink = "`none`";
-				} else {
-					varlink = link;
-				}
-				const other = await awaitReply(call.message, "Any other information? If none respond with `none`.", 60000);
-				if (other == "cancel") return call.message.channel.send("**Canceled Prompt.**").catch(function(){});
-				let annchannel = call.message.guild.channels.find("name", "announcements");
-				if (games.includes(game)) {
-					gamerole.setMentionable(true).then(() => {
-						annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other}\`\n*Posted by ${call.message.author}*`)
-							.then(function(){
-								game.setMentionable(false).catch(function(){
-									call.message.author
-										.send(`Could not change the role mentionability of ${gamerole.name} back to normal. Please do this manually.`)
-										.catch(function(){});
-								});
-							}).catch(function(){
-								call.message.author.send(`There was an error while sending a message in ${annchannel}.`).catch(function(){});
-							});
-					}).catch(() => {
-						call.message.channel.send("Something went wrong and I couldn't toggle the role mentionability.").catch(function(){
-							call.message.author
-								.send(`You attempted to run the \`postgamenight\` command in ${call.message.channel}, but I can not chat there.`)
-								.catch(function(){});
-						});
+	execute: (call) => {
+		var rawinput = call.params.readRaw();
+		if (rawinput === "") return call.message.reply("You must specify a gamerole!").catch(() => {
+			call.message.author.send(`You attempted to use the \`gamerole\` command in ${call.message.channel}, but I do not have permission to chat there.`)
+				.catch(function(){});
+		});
+		var game = games.find(function(g) {
+			return g.toLowerCase().startsWith(rawinput.toLowerCase());
+		});
+		if (game !== undefined) {
+			var role = call.message.guild.roles.find("name", game);
+			if (call.message.member.roles.has(role.id)) {
+				call.message.member.removeRole(role).then(() => {
+					call.message.channel.send(`Since you already had the \`${game}\` game role, it has been removed from you.`).catch(() => {
+						call.message.author.send(`Since you already had the \`${game}\` gamerole, it has been removed from you.`).catch(function(){});
 					});
-				} else {
-					annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other}\`\n*Posted by ${call.message.author}*`)
-						.catch(function(){
-							call.message.author.send(`There was an error while sending a message in ${annchannel}.`).catch(function(){});
-						});
-				}
+				}).catch(() => {
+					call.message.channel.send(`Unable to remove the \`${game}\` game role.`).catch(() => {
+						call.message.author.send(`Unable to remove the \`${game}\` game role from you.`).catch(function(){});
+					});
+				});
 			} else {
-				call.message.channel.send("Invalid link supplied.").catch(function(){
-					call.message.author
-						.send(`You attempted to run the \`postgamenight\` command in ${call.message.channel}, but I can not chat there`)
-						.catch(function(){});
+				call.message.member.addRole(role).then(() => {
+					call.message.channel.send(`Successfully given you the \`${game}\` game role.`).catch(() => {
+						call.message.author.send(`Successfully given you the \`${game}\` game role.`).catch(function(){});
+					});
+				}).catch(() => {
+					call.message.channel.send(`Unable to give you the \`${game}\` game role.`).catch(() => {
+						call.message.author.send(`Unable to give you the \`${game}\` game role.`).catch(function(){});
+					});
 				});
 			}
 		} else {
-			call.message.channel.send("Error: missing role: `Game Night Host`").catch(function(){
+			call.message.channel.send("Invalid game option. Game options can be found in `!info gameroles list`.").catch(() => {
 				call.message.author
-					.send(`You attempted to run the \`postgamenight\` command in ${call.message.channel}, but I can not chat there`)
+					.send(`You attempted to use the \`gamerole\` command in ${call.message.channel}, but I do not have permission to chat there.`)
 					.catch(function(){});
 			});
 		}
