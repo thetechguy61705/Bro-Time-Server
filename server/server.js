@@ -84,7 +84,7 @@ for (let token in config.BOTS) {
 							if (chatHandlers[i].exec(message, client))
 								break;
 						} catch (exc) {
-							console.warn(`Failed to handle chat message:`)
+							console.warn("Failed to handle chat message:");
 							console.warn(exc.stack);
 						}
 					}
