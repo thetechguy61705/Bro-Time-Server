@@ -4,7 +4,7 @@ module.exports = {
 	id: "warn",
 	load: () => {},
 	execute: (call) => {
-		const rawContent = call.params.readRaw();
+		const rawContent = call.params.readRaw()
 		const parameterOne = rawContent.split(" ")[0];
 		const parameterTwo = rawContent.split(" ")[1];
 		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
