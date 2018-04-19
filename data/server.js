@@ -1,6 +1,7 @@
 var config = require("../config");
 var discord = require("discord.js");
 const { Pool } = require("pg");
+const Settings = require("./settings");
 /**
  * normal - Operate as normal.
  * idm - Operate without persistence.
@@ -19,7 +20,7 @@ const pool = mode !== "idm" ? new Pool({
 	connectionString: config.DB
 }) : null;
 
-if (pool !== null)
+if (pool != null)
 	process.on("SIGTERM", async () => {
 		await pool.end();
 	});
@@ -89,6 +90,10 @@ class BotAccess extends DataAccess {
 		                            SET Prefix = $2
 		                            WHERE Server_Id = $1`, [this.server.id, newPrefix]);
 		this.prefix = newPrefix;
+	}
+
+	getSettings(namespace, association) {
+		return new Settings(this._pool, namespace, association);
 	}
 }
 
