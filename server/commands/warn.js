@@ -21,7 +21,7 @@ module.exports = {
 				target.send(`You have been banned from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}.`).then(() => {
 					call.message.channel.send(`***Successfully warned \`${target.user.tag}\`.***`).catch(function() {});
 					const warnEmbed = new Discord.RichEmbed()
-						.setAuthor(target.user.tag, target.user.avatarURL)
+						.setAuthor(target.user.tag, target.user.displayAvatarURL)
 						.setDescription(reason)
 						.setFooter(`Warned by ${call.message.author.tag} (${call.message.author.id})`)
 						.setColor("ORANGE")
