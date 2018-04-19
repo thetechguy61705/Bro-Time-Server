@@ -4,17 +4,16 @@ module.exports = {
 	id: "warn",
 	load: () => {},
 	execute: (call) => {
-		const rawContent = call.params.readRaw()
+		const rawContent = call.params.readRaw();
 		const parameterOne = rawContent.split(" ")[0];
 		const parameterTwo = rawContent.split(" ")[1];
 		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
 		if (call.message.member.roles.some(role => modRoles.includes(role.id))) {
 			const target = call.message.guild.members
 				.find(member => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
-			
 			if (target !== null) {
 				if (!target.user.bot) {
-					if (target.highestRole.position < message.member.highestRole.position) {
+					if (target.highestRole.position < call.message.member.highestRole.position) {
 						var reason;
 						if (parameterTwo != undefined) {
 							reason = "`" + rawContent.substr(parameterOne.length + 1) + "`";
@@ -46,7 +45,8 @@ module.exports = {
 						});
 					} else {
 						call.message.reply("Specified user is too high in this guild's hierarchy to be warned by you.").catch(() => {
-							call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+							call.message.author
+								.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 						});
 					}
 				} else {
