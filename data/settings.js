@@ -1,17 +1,20 @@
+var pool;
+
 class Settings {
 	static CACHE = 0x00000001;
 	static SAVE = 0x00000002;
 
-	constructor(pool, namespace, association) {
+	constructor(newPool, namespace, association) {
+		pool = newPool;
+
+	}
+
+	get(key, options = this.CACHE) {
 		
 	}
 
-	get(key, options) {
-
-	}
-
-	set(key, value, options) {
-
+	set(key, value, options = this.CACHE) {
+		
 	}
 }
 

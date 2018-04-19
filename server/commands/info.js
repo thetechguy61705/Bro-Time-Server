@@ -22,11 +22,11 @@ async function gameRoles(message, Discord, prompt, param) {
 	var games = ["`Roblox`", "`Minecraft`", "`Cuphead`", "`Fortnite`", "`Undertale`", "`Unturned`", "`VRChat`",
 		"`PUBG`", "`FNAF`", "`Clash of Clans`", "`Clash Royale`", "`Sims`", "`Terraria`", "`Subnautica`", "`Rocket League`",
 		"`Portal`", "`Hat in Time`", "`CSGO`", "`Splatoon`", "`Mario`", "`Starbound`", "`Garry's Mod`", "`Overwatch`",
-		"`Call of Duty`", "`Destiny`"
+		"`Call of Duty`", "`Destiny`", "`Psych`"
 	];
 	if (prompt.toLowerCase() === "preview") {
 		var gameRoleEmbed = new Discord.RichEmbed()
-			.setTitle(games[0])
+			.setTitle(games[0].substr(1).slice(0, -1))
 			.setDescription(`Players: \`${message.guild.roles.find("name", games[0].substr(1).slice(0, -1)).members.size}\``)
 			.setColor(message.guild.roles.find("name", games[0].substr(1).slice(0, -1)).hexColor);
 		var emojiArray = ["◀", "▶"];
@@ -110,7 +110,7 @@ async function nameColors(message, Discord, prompt, param) {
 	if (prompt.toLowerCase() === "preview") {
 		currentRole = message.guild.roles.find("name", colorRoles[0].substr(1).slice(0, -1));
 		var nameColorEmbed = new Discord.RichEmbed()
-			.setTitle(colorRoles[0])
+			.setTitle(colorRoles[0].substr(1).slice(0, -1))
 			.setDescription(`Hex: \`${currentRole.hexColor}\`\nMembers: \`${currentRole.members.size}\``)
 			.setColor(message.guild.roles.find("name", colorRoles[0].substr(1).slice(0, -1)).hexColor);
 		var emojiArray = ["◀", "▶"];
@@ -194,7 +194,7 @@ async function howToGetRole(message, Discord, prompt, param) {
 	];
 	if (prompt.toLowerCase() === "preview") {
 		var roleEmbed = new Discord.RichEmbed()
-			.setTitle(obtainableRoles[0])
+			.setTitle(obtainableRoles[0].substr(1).slice(0, -1))
 			.setDescription(`Members: \`${message.guild.roles.find("name", obtainableRoles[0].substr(1).slice(0, -1)).members.size}\`\nObtain: \`${descriptions[0]}\``)
 			.setColor(message.guild.roles.find("name", obtainableRoles[0].substr(1).slice(0, -1)).hexColor);
 		var emojiArray = ["◀", "▶"];
@@ -267,14 +267,15 @@ async function howToGetRole(message, Discord, prompt, param) {
 async function levelRoles(message, Discord, prompt, param) {
 	if (param !== undefined) prompt = param;
 	var currentRole;
-	var levelRoles = ["`True Bro`", "`OP Elite Bro`", "`Cool Elite Bro`", "`Elite Bro`", "`OP Legendary Bro`", "`Cool Legendary Bro`",
-		"`Legendary Bro`", "`OP Epic Bro`", "`Cool Epic Bro`", "`Epic Bro`", "`OP Senior Bro`", "`Cool Senior Bro`", "`Senior Bro`", "`OP Bro`",
-		"`Cool Bro`", "`Bro`", "`OP Junior Bro`", "`Cool Junior Bro`", "`Junior Bro`", "`Newbie Bro`"
+	var levelRoles = [ "`​Newbie Bro`​", "`​Junior Bro`​", "`​Cool Junior Bro`​", "`​OP Junior Bro`​", "`​Bro`​", "`​Cool Bro`​", "`​OP Bro`​",
+		"`​Senior Bro`​", "`​Cool Senior Bro`​", "`​OP Senior Bro`​", "`​Epic Bro`​", "`​Cool Epic Bro`​", "`​OP Epic Bro`​",
+		"`​Legendary Bro`​", "`​Cool Legendary Bro`​", "`​OP Legendary Bro`​", "`​Elite Bro`​", "`​Cool Elite Bro`​", "`​OP Elite Bro`​",
+		"`​True Bro`​"
 	];
-	var level = ["61", "60", "55", "51", "50", "45", "41", "40", "35", "31", "30", "25", "21", "20", "15", "11", "10", "5", "1", "0"];
+	var level = [ "0", "1", "5", "10", "11", "15", "20", "21", "25", "30", "31", "35", "40", "41", "45", "50", "51", "55", "60", "61" ];
 	if (prompt.toLowerCase() === "preview") {
 		var roleEmbed = new Discord.RichEmbed()
-			.setTitle(levelRoles[0])
+			.setTitle(levelRoles[0].substr(1).slice(0, -1))
 			.setDescription(`Members: \`${message.guild.roles.find("name", levelRoles[0].substr(1).slice(0, -1)).members.size}\`\nObtain: \`level ${level[0]}\``)
 			.setColor(message.guild.roles.find("name", levelRoles[0].substr(1).slice(0, -1)).hexColor);
 		var emojiArray = ["◀", "▶"];

@@ -2,7 +2,6 @@ var { Collection, MessageMentions } = require("discord.js");
 var modules = new Collection();
 var Parameters = require("app/paramaters");
 var { CommandAccess } = require("./../../data/data");
-var report = require("app/report");
 var fs = require("fs");
 var util = require("util");
 var prefixPattern = "^(%s)";
@@ -59,7 +58,8 @@ fs.readdirSync(__dirname + "/../commands").forEach(file => {
 		}).then(module => {
 			modules.set(module.id, module);
 		}, exc => {
-			report(exc, {tags: {category: "commands", action: "load", item: match[1]}});
+			console.warn(`Commaned failed to load ${match}:`);
+			console.warn(exc.stack);
 		});
 	}
 });
@@ -88,18 +88,18 @@ module.exports = {
 		} else if (requests.some((request) => request.settings&this.ANYONE !== 0)) {
 			request = requests.find((request) => request.settings&this.ANYONE !== 0);
 		}
-		if (request !== null) {
+		if (request != null) {
 			request.resolve(new Call(this, message, client, new Parameters(message)));
 			this._requests.delete(request.author);
 		} else {
 			var prefix = message.content.match(new RegExp(util.format(prefixPattern,
 				message.data.prefix), "i"));
 			var using;
-			if (prefix !== null) {
+			if (prefix != null) {
 				using = true;
 			} else {
 				prefix = message.content.match("^" + MessageMentions.USERS_PATTERN.source);
-				using = prefix !== null &&
+				using = prefix != null &&
 					message.mentions.users.size === 1 &&
 					message.mentions.users.first().id == client.user.id;
 			} if (using) {
@@ -120,7 +120,8 @@ module.exports = {
 							}
 						}
 					} catch (exc) {
-						report(exc, {tags: {category: "commands", action: "execute", item: name}});
+						console.warn(`Command failed to execute ${name}:`);
+						console.warn(exc.stack);
 						message.channel.send(`The ${name} command failed to load.`);
 					}
 				}
