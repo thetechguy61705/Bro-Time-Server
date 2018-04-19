@@ -27,6 +27,15 @@ module.exports = {
 						.setColor("ORANGE")
 						.setTimestamp();
 					call.client.channels.get("436353363786072104").send({ embed: warnEmbed }).catch(function() {});
+				}).catch(() => {
+					call.message.channel.send(`***Successfully warned \`${target.user.tag}\`.***`).catch(function() {});
+					const warnEmbed = new Discord.RichEmbed()
+						.setAuthor(target.user.tag, target.user.displayAvatarURL)
+						.setDescription(reason)
+						.setFooter(`Warned by ${call.message.author.tag} (${call.message.author.id})`)
+						.setColor("ORANGE")
+						.setTimestamp();
+					call.client.channels.get("436353363786072104").send({ embed: warnEmbed }).catch(function() {});
 				});
 			} else {
 				call.message.reply("Please supply a valid user tag, mention, or id.").catch(() => {
