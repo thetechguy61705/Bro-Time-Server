@@ -1,7 +1,7 @@
 var { Collection, MessageMentions } = require("discord.js");
 var modules = new Collection();
 var Parameters = require("app/paramaters");
-var { CommandAccess } = require("./../../data/server");
+var { CommandAccess } = require("./../../data/data");
 var report = require("app/report");
 var fs = require("fs");
 var util = require("util");

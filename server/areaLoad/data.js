@@ -1,4 +1,4 @@
-var { BotAccess } = require("../../data/server");
+var { BotAccess } = require("../../data/data");
 
 module.exports = {
 	async exec(area, client) {
