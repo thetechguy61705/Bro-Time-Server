@@ -27,7 +27,6 @@ if (pool != null)
 
 class DataAccess {
 	constructor() {
-		this._pool = pool;
 		this.loaded = false;
 	}
 
@@ -56,9 +55,8 @@ class CommandAccess extends DataAccess {
 }
 
 class BotAccess extends DataAccess {
-	constructor(area, client) {
+	constructor(area) {
 		super();
-		this._client = client;
 		if (area instanceof discord.Channel) {
 			this.dm = area;
 		} else {
@@ -68,14 +66,17 @@ class BotAccess extends DataAccess {
 
 	async load() {
 		super.load();
-		if (this._pool != null && this.server != null) {
-			var client = await this._pool.connect();
-			// Provide the bot id and server id.
-			await client.query("SELECT discord.AddBot($1) FOR UPDATE", [this.server.id]);
-			this.prefix = (await client.query(`SELECT Prefix
-			                                   FROM discord.Servers
-			                                   WHERE Server_Id = $1`, [this.server.id])).rows[0].prefix;
-			client.release();
+		if (pool != null && this.server != null) {
+			var client = await pool.connect();
+			try {
+				// Provide the bot id and server id.
+				await client.query("SELECT discord.AddBot($1) FOR UPDATE", [this.server.id]);
+				this.prefix = (await client.query(`SELECT Prefix
+				                                   FROM discord.Servers
+				                                   WHERE Server_Id = $1`, [this.server.id])).rows[0].prefix;
+			} finally {
+				client.release();
+			}
 		} else {
 			this.prefix = DM_PREFIX;
 		}
@@ -85,15 +86,15 @@ class BotAccess extends DataAccess {
 		if (this.server == null)
 			throw new Error("Cannot set a prefix for non-server data.");
 		newPrefix = escapeRegExp(newPrefix);
-		if (this._pool != null)
-			await this._pool.query(`UPDATE discord.Servers
+		if (pool != null)
+			await pool.query(`UPDATE discord.Servers
 		                            SET Prefix = $2
 		                            WHERE Server_Id = $1`, [this.server.id, newPrefix]);
 		this.prefix = newPrefix;
 	}
 
-	getSettings(namespace, association) {
-		return new Settings(this._pool, namespace, association);
+	getSettings(namespace = "global", association) {
+		return new Settings(pool, namespace, association);
 	}
 }
 

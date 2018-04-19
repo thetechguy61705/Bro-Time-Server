@@ -2,7 +2,7 @@ class Settings {
 	static CACHE = 0x00000001;
 	static SAVE = 0x00000002;
 
-	constructor(pool, namespace = "global", association) {
+	constructor(pool, namespace, association) {
 		
 	}
 
