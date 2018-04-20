@@ -1,6 +1,6 @@
 module.exports = {
 	id: "poll",
-	aliases: ["makepoll", "createpoll", "p"];
+	aliases: ["makepoll", "createpoll", "p"],
 	load: () => {},
 	execute: (call) => {
 		const pollTitle = call.params.readRaw().split(":")[0];
