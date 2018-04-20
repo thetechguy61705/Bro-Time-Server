@@ -44,6 +44,8 @@ for (let token in config.BOTS) {
 		client.setMaxListeners(30);
 
 		client.on("ready", () => {
+			const realGuild = client.guilds.get("330913265573953536");
+
 			console.log("Loading " + client.user.username);
 			loaders.forEach(loader => {
 				loader.exec(client, settings);
@@ -51,7 +53,28 @@ for (let token in config.BOTS) {
 			console.log("Finished loading " + client.user.username);
 
 			if (client.user.id === "393532251398209536") {
-				const realGuild = client.guilds.get("330913265573953536");
+				client.channels.get("436714650835484707").fetchMessages( {limit: 100} ).then(messagesFetched => {
+					var muteUser;
+					var timeUntilUnmute;
+					messagesFetched.forEach(msg => {
+						if (msg.author.id === "393532251398209536") {
+							muteUser = msg.content.split(" ")[0];
+							timeUntilUnmute = parseInt(msg.content.split(" ")[1]);
+							if (timeUntilUnmute <= Date.now()) {
+								msg.delete().catch(function() {});
+								realGuild.members.get(muteUser).removeRole(realGuild.roles.find("name", "Muted")).catch(function() {});
+							} else {
+								setTimeout(() => {
+									realGuild.members.get(muteUser).removeRole(realGuild.roles.find("name", "Muted")).catch(function() {});
+									msg.delete().catch(function() {});
+								}, timeUntilUnmute - Date.now());
+							}
+						}
+					});
+				});
+			}
+
+			if (client.user.id === "393532251398209536") {
 				const multiColorRole = realGuild.roles.find("name", "Multicolored");
 				const colors = ["Red", "Blue", "Orange", "Green", "Purple", "Pink", "Yellow", "HotPink",
 					"Indigo", "Bronze", "Cyan", "LightGreen", "Silver", "BrightRed", "HotBrown",
