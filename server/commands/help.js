@@ -10,8 +10,8 @@ module.exports = {
 		var cmdNames = ["help", "ping", "freerole", "gamerole", "namecolor", "postqotd", "postgamenight", "customcolor",
 			"mt", "info", "ban", "kick", "softban", "mute", "warn", "poll", "uptime", "role"];
 		var cmdUsage = [" [command]", "", " (free role)", " (game role)", " (color role)", " (qotd)", "...prompt",
-			"...prompt", " (role name)", " (information topic)", "(user) [reason]", "(user) [reason]",
-			"(user) [reason]", "(user) [time]", "(user) [reason]", "(title): (options seperated by |)", "(option/user) (role(s))"];
+			"...prompt", " (role name)", " (information topic)", " (user) [reason]", " (user) [reason]",
+			" (user) [reason]", " (user) [time]", " (user) [reason]", " (title): (options seperated by |)", "", " (option/user) (role(s))"];
 		var cmdReq = ["Nothing", "Nothing", "Nothing", "Nothing", "Nothing/Bro Time Plus/Bro Time Premium/Bro Time Deluxe",
 			"Role: QOTD Host", "Role: Game Night Host", "Donator", "Moderator permissions", "Nothing", "Moderator permissions",
 			"Moderator permissions", "Moderator permissions", "Moderator permissions", "Moderator permissions", "Nothing", "Nothing",
