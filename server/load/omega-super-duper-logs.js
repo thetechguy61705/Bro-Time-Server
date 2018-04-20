@@ -111,7 +111,7 @@ module.exports = {
 							if (newChannel.userLimit === 0) newLimit = "infinity";
 							if (newChannel.userLimit !== 0) newLimit = newChannel.userLimit;
 						}
-						if (topic !== newTopic || bps !== newBps || limit !== newLimit) {
+						if (topic !== newTopic || bps !== newBps || limit !== newLimit || oldChannel.name !== newChannel.name) {
 							var channelUpdateEmbed = new Discord.RichEmbed()
 								.setAuthor(`${executor.tag} (${executor.id})`)
 								.setColor("BLUE")
