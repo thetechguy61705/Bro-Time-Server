@@ -111,18 +111,20 @@ module.exports = {
 							if (newChannel.userLimit === 0) newLimit = "infinity";
 							if (newChannel.userLimit !== 0) newLimit = newChannel.userLimit;
 						}
-						var channelUpdateEmbed = new Discord.RichEmbed()
-							.setAuthor(`${executor.tag} (${executor.id})`)
-							.setColor("BLUE")
-							.setTitle("Channel Update")
-							.setDescription(`ID: ${oldChannel.id}`)
-							.addField("Old Channel", `Name: \`${oldChannel.name}\`\nType: \`${oldChannel.type}\`\nTopic: \`${topic}\`\nBPS: \`${bps}\`\n` +
-								`Max Members in channel: \`${limit}\``)
-							.addField("New Channel", `Name: \`${newChannel.name}\`\nType: \`${newChannel.type}\`\nTopic: \`${newTopic}\`\nBPS: \`${newBps}\`\n` +
-								`Max Members in channel: \`${newLimit}\``);
-						superLogChannel.send({
-							embed: channelUpdateEmbed
-						});
+						if (topic !== newTopic || bps !== newBps || limit !== newLimit) {
+							var channelUpdateEmbed = new Discord.RichEmbed()
+								.setAuthor(`${executor.tag} (${executor.id})`)
+								.setColor("BLUE")
+								.setTitle("Channel Update")
+								.setDescription(`ID: ${oldChannel.id}`)
+								.addField("Old Channel", `Name: \`${oldChannel.name} \`\nType: \`${oldChannel.type} \`\nTopic: \`${topic} \`\nBPS: \`${bps} \`\n` +
+									`Max Members in channel: \`${limit} \``)
+								.addField("New Channel", `Name: \`${newChannel.name} \`\nType: \`${newChannel.type} \`\nTopic: \`${newTopic} \`\nBPS: \`${newBps} \`\n` +
+									`Max Members in channel: \`${newLimit} \``);
+							superLogChannel.send({
+								embed: channelUpdateEmbed
+							});
+						}
 					});
 				}
 			}
