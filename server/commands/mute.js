@@ -1,7 +1,7 @@
 const ms = require("ms");
 
 module.exports = {
-	id: "ban",
+	id: "mute",
 	load: () => {},
 	execute: (call) => {
 		const rawContent = call.params.readRaw();
