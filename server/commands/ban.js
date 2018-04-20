@@ -30,6 +30,8 @@ module.exports = {
 							target.ban({
 								days:7,
 								reason:`Banned by ${call.message.author.tag} for ${reason}`
+							}).then(() => {
+								call.message.channel.send(`***Successfully banned \`${target.user.tag}\`.***`).catch(function() {});
 							}).catch(() => {
 								call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).catch(function() {});
 							});
