@@ -35,7 +35,7 @@ module.exports = {
 							call.message.channel.send(`***Successfully warned \`${target.user.tag}\`.***`).catch(function() {});
 							const warnEmbed = new Discord.RichEmbed()
 								.setAuthor(target.user.tag, target.user.displayAvatarURL)
-								.setDescription(reason)
+								.setDescription(reason.substr(1).slice(0, -1))
 								.setFooter(`Warned by ${call.message.author.tag} (${call.message.author.id})`)
 								.setColor("ORANGE")
 								.setTimestamp();
