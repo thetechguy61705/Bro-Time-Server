@@ -34,20 +34,20 @@ module.exports = {
 						});
 					});
 				} else {
-					call.message.reply("Please specify at least 2 and at most 9 poll options. Example: `!poll title: option 1, option 2, option 3`.")
+					call.message.reply("Please specify at least 2 and at most 9 poll options. Example: `!poll title: option 1 | option 2 | option 3`.")
 						.catch(() => {
 							call.message.author
 								.send(`You attempted to use the \`poll\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 						});
 				}
 			} else {
-				call.message.reply("Please specify valid poll options. Example: `!poll title: option 1, option 2, option 3`.").catch(() => {
+				call.message.reply("Please specify valid poll options. Example: `!poll title: option 1 | option 2 | option 3`.").catch(() => {
 					call.message.author
 						.send(`You attempted to use the \`poll\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 				});
 			}
 		} else {
-			call.message.reply("Please specify a valid poll title. Example: `!poll title: option 1, option 2, option 3`.").catch(() => {
+			call.message.reply("Please specify a valid poll title. Example: `!poll title: option 1 | option 2 | option 3`.").catch(() => {
 				call.message.author
 					.send(`You attempted to use the \`poll\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 			});
