@@ -13,7 +13,7 @@ module.exports = {
 				.find(member => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
 			if (target !== null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
-					if (target.roles.has(call.message.guild.roles.find('name', 'Muted').id)) {
+					if (!target.roles.has(call.message.guild.roles.find('name', 'Muted').id)) {
 						if (parameterTwo !== undefined) var muteTime = ms(parameterTwo);
 						if (muteTime) {
 							if (muteTime >= 10000) {
@@ -37,11 +37,11 @@ module.exports = {
 							}).catch(() => {
 								call.message.channel.send(`Failed to mute \`${target.user.tag}\`.`).catch(function() {});
 							});
-						} else {
-							call.message.reply("That user is already muted.").catch(() => {
-								call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
-							});
 						}
+					} else {
+						call.message.reply("That user is already muted.").catch(() => {
+							call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+						});
 					}
 				} else {
 					call.message.reply("That user is too far up in this guild's hierarchy to be muted by you.").catch(() => {
