@@ -30,7 +30,7 @@ module.exports = {
 				embed: helpembed
 			}).catch(() => {
 				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
-					.catch();
+					.catch(function() {});
 			});
 		} else {
 			param1 = param1.toLowerCase();
@@ -39,16 +39,21 @@ module.exports = {
 					throw err;
 				} else {
 					cmdDescs = data.toString("utf8").split("\n");
-					if(cmdNames.includes(param1)) {
+					if(cmdNames.includes(param1.toLowerCase())) {
+						var aliases = require(`./${param1.toLowerCase()}`).aliases;
+						if (aliases == null) aliases = ["None"];
 						var num = cmdNames.indexOf(param1);
 						helpembed = new Discord.RichEmbed()
 							.setTitle(`${pfx}${param1}`)
-							.setDescription(`Purpose: ${cmdDescs[num]}\nUsage: \`${pfx}${param1}${cmdUsage[num]}\`\nRequires: \`${cmdReq[num]}\``)
+							.setDescription(`Purpose: ${cmdDescs[num]}` +
+								`\nUsage: \`${pfx}${param1}${cmdUsage[num]}\``+
+								`\nRequires: \`${cmdReq[num]}\`` +
+								`\nAliases: \`${aliases.join("`, `")}\`.`)
 							.setColor(0x00AE86);
 					} else {
 						call.message.reply("Invalid command name. Please run `!help (command)` or just `!help`").catch(() => {
 							call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`)
-								.catch();
+								.catch(function() {});
 						});
 					}
 					if (helpembed != undefined) {
@@ -57,7 +62,7 @@ module.exports = {
 						}).catch(() => {
 							call.message.author
 								.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
-								.catch();
+								.catch(function() {});
 						});
 					}
 				}
