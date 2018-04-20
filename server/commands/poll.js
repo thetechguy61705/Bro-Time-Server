@@ -7,7 +7,7 @@ module.exports = {
 	execute: (call) => {
 		const pollTitle = call.params.readRaw().split(":")[0];
 		if (call.params.readRaw().split(":")[1] !== undefined) {
-			var pollOptions = call.params.readRaw().split(":").slice(1).join(":").split(",");
+			var pollOptions = call.params.readRaw().split(":").slice(1).join(":").split("|");
 			if (pollOptions[0] !== "") {
 				if (pollOptions.length <= 9 && pollOptions.length >= 2) {
 					const eA = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
