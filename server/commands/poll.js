@@ -1,3 +1,5 @@
+const Discord = require("discord.js");
+
 module.exports = {
 	id: "poll",
 	aliases: ["makepoll", "createpoll", "p"],
@@ -8,7 +10,7 @@ module.exports = {
 			var pollOptions = call.params.readRaw().split(":")[1].split(",");
 			if (pollOptions[0] !== "") {
 				if (pollOptions.length <= 9 && pollOptions.length >= 2) {
-					const eA = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣'];
+					const eA = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
 					pollOptions = pollOptions.map((pollOption, index) => {
 						return `${eA[index]} ${pollOption}`;
 					});
