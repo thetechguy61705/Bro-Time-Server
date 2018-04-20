@@ -15,7 +15,7 @@ module.exports = {
 						return `${eA[index]} ${pollOption}`;
 					});
 					const pollEmbed = new Discord.RichEmbed()
-						.setTitle("**" + pollTitle + "**")
+						.setTitle(pollTitle)
 						.setDescription(pollOptions.join("\n"))
 						.setColor(0x00AE86)
 						.setFooter(`${call.client.user.username} | Poll by ${call.message.author.tag}.`);
