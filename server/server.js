@@ -65,7 +65,7 @@ for (let token in config.BOTS) {
 								realGuild.members.get(muteUser).removeRole(realGuild.roles.find("name", "Muted")).catch(function() {});
 							} else {
 								setTimeout(() => {
-									realGuild.members.get(muteUser).removeRole(message.guild.roles.find("name", "Muted")).catch(function() {});
+									realGuild.members.get(muteUser).removeRole(realGuild.roles.find("name", "Muted")).catch(function() {});
 									msg.delete().catch(function() {});
 								}, timeUntilUnmute - Date.now());
 							}
