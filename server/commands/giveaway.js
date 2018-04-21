@@ -12,7 +12,7 @@ module.exports = {
 			if (ms(giveawayTime)) {
 				if (call.message.mentions.channels.first() !== undefined) {
 					giveawayTime = ms(giveawayTime);
-					if (giveawayTime > 0 && giveawayTime < 604800) {
+					if (giveawayTime > 0 && giveawayTime <= 604800000) {
 						var winners = call.params.readRaw().split(":").slice(1).join(":").split(" ").filter(arg => arg !== "")[2];
 						if (!isNaN(parseInt(winners))) {
 							if (parseInt(winners) > 0 && parseInt(winners) < 20) {
