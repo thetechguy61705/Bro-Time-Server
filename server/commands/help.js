@@ -30,7 +30,7 @@ module.exports = {
 					`\n\`${pfx}poll (title) (options)\`\n${pfx}giveaway (prize): (time) (channel) (winners)`)
 				.addField("Posting Commands", `\`${pfx}postqotd (qotd)\`\n\`${pfx}postgamenight\``)
 				.addField("Moderation Commands", `\`${pfx}mt (role)\`\n\`${pfx}ban (user)\`\n\`${pfx}kick (user)\`\n\`${pfx}softban (user)\`` +
-					`\n\`${pfx}mute (user) (time)\`\n${pfx}warn (user) (reason)\`\n\`${pfx}role (option/user) (role)\``)
+					`\n\`${pfx}mute (user) (time)\`\n\`${pfx}warn (user) (reason)\`\n\`${pfx}role (option/user) (role)\``)
 				.addField("Donator Commands", `\`${pfx}customcolor\``);
 			call.message.channel.send({
 				embed: helpembed
