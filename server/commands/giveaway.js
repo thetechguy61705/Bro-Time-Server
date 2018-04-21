@@ -33,7 +33,7 @@ module.exports = {
 								}).then(msg => {
 									call.client.channels
 										.get("437091372538003456")
-										.send(`${msg.channel.id} ${msg.id} ${Date.now() + giveawayTime} ${winners} ${call.message.author.id} ${giveawayPrize}`);
+										.send(`${msg.channel.id} ${msg.id} ${Date.now() + giveawayTime} ${winners} ${call.message.author.id} ${giveawayPrize}`)
 										.then(databaseMesage => {
 											msg.react("🎉").catch(function() {});
 											var editLoop = setInterval(function() {
