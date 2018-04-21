@@ -6,17 +6,18 @@ module.exports = {
 	aliases: ["g", "creategivaway"],
 	load: () => {},
 	execute: (call) => {
-		var giveawayPrize = content.split(":")[0];
-		if (content.split(":")[1] !== undefined) {
-			var giveawayTime = content.split(":").slice(1).join(":").split(" ").filter(arg => arg !== "")[0];
+		var giveawayPrize = call.params.readRaw().split(":")[0];
+		if (call.params.readRaw().split(":")[1] !== undefined) {
+			var giveawayTime = call.params.readRaw().split(":").slice(1).join(":").split(" ").filter(arg => arg !== "")[0];
 			if (ms(giveawayTime)) {
 				if (call.message.mentions.channels.first() !== undefined) {
 					giveawayTime = ms(giveawayTime);
 					if (giveawayTime > 0 && giveawayTime < 604800) {
-						var winners = content.split(":").slice(1).join(":").split(" ").filter(arg => arg !== "")[2];
+						var winners = call.params.readRaw().split(":").slice(1).join(":").split(" ").filter(arg => arg !== "")[2];
 						if (!isNaN(parseInt(winners))) {
 							if (parseInt(winners) > 0 && parseInt(winners) < 20) {
-								var winners = Math.round(parseInt(winners));
+								winners = Math.round(parseInt(winners));
+								var winner;
 								var hours = (((giveawayTime) - (giveawayTime % 3600000)) / 3600000)
 								var minutes = ((giveawayTime % 3600000) - (giveawayTime % 3600000) % (60000)) / 60000;
 								var seconds = ((giveawayTime % 3600000) % 60000) - (((giveawayTime % 3600000) % 60000) % 1000);
@@ -30,7 +31,9 @@ module.exports = {
 								giveawayChannel.send("🎉 **GIVEAWAY** 🎉", {
 									embed: giveawayEmbed
 								}).then(msg => {
-									call.client.channels.get("437091372538003456").send(`${msg.channel.id} ${msg.id} ${Date.now() + giveawayTime} ${winners} ${call.message.author.id} ${giveawayPrize}`)
+									call.client.channels
+										.get("437091372538003456")
+										.send(`${msg.channel.id} ${msg.id} ${Date.now() + giveawayTime} ${winners} ${call.message.author.id} ${giveawayPrize}`);
 										.then(databaseMesage => {
 											msg.react("🎉").catch(function() {});
 											var editLoop = setInterval(function() {
@@ -47,7 +50,7 @@ module.exports = {
 														.setFooter(`${call.client.user.username} | Giveaway by ${call.message.author.tag}.`);
 													msg.edit("🎉 **GIVEAWAY** 🎉", {
 														embed: giveawayEmbed
-													})
+													});
 												} else {
 													winner = msg.reactions.find(r => r.emoji.name === "🎉").users.filter(r => r.id !== call.client.user.id && r.id !== call.message.author.id).random(winners);
 													if (winner.length === 0) winner = ["**Not enough users entered.**"];
@@ -85,7 +88,7 @@ module.exports = {
 								});
 						}
 					} else {
-						message
+						call.message
 							.reply("Please make the giveaway time greater than 10 seconds and less than 7 days. Example: `!giveaway title: 10m #giveaways 3`.")
 							.catch(() => {
 								call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
