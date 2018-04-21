@@ -16,3 +16,4 @@ Sends the user a dm with the supplied reason.
 Creates a embed with specified title and options. After doing so it reacts with an emoji corresponding to each option.
 Returns how it has been since the bot was last restarted.
 Gives the user the specified role(s) if the role is below the author's highest role.
+Sends a giveaway embed in the specified channel. After the specified time, x users that reacted with the giveaway emoji will be selected.
