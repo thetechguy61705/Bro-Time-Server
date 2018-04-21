@@ -18,7 +18,7 @@ module.exports = {
 							if (parseInt(winners) > 0 && parseInt(winners) < 20) {
 								winners = Math.round(parseInt(winners));
 								var winner;
-								var hours = (((giveawayTime) - (giveawayTime % 3600000)) / 3600000)
+								var hours = (((giveawayTime) - (giveawayTime % 3600000)) / 3600000);
 								var minutes = ((giveawayTime % 3600000) - (giveawayTime % 3600000) % (60000)) / 60000;
 								var seconds = ((giveawayTime % 3600000) % 60000) - (((giveawayTime % 3600000) % 60000) % 1000);
 								var totalTime = `\`${hours}\` hours, \`${minutes}\` minutes, \`${seconds/1000}\` seconds`;
@@ -31,6 +31,7 @@ module.exports = {
 								giveawayChannel.send("🎉 **GIVEAWAY** 🎉", {
 									embed: giveawayEmbed
 								}).then(msg => {
+									var giveawayEmbed;
 									call.client.channels
 										.get("437091372538003456")
 										.send(`${msg.channel.id} ${msg.id} ${Date.now() + giveawayTime} ${winners} ${call.message.author.id} ${giveawayPrize}`)
@@ -43,7 +44,7 @@ module.exports = {
 												seconds = ((giveawayTime % 3600000) % 60000) - (((giveawayTime % 3600000) % 60000) % 1000);
 												totalTime = `\`${hours}\` hours, \`${minutes}\` minutes, \`${seconds/1000}\` seconds`;
 												if (giveawayTime > 0) {
-													var giveawayEmbed = new Discord.RichEmbed()
+													giveawayEmbed = new Discord.RichEmbed()
 														.setTitle(giveawayPrize)
 														.setDescription(`**React with 🎉 to enter**\nTime remaining: **${totalTime}**`)
 														.setColor(0x00AE86)
@@ -52,9 +53,12 @@ module.exports = {
 														embed: giveawayEmbed
 													});
 												} else {
-													winner = msg.reactions.find(r => r.emoji.name === "🎉").users.filter(r => r.id !== call.client.user.id && r.id !== call.message.author.id).random(winners);
+													winner = msg.reactions
+														.find(r => r.emoji.name === "🎉").users
+														.filter(r => r.id !== call.client.user.id && r.id !== call.message.author.id)
+														.random(winners);
 													if (winner.length === 0) winner = ["**Not enough users entered.**"];
-													var giveawayEmbed = new Discord.RichEmbed()
+													giveawayEmbed = new Discord.RichEmbed()
 														.setTitle(giveawayPrize)
 														.setDescription(`Winner(s): ${winner.join(", ")}`)
 														.setColor(0x00AE86)
@@ -72,31 +76,41 @@ module.exports = {
 											}, 5000);
 										}).catch(() => {
 											call.message.reply("There was an error sending the giveaway in that channel.").catch(() => {
-												call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+												call.message.author
+													.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`)
+													.catch(function() {});
 											});
 										});
 								});
 							} else {
 								call.message.reply("Please mention a valid amount of winners. Example: `!giveaway title: 10m #giveaways 3`.").catch(() => {
-									call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+									call.message.author
+										.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`)
+										.catch(function() {});
 								});
 							}
 						} else {
 							call.message.reply("Please specify a valid amount of winners. Example: `!giveaway title: 10m #giveaways 3`.")
 								.catch(() => {
-									call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+									call.message.author
+										.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`)
+										.catch(function() {});
 								});
 						}
 					} else {
 						call.message
 							.reply("Please make the giveaway time greater than 10 seconds and less than 7 days. Example: `!giveaway title: 10m #giveaways 3`.")
 							.catch(() => {
-								call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+								call.message.author
+									.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`)
+									.catch(function() {});
 							});
 					}
 				} else {
 					call.message.reply("Please mention a valid giveaway channel. Example: `!giveaway title: 10m #giveaways 3`.").catch(() => {
-						call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+						call.message.author
+							.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`)
+							.catch(function() {});
 					});
 				}
 			} else {
