@@ -1,3 +1,4 @@
+const { Guild } = require("discord.js");
 var pool;
 
 class Settings {
@@ -6,7 +7,13 @@ class Settings {
 
 	constructor(newPool, namespace, association) {
 		pool = newPool;
-
+		if (association instanceof Guild) {
+			this.serverId = association.id;
+			this.userId = null;
+		} else {
+			this.serverId = association.guild.id;
+			this.userId = association.id;
+		}
 	}
 
 	get(key, options = this.CACHE) {
