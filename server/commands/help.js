@@ -27,8 +27,9 @@ module.exports = {
 				.setFooter(`Ran by ${call.message.author.username} (${call.message.author.id})`, call.message.author.displayAvatarURL)
 				.addField("Information Commands", `\`${pfx}help [command]\`\n\`${pfx}ping\`\n\`${pfx}info [topic]\`\n\`${pfx}uptime\``)
 				.addField("Role Commands", `\`${pfx}freerole (freerole)\`\n\`${pfx}gamerole (game)\`\n\`${pfx}namecolor (color)\`` +
-					`\n\`${pfx}poll (title) (options)\`\n${pfx}giveaway (prize): (time) (channel) (winners)`)
-				.addField("Posting Commands", `\`${pfx}postqotd (qotd)\`\n\`${pfx}postgamenight\``)
+					`\n\`${pfx}poll (title) (options)\``)
+				.addField("Posting Commands", `\`${pfx}postqotd (qotd)\`\n\`${pfx}postgamenight\`` +
+					`\n\`${pfx}giveaway (prize): (time) (channel) (winners)\``)
 				.addField("Moderation Commands", `\`${pfx}mt (role)\`\n\`${pfx}ban (user)\`\n\`${pfx}kick (user)\`\n\`${pfx}softban (user)\`` +
 					`\n\`${pfx}mute (user) (time)\`\n\`${pfx}warn (user) (reason)\`\n\`${pfx}role (option/user) (role)\``)
 				.addField("Donator Commands", `\`${pfx}customcolor\``);
