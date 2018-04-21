@@ -94,9 +94,9 @@ for (let token in config.BOTS) {
 				}, 1000);
 			}
 
-			if (bot.user.id === "393532251398209536") {u
+			if (client.user.id === "393532251398209536") {
 				const Discord = require("discord.js");
-				bot.channels.get("437091372538003456").fetchMessages({
+				client.channels.get("437091372538003456").fetchMessages({
 					limit: 100
 				}).then(messagesFetched => {
 					var giveawayChannel;
@@ -117,24 +117,28 @@ for (let token in config.BOTS) {
 							if (giveawayEnd > 0) {
 								client.channels.get(giveawayChannel).fetchMessage(giveawayID).then(giveawayMessage => {
 									var editLoop = setInterval(function() {
+										var giveawayEmbed;
 										giveawayEnd = giveawayEnd - 5000;
 										var hours = (((giveawayEnd) - (giveawayEnd % 3600000)) / 3600000);
 										var minutes = ((giveawayEnd % 3600000) - (giveawayEnd % 3600000) % (60000)) / 60000;
 										var seconds = ((giveawayEnd % 3600000) % 60000) - (((giveawayEnd % 3600000) % 60000) % 1000);
 										var totalTime = `\`${hours}\` hours, \`${minutes}\` minutes, \`${seconds/1000}\` seconds`;
 										if (giveawayEnd > 0) {
-											var giveawayEmbed = new Discord.RichEmbed()
+											giveawayEmbed = new Discord.RichEmbed()
 												.setTitle(giveawayPrize)
 												.setDescription(`**React with 🎉 to enter**\nTime remaining: **${totalTime}**`)
 												.setColor(0x00AE86)
 												.setFooter(`${client.user.username} | Giveaway by ${giveawayAuthor}.`);
 											giveawayMessage.edit("🎉 **GIVEAWAY** 🎉", {
 												embed: giveawayEmbed
-											})
+											});
 										} else {
-											var winner = giveawayMessage.reactions.find(r => r.emoji.name === "🎉").users.filter(r => r.id !== bot.user.id && r.id !== message.author.id).random(giveawayWinners);
+											var winner = giveawayMessage.reactions
+												.find(r => r.emoji.name === "🎉").users
+												.filter(r => r.id !== client.user.id && r.id !== giveawayAuthor.id)
+												.random(giveawayWinners);
 											if (winner.length === 0) winner = ["**Not enough users entered.**"];
-											var giveawayEmbed = new Discord.RichEmbed()
+											giveawayEmbed = new Discord.RichEmbed()
 												.setTitle(giveawayPrize)
 												.setDescription(`Winner(s): ${winner.join(", ")}`)
 												.setColor(0x00AE86)
