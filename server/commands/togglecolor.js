@@ -5,7 +5,7 @@ module.exports = {
 	requires: "Permission: MANAGE ROLES",
 	load: () => {},
 	execute: (call) => {
-		var multicolor = require("./togglecolor").multicolor
+		var multicolor = require("./togglecolor").multicolor;
 		if (call.message.member.hasPermission("MANAGE_ROLES")) {
 			if (multicolor) {
 				multicolor = false;
