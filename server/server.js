@@ -118,7 +118,6 @@ for (let token in config.BOTS) {
 								client.channels.get(giveawayChannel).fetchMessage(giveawayID).then(giveawayMessage => {
 									var editLoop = setInterval(function() {
 										var giveawayEmbed;
-										var winner
 										giveawayEnd = giveawayEnd - 5000;
 										var hours = (((giveawayEnd) - (giveawayEnd % 3600000)) / 3600000);
 										var minutes = ((giveawayEnd % 3600000) - (giveawayEnd % 3600000) % (60000)) / 60000;
@@ -134,7 +133,7 @@ for (let token in config.BOTS) {
 												embed: giveawayEmbed
 											});
 										} else {
-											giveawayMessage.reactions.find(r => r.emoji.name === "🎉").fetchUsers().then(user => {
+											giveawayMessage.reactions.find(r => r.emoji.name === "🎉").fetchUsers().then(users => {
 												var winner = users.filter(r => r.id !== client.user.id && r.id !== giveawayAuthor.id).random(giveawayWinners);
 												if (winner.length === 0) winner = ["**Not enough users entered.**"];
 												giveawayEmbed = new Discord.RichEmbed()
