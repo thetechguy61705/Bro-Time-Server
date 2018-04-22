@@ -184,13 +184,13 @@ async function howToGetRole(message, Discord, prompt, param) {
 	if (param !== undefined) prompt = param;
 	var currentRole;
 	var obtainableRoles = ["`Story Teller`", "`Dolphin`", "`Meme Master`", "`Inviter`", "`Pro Inviter`", "`Cuber`", "`Artist`", "`Partner`",
-		"`Contributor`", "`Donator`"];
+		"`Contributor`", "`Supporter`"];
 	var descriptions = ["Get part of your story on the starboard.",
 		"Tell cj your knowledge about dolphin’s dark deeds and he shall decide if you are worthy of the role.",
 		"Get one of your memes on the starboard.",
 		"Invite 5 people to this server", "Invite 10 people to this server", "Be able to solve a 3x3 Rubik’s cube in less than 2 minutes.",
 		"Get one of your art pieces on the starboard.", "Be the owner of a discord server partnered with us.", "Contribute to the server or assets relating to it",
-		"Donate at least 1 dollar, payment instructions in !info donate"
+		"Tip any amount, payment instructions in !info perks"
 	];
 	if (prompt.toLowerCase() === "preview") {
 		var roleEmbed = new Discord.RichEmbed()
