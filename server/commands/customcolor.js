@@ -23,20 +23,7 @@ module.exports = {
 		let color = call.params.readRaw().toLowerCase();
 		let role = call.params.readRole();
 		if (allroles.includes(color)) {
-			if (call.message.member.roles.find("name", "Bro Time Deluxe")) {
-				removeColorRoles(call.message.guild.roles, call.message.member);
-				call.message.member.addRole(role).then(() => {
-					call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`).catch(() => {
-						call.message.author.send(`Successfully given you the \`${role.name}\` color role, note that I can not chat in ${call.message.channel}.`)
-							.catch(function(){});
-					});
-				}).catch(() => {
-					call.message.channel.send("There was an error while giving you the color role. Please try again.").catch(() => {
-						call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
-							.catch(function(){});
-					});
-				});
-			} else if (call.message.member.roles.find("name", "Bro Time Premium")) {
+			if (call.message.member.roles.find("name", "Bro Time Premium")) {
 				if (premiumcolors.includes(color) || freecolors.includes(color)) {
 					removeColorRoles(call.message.guild.roles, call.message.member);
 					call.message.member.addRole(role).then(() => {
