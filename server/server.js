@@ -2,11 +2,9 @@ var errorHandler = require("app/errorHandler");
 var config = require("../config");
 var fs = require("fs");
 var discord = require("discord.js");
-
 var loaders = [];
 var areaLoaders = [];
 var chatHandlers = [];
-
 fs.readdirSync(__dirname + "/chat").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
 	if (match != null) {
@@ -38,6 +36,7 @@ for (let token in config.BOTS) {
 	if (token !== "undefined") {
 		let settings = config.BOTS[token];
 		let client = new discord.Client();
+		client.multicolor = true;
 		let loadedAreas = new discord.Collection();
 
 		errorHandler(client);
@@ -85,11 +84,13 @@ for (let token in config.BOTS) {
 				var loopNumber = 0;
 				var offlineInRole;
 				setInterval(function() {
-					offlineInRole = multiColorRole.members.filter(member => member.presence.status === "offline");
-					if (offlineInRole.size !== multiColorRole.members.size) {
-						multiColorRole.setColor(realGuild.roles.find("name", colors[loopNumber]).hexColor).catch(function() {});
-						loopNumber = loopNumber + 1;
-						if (loopNumber === colors.length) loopNumber = 0;
+					if(client.multicolor) {
+						offlineInRole = multiColorRole.members.filter(member => member.presence.status === "offline");
+						if (offlineInRole.size !== multiColorRole.members.size) {
+							multiColorRole.setColor(realGuild.roles.find("name", colors[loopNumber]).hexColor).catch(function() {});
+							loopNumber = loopNumber + 1;
+							if (loopNumber === colors.length) loopNumber = 0;
+						}
 					}
 				}, 1000);
 			}
