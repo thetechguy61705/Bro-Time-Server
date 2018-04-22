@@ -91,9 +91,9 @@ for (let token in config.BOTS) {
 							loopNumber = loopNumber + 1;
 							if (loopNumber === colors.length) loopNumber = 0;
 						}
-					}, 1000);
-				}
-			 }
+					}
+				}, 1000);
+			}
 
 			if (client.user.id === "393532251398209536") {
 				const Discord = require("discord.js");
