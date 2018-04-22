@@ -4,7 +4,7 @@ module.exports = {
 	load: () => {},
 	execute: (call) => {
 		if (call.message.member.hasPermission("MANAGE_ROLES")) {
-			if (call.client.multicolor) {
+			if (this.multicolor) {
 				this.multicolor = false;
 			} else {
 				this.multicolor = true;
