@@ -89,7 +89,7 @@ for (let token in config.BOTS) {
 					if (offlineInRole.size !== multiColorRole.members.size) {
 						multiColorRole.setColor(realGuild.roles.find("name", colors[loopNumber]).hexColor).catch(function() {});
 						loopNumber = loopNumber + 1;
-						if (loopNumber === colors.length) loopNumber =0;
+						if (loopNumber === colors.length) loopNumber = 0;
 					}
 				}, 1000);
 			}
@@ -118,6 +118,7 @@ for (let token in config.BOTS) {
 								client.channels.get(giveawayChannel).fetchMessage(giveawayID).then(giveawayMessage => {
 									var editLoop = setInterval(function() {
 										var giveawayEmbed;
+										var winner
 										giveawayEnd = giveawayEnd - 5000;
 										var hours = (((giveawayEnd) - (giveawayEnd % 3600000)) / 3600000);
 										var minutes = ((giveawayEnd % 3600000) - (giveawayEnd % 3600000) % (60000)) / 60000;
@@ -133,46 +134,46 @@ for (let token in config.BOTS) {
 												embed: giveawayEmbed
 											});
 										} else {
-											var winner = giveawayMessage.reactions
-												.find(r => r.emoji.name === "🎉").users
-												.filter(r => r.id !== client.user.id && r.id !== giveawayAuthor.id)
-												.random(giveawayWinners);
-											if (winner.length === 0) winner = ["**Not enough users entered.**"];
-											giveawayEmbed = new Discord.RichEmbed()
-												.setTitle(giveawayPrize)
-												.setDescription(`Winner(s): ${winner.join(", ")}`)
-												.setColor(0x00AE86)
-												.setFooter(`${client.user.username} | Giveaway by ${giveawayAuthor}.`);
-											giveawayMessage.edit("🎉 **GIVEAWAY ENDED** 🎉", {
-												embed: giveawayEmbed
-											}).then(() => {
-												msg.delete().catch(function() {});
-												if (winner[0] !== "**Not enough users entered.**") {
-													giveawayMessage.channel.send(`${winner.join(", ")} won **${giveawayPrize}**!`).catch(function() {});
-												}
-											}).catch(function() {});
-											clearInterval(editLoop);
+											giveawayMessage.reactions.find(r => r.emoji.name === "🎉").fetchUsers().then(user => {
+												var winner = users.filter(r => r.id !== client.user.id && r.id !== giveawayAuthor.id).random(giveawayWinners);
+												if (winner.length === 0) winner = ["**Not enough users entered.**"];
+												giveawayEmbed = new Discord.RichEmbed()
+													.setTitle(giveawayPrize)
+													.setDescription(`Winner(s): ${winner.join(", ")}`)
+													.setColor(0x00AE86)
+													.setFooter(`${client.user.username} | Giveaway by ${giveawayAuthor}.`);
+												giveawayMessage.edit("🎉 **GIVEAWAY ENDED** 🎉", {
+													embed: giveawayEmbed
+												}).then(() => {
+													msg.delete().catch(function() {});
+													if (winner[0] !== "**Not enough users entered.**") {
+														giveawayMessage.channel.send(`${winner.join(", ")} won **${giveawayPrize}**!`).catch(function() {});
+													}
+												}).catch(function() {});
+												clearInterval(editLoop);
+											});
 										}
 									}, 5000);
 								});
 							} else {
 								client.channels.get(giveawayChannel).fetchMessage(giveawayID).then(giveawayMessage => {
-									var winner = giveawayMessage.reactions
-										.find(r => r.emoji.name === "🎉").users.filter(r => r.id !== client.user.id && r.id !== giveawayAuthor.id).random(giveawayWinners);
-									if (winner.length === 0) winner = ["**Not enough users entered.**"];
-									var giveawayEmbed = new Discord.RichEmbed()
-										.setTitle(giveawayPrize)
-										.setDescription(`Winner(s): ${winner.join(", ")}`)
-										.setColor(0x00AE86)
-										.setFooter(`${client.user.username} | Giveaway by ${giveawayAuthor}.`);
-									giveawayMessage.edit("🎉 **GIVEAWAY ENDED** 🎉", {
-										embed: giveawayEmbed
-									}).then(() => {
-										msg.delete().catch(function() {});
-										if (winner[0] !== "**Not enough users entered.**") {
-											giveawayMessage.channel.send(`${winner.join(", ")} won **${giveawayPrize}**!`).catch(function() {});
-										}
-									}).catch(function() {});
+									giveawayMessage.reactions.find(r => r.emoji.name === "🎉").fetchUsers().then(users => {
+										var winner = users.filter(r => r.id !== client.user.id && r.id !== giveawayAuthor.id).random(giveawayWinners);
+										if (winner.length === 0) winner = ["**Not enough users entered.**"];
+										var giveawayEmbed = new Discord.RichEmbed()
+											.setTitle(giveawayPrize)
+											.setDescription(`Winner(s): ${winner.join(", ")}`)
+											.setColor(0x00AE86)
+											.setFooter(`${client.user.username} | Giveaway by ${giveawayAuthor}.`);
+										giveawayMessage.edit("🎉 **GIVEAWAY ENDED** 🎉", {
+											embed: giveawayEmbed
+										}).then(() => {
+											msg.delete().catch(function() {});
+											if (winner[0] !== "**Not enough users entered.**") {
+												giveawayMessage.channel.send(`${winner.join(", ")} won **${giveawayPrize}**!`).catch(function() {});
+											}
+										}).catch(function() {});
+									});
 								});
 							}
 						}
