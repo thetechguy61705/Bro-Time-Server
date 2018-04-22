@@ -100,8 +100,8 @@ async function nameColors(message, Discord, prompt, param) {
 	if (param !== undefined) prompt = param;
 	var currentRole;
 	var endMessage = ["**Free**", "`Red`", "`Yellow`", "`Blue`", "`Orange`", "`Green`", "`Black`", "`Purple`",
-		"**Plus**", "`Pink`", "`Indigo`", "`Bronze`", "`HotPink`", "`Cyan`", "`LightGreen`", "**Premium**",
-		"`Silver`", "`BrightRed`", "`DarkViolet`", "`HotBrown`", "`DarkGreen`", "**Deluxe**", "`Gold`"
+		"**Premium**", "`Pink`", "`Indigo`", "`Bronze`", "`HotPink`", "`Cyan`", "`LightGreen`",
+			  "`Silver`", "`BrightRed`", "`DarkViolet`", "`HotBrown`", "`DarkGreen`", "`Gold`"
 	];
 	var colorRoles = ["`Red`", "`Yellow`", "`Blue`", "`Orange`", "`Green`", "`Black`", "`Purple`",
 		"`Pink`", "`Indigo`", "`Bronze`", "`HotPink`", "`Cyan`", "`LightGreen`",
