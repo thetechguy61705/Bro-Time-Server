@@ -1,4 +1,5 @@
 module.exports = {
+	multicolor: true,
 	id: "togglecolor",
 	load: () => {},
 	execute: (call) => {
