@@ -171,7 +171,7 @@ async function nameColors(message, Discord, prompt, param) {
 	} else {
 		endMessage = endMessage.join("\n");
 		nameColorEmbed = new Discord.RichEmbed()
-			.setTitle("Name colors")
+			.setTitle("Name Colors")
 			.setDescription(endMessage)
 			.setColor(0x00AE86);
 		message.channel.send({
