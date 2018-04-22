@@ -4,12 +4,12 @@ module.exports = {
 	load: () => {},
 	execute: (call) => {
 		if (call.message.member.hasPermission("MANAGE_ROLES")) {
-			if (this.multicolor) {
-				this.multicolor = false;
+			if (this.module.exports.multicolor) {
+				this.module.exports.multicolor = false;
 			} else {
-				this.multicolor = true;
+				this.module.exports.multicolor = true;
 			}
-			call.message.channel.send(`Toggled the multicolor role to \`${this.multicolor}\`.`);
+			call.message.channel.send(`Toggled the multicolor role to \`${this.module.exports.multicolor}\`.`);
 		}
 	}
 };
