@@ -37,6 +37,7 @@ module.exports = {
 								.catch(function(){});
 						});
 					});
+				}
 				} else if (premiumcolors.includes(color)) {
 					call.message.channel.send(`\`${role.name}\` is a premium and up color. Your plan is plus.`).catch(() => {
 						call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
@@ -71,5 +72,4 @@ module.exports = {
 			}
 		}
 	}
-};
 
