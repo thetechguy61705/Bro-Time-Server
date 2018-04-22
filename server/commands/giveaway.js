@@ -53,25 +53,25 @@ module.exports = {
 														embed: giveawayEmbed
 													});
 												} else {
-													winner = msg.reactions
-														.find(r => r.emoji.name === "🎉").users
-														.filter(r => r.id !== call.client.user.id && r.id !== call.message.author.id)
-														.random(winners);
-													if (winner.length === 0) winner = ["**Not enough users entered.**"];
-													giveawayEmbed = new Discord.RichEmbed()
-														.setTitle(giveawayPrize)
-														.setDescription(`Winner(s): ${winner.join(", ")}`)
-														.setColor(0x00AE86)
-														.setFooter(`${call.client.user.username} | Giveaway by ${call.message.author.tag}.`);
-													msg.edit("🎉 **GIVEAWAY ENDED** 🎉", {
-														embed: giveawayEmbed
-													}).then(() => {
-														databaseMesage.delete().catch(function() {});
-														if (winner[0] !== "**Not enough users entered.**") {
-															msg.channel.send(`${winner.join(", ")} won **${giveawayPrize}**!`).catch(function() {});
-														}
-													}).catch(function() {});
-													clearInterval(editLoop);
+													msg.reactions.find(r => r.emoji.name === "🎉").fetchUsers().then(users => {
+														winner = users.filter(r => r.id !== call.client.user.id && r.id !== call.message.author.id)
+															.random(winners);
+														if (winner.length === 0) winner = ["**Not enough users entered.**"];
+														giveawayEmbed = new Discord.RichEmbed()
+															.setTitle(giveawayPrize)
+															.setDescription(`Winner(s): ${winner.join(", ")}`)
+															.setColor(0x00AE86)
+															.setFooter(`${call.client.user.username} | Giveaway by ${call.message.author.tag}.`);
+														msg.edit("🎉 **GIVEAWAY ENDED** 🎉", {
+															embed: giveawayEmbed
+														}).then(() => {
+															databaseMesage.delete().catch(function() {});
+															if (winner[0] !== "**Not enough users entered.**") {
+																msg.channel.send(`${winner.join(", ")} won **${giveawayPrize}**!`).catch(function() {});
+															}
+														}).catch(function() {});
+														clearInterval(editLoop);
+													});
 												}
 											}, 5000);
 										}).catch(() => {
