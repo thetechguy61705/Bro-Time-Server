@@ -8,17 +8,19 @@ module.exports = {
 			if (oldMessage.channel.type !== "dm") {
 				if (oldMessage.guild.id === realGuild.id) {
 					if (!oldMessage.author.bot) {
-						var superLogChannel = testGuild.channels.get("433800038213353483");
-						var updateEmbed = new Discord.RichEmbed()
-							.setAuthor(`${oldMessage.author.tag} (${oldMessage.author.id})`)
-							.setColor("BLUE")
-							.setTitle("Message Update")
-							.setDescription(`ID: ${oldMessage.id}`)
-							.addField("Old Message", `\`\`\`${oldMessage.content} \`\`\`\nIn: ${oldMessage.channel}\nAt: \`${oldMessage.createdAt}\``)
-							.addField("New Message", `\`\`\`${newMessage.content} \`\`\`\nIn: ${newMessage.channel}\nAt: \`${newMessage.createdAt}\``);
-						superLogChannel.send({
-							embed: updateEmbed
-						});
+						if (oldMessage.content !== newMessage.content) {
+							var superLogChannel = testGuild.channels.get("433800038213353483");
+							var updateEmbed = new Discord.RichEmbed()
+								.setAuthor(`${oldMessage.author.tag} (${oldMessage.author.id})`)
+								.setColor("BLUE")
+								.setTitle("Message Update")
+								.setDescription(`ID: ${oldMessage.id}`)
+								.addField("Old Message", `\`\`\`${oldMessage.content} \`\`\`\nIn: ${oldMessage.channel}\nAt: \`${oldMessage.createdAt}\``)
+								.addField("New Message", `\`\`\`${newMessage.content} \`\`\`\nIn: ${newMessage.channel}\nAt: \`${newMessage.createdAt}\``);
+							superLogChannel.send({
+								embed: updateEmbed
+							});
+						}
 					}
 				}
 			}
