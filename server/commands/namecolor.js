@@ -38,38 +38,38 @@ module.exports = {
 						});
 					});
 				}
-				} else if (premiumcolors.includes(color)) {
-					call.message.channel.send(`\`${role.name}\` is a premium and up color. Your plan is plus.`).catch(() => {
-						call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
-							.catch(function(){});
-					});
-				} else {
-					if (freecolors.includes(color)) {
-						removeColorRoles(call.message.guild.roles, call.message.member);
-						call.message.member.addRole(role).then(() => {
-							call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`).catch(() => {
-								call.message.author.send(`Successfully given you the \`${role.name}\` color role, note that I can not chat in ${call.message.channel}.`)
-									.catch(function(){});
-							});
-						}).catch(() => {
-							call.message.channel.send("There was an error while giving you the color role. Please try again.").catch(() => {
-								call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
-									.catch(function(){});
-							});
-						});
 					} else if (premiumcolors.includes(color)) {
-						call.message.channel.send(`\`${role.name}\` is a premium and up color. Your plan is free.`).catch(() => {
+						call.message.channel.send(`\`${role.name}\` is a premium and up color. Your plan is plus.`).catch(() => {
 							call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
 								.catch(function(){});
 						});
 					} else {
-						call.message.channel.send(`\`${color} \` is not a valid color role. Make sure it contains no spaces.`).catch(() => {
-							call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
-								.catch(function(){});
-						});
+						if (freecolors.includes(color)) {
+							removeColorRoles(call.message.guild.roles, call.message.member);
+							call.message.member.addRole(role).then(() => {
+								call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`).catch(() => {
+									call.message.author.send(`Successfully given you the \`${role.name}\` color role, note that I can not chat in ${call.message.channel}.`)
+										.catch(function(){});
+								});
+							}).catch(() => {
+								call.message.channel.send("There was an error while giving you the color role. Please try again.").catch(() => {
+									call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
+										.catch(function(){});
+								});
+							});
+						} else if (premiumcolors.includes(color)) {
+							call.message.channel.send(`\`${role.name}\` is a premium and up color. Your plan is free.`).catch(() => {
+								call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
+									.catch(function(){});
+							});
+						} else {
+							call.message.channel.send(`\`${color} \` is not a valid color role. Make sure it contains no spaces.`).catch(() => {
+								call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
+									.catch(function(){});
+							});
+						}
 					}
 				}
 			}
 		}
-	}
 
