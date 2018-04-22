@@ -7,7 +7,7 @@ var allroles = ["red", "blue", "orange", "green", "black", "purple", "pink", "ye
 var premiumcolors = ["pink", "indigo", "bronze", "hotpink", "cyan", "lightgreen", "silver", "brightred",
 	"darkviolet", "hotbrown", "darkgreen", "gold", "multicolored"];
 var freecolors = ["red", "blue", "orange", "green", "black", "purple", "yellow", "white"];
-
+//travis pls work
 function removeColorRoles(roles, user) {
 	caproles.forEach((color) => {
 		if (user.roles.find("name", color)) {
@@ -56,11 +56,6 @@ module.exports = {
 							call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
 								.catch(function(){});
 						});
-					});
-				} else if (premiumcolors.includes(color)) {
-					call.message.channel.send(`\`${role.name}\` is a premium and up color. Your plan is free.`).catch(() => {
-						call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
-							.catch(function(){});
 					});
 				} else {
 					call.message.channel.send(`\`${color} \` is not a valid color role. Make sure it contains no spaces.`).catch(() => {
