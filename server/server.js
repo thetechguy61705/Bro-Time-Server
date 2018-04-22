@@ -5,7 +5,6 @@ var discord = require("discord.js");
 var loaders = [];
 var areaLoaders = [];
 var chatHandlers = [];
-client.multicolor = true;
 fs.readdirSync(__dirname + "/chat").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
 	if (match != null) {
@@ -37,6 +36,7 @@ for (let token in config.BOTS) {
 	if (token !== "undefined") {
 		let settings = config.BOTS[token];
 		let client = new discord.Client();
+		client.multicolor = true;
 		let loadedAreas = new discord.Collection();
 
 		errorHandler(client);
