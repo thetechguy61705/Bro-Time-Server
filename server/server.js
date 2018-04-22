@@ -1,5 +1,6 @@
 var errorHandler = require("app/errorHandler");
 var config = require("../config");
+var multicolor = require("./commands/togglecolor.js").multicolor;
 var fs = require("fs");
 var discord = require("discord.js");
 var loaders = [];
@@ -36,7 +37,6 @@ for (let token in config.BOTS) {
 	if (token !== "undefined") {
 		let settings = config.BOTS[token];
 		let client = new discord.Client();
-		client.multicolor = true;
 		let loadedAreas = new discord.Collection();
 
 		errorHandler(client);
@@ -84,7 +84,7 @@ for (let token in config.BOTS) {
 				var loopNumber = 0;
 				var offlineInRole;
 				setInterval(function() {
-					if(client.multicolor) {
+					if(multicolor) {
 						offlineInRole = multiColorRole.members.filter(member => member.presence.status === "offline");
 						if (offlineInRole.size !== multiColorRole.members.size) {
 							multiColorRole.setColor(realGuild.roles.find("name", colors[loopNumber]).hexColor).catch(function() {});
