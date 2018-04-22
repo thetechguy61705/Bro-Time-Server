@@ -1,5 +1,5 @@
 module.exports = {
-	multicolor: true,
+	multicolor: false,
 	id: "togglecolor",
 	description: "Toggles the multicolored role from switching colors",
 	requires: "Permission: MANAGE ROLES",
