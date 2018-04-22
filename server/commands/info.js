@@ -100,8 +100,8 @@ async function nameColors(message, Discord, prompt, param) {
 	if (param !== undefined) prompt = param;
 	var currentRole;
 	var endMessage = ["**Free**", "`Red`", "`Yellow`", "`Blue`", "`Orange`", "`Green`", "`Black`", "`Purple`",
-		"**Plus**", "`Pink`", "`Indigo`", "`Bronze`", "`HotPink`", "`Cyan`", "`LightGreen`", "**Premium**",
-		"`Silver`", "`BrightRed`", "`DarkViolet`", "`HotBrown`", "`DarkGreen`", "**Deluxe**", "`Gold`"
+		"**Premium**", "`Pink`", "`Indigo`", "`Bronze`", "`HotPink`", "`Cyan`", "`LightGreen`",
+		"`Silver`", "`BrightRed`", "`DarkViolet`", "`HotBrown`", "`DarkGreen`", "`Gold`"
 	];
 	var colorRoles = ["`Red`", "`Yellow`", "`Blue`", "`Orange`", "`Green`", "`Black`", "`Purple`",
 		"`Pink`", "`Indigo`", "`Bronze`", "`HotPink`", "`Cyan`", "`LightGreen`",
@@ -171,7 +171,7 @@ async function nameColors(message, Discord, prompt, param) {
 	} else {
 		endMessage = endMessage.join("\n");
 		nameColorEmbed = new Discord.RichEmbed()
-			.setTitle("Name colors")
+			.setTitle("Name Colors")
 			.setDescription(endMessage)
 			.setColor(0x00AE86);
 		message.channel.send({
