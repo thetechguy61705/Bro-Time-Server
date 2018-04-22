@@ -7,7 +7,7 @@ var allroles = ["red", "blue", "orange", "green", "black", "purple", "pink", "ye
 var premiumcolors = ["pink", "indigo", "bronze", "hotpink", "cyan", "lightgreen", "silver", "brightred",
 	"darkviolet", "hotbrown", "darkgreen", "gold", "multicolored"];
 var freecolors = ["red", "blue", "orange", "green", "black", "purple", "yellow", "white"];
-
+//travis pls work
 function removeColorRoles(roles, user) {
 	caproles.forEach((color) => {
 		if (user.roles.find("name", color)) {
