@@ -1,17 +1,18 @@
 module.exports = {
-	multicolor: false,
+	multicolor: true,
 	id: "togglecolor",
 	description: "Toggles the multicolored role from switching colors",
 	requires: "Permission: MANAGE ROLES",
 	load: () => {},
 	execute: (call) => {
+		require(".togglecolor").multicolor
 		if (call.message.member.hasPermission("MANAGE_ROLES")) {
-			if (this.multicolor) {
-				this.multicolor = false;
+			if (require(".togglecolor").multicolor) {
+				require(".togglecolor").multicolor = false;
 			} else {
-				this.multicolor = true;
+				require(".togglecolor").multicolor = true;
 			}
-			call.message.channel.send(`Toggled the multicolor role to \`${this.multicolor}\`.`);
+			call.message.channel.send(`Toggled the multicolor role to \`${require(".togglecolor").multicolor}\`.`);
 		}
 	}
 };
