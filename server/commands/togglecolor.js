@@ -8,7 +8,7 @@ module.exports = {
 			} else {
 				this.multicolor = true;
 			}
-			call.message.channel.send(`Toggled the multicolor role to \`${this.multicolor}\`.`)
+			call.message.channel.send(`Toggled the multicolor role to \`${this.multicolor}\`.`);
 		}
 	}
 };
