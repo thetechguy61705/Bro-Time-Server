@@ -1,5 +1,6 @@
 var errorHandler = require("app/errorHandler");
 var config = require("../config");
+require("./commands/togglecolor.js").multicolor
 var fs = require("fs");
 var discord = require("discord.js");
 var loaders = [];
