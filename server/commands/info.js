@@ -346,7 +346,7 @@ async function levelRoles(message, Discord, prompt, param) {
 }
 
 function donate(message) {
-	fs.readFile(__dirname + "/../info/donateinfo.md", (err, data) => {
+	fs.readFile(__dirname + "/../info/perks.md", (err, data) => {
 		if (err) {
 			throw err;
 		} else {
@@ -397,7 +397,7 @@ async function infoTarget(message, prompt, Discord, choice, param) {
 		} else {
 			howToGetRole(message, Discord, prompt, param);
 		}
-	} else if (choice.toLowerCase() === "donate" || choice.toLowerCase() === "donations" || choice.toLowerCase() === "donateinfo") {
+	} else if (choice.toLowerCase() === "donate" || choice.toLowerCase() === "perks" || choice.toLowerCase() === "tip") {
 		donate(message);
 	} else if (choice.toLowerCase() === "levelroles" || choice.toLowerCase() === "levels") {
 		if (param !== "preview" && param !== "list" && param !== "specify") {
@@ -418,9 +418,9 @@ module.exports = {
 		var choice = call.params.readParameter();
 		var param = call.params.readParameter();
 		var options = ["ad", "advertisement", "gamerole", "gameroles", "namecolors", "colors", "getrole", "howtogetrole", "htgr",
-			"donate", "donations", "donateinfo", "levelroles", "levels"
+			"donate", "perks", "tip", "levelroles", "levels"
 		];
-		var plainOptions = ["advertisement", "gameroles", "namecolors", "howtogetrole", "donate", "levelroles"];
+		var plainOptions = ["advertisement", "gameroles", "namecolors", "howtogetrole", "perks", "levelroles"];
 		if(choice === null) {
 			awaitReply(call.message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`).then(userChoice => {
 				if(!options.includes(userChoice.toLowerCase())) {
