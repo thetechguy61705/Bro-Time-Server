@@ -2,11 +2,10 @@ var errorHandler = require("app/errorHandler");
 var config = require("../config");
 var fs = require("fs");
 var discord = require("discord.js");
-
 var loaders = [];
 var areaLoaders = [];
 var chatHandlers = [];
-
+client.multicolor = true;
 fs.readdirSync(__dirname + "/chat").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
 	if (match != null) {
