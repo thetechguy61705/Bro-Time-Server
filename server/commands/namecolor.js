@@ -54,7 +54,7 @@ module.exports = {
 				}
 			}
 		} else {
-			call.message.channel.send(`\`${color} \` is not a valid color role. Make sure it contains no spaces.`).catch(() => {
+			call.message.channel.send("Please specify a valid color role. A list of color roles can be found in `!info namecolors list`.").catch(() => {
 				call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
 					.catch(function() {});
 			});
