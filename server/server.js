@@ -44,7 +44,7 @@ for (let token in config.BOTS) {
 
 		client.on("ready", () => {
 			const realGuild = client.guilds.get("330913265573953536");
-
+			multicolor = true
 			console.log("Loading " + client.user.username);
 			loaders.forEach(loader => {
 				loader.exec(client, settings);
