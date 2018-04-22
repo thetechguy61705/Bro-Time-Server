@@ -1,6 +1,8 @@
 module.exports = {
-	multicolor: true,
+	//multicolor: true,
 	id: "togglecolor",
+	description: "Toggles the multicolored role from switching colors",
+	requires: "Permission: MANAGE ROLES",
 	load: () => {},
 	execute: (call) => {
 		if (call.message.member.hasPermission("MANAGE_ROLES")) {
