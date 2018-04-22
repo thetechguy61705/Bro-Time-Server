@@ -57,14 +57,13 @@ module.exports = {
 								.catch(function(){});
 						});
 					});
-				} else {
-					call.message.channel.send(`\`${color} \` is not a valid color role. Make sure it contains no spaces.`).catch(() => {
-						call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
-							.catch(function(){});
-					});
 				}
 			}
+		} else {
+			call.message.channel.send(`\`${color} \` is not a valid color role. Make sure it contains no spaces.`).catch(() => {
+				call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`)
+					.catch(function(){});
+			});
 		}
-	}
-};
+	};
 
