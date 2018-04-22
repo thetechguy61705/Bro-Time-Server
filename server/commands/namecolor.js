@@ -2,9 +2,6 @@ const allroles = ["Red", "Blue", "Orange", "Green", "Black", "Purple", "Pink", "
 	"HotPink", "Indigo", "Bronze", "Cyan", "LightGreen", "Silver", "BrightRed", "HotBrown",
 	"DarkViolet", "Gold", "Multicolored"];
 
-const premiumcolors = ["pink", "indigo", "bronze", "hotpink", "cyan", "lightgreen", "silver", "brightred",
-	"darkviolet", "hotbrown", "darkgreen", "gold", "multicolored"];
-
 const freecolors = ["red", "blue", "orange", "green", "black", "purple", "yellow", "white"];
 
 function removeColorRoles(roles, user) {
