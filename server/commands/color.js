@@ -2,6 +2,7 @@ module.exports = {
 	id: "color",
 	load: () => {},
 	execute: (call) => {
+		if(!call.message.member.hasPermission("MANAGE_ROLES")) return;
 		var ha;
 		if(call.client.multicolor) {
 			call.client.multicolor = false;
