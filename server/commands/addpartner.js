@@ -4,8 +4,8 @@ module.exports = {
 	id: "addpartner",
 	load: () => {},
 	execute: (call) => {
-		var CommunityManagerBro = call.message.guild.roles.find(`id`, `409153912558583818`);
-		let PartnersChannel = call.message.guild.channels.find(`id`, `409156491640045571`);
+		var CommunityManagerBro = call.message.guild.roles.find("id", "409153912558583818");
+		let PartnersChannel = call.message.guild.channels.find("id", "409156491640045571");
 		if(call.message.member.roles.has(CommunityManagerBro)) {
 			var Title = call.params.readRaw().split("|")[0];
 			var Description = call.params.readRaw().split("|")[1];
@@ -20,4 +20,4 @@ module.exports = {
 			});
 		}
 	}
-}
+};
