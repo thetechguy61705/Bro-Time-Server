@@ -22,6 +22,7 @@ module.exports = {
 				}).catch(() => {
 					call.message.reply("Couldn't send the partner message in the partners channel!");
 				});
+				PartnersChannel.send("-------------------------------------------------");
 			} else {
 				call.message.reply("You did not provide the necessary parameters! `!addpartner (title) | (description) | (thumbnail URL)`");
 			}
