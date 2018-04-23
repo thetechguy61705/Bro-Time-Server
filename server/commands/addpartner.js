@@ -2,6 +2,8 @@ const Discord = require("discord.js");
 
 module.exports = {
 	id: "addpartner",
+	description: "Adds a new partner in the #partners channel",
+	requires: "Role: Community Manager Bro",
 	load: () => {},
 	execute: (call) => {
 		let PartnersChannel = call.message.guild.channels.find("id", "409156491640045571");
