@@ -19,9 +19,5 @@ module.exports = {
 			call.message.reply(`Couldn't send the partner message in the partners channel!\n\`${e}\``);
 		});
 		}
-		}
-
-			
-      
- 
-      
+	}
+}
