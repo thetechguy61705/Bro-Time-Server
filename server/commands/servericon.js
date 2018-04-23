@@ -1,5 +1,7 @@
 module.exports = {
 	id: "servericon",
+	description: "Gets a server icon from a discord server invite",
+	requires: "None",
 	load: () => {},
 	execute: (call) => {
 		if(call.params.readRaw()) {
