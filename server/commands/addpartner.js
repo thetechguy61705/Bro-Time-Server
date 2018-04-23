@@ -8,9 +8,9 @@ module.exports = {
 		let PartnersChannel = call.message.guild.channels.find("id", "409156491640045571");
 		if(call.message.member.roles.has(CommunityManagerBro)) {
 			var Content = call.params.readRaw().slice(12)
-			var Title = call.params.readRaw().split("|")[0];
-			var Description = call.params.readRaw().split("|")[1].slice(1);
-			var Thumbnail = call.params.readRaw().split("|")[2].slice(1);
+			var Title = call.params.readRaw().split(" |")[0];
+			var Description = call.params.readRaw().split(" |")[1].slice(1);
+			var Thumbnail = call.params.readRaw().split(" |")[2].slice(1);
 			const PartnerEmbed = new Discord.RichEmbed()
 				.setTitle(Title)
 				.setColor("#FFA500")
