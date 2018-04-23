@@ -5,7 +5,7 @@ module.exports = {
 		if(call.params.readRaw()) {
 			var unfetchedinvite = call.params.readRaw();
 			call.client.fetchInvite(unfetchedinvite).then((invite) => {
-				call.message.reply(invite.guild.icon);
+				call.message.reply(`https://cdn.discordapp.com/icons/${invite.guild.id}/${invite.guild.icon}.png`);
 			}).catch(() => {
 				call.message.author.send("You did not provide a valid invite!");
 			});
