@@ -3,7 +3,7 @@ module.exports = {
 	load: () => {},
 	execute: (call) => {
 		var unfetchedinvite = call.params.readRaw();
-    		client.fetchInvite(unfetchedinvite).then((invite) => {
+    		call.client.fetchInvite(unfetchedinvite).then((invite) => {
     			call.message.reply(invite.guild.icon);
     				}).catch(() => {
     					call.message.author.send(`You did not provide a valid invite!`);
