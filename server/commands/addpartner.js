@@ -16,9 +16,13 @@ module.exports = {
 				.setColor("#FFA500")
 				.setDescription(Description)
 				.setThumbnail(Thumbnail);
-			PartnersChannel(PartnerEmbed).catch((e) => {
+			PartnersChannel.send(PartnerEmbed).then(() => {
+				call.message.reply("Successfully send message!");
+			}).catch((e) => {
 				call.message.reply(`Couldn't send the partner message in the partners channel!\n\`${e}\``);
 			});
+		} else {
+			call.message.reply("You do not have permission to use this command!");
 		}
 	}
 };
