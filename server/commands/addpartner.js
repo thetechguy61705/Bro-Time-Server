@@ -21,10 +21,10 @@ module.exports = {
 					call.message.reply("Couldn't send the partner message in the partners channel!");
 				});
 			} else {
-				call.message.reply("You do not have permission to use this command!\n`Requires: Community Manager Bro`");
+				call.message.reply("You did not provide the necessary parameters! `!addpartner (title) | (description) | (thumbnail URL)`");
 			}
 		} else {
-			call.message.reply("You did not provide the necessary parameters! `!addpartner (title) | (description) | (thumbnail URL)`");
+			call.message.reply("You do not have permission to use this command!\n`Requires: Community Manager Bro`");
 		}
 	}
 };
