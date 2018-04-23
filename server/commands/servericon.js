@@ -10,8 +10,7 @@ module.exports = {
 						call.message.author.send("You did not provide a valid invite!");
 			});
 		} else {
-			call.message.reply("You did not provide the necessary parameter(s)! `!servericon (invite)`"
-					   }
-					   }
-					   }
-					   }
+			call.message.reply("You did not provide the necessary parameter(s)! `!servericon (invite)`");
+		}
+	}
+};
