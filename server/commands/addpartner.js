@@ -8,11 +8,8 @@ module.exports = {
 		if(call.message.member.roles.has("409153912558583818")) {
 			if(call.params.readRaw()) {
 				var Title = call.params.readRaw().split(" |")[0];
-				if(!Title) call.message.reply("You did not provide the necessary parameters! `!addpartner (title) | (description) | (thumbnail URL)`");
 				var Description = call.params.readRaw().split(" |")[1].slice(1);
-				if(!Description) call.message.reply("You did not provide the necessary parameters! `!addpartner (title) | (description) | (thumbnail URL)`");
 				var Thumbnail = call.message.content.slice(18+Title.length+Description.length);
-				if(!Thumbnail) call.message.reply("You did not provide the necessary parameters! `!addpartner (title) | (description) | (thumbnail URL)`");
 				const PartnerEmbed = new Discord.RichEmbed()
 					.setTitle(Title)
 					.setColor("#FFA500")
@@ -25,9 +22,9 @@ module.exports = {
 				});
 			} else {
 				call.message.reply("You do not have permission to use this command!\n`Requires: Community Manager Bro`");
-			} else {
+			} 
+		} else {
 				call.message.reply("You did not provide the necessary parameters! `!addpartner (title) | (description) | (thumbnail URL)`");
-			}
 		}
 	}
 };
