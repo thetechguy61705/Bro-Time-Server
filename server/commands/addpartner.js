@@ -9,10 +9,10 @@ module.exports = {
 	execute: (call) => {
 		const partnersChannel = call.message.guild.channels.find("id", "409156491640045571");
 		if (call.message.member.roles.has("409153912558583818")) {
-			if(call.params.readRaw()) {
+			if (call.params.readRaw()) {
 				const title = call.params.readRaw().split(" |")[0];
 				const description = call.params.readRaw().split(" |")[1].slice(1);
-				const thumbnail = call.message.content.slice(18+title.length+description.length);
+				const thumbnail = call.message.content.slice(18 + title.length + description.length);
 				const partnerEmbed = new Discord.RichEmbed()
 					.setTitle(title)
 					.setColor("#FFA500")
@@ -33,8 +33,8 @@ module.exports = {
 			}
 		} else {
 			call.message.reply("You do not have permission to use this command!\n`Requires: Community Manager Bro`").catch(() => {
-					call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
-				});;
+				call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+			});;
 		}
 	}
 };
