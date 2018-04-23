@@ -34,7 +34,7 @@ module.exports = {
 		} else {
 			call.message.reply("You do not have permission to use this command!\n`Requires: Community Manager Bro`").catch(() => {
 				call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
-			});;
+			});
 		}
 	}
 };
