@@ -17,14 +17,14 @@ module.exports = {
 					.setThumbnail(Thumbnail);
 				PartnersChannel.send(PartnerEmbed).then(() => {
 					call.message.reply("Successfully sent message!");
-				}).catch((e) => {
+				}).catch(() => {
 					call.message.reply("Couldn't send the partner message in the partners channel!");
 				});
 			} else {
 				call.message.reply("You do not have permission to use this command!\n`Requires: Community Manager Bro`");
-			} 
+			}
 		} else {
-				call.message.reply("You did not provide the necessary parameters! `!addpartner (title) | (description) | (thumbnail URL)`");
+			call.message.reply("You did not provide the necessary parameters! `!addpartner (title) | (description) | (thumbnail URL)`");
 		}
 	}
 };
