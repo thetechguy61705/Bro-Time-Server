@@ -183,7 +183,7 @@ config.BOTS.forEach((bot) => {
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
 					if (!member.bot) {
-						let WelcomeMessage = new Discord.RichEmbed()
+						let WelcomeMessage = new discord.RichEmbed()
 							.setTitle("Welcome")
 							.setColor("#FFA500")
 							.setDescription(`Welcome to Bro Time ${member.user}! Have a good time here!`)
@@ -207,7 +207,7 @@ config.BOTS.forEach((bot) => {
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
 					if (!member.bot) {
-						let GoodbyeMessage = new Discord.RichEmbed()
+						let GoodbyeMessage = new discord.RichEmbed()
 							.setTitle("Goodbye")
 							.setColor("#FFA500")
 							.setDescription(`Sad to see you leave ${member.user}`)
