@@ -33,7 +33,7 @@ module.exports = {
 						.setColor("#FFA500")
 						.setDescription(description)
 						.setThumbnail(thumbnail);
-					var ooftext = "Couldn't send the partner message in the partners channel!"
+					var ooftext = "Couldn't send the partner message in the partners channel!";
 					partnersChannel.send(partnerEmbedb).then(() => {
 						call.message.reply("Successfully sent message!").catch(function() {});
 						partnersChannel.send("-------------------------------------------------").catch(function() {});
@@ -42,8 +42,8 @@ module.exports = {
 							.message
 							.reply(`${ooftext}\n**Make sure that:**\n-You have a valid discord server invite or a valid thumbnail url\n-Your description is not over 2048 characters`)
 							.catch(() => {
-							call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
-						});
+								call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+							});
 					});
 				});
 			} else {
