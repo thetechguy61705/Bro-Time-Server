@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 module.exports = {
 	id: "addpartner",
 	description: "Adds a new partner in the #partners channel",
-	arguments: "(title) (description) (thumbnail URL)",
+	arguments: "(title) (description) (discord invite OR thumbnail url)",
 	requires: "Role: Community Manager Bro",
 	load: () => {},
 	execute: (call) => {
@@ -43,7 +43,7 @@ module.exports = {
 					});
 				});
 			} else {
-				call.message.reply("You did not provide the necessary parameters! `!addpartner (title) | (description) | (thumbnail URL)`").catch(() => {
+				call.message.reply("You did not provide the necessary parameters! `!addpartner (title) (description) (discord invite OR thumbnail url)`").catch(() => {
 					call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 				});
 			}
