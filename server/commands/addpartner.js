@@ -11,8 +11,8 @@ module.exports = {
 		if (call.message.member.roles.has("409153912558583818")) {
 			if (call.params.readRaw()) {
 				const title = call.params.readRaw().split("|")[0];
-				const description = call.params.readRaw().split("|")[1].slice(1);
-				const thumbnail = call.params.readRaw().split("|")[2].slice(1);
+				const description = call.params.readRaw().split("|")[1].trim();
+				const thumbnail = call.params.readRaw().split("|")[2].trim();
 				call.client.fetchInvite(thumbnail).then((invite) => {
 					const partnerEmbed = new Discord.RichEmbed()
 						.setTitle(title)
