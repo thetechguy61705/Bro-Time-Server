@@ -26,8 +26,8 @@ module.exports = {
 						}).catch(() => {
 							call.message.reply("Couldn't send the partner message in the partners channel, make sure that you have a valid discord server invite or a valid thumbnail url!")
 								.catch(() => {
-								call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
-							});
+									call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+								});
 						});
 					}).catch(() => {
 						const partnerEmbedb = new Discord.RichEmbed()
@@ -41,8 +41,8 @@ module.exports = {
 						}).catch(() => {
 							call.message.reply("Couldn't send the partner message in the partners channel, make sure that you have a valid discord server invite or a valid thumbnail url!")
 								.catch(() => {
-								call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
-							});
+									call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+								});
 						});
 					});
 				} else {
