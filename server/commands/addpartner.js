@@ -12,7 +12,7 @@ module.exports = {
 			if (call.params.readRaw()) {
 				const title = call.params.readRaw().split("|")[0];
 				const description = call.params.readRaw().split("|")[1].slice(1);
-				const thumbnail = call.message.content.slice(18 + title.length + description.length);
+				const thumbnail = call.params.readRaw().split("|")[2].slice(1);
 				call.client.fetchInvite(thumbnail).then((invite) => {
 					const partnerEmbed = new Discord.RichEmbed()
 						.setTitle(title)
