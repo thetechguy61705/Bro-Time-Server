@@ -26,7 +26,7 @@ module.exports = {
 					}).catch(() => {
 						call
 							.message
-							.reply(`${ooftext}\n**Make sure that:\n**\n-You have a valid discord server invite or a valid thumbnail url\n-The description is not over 2048 characters`)
+							.reply(`${ooftext}\n\n**Make sure that:**\n-You have a valid discord server invite or a valid thumbnail url\n-The description is not over 2048 characters`)
 							.catch(() => {
 								call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 							});
@@ -43,7 +43,7 @@ module.exports = {
 					}).catch(() => {
 						call
 							.message
-							.reply(`${ooftext}\n**Make sure that:\n**\n-You have a valid discord server invite or a valid thumbnail url\n-The description is not over 2048 characters`)
+							.reply(`${ooftext}\n\n**Make sure that:**\n-You have a valid discord server invite or a valid thumbnail url\n-The description is not over 2048 characters`)
 							.catch(() => {
 								call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 							});
