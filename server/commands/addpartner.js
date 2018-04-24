@@ -41,16 +41,16 @@ module.exports = {
 							call.message.reply("Successfully sent message!").catch(function() {});
 							partnersChannel.send("-------------------------------------------------").catch(function() {});
 						}).catch(() => {
-							call.message.reply("Couldn't send the partner message in the partners channel, make sure that you have a valid discord server invite or a valid thumbnail url!`)
+							call.message.reply("Couldn't send the partner message in the partners channel, make sure that you have a valid discord server invite or a valid thumbnail url!")
 									   .catch(() => {
 								call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 							});
 						});
 					});
-					} else {
-						call.message.reply("The description cannot be over 2048 characters!").catch(() => {
-							call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
-						});
+				} else {
+					call.message.reply("The description cannot be over 2048 characters!").catch(() => {
+						call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+					});
 				}
 			} else {
 				call.message.reply("You did not provide the necessary parameters! `!addpartner (title) (description) (discord invite OR thumbnail url)`").catch(() => {
