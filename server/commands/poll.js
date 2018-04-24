@@ -12,7 +12,7 @@ module.exports = {
 				if (pollOptions.length <= 9 && pollOptions.length >= 2) {
 					const eA = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
 					pollOptions = pollOptions.map((pollOption, index) => {
-						return `${eA[index]} ${pollOption}`;
+						return `${eA[index]} ${pollOption.trim()}`;
 					});
 					const pollEmbed = new Discord.RichEmbed()
 						.setTitle(pollTitle)
