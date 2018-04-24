@@ -10,8 +10,8 @@ module.exports = {
 		const partnersChannel = call.message.guild.channels.find("id", "409156491640045571");
 		if (call.message.member.roles.has("409153912558583818")) {
 			if (call.params.readRaw()) {
-				const title = call.params.readRaw().split(" |")[0];
-				const description = call.params.readRaw().split(" |")[1].slice(1);
+				const title = call.params.readRaw().split("|")[0];
+				const description = call.params.readRaw().split("|")[1].slice(1);
 				const thumbnail = call.message.content.slice(18 + title.length + description.length);
 				call.client.fetchInvite(thumbnail).then((invite) => {
 					const partnerEmbed = new Discord.RichEmbed()
