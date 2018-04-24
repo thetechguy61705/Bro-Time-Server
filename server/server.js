@@ -32,9 +32,8 @@ fs.readdirSync(__dirname + "/areaLoad").forEach(file => {
 	if (match != null)
 		areaLoaders.push(require("./areaLoad/" + match[1]));
 });
-for (let token in config.BOTS) {
-	if (token !== "undefined") {
-		let settings = config.BOTS[token];
+config.BOTS.forEach((bot) => {
+	if (bot.token != null) {
 		let client = new discord.Client();
 		let loadedAreas = new discord.Collection();
 
@@ -45,7 +44,7 @@ for (let token in config.BOTS) {
 			const realGuild = client.guilds.get("330913265573953536");
 			console.log("Loading " + client.user.username);
 			loaders.forEach(loader => {
-				loader.exec(client, settings);
+				loader.exec(client, bot);
 			});
 			console.log("Finished loading " + client.user.username);
 
@@ -218,7 +217,7 @@ for (let token in config.BOTS) {
 			}
 		});
 
-		client.login(token);
+		client.login(bot.token);
 
 		process.on("SIGTERM", async () => {
 			await client.destroy();
@@ -226,4 +225,4 @@ for (let token in config.BOTS) {
 	} else {
 		console.log("Skipped missing token.");
 	}
-}
+});

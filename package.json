@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node server/server.js",
+    "debug": "node --inspect-brk server/server.js",
     "test": "eslint . && eslint test/. --env mocha && mocha",
     "fix": "eslint . --fix && eslint test/. --env mocha --fix"
   },

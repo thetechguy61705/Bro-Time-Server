@@ -1,10 +1,24 @@
-module.exports = {
-	BOTS: {
-		[process.env.BRO_TIME_TOKEN]: {
-			TRACKING: process.env.BRO_TIME_TRACKING_ID
+var config = {
+	BOTS: [
+		{
+			token: process.env.BRO_TIME_TOKEN
 		},
-		[process.env.KITCHEN_TOKEN]: {}
-	},
+		{
+			token: process.env.KITCHEN_TOKEN
+		}
+	],
 	DB_CONNECTIONS: 20,
 	DB: process.env.DB
 };
+
+var userConfig = require("./user_config");
+if (userConfig != null) {
+	if (userConfig.DB != null)
+		config.DB = userConfig.DB;
+	for (var i = 0; i < userConfig.BOTS.length; i++) {
+		if (userConfig.BOTS[i] != null)
+			config.BOTS[i].token = userConfig.BOTS[i];
+	}
+}
+
+module.exports = config;
