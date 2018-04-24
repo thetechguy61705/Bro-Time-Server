@@ -13,17 +13,33 @@ module.exports = {
 				const title = call.params.readRaw().split(" |")[0];
 				const description = call.params.readRaw().split(" |")[1].slice(1);
 				const thumbnail = call.message.content.slice(18 + title.length + description.length);
-				const partnerEmbed = new Discord.RichEmbed()
-					.setTitle(title)
-					.setColor("#FFA500")
-					.setDescription(description)
-					.setThumbnail(thumbnail);
-				partnersChannel.send(partnerEmbed).then(() => {
-					call.message.reply("Successfully sent message!").catch(function() {});
-					partnersChannel.send("-------------------------------------------------").catch(function() {});
+				call.client.fetchInvite(thumbnail).then((invite) => {
+					const partnerEmbed = new Discord.RichEmbed()
+						.setTitle(title)
+						.setColor("#FFA500")
+						.setDescription(description)
+						.setThumbnail(`https://cdn.discordapp.com/icons/${invite.guild.id}/${invite.guild.icon}.png`);
+					partnersChannel.send(partnerEmbed).then(() => {
+						call.message.reply("Successfully sent message!").catch(function() {});
+						partnersChannel.send("-------------------------------------------------").catch(function() {});
+					}).catch(() => {
+						call.message.reply("Couldn't send the partner message in the partners channel!").catch(() => {
+							call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+						});
+					});
 				}).catch(() => {
-					call.message.reply("Couldn't send the partner message in the partners channel!").catch(() => {
-						call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+					const partnerEmbedb = new Discord.RichEmbed()
+						.setTitle(title)
+						.setColor("#FFA500")
+						.setDescription(description)
+						.setThumbnail(thumbnail);
+					partnersChannel.send(partnerEmbedb).then(() => {
+						call.message.reply("Successfully sent message!").catch(function() {});
+						partnersChannel.send("-------------------------------------------------").catch(function() {});
+					}).catch(() => {
+						call.message.reply("Couldn't send the partner message in the partners channel!").catch(() => {
+							call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+						});
 					});
 				});
 			} else {
