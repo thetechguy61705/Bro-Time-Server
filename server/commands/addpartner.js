@@ -24,12 +24,9 @@ module.exports = {
 							call.message.reply("Successfully sent message!").catch(function() {});
 							partnersChannel.send("-------------------------------------------------").catch(function() {});
 						}).catch(() => {
-							call
-								.message
-								.reply(`${ooftext}\n\n**Make sure that:**\n-You have a valid discord server invite or a valid thumbnail url\n-The description is not over 2048 characters`)
-								.catch(() => {
-									call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
-								});
+							call.message.reply("Couldn't send the partner message in the partners channel, make sure that you have a valid discord server invite or a valid thumbnail url!").catch(() => {
+								call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+							});
 						});
 					}).catch(() => {
 						const partnerEmbedb = new Discord.RichEmbed()
@@ -41,8 +38,7 @@ module.exports = {
 							call.message.reply("Successfully sent message!").catch(function() {});
 							partnersChannel.send("-------------------------------------------------").catch(function() {});
 						}).catch(() => {
-							call.message.reply("Couldn't send the partner message in the partners channel, make sure that you have a valid discord server invite or a valid thumbnail url!")
-									   .catch(() => {
+							call.message.reply("Couldn't send the partner message in the partners channel, make sure that you have a valid discord server invite or a valid thumbnail url!").catch(() => {
 								call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 							});
 						});
