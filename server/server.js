@@ -179,6 +179,48 @@ config.BOTS.forEach((bot) => {
 			}
 
 		});
+		client.on("guildMemberAdd", member => {
+			if (client.user.id === "393532251398209536") {
+				if (member.guild.id === "330913265573953536") {
+					if (!member.bot) {
+						let WelcomeMessage = new Discord.RichEmbed()
+							.setTitle("Welcome")
+							.setColor("#FFA500")
+							.setDescription(`Welcome to Bro Time ${member.user}! Have a good time here!`)
+							.setThumbnail(member.user.displayAvatarURL)
+							.setFooter(`Bro Time is now at **${member.guild.memberCount}** members!`);
+						let hangoutchannel = member.guild.channels.find("id", "330913265573953536");
+						hangoutchannel.send(WelcomeMessage).then(() => {
+							fs.readFile(__dirname + "/../info/welcomemsg.md", (err, data) => {
+								if (err) {
+									throw err;
+								} else {
+									member.user.send(data.toString("utf8")).catch(function() {});
+								}
+							});
+						}
+											 }).catch(function() {});
+					}
+				}
+			}
+		});
+		client.on("guildMemberRemove", member => {
+			if (client.user.id === "393532251398209536") {
+				if (member.guild.id === "330913265573953536") {
+					if (!member.bot) {
+						let GoodbyeMessage = new Discord.RichEmbed()
+							.setTitle("Goodbye")
+							.setColor("#FFA500")
+							.setDescription(`Sad to see you leave ${member.user}`)
+							.setThumbnail(member.user.displayAvatarURL);
+						let hangoutchannel = member.guild.channels.find("id", "330913265573953536");
+						hangoutchannel.send(GoodbyeMessage).then(() => {
+							member.user.send("welcomemessagehere").catch(function() {});
+						}).catch(function() {});
+					}
+				}
+			}
+		});
 
 		client.on("message", message => {
 			if (!message.author.bot) {
