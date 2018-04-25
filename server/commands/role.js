@@ -32,7 +32,7 @@ module.exports = {
 				}
 				if (rolesToRemove.length !== 0) {
 					rolesToRemove.forEach(roleToRemove => {
-						target.removeRole(roleToRemove).catch(function() {});
+						target.removeRole(roleToRemove);
 					});
 					messageToSend = messageToSend + `\nRole(s) removed from \`${target.user.tag}\`: \`${rolesToRemove.map(rM => rM.name).join("`, `")}\``;
 				}
