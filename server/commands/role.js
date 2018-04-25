@@ -25,7 +25,9 @@ module.exports = {
 					.filter(role => call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position);
 				var messageToSend = "";
 				if (rolesToAdd.length !== 0) {
-					target.addRoles(rolesToAdd).catch(function() {});
+					rolesToAdd.forEach(roleToAdd => {
+						target.addRole(roleToAdd).catch(function() {});
+					});
 					messageToSend = messageToSend + `\nRole(s) added to \`${target.user.tag}\`: \`${rolesToAdd.map(rM => rM.name).join("`, `")}\``;
 				}
 				if (rolesToRemove.length !== 0) {
