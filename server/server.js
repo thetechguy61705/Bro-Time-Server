@@ -185,10 +185,9 @@ config.BOTS.forEach((bot) => {
 					if (!member.bot) {
 						let WelcomeMessage = new discord.RichEmbed()
 							.setTitle("Welcome")
-							.setColor("#33943e")
+							.setColor("ORANGE")
 							.setDescription(`Welcome to Bro Time ${member.user}! Have a good time here!`)
-							.setThumbnail(member.user.displayAvatarURL)
-							.setFooter(`Bro Time is now at **${member.guild.memberCount}** members!`);
+							.setFooter(`Bro Time is now at ${member.guild.memberCount} members!`);
 						let hangoutchannel = client.channels.find("id", "433831764105101332");
 						hangoutchannel.send(WelcomeMessage).then(() => {
 							fs.readFile(__dirname + "/../info/welcomemsg.md", (err, data) => {
@@ -209,9 +208,8 @@ config.BOTS.forEach((bot) => {
 					if (!member.bot) {
 						let GoodbyeMessage = new discord.RichEmbed()
 							.setTitle("Goodbye")
-							.setColor("#ce1515")
+							.setColor("BLUE")
 							.setDescription(`Sad to see you leave ${member.user}`)
-							.setThumbnail(member.user.displayAvatarURL);
 						let hangoutchannel = client.channels.find("id", "433831764105101332");
 						hangoutchannel.send(GoodbyeMessage).catch(function() {});
 					}
