@@ -13,7 +13,7 @@ module.exports = {
 							.setColor("#FFA500")
 							.setDescription(`Welcome to Bro Time ${member.user.toString()}! Have a good time here!`)
 							.setFooter(`Bro Time is now at ${member.guild.memberCount} members!`);
-						hangoutChannel.send(welcomeMessage).then(() => {
+						hangoutChannel.send({ embed: welcomeMessage }).then(() => {
 							fs.readFile(__dirname + "/./info/welcomemsg.md", (err, data) => {
 								if (err) {
 									throw err;
@@ -34,7 +34,7 @@ module.exports = {
 							.setTitle("Goodbye")
 							.setColor("#0000ff")
 							.setDescription(`Sad to see you leave ${member.user.toString()}.`);
-						hangoutChannel.send(goodbyeMessage).catch(function() {});
+						hangoutChannel.send({ embed: goodbyeMessage }).catch(function() {});
 					}
 				}
 			}
