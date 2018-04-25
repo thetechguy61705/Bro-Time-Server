@@ -209,7 +209,7 @@ config.BOTS.forEach((bot) => {
 						let GoodbyeMessage = new discord.RichEmbed()
 							.setTitle("Goodbye")
 							.setColor("BLUE")
-							.setDescription(`Sad to see you leave ${member.user}`)
+							.setDescription(`Sad to see you leave ${member.user}`);
 						let hangoutchannel = client.channels.find("id", "433831764105101332");
 						hangoutchannel.send(GoodbyeMessage).catch(function() {});
 					}
