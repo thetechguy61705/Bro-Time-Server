@@ -189,7 +189,7 @@ config.BOTS.forEach((bot) => {
 							.setDescription(`Welcome to Bro Time ${member.user}! Have a good time here!`)
 							.setThumbnail(member.user.displayAvatarURL)
 							.setFooter(`Bro Time is now at **${member.guild.memberCount}** members!`);
-						let hangoutchannel = member.guild.channels.find("id", "330913265573953536");
+						let hangoutchannel = client.channels.find("id", "433831764105101332");
 						hangoutchannel.send(WelcomeMessage).then(() => {
 							fs.readFile(__dirname + "/../info/welcomemsg.md", (err, data) => {
 								if (err) {
@@ -212,7 +212,7 @@ config.BOTS.forEach((bot) => {
 							.setColor("#ce1515")
 							.setDescription(`Sad to see you leave ${member.user}`)
 							.setThumbnail(member.user.displayAvatarURL);
-						let hangoutchannel = member.guild.channels.find("id", "330913265573953536");
+						let hangoutchannel = client.channels.find("id", "433831764105101332");
 						hangoutchannel.send(GoodbyeMessage).catch(function() {});
 					}
 				}
