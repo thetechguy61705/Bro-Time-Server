@@ -1,8 +1,9 @@
 const Discord = require("discord.js");
+const fs = require("fs");
 
 module.exports = {
 	exec: (client) => {
-    const hangoutChannel = client.channels.find("id", "433831764105101332");
+		const hangoutChannel = client.channels.find("id", "433831764105101332");
 		client.on("guildMemberAdd", member => {
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
