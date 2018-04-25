@@ -190,7 +190,7 @@ config.BOTS.forEach((bot) => {
 							.setFooter(`Bro Time is now at ${member.guild.memberCount} members!`);
 						let hangoutchannel = client.channels.find("id", "433831764105101332");
 						hangoutchannel.send(WelcomeMessage).then(() => {
-							fs.readFile(__dirname + "/../info/welcomemsg.md", (err, data) => {
+							fs.readFile(__dirname + "/./info/welcomemsg.md", (err, data) => {
 								if (err) {
 									throw err;
 								} else {
