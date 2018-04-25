@@ -1,2 +1,2 @@
 Heya there! Welcome to Bro Time. I'm **Bro Bot**, Bro Time's custom bot. Please keep Bro Time to a maximum of PG-13, this means no racial slurs, excessive profanity and especially no explicit content.
-Note that if you do not wqant to be pinged for important announcements/giveaways say `!freerole ANN` in <#330915188733902849>. If you want to be pinged for giveaways, say `!freerole GW` in <#330915188733902849>.
+Note that if you do not want to be pinged for important announcements/giveaways say `!freerole ANN` in <#330915188733902849>. If you want to be pinged for giveaways, say `!freerole GW` in <#330915188733902849>.
