@@ -20,16 +20,17 @@ module.exports = {
 			memberEmbed.setTitle("Users");
 		}
 		var membersLength = members.length;
+		var membersToSend;
 		if (membersLength > 750) {
-			membersLength = 0
+			membersLength = 0;
 			membersToSend = members.substring(membersLength, membersLength+750).split("\n");
 			membersToSend.pop();
 			memberEmbed.setDescription(membersToSend.join("\n"));
 			call.message.channel.send({ embed: memberEmbed }).then(async function(sentEmbed) {
 				const emojiArray = ["◀", "▶"];
 				const filter = (reaction, user) => emojiArray.includes(reaction.emoji.name) && user.id === call.message.author.id;
-				await sentEmbed.react(emojiArray[0]);
-				await sentEmbed.react(emojiArray[1]);
+				await sentEmbed.react(emojiArray[0]).catch(function() {});
+				await sentEmbed.react(emojiArray[1]).catch(function() {});
 				var reactions = sentEmbed.createReactionCollector(filter, { time: 120000 });
 				reactions.on("collect", async function(reaction) {
 					await reaction.remove(call.message.author);
@@ -51,7 +52,7 @@ module.exports = {
 					memberEmbed = new Discord.RichEmbed().setDescription(membersToSend.join("\n")).setColor("ORANGE");
 					if (content !== "") memberEmbed.setTitle(`Users in ${call.message.guild.roles.find(r => r.name.toLowerCase().startsWith(content.toLowerCase())).name}`);
 					if (content === "") memberEmbed.setTitle("Users");
-					sentEmbed.edit(memberEmbed)
+					sentEmbed.edit(memberEmbed).catch(function() {});
 				});
 				reactions.on("end", () => sentEmbed.edit("Interactive command ended: 2 minutes passed."));
 			}).catch(() => {
