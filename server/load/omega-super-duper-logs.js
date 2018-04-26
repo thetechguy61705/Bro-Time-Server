@@ -11,17 +11,17 @@ module.exports = {
 						if (oldMessage.content !== newMessage.content) {
 							if (newMessage.content !== "" || oldMessage.content !== "" || oldMessage.attachments.first() !== undefined || newMessage.attachments.first() !== undefined) {
 								var oldMessageAttachments = "";
-								if (oldMessage.attachments.first() !== undefined) oldMessageAttachments = oldMessage.attachments.first().url;
+								if (oldMessage.attachments.first() !== undefined) oldMessageAttachments = `\n${oldMessage.attachments.first().url}`;
 								var newMessageAttachments = "";
-								if (newMessage.attachments.first() !== undefined) newMessageAttachments = newMessage.attachments.first().url;
+								if (newMessage.attachments.first() !== undefined) newMessageAttachments = `\n${newMessage.attachments.first().url}`;
 								var superLogChannel = testGuild.channels.get("433800038213353483");
 								var updateEmbed = new Discord.RichEmbed()
 									.setAuthor(`${oldMessage.author.tag} (${oldMessage.author.id})`)
 									.setColor("BLUE")
 									.setTitle("Message Update")
 									.setDescription(`ID: ${oldMessage.id}`)
-									.addField("Old Message", `\`\`\`\n${oldMessage.content}\n${oldMessageAttachments} \`\`\`\nIn: ${oldMessage.channel}\nAt: \`${oldMessage.createdAt}\``)
-									.addField("New Message", `\`\`\`\n${newMessage.content}\n${newMessageAttachments} \`\`\`\nIn: ${newMessage.channel}\nAt: \`${newMessage.createdAt}\``);
+									.addField("Old Message", `\`\`\`\n${oldMessage.content}${oldMessageAttachments} \`\`\`\nIn: ${oldMessage.channel}\nAt: \`${oldMessage.createdAt}\``)
+									.addField("New Message", `\`\`\`\n${newMessage.content}${newMessageAttachments} \`\`\`\nIn: ${newMessage.channel}\nAt: \`${newMessage.createdAt}\``);
 								superLogChannel.send({
 									embed: updateEmbed
 								});
