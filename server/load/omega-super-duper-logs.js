@@ -38,14 +38,14 @@ module.exports = {
 					if (!message.author.bot) {
 						if (message.content !== ""  || message.attatchments.first() !== undefined) {
 							var messageAttachments = "";
-							if (message.attachments.first() !== undefined) messageAttachments = message.attachments.first().url;
+							if (message.attachments.first() !== undefined) `\n${messageAttachments = message.attachments.first().url}`;
 							var superLogChannel = testGuild.channels.get("433800038213353483");
 							var updateEmbed = new Discord.RichEmbed()
 								.setAuthor(`${message.author.tag} (${message.author.id})`)
 								.setColor("RED")
 								.setTitle("Message Delete")
 								.setDescription(`ID: ${message.id}`)
-								.addField("Message", `\`\`\`\n${message.content}\n${messageAttachments} \`\`\`\nDeleted in: ${message.channel}\nDeleted at: \`soon:tm:\``);
+								.addField("Message", `\`\`\`\n${message.content}${messageAttachments} \`\`\`\nDeleted in: ${message.channel}\nDeleted at: \`soon:tm:\``);
 							superLogChannel.send({
 								embed: updateEmbed
 							});
