@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 
 module.exports = {
 	exec: (client) => {
+		const realGuild = client.guilds.get("330913265573953536");
 		if (client.user.id === "393532251398209536") {
 			client.channels.get("436714650835484707").fetchMessages({
 				limit: 100
