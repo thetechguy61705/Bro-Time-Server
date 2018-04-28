@@ -1,5 +1,3 @@
-const Discord = require("discord.js");
-
 module.exports = {
 	exec: (client) => {
 		const realGuild = client.guilds.get("330913265573953536");
@@ -143,7 +141,7 @@ module.exports = {
 					msg.delete();
 				} else {
 					const eA = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
-					const filter = (user) => user.id !== call.client.user.id;
+					const filter = (user) => user.id !== client.user.id;
 					channel.fetchMessage(messageID).then(databaseMessage => {
 						const collector = databaseMessage.createReactionCollector(filter);
 						collector.on("collect", (reaction) => {
