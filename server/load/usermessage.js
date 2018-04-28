@@ -11,7 +11,7 @@ module.exports = {
 						const welcomeMessage = new Discord.RichEmbed()
 							.setTitle("Welcome")
 							.setColor("#FFA500")
-							.setDescription(`Welcome to Bro Time ${member.user.toString()}! Have a good time here!`)
+							.setDescription(`Welcome to Bro Time ${member.user}! Have a good time here!`)
 							.setFooter(`Bro Time is now at ${member.guild.memberCount} members!`);
 						hangoutChannel.send({ embed: welcomeMessage }).then(() => {
 							fs.readFile(__dirname + "/./info/welcomemsg.md", (err, data) => {
@@ -33,7 +33,7 @@ module.exports = {
 						const goodbyeMessage = new Discord.RichEmbed()
 							.setTitle("Goodbye")
 							.setColor("#0000ff")
-							.setDescription(`Sad to see you leave ${member.user.toString()}.`);
+							.setDescription(`Sad to see you leave ${member.user}.`);
 						hangoutChannel.send({ embed: goodbyeMessage }).catch(function() {});
 					}
 				}
