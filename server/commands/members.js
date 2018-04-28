@@ -29,11 +29,9 @@ module.exports = {
 				if (totalPages === 20) {
 					totalPages = members.split("\n").length / 20;
 				} else {
-					totalPages = (members.split("\n").length + (20 - (members.split("\n").length % 20)))
+					totalPages = (members.split("\n").length + (20 - (members.split("\n").length % 20)));
 					totalPages = totalPages / 20;
 				}
-				console.log(`MEMBER LENGTH: ${members.length}`)
-				console.log(`TOTAL PAGES: ${totalPages}`)
 				memberEmbed.setDescription(membersToSend.join("\n")).setFooter(`Page ${page}/${totalPages}`);
 				call.message.channel.send({ embed: memberEmbed }).then(async function(sentEmbed) {
 					const emojiArray = ["◀", "▶"];
