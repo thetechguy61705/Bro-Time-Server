@@ -6,7 +6,6 @@ module.exports = {
 	exec: (client) => {
 		var testGuild = client.guilds.get("430096406275948554");
 		var realGuild = client.guilds.get("330913265573953536");
-		console.log("in module: " + client.guilds.get("430096406275948554") != null);
 		client.on("message", (message) => {
 			if (realGuild == undefined) return;
 			if (message.channel.type !== "dm") {
