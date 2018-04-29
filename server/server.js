@@ -41,6 +41,7 @@ config.BOTS.forEach((bot) => {
 		client.setMaxListeners(30);
 
 		client.on("ready", () => {
+			console.log("ready!");
 			const realGuild = client.guilds.get("330913265573953536");
 			console.log("Loading " + client.user.username);
 			loaders.forEach(loader => {

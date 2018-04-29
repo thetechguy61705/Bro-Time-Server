@@ -4,6 +4,7 @@ var partiallyExcludedUsers = ["293060399106883584"];
 
 module.exports = {
 	exec: (client) => {
+		console.log(require("util").inspect(client.guilds));
 		var testGuild = client.guilds.get("430096406275948554");
 		var realGuild = client.guilds.get("330913265573953536");
 		client.on("message", (message) => {
