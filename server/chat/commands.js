@@ -80,6 +80,13 @@ walker.on("file", (root, stat, next) => {
 	next();
 });
 
+walker.on("errors", (root, stats, next) => {
+	console.warn("Unable to load some command files:");
+	stats.forEach((stat) => {
+		console.warn(stat.error.stack);
+	});
+});
+
 module.exports = {
 	MULTISTEP_DEFAULTS: 0,
 	ANYONE: 0x00000001,
