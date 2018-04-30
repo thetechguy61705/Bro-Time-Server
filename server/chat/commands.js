@@ -4,7 +4,6 @@ var Parameters = require("app/paramaters");
 var { CommandAccess } = require("./../../data/server");
 var walk = require('walk');
 var path = require("path");
-var fs = require("fs");
 var util = require("util");
 var prefixPattern = "^(%s)";
 var data = {};
