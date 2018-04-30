@@ -32,7 +32,8 @@
     "discord.js": "^11.3.2",
     "escape-string-regexp": "^1.0.5",
     "pg": "^7.4.1",
-    "prompt-confirm": "^1.2.0"
+    "prompt-confirm": "^1.2.0",
+    "walk": "^2.3.13"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
