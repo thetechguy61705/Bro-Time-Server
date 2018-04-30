@@ -16,7 +16,7 @@ try {
 	if (userConfig.DB != null)
 		config.DB = userConfig.DB;
 	for (var i = 0; i < userConfig.BOTS.length; i++) {
-		if (userConfig.BOTS[i] != null)
+		if (userConfig.BOTS[i] != null && userConfig.BOTS[i] !== "")
 			config.BOTS[i].token = userConfig.BOTS[i];
 	}
 } catch (exc) {
