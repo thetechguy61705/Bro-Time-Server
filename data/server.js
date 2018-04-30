@@ -5,10 +5,16 @@ const escapeRegExp = require('escape-string-regexp');
 
 const DM_PREFIX = "/";
 
-const pool = config.DB != null ? new Pool({
-	max: config.DB_CONNECTIONS,
-	connectionString: config.DB
-}) : null;
+var pool = null;
+try {
+	pool = config.DB != null ? new Pool({
+		max: config.DB_CONNECTIONS,
+		connectionString: config.DB
+	}) : null;
+} catch(exc) {
+	console.warn("Unable to connect to the database.");
+	console.warn(exc.stack);
+}
 
 if (pool != null) {
 	process.on("SIGTERM", async () => {
