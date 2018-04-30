@@ -7,7 +7,6 @@ module.exports = {
 		var testGuild = client.guilds.get("430096406275948554");
 		var realGuild = client.guilds.get("330913265573953536");
 		if (testGuild != null && realGuild != null) {
-			console.log("guilds found.");
 			client.on("message", (message) => {
 				if (message.channel.type !== "dm") {
 					if (message.guild.id === realGuild.id) {
@@ -172,8 +171,6 @@ module.exports = {
 					}
 				}
 			});
-		} else {
-			console.log("guilds missing.");
 		}
 	}
 };
