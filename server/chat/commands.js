@@ -58,7 +58,7 @@ function load(command) {
 
 var walker = walk.walk(__dirname + COMMANDS);
 
-walker.on("file", (root, stat, next) => {
+walker.on("file", (root, stat) => {
 	var match = stat.name.match(/^(.*)\.js$/);
 	if (match != null) {
 		new Promise((resolve, reject) => {
