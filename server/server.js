@@ -81,7 +81,7 @@ config.BOTS.forEach((bot) => {
 				var loopNumber = 0;
 				var offlineInRole;
 				setInterval(function() {
-					if(require("./commands/togglecolor").multicolor) {
+					if(require("./commands/utility/togglecolor").multicolor) {
 						offlineInRole = multiColorRole.members.filter(member => member.presence.status === "offline");
 						if (offlineInRole.size !== multiColorRole.members.size) {
 							multiColorRole.setColor(realGuild.roles.find("name", colors[loopNumber]).hexColor).catch(function() {});

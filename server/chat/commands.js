@@ -63,12 +63,11 @@ walker.on("file", (root, stat, next) => {
 	if (match != null) {
 		new Promise((resolve, reject) => {
 			try {
-				console.log(path.relative(__dirname, path.join(root, match[1])));
 				var module = require(path.relative(__dirname, path.join(root, match[1])));
 				if (TESTING || module.test !== true) {
 					resolve(module);
 				} else {
-					throw new Error("Not available in production environments.");
+					throw null;
 				}
 			} catch (exc) {
 				reject(exc);
@@ -77,8 +76,10 @@ walker.on("file", (root, stat, next) => {
 			module.categories = path.relative(COMMANDS, root).split(path.sep);
 			modules.set(module.id, module);
 		}, exc => {
-			console.warn(`Commaned failed to load ${match}:`);
-			console.warn(exc.stack);
+			if (exc != null) {
+				console.warn(`Commaned failed to load ${match}:`);
+				console.warn(exc.stack);
+			}
 		});
 	}
 	next();
