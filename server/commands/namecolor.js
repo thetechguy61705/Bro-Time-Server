@@ -14,6 +14,7 @@ function removeColorRoles(roles, user) {
 
 module.exports = {
 	id: "namecolor",
+	aliases: ["color"],
 	load: () => {},
 	execute: (call) => {
 		let color = call.params.readRaw().toLowerCase();
