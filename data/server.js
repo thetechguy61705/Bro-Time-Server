@@ -1,7 +1,7 @@
 var config = require("../config");
 var discord = require("discord.js");
 const { Pool } = require("pg");
-const escapeRegExp = require('escape-string-regexp');
+const escapeRegExp = require("escape-string-regexp");
 
 const DM_PREFIX = "/";
 
