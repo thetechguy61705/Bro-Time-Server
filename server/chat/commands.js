@@ -8,7 +8,7 @@ var util = require("util");
 var prefixPattern = "^(%s)";
 var data = {};
 
-const COMMANDS = "/../commands";
+const COMMANDS = path.join(__dirname, "/../commands");
 const TESTING = process.env.NODE_ENV !== "production";
 
 class Call {
@@ -56,13 +56,15 @@ function load(command) {
 }
 
 
-var walker = walk.walk(__dirname + COMMANDS);
+var walker = walk.walk(COMMANDS);
 
 walker.on("file", (root, stat, next) => {
 	var match = stat.name.match(/^(.*)\.js$/);
 	if (match != null) {
 		new Promise((resolve, reject) => {
 			try {
+				console.log(root);
+				console.log(match[1]);
 				var module = require(path.join(root, match[1]));
 				if (TESTING || module.test !== true)
 					resolve(module);
@@ -70,7 +72,7 @@ walker.on("file", (root, stat, next) => {
 				reject(exc);
 			}
 		}).then(module => {
-			module.categories = path.relative(__dirname + COMMANDS, root).split(path.sep);
+			module.categories = path.relative(COMMANDS, root).split(path.sep);
 			modules.set(module.id, module);
 		}, exc => {
 			console.warn(`Commaned failed to load ${match}:`);
