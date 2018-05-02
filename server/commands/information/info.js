@@ -346,7 +346,7 @@ async function levelRoles(message, Discord, prompt, param) {
 }
 
 function donate(message) {
-	fs.readFile(__dirname + "/./../info/perks.md", (err, data) => {
+	fs.readFile(__dirname + "/../../info/perks.md", (err, data) => {
 		if (err) {
 			throw err;
 		} else {
@@ -357,7 +357,7 @@ function donate(message) {
 
 function ad(message, prompt, param) {
 	if(param !== undefined) prompt = param;
-	fs.readFile(__dirname + "/./../info/ad.md", (err, data) => {
+	fs.readFile(__dirname + "/../../info/ad.md", (err, data) => {
 		if(err) {
 			throw err;
 		} else {
