@@ -98,6 +98,7 @@ module.exports = {
 
 	_requests: new Collection(),
 
+	loaded: modules,
 	exec: function(message, client) {
 		var used = false;
 		var requests = this._requests.filter((request) => request.channel === message.channel.id);
