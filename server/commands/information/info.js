@@ -100,8 +100,8 @@ async function nameColors(message, Discord, prompt, param) {
 	if (param !== undefined) prompt = param;
 	var currentRole;
 	var endMessage = ["**Free**", "`Red`", "`Yellow`", "`Blue`", "`Orange`", "`Green`", "`Black`", "`Purple`",
-		"**Plus**", "`Pink`", "`Indigo`", "`Bronze`", "`HotPink`", "`Cyan`", "`LightGreen`", "**Premium**",
-		"`Silver`", "`BrightRed`", "`DarkViolet`", "`HotBrown`", "`DarkGreen`", "**Deluxe**", "`Gold`"
+		"**Premium**", "`Pink`", "`Indigo`", "`Bronze`", "`HotPink`", "`Cyan`", "`LightGreen`",
+		"`Silver`", "`BrightRed`", "`DarkViolet`", "`HotBrown`", "`DarkGreen`", "`Gold`"
 	];
 	var colorRoles = ["`Red`", "`Yellow`", "`Blue`", "`Orange`", "`Green`", "`Black`", "`Purple`",
 		"`Pink`", "`Indigo`", "`Bronze`", "`HotPink`", "`Cyan`", "`LightGreen`",
@@ -171,7 +171,7 @@ async function nameColors(message, Discord, prompt, param) {
 	} else {
 		endMessage = endMessage.join("\n");
 		nameColorEmbed = new Discord.RichEmbed()
-			.setTitle("Name colors")
+			.setTitle("Name Colors")
 			.setDescription(endMessage)
 			.setColor(0x00AE86);
 		message.channel.send({
@@ -184,13 +184,13 @@ async function howToGetRole(message, Discord, prompt, param) {
 	if (param !== undefined) prompt = param;
 	var currentRole;
 	var obtainableRoles = ["`Story Teller`", "`Dolphin`", "`Meme Master`", "`Inviter`", "`Pro Inviter`", "`Cuber`", "`Artist`", "`Partner`",
-		"`Contributor`", "`Donator`"];
+		"`Contributor`", "`Supporter`"];
 	var descriptions = ["Get part of your story on the starboard.",
 		"Tell cj your knowledge about dolphin’s dark deeds and he shall decide if you are worthy of the role.",
 		"Get one of your memes on the starboard.",
 		"Invite 5 people to this server", "Invite 10 people to this server", "Be able to solve a 3x3 Rubik’s cube in less than 2 minutes.",
 		"Get one of your art pieces on the starboard.", "Be the owner of a discord server partnered with us.", "Contribute to the server or assets relating to it",
-		"Donate at least 1 dollar, payment instructions in !info donate"
+		"Tip any amount, payment instructions in !info perks"
 	];
 	if (prompt.toLowerCase() === "preview") {
 		var roleEmbed = new Discord.RichEmbed()
@@ -346,7 +346,7 @@ async function levelRoles(message, Discord, prompt, param) {
 }
 
 function donate(message) {
-	fs.readFile(__dirname + "/../info/donateinfo.md", (err, data) => {
+	fs.readFile(__dirname + "/../../info/perks.md", (err, data) => {
 		if (err) {
 			throw err;
 		} else {
@@ -357,7 +357,7 @@ function donate(message) {
 
 function ad(message, prompt, param) {
 	if(param !== undefined) prompt = param;
-	fs.readFile(__dirname + "/../info/ad.md", (err, data) => {
+	fs.readFile(__dirname + "/../../info/ad.md", (err, data) => {
 		if(err) {
 			throw err;
 		} else {
@@ -397,7 +397,7 @@ async function infoTarget(message, prompt, Discord, choice, param) {
 		} else {
 			howToGetRole(message, Discord, prompt, param);
 		}
-	} else if (choice.toLowerCase() === "donate" || choice.toLowerCase() === "donations" || choice.toLowerCase() === "donateinfo") {
+	} else if (choice.toLowerCase() === "donate" || choice.toLowerCase() === "perks" || choice.toLowerCase() === "tip") {
 		donate(message);
 	} else if (choice.toLowerCase() === "levelroles" || choice.toLowerCase() === "levels") {
 		if (param !== "preview" && param !== "list" && param !== "specify") {
@@ -418,9 +418,9 @@ module.exports = {
 		var choice = call.params.readParameter();
 		var param = call.params.readParameter();
 		var options = ["ad", "advertisement", "gamerole", "gameroles", "namecolors", "colors", "getrole", "howtogetrole", "htgr",
-			"donate", "donations", "donateinfo", "levelroles", "levels"
+			"donate", "perks", "tip", "levelroles", "levels"
 		];
-		var plainOptions = ["advertisement", "gameroles", "namecolors", "howtogetrole", "donate", "levelroles"];
+		var plainOptions = ["advertisement", "gameroles", "namecolors", "howtogetrole", "perks", "levelroles"];
 		if(choice === null) {
 			awaitReply(call.message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`).then(userChoice => {
 				if(!options.includes(userChoice.toLowerCase())) {

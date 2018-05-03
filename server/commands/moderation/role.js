@@ -6,7 +6,7 @@ module.exports = {
 		const paramaterOne = call.params.readRaw().split(" ")[0];
 		const paramaterTwo = call.params.readRaw().split(" ")[1];
 		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
-		var options = ["removeall", "all", "bots", "humans", "in", "status"];
+		var options = ["removeall", "all", "bots", "humans", "in"];
 		var timeEstimate = "";
 		var target = null;
 		var usersToRole;
@@ -25,11 +25,15 @@ module.exports = {
 					.filter(role => call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position);
 				var messageToSend = "";
 				if (rolesToAdd.length !== 0) {
-					target.addRoles(rolesToAdd).catch(function() {});
+					rolesToAdd.forEach(roleToAdd => {
+						target.addRole(roleToAdd).catch(function() {});
+					});
 					messageToSend = messageToSend + `\nRole(s) added to \`${target.user.tag}\`: \`${rolesToAdd.map(rM => rM.name).join("`, `")}\``;
 				}
 				if (rolesToRemove.length !== 0) {
-					target.removeRoles(rolesToRemove).catch(function() {});
+					rolesToRemove.forEach(roleToRemove => {
+						target.removeRole(roleToRemove);
+					});
 					messageToSend = messageToSend + `\nRole(s) removed from \`${target.user.tag}\`: \`${rolesToRemove.map(rM => rM.name).join("`, `")}\``;
 				}
 				if (messageToSend !== "") {

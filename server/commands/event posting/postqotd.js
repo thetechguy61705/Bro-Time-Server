@@ -2,7 +2,7 @@ module.exports = {
 	id: "postqotd",
 	load: () => {},
 	execute: (call) => {
-		if(call.message.member.roles.has(call.message.guild.roles.find("name", "QOTD Host"))) {
+		if(call.message.member.roles.has(call.message.guild.roles.find("name", "QOTD Host").id)) {
 			let ann = call.message.guild.channels.find("name", "announcements");
 			let qotd = call.params.readRaw(" ");
 			let qotdrole = call.message.guild.roles.find("name", "QOTD");

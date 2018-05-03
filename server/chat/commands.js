@@ -2,11 +2,13 @@ var { Collection, MessageMentions } = require("discord.js");
 var modules = new Collection();
 var Parameters = require("app/paramaters");
 var { CommandAccess } = require("./../../data/data");
-var fs = require("fs");
+var walk = require("walk");
+var path = require("path");
 var util = require("util");
 var prefixPattern = "^(%s)";
 var data = {};
 
+const COMMANDS = "../commands";
 const TESTING = process.env.NODE_ENV !== "production";
 
 class Call {
@@ -44,26 +46,6 @@ class Call {
 	}
 }
 
-fs.readdirSync(__dirname + "/../commands").forEach(file => {
-	var match = file.match(/^(.*)\.js$/);
-	if (match !== null) {
-		new Promise((resolve, reject) => {
-			try {
-				var module = require("../commands/" + match[1]);
-				if (TESTING || module.test !== true)
-					resolve(module);
-			} catch (exc) {
-				reject(exc);
-			}
-		}).then(module => {
-			modules.set(module.id, module);
-		}, exc => {
-			console.warn(`Commaned failed to load ${match}:`);
-			console.warn(exc.stack);
-		});
-	}
-});
-
 function load(command) {
 	var commandData = data[command.id];
 	if (commandData === undefined) {
@@ -73,12 +55,50 @@ function load(command) {
 	return commandData;
 }
 
+
+var walker = walk.walk(path.join(__dirname, COMMANDS));
+
+walker.on("file", (root, stat, next) => {
+	var match = stat.name.match(/^(.*)\.js$/);
+	if (match != null) {
+		new Promise((resolve, reject) => {
+			try {
+				var module = require(path.relative(__dirname, path.join(root, match[1])));
+				if (TESTING || module.test !== true) {
+					resolve(module);
+				} else {
+					throw null;
+				}
+			} catch (exc) {
+				reject(exc);
+			}
+		}).then(module => {
+			module.categories = path.relative(COMMANDS, root).split(path.sep);
+			modules.set(module.id, module);
+		}, exc => {
+			if (exc != null) {
+				console.warn(`Commaned failed to load ${match}:`);
+				console.warn(exc.stack);
+			}
+		});
+	}
+	next();
+});
+
+walker.on("errors", (root, stats) => {
+	console.warn("Unable to load some command files:");
+	stats.forEach((stat) => {
+		console.warn(stat.error.stack);
+	});
+});
+
 module.exports = {
 	MULTISTEP_DEFAULTS: 0,
 	ANYONE: 0x00000001,
 
 	_requests: new Collection(),
 
+	loaded: modules,
 	exec: function(message, client) {
 		var used = false;
 		var requests = this._requests.filter((request) => request.channel === message.channel.id);

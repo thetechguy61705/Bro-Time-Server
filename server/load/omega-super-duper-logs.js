@@ -8,17 +8,25 @@ module.exports = {
 			if (oldMessage.channel.type !== "dm") {
 				if (oldMessage.guild.id === realGuild.id) {
 					if (!oldMessage.author.bot) {
-						var superLogChannel = testGuild.channels.get("433800038213353483");
-						var updateEmbed = new Discord.RichEmbed()
-							.setAuthor(`${oldMessage.author.tag} (${oldMessage.author.id})`)
-							.setColor("BLUE")
-							.setTitle("Message Update")
-							.setDescription(`ID: ${oldMessage.id}`)
-							.addField("Old Message", `\`\`\`${oldMessage.content} \`\`\`\nIn: ${oldMessage.channel}\nAt: \`${oldMessage.createdAt}\``)
-							.addField("New Message", `\`\`\`${newMessage.content} \`\`\`\nIn: ${newMessage.channel}\nAt: \`${newMessage.createdAt}\``);
-						superLogChannel.send({
-							embed: updateEmbed
-						});
+						if (oldMessage.content !== newMessage.content) {
+							if (newMessage.content !== "" || oldMessage.content !== "" || oldMessage.attachments.first() !== undefined || newMessage.attachments.first() !== undefined) {
+								var oldMessageAttachments = "";
+								if (oldMessage.attachments.first() !== undefined) oldMessageAttachments = `\n${oldMessage.attachments.first().url}`;
+								var newMessageAttachments = "";
+								if (newMessage.attachments.first() !== undefined) newMessageAttachments = `\n${newMessage.attachments.first().url}`;
+								var superLogChannel = testGuild.channels.get("433800038213353483");
+								var updateEmbed = new Discord.RichEmbed()
+									.setAuthor(`${oldMessage.author.tag} (${oldMessage.author.id})`)
+									.setColor("BLUE")
+									.setTitle("Message Update")
+									.setDescription(`ID: ${oldMessage.id}`)
+									.addField("Old Message", `\`\`\`\n${oldMessage.content}${oldMessageAttachments} \`\`\`\nIn: ${oldMessage.channel}\nAt: \`${oldMessage.createdAt}\``)
+									.addField("New Message", `\`\`\`\n${newMessage.content}${newMessageAttachments} \`\`\`\nIn: ${newMessage.channel}\nAt: \`${newMessage.createdAt}\``);
+								superLogChannel.send({
+									embed: updateEmbed
+								});
+							}
+						}
 					}
 				}
 			}
@@ -28,16 +36,20 @@ module.exports = {
 			if (message.channel.type !== "dm") {
 				if (message.guild.id === realGuild.id) {
 					if (!message.author.bot) {
-						var superLogChannel = testGuild.channels.get("433800038213353483");
-						var updateEmbed = new Discord.RichEmbed()
-							.setAuthor(`${message.author.tag} (${message.author.id})`)
-							.setColor("RED")
-							.setTitle("Message Delete")
-							.setDescription(`ID: ${message.id}`)
-							.addField("Message", `\`\`\`${message.content} \`\`\`\nDeleted in: ${message.channel}\nDeleted at: \`soon:tm:\``);
-						superLogChannel.send({
-							embed: updateEmbed
-						});
+						if (message.content !== ""  || message.attatchments.first() !== undefined) {
+							var messageAttachments = "";
+							if (message.attachments.first() !== undefined) `\n${messageAttachments = message.attachments.first().url}`;
+							var superLogChannel = testGuild.channels.get("433800038213353483");
+							var updateEmbed = new Discord.RichEmbed()
+								.setAuthor(`${message.author.tag} (${message.author.id})`)
+								.setColor("RED")
+								.setTitle("Message Delete")
+								.setDescription(`ID: ${message.id}`)
+								.addField("Message", `\`\`\`\n${message.content}${messageAttachments} \`\`\`\nDeleted in: ${message.channel}\nDeleted at: \`soon:tm:\``);
+							superLogChannel.send({
+								embed: updateEmbed
+							});
+						}
 					}
 				}
 			}
@@ -111,18 +123,20 @@ module.exports = {
 							if (newChannel.userLimit === 0) newLimit = "infinity";
 							if (newChannel.userLimit !== 0) newLimit = newChannel.userLimit;
 						}
-						var channelUpdateEmbed = new Discord.RichEmbed()
-							.setAuthor(`${executor.tag} (${executor.id})`)
-							.setColor("BLUE")
-							.setTitle("Channel Update")
-							.setDescription(`ID: ${oldChannel.id}`)
-							.addField("Old Channel", `Name: \`${oldChannel.name}\`\nType: \`${oldChannel.type}\`\nTopic: \`${topic}\`\nBPS: \`${bps}\`\n` +
-								`Max Members in channel: \`${limit}\``)
-							.addField("New Channel", `Name: \`${newChannel.name}\`\nType: \`${newChannel.type}\`\nTopic: \`${newTopic}\`\nBPS: \`${newBps}\`\n` +
-								`Max Members in channel: \`${newLimit}\``);
-						superLogChannel.send({
-							embed: channelUpdateEmbed
-						});
+						if (topic !== newTopic || bps !== newBps || limit !== newLimit || oldChannel.name !== newChannel.name) {
+							var channelUpdateEmbed = new Discord.RichEmbed()
+								.setAuthor(`${executor.tag} (${executor.id})`)
+								.setColor("BLUE")
+								.setTitle("Channel Update")
+								.setDescription(`ID: ${oldChannel.id}`)
+								.addField("Old Channel", `Name: \`${oldChannel.name} \`\nType: \`${oldChannel.type} \`\nTopic: \`${topic} \`\nBPS: \`${bps} \`\n` +
+									`Max Members in channel: \`${limit} \``)
+								.addField("New Channel", `Name: \`${newChannel.name} \`\nType: \`${newChannel.type} \`\nTopic: \`${newTopic} \`\nBPS: \`${newBps} \`\n` +
+									`Max Members in channel: \`${newLimit} \``);
+							superLogChannel.send({
+								embed: channelUpdateEmbed
+							});
+						}
 					});
 				}
 			}
