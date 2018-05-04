@@ -1,10 +1,12 @@
-var games = ["Roblox", "Minecraft", "Cuphead", "Fortnite", "Undertale", "Unturned", "VRChat",
+const games = ["Roblox", "Minecraft", "Cuphead", "Fortnite", "Undertale", "Unturned", "VRChat",
 	"PUBG", "FNAF", "Clash of Clans", "Clash Royale", "Sims", "Terraria", "Subnautica", "Rocket League",
 	"Portal", "Hat in Time", "CSGO", "Splatoon", "Mario", "Starbound", "Garry's Mod", "Overwatch",
 	"Call of Duty", "Destiny", "Psych"];
 
 module.exports = {
 	id: "gamerole",
+	description: "Gives the user the specified role if it is a part of !info gameroles list.",
+	arguments: "(game role)",
 	load: () => {},
 	execute: (call) => {
 		var rawinput = call.params.readRaw();
