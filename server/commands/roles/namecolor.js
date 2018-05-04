@@ -15,6 +15,9 @@ function removeColorRoles(roles, user) {
 module.exports = {
 	id: "namecolor",
 	aliases: ["color"],
+	description: "Gives the user the specified role if it is a part of !info namecolors list.",
+	arguments: "(color role)",
+	requires: "Nothing/Bro Time Premium",
 	load: () => {},
 	execute: (call) => {
 		let color = call.params.readRaw().toLowerCase();
