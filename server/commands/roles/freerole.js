@@ -1,7 +1,9 @@
-var joinableroles = ["QOTD", "ANN", "GW"];
+const joinableroles = ["QOTD", "ANN", "GW"];
 
 module.exports = {
 	id: "freerole",
+	description: "Gives the user the specified role if it is QOTD, ANN or GW.",
+	arguments: "(ANN/GW/QoTD)",
 	load: () => {},
 	execute: (call) => {
 		var finput = call.params.readRaw().trim();
