@@ -1,6 +1,8 @@
 module.exports = {
 	id: "mentionable",
-	aliases: ["mt", "mf", "togglementionable"],
+	aliases: ["mt", "mf", "togglementionable", "ment"],
+	arguments: "(role)",
+	requires: "Moderator permissions",
 	load: () => {},
 	execute: (call) => {
 		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
