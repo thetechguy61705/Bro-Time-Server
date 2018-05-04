@@ -1,5 +1,8 @@
 module.exports = {
 	id: "ban",
+	description: "Bans specified user.",
+	arguments: "(user) [reason]",
+	requires: "Moderator permissions",
 	load: () => {},
 	execute: (call) => {
 		const rawContent = call.params.readRaw();
