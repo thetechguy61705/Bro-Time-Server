@@ -33,6 +33,9 @@ async function awaitReply(message, question, limit = 60000){
 
 module.exports = {
 	id: "postgamenight",
+	description: "Posts the specified \"Gamenight\" in <#330920609435353090>.",
+	arguments: "... prompt",
+	requires: "Role: Game Night Host",
 	load: () => {},
 	execute: async (call) => {
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {
