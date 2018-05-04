@@ -2,6 +2,9 @@ const Discord = require("discord.js");
 
 module.exports = {
 	id: "help",
+	aliases: ["h"],
+	description: "Returns information and commands on the bot.",
+	parameters: "[command]",
 	load: () => {},
 	execute: (call) => {
 		var pfx = call.message.data.prefix;
