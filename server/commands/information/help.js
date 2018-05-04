@@ -35,14 +35,14 @@ module.exports = {
 				if (aliases == null) aliases = ["None"];
 				var cmdDesc = command.description;
 				if (cmdDesc == null) cmdDesc = "None";
-				var cmdUsage = command.arguments;
-				if (cmdUsage == null) cmdUsage = "None";
+				var cmdUsage = " " + command.arguments;
+				if (cmdUsage == null) cmdUsage = "";
 				var cmdReq = command.requires;
 				if (cmdReq == null) cmdReq = "None";
 				helpembed = new Discord.RichEmbed()
 					.setTitle(`${pfx}${param1}`)
 					.setDescription(`Purpose: ${cmdDesc}` +
-						`\nUsage: \`${pfx}${param1} ${cmdUsage}\``+
+						`\nUsage: \`${pfx}${param1}${cmdUsage}\``+
 						`\nRequires: \`${cmdReq}\`` +
 						`\nAliases: \`${aliases.join("`, `")}\``)
 					.setColor(0x00AE86);
