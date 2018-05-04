@@ -47,7 +47,7 @@ module.exports = {
 				} else {
 					cmdDescs = data.toString("utf8").split("\n");
 					if(cmdNames.includes(param1.toLowerCase())) {
-						var aliases = call.commands.get(param1.toLowerCase()).aliases;
+						var aliases = call.commands.loaded.get(param1.toLowerCase()).aliases;
 						if (aliases == null) aliases = ["None"];
 						var num = cmdNames.indexOf(param1);
 						helpembed = new Discord.RichEmbed()
