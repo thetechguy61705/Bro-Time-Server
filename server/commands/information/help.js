@@ -41,7 +41,7 @@ module.exports = {
 			});
 		} else {
 			param1 = param1.toLowerCase();
-			fs.readFile(__dirname + "/../info/commandinfo.md", (err, data) => {
+			fs.readFile(__dirname + "/../../info/commandinfo.md", (err, data) => {
 				if(err) {
 					throw err;
 				} else {
