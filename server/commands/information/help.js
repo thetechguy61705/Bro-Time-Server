@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const fs = require("fs");
 
 module.exports = {
 	id: "help",
@@ -35,7 +34,7 @@ module.exports = {
 				var aliases = command.aliases;
 				if (aliases == null) aliases = ["None"];
 				var cmdDesc = command.description;
-				if (cmdDesc == null) cmdDescs = "None";
+				if (cmdDesc == null) cmdDesc = "None";
 				var cmdUsage = command.arguments;
 				if (cmdUsage == null) cmdUsage = "None";
 				var cmdReq = command.requires;
