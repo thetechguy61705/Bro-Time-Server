@@ -10,7 +10,7 @@ module.exports = {
 		var pfx = call.message.data.prefix;
 		var param1 = call.params.readRaw();
 		var helpEmbed;
-		const categories = ["Donator", "Utility", "Posting", "Roles", "Moderation", "Information"];
+		const categories = ["Information", "Moderation", "Roles", "Posting", "Utility", "Donator"];
 		if (param1 == null || param1 == undefined || param1 == "") {
 			helpEmbed = new Discord.RichEmbed()
 				.setTitle("Commands")
