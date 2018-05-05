@@ -31,7 +31,7 @@ class Call {
 				settings: settings,
 				author: this.message.author.id,
 				channel: this.message.channel.id,
-				timeout: setTimeout(() => this.denyInput(), timeout)
+				timeout: this.client.settimeout(() => this.denyInput(), timeout)
 			});
 		}).bind(this));
 	}

@@ -24,7 +24,7 @@ module.exports = {
 									call.message.channel
 										.send(`***Successfully muted \`${target.user.tag}\` for ${ms(muteTime, { long: true })}.***`).catch(function() {});
 									call.client.channels.get("436714650835484707").send(`${target.user.id} ${Date.now() + muteTime}`).then(msg => {
-										setTimeout(() => {
+										call.client.settimeout(() => {
 											target.removeRole(call.message.guild.roles.find("name", "Muted")).catch(function() {});
 											msg.delete().catch(function() {});
 										}, muteTime);
