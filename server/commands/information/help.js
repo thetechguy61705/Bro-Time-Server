@@ -17,15 +17,15 @@ module.exports = {
 				.setDescription(`Prefix: \`${pfx}\`\nUptime: \`soon™\``)
 				.setColor(0x00AE86)
 				.setFooter(`Ran by ${call.message.author.username} (${call.message.author.id})`, call.message.author.displayAvatarURL);
-				categories.forEach(category => {
-					helpEmbed.addField(category, call.commands.filter(cmd => cmd.categories[0].toLowerCase() === category).map(cmd => {
-						if (cmd.arguments != null) {
-							return `${pfx}${cmd.id}${cmd.arguments}`;
-						} else {
-							return `${pfx}${cmd.id}`;
-						}
-					}));
-				});
+			categories.forEach(category => {
+				helpEmbed.addField(category, call.commands.filter(cmd => cmd.categories[0].toLowerCase() === category).map(cmd => {
+					if (cmd.arguments != null) {
+						return `${pfx}${cmd.id}${cmd.arguments}`;
+					} else {
+						return `${pfx}${cmd.id}`;
+					}
+				}));
+			});
 			call.message.channel.send({ embed: helpEmbed }).catch(() => {
 				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
 					.catch(function() {});
