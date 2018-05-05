@@ -1,29 +1,29 @@
 var config = require("../config");
 var discord = require("discord.js");
 const { Pool } = require("pg");
+const escapeRegExp = require("escape-string-regexp");
 const Settings = require("./settings");
-/**
- * normal - Operate as normal.
- * idm - Operate without persistence.
- */
-var mode = process.argv[2] || "normal";
 
 const DM_PREFIX = "/";
 
-function escapeRegExp(str) {
-	// eslint-disable-next-line no-useless-escape
-	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+var pool = null;
+try {
+	pool = config.DB != null ? new Pool({
+		max: config.DB_CONNECTIONS,
+		connectionString: config.DB
+	}) : null;
+} catch(exc) {
+	console.warn("Unable to connect to the database.");
+	console.warn(exc.stack);
 }
 
-const pool = mode !== "idm" ? new Pool({
-	max: config.DB_CONNECTIONS,
-	connectionString: config.DB
-}) : null;
-
-if (pool != null)
+if (pool != null) {
 	process.on("SIGTERM", async () => {
 		await pool.end();
 	});
+} else {
+	console.warn("No database provided. The server will run without data persistence.");
+}
 
 class DataAccess {
 	constructor() {
