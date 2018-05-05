@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 module.exports = {
 	id: "addpartner",
 	description: "Adds a new partner in the #partners channel",
-	arguments: "(title) (description) (discord invite OR thumbnail url)",
+	arguments: "(title) | (description) | (discord invite OR thumbnail url)",
 	requires: "Role: Community Manager Bro",
 	load: () => {},
 	execute: (call) => {
