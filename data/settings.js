@@ -1,25 +1,38 @@
 const { Guild } = require("discord.js");
+var objects = [];
 var pool;
 
 class Settings {
 	static CACHE = 0x00000001;
 	static SAVE = 0x00000002;
 
-	constructor(newPool, namespace, association) {
+	static get(newPool, namespace, association) {
+		var serverId, userId;
 		pool = newPool;
+		if (association == null) {
+			serverId = null;
+			userId = null;
+		} else if (association instanceof Guild) {
+			serverId = association.id;
+			userId = null;
+		} else {
+			serverId = association.guild.id;
+			userId = association.id;
+		}
+		return objects.find((object) => {
+			return object.namespace === namespace &&
+			object.serverId === serverId &&
+			object.userId === userId;
+		}) || new Settings(namespace, serverId, userId);
+	}
+
+	constructor(namespace, serverId, userId) {
 		this.dirty = false;
 		this.data = {};
 		this.namespace = namespace;
-		if (association == null) {
-			this.serverId = null;
-			this.userId = null;
-		} else if (association instanceof Guild) {
-			this.serverId = association.id;
-			this.userId = null;
-		} else {
-			this.serverId = association.guild.id;
-			this.userId = association.id;
-		}
+		this.serverId = serverId;
+		this.userId = userId;
+		objects.push(this);
 	}
 
 	async get(key, options = this.CACHE) {
