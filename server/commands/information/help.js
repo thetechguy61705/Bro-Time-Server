@@ -11,6 +11,7 @@ module.exports = {
 		var param1 = call.params.readRaw();
 		var helpEmbed;
 		const categories = ["Donator", "Posting", "Information", "Roles", "Utility"];
+		console.log(call.commands.loaded);
 		if (param1 == null || param1 == undefined || param1 == "") {
 			helpEmbed = new Discord.RichEmbed()
 				.setTitle("Commands")
