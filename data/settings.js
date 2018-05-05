@@ -35,11 +35,11 @@ class Settings {
 		pool.query("SELECT discord.SetSettings($1, $2, $3, $4) FOR UPDATE",
 			[this.namespace, this.data, this.serverId, this.userId],
 			(err) => {
-			if (err) {
-				console.warn("Unable to save settings: " + err.stack);
-			} else {
-				this.dirty = false;
-			}
+				if (err) {
+					console.warn("Unable to save settings: " + err.stack);
+				} else {
+					this.dirty = false;
+				}
 		});
 	}
 }
