@@ -40,7 +40,7 @@ class Settings {
 				} else {
 					this.dirty = false;
 				}
-		});
+			});
 	}
 }
 
