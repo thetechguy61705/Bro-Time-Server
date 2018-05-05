@@ -12,7 +12,7 @@ module.exports = {
 		var milliseconds = (((uptime % 3600000) % 60000) % 1000) - (((uptime % 3600000) % 60000) % 1);
 		if (days > 1) days = `\`${days}\` days, `; else if (days === 1) `\`${days}\` day, `; else days = "";
 		if (hours > 1) hours = `\`${hours}\` hours, `; else if (hours === 1) `\`${hours}\` hour, `; else hours = "";
-		if (minutes > 1) minutes = `\`${minutes}\` minutes, `; else if (minutes === 1) `\`${minutes}\` minute, `; else minutes = "";
+		if (minutes > 1) minutes = `\`${minutes}\` minutes, `; else if (minutes === 1) minutes = `\`${minutes}\` minute, `; else minutes = "";
 		if ((seconds/1000) > 1) seconds = `\`${seconds/1000}\` seconds, `; else if ((seconds/1000) === 1) seconds = `\`${seconds/1000}\` second, `; else seconds = "";
 		milliseconds = `and \`${milliseconds}\` milliseconds.`;
 		call.message
