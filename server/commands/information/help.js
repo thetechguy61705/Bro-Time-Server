@@ -20,9 +20,9 @@ module.exports = {
 			categories.forEach(category => {
 				helpEmbed.addField(category, call.commands.loaded.filter(cmd => cmd.categories[0].toLowerCase() === category).map(cmd => {
 					if (cmd.arguments != null) {
-						return `${pfx}${cmd.id}${cmd.arguments}`;
+						return `\n${pfx}${cmd.id}${cmd.arguments}`;
 					} else {
-						return `${pfx}${cmd.id}`;
+						return `\n${pfx}${cmd.id}`;
 					}
 				}));
 			});
