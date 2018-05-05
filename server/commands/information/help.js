@@ -10,7 +10,7 @@ module.exports = {
 		var pfx = call.message.data.prefix;
 		var param1 = call.params.readRaw();
 		var helpEmbed;
-		const categories = ["Donator", "Posting", "Information", "Roles", "Utility"];
+		const categories = ["Donator", "Utility", "Posting", "Roles", "Moderation", "Information"];
 		if (param1 == null || param1 == undefined || param1 == "") {
 			helpEmbed = new Discord.RichEmbed()
 				.setTitle("Commands")
@@ -20,9 +20,9 @@ module.exports = {
 			categories.forEach(category => {
 				helpEmbed.addField(category, call.commands.loaded.filter(cmd => cmd.categories[cmd.categories.length - 1] === category.toLowerCase()).map(cmd => {
 					if (cmd.arguments != null) {
-						return `${pfx}${cmd.id}${cmd.arguments}`;
+						return `\`${pfx}${cmd.id} ${cmd.arguments}\``;
 					} else {
-						return `${pfx}${cmd.id}`;
+						return `\`${pfx}${cmd.id}\``;
 					}
 				}).join("\n"));
 			});
