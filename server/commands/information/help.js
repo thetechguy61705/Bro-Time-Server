@@ -11,7 +11,6 @@ module.exports = {
 		var param1 = call.params.readRaw();
 		var helpEmbed;
 		const categories = ["Donator", "Posting", "Information", "Roles", "Utility"];
-		console.log(call.commands.loaded);
 		if (param1 == null || param1 == undefined || param1 == "") {
 			helpEmbed = new Discord.RichEmbed()
 				.setTitle("Commands")
@@ -19,7 +18,7 @@ module.exports = {
 				.setColor(0x00AE86)
 				.setFooter(`Ran by ${call.message.author.username} (${call.message.author.id})`, call.message.author.displayAvatarURL);
 			categories.forEach(category => {
-				helpEmbed.addField(category, call.commands.loaded.filter(cmd => cmd.categories[0] === category.toLowerCase()).map(cmd => {
+				helpEmbed.addField(category, call.commands.loaded.filter(cmd => cmd.categories[cmd.categories.length - 1] === category.toLowerCase()).map(cmd => {
 					if (cmd.arguments != null) {
 						return `${pfx}${cmd.id}${cmd.arguments}`;
 					} else {
