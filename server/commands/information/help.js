@@ -4,29 +4,29 @@ module.exports = {
 	id: "help",
 	aliases: ["h"],
 	description: "Returns information and commands on the bot.",
-	parameters: "[command]",
+	arguments: "[command]",
 	load: () => {},
 	execute: (call) => {
 		var pfx = call.message.data.prefix;
 		var param1 = call.params.readRaw();
-		var helpembed;
-		if(param1 == null || param1 == undefined || param1 == "") {
-			helpembed = new Discord.RichEmbed()
+		var helpEmbed;
+		const categories = ["Donator", "Posting", "Information", "Roles", "Utility"];
+		if (param1 == null || param1 == undefined || param1 == "") {
+			helpEmbed = new Discord.RichEmbed()
 				.setTitle("Commands")
 				.setDescription(`Prefix: \`${pfx}\`\nUptime: \`soon™\``)
 				.setColor(0x00AE86)
-				.setFooter(`Ran by ${call.message.author.username} (${call.message.author.id})`, call.message.author.displayAvatarURL)
-				.addField("Information Commands", `\`${pfx}help [command]\`\n\`${pfx}ping\`\n\`${pfx}info [topic]\`\n\`${pfx}uptime\``)
-				.addField("Role Commands", `\`${pfx}freerole (freerole)\`\n\`${pfx}gamerole (game)\`\n\`${pfx}namecolor (color)\`` +
-					`\n\`${pfx}poll (title) (options)\``)
-				.addField("Posting Commands", `\`${pfx}postqotd (qotd)\`\n\`${pfx}postgamenight\`` +
-					`\n\`${pfx}giveaway (prize): (time) (channel) (winners)\``)
-				.addField("Moderation Commands", `\`${pfx}mt (role)\`\n\`${pfx}ban (user)\`\n\`${pfx}kick (user)\`\n\`${pfx}softban (user)\`` +
-					`\n\`${pfx}mute (user) (time)\`\n\`${pfx}warn (user) (reason)\`\n\`${pfx}role (option/user) (role)\``)
-				.addField("Donator Commands", `\`${pfx}customcolor\``);
-			call.message.channel.send({
-				embed: helpembed
-			}).catch(() => {
+				.setFooter(`Ran by ${call.message.author.username} (${call.message.author.id})`, call.message.author.displayAvatarURL);
+			categories.forEach(category => {
+				helpEmbed.addField(category, call.commands.filter(cmd => cmd.categories[0].toLowerCase() === category).map(cmd => {
+					if (cmd.arguments != null) {
+						return `${pfx}${cmd.id}${cmd.arguments}`;
+					} else {
+						return `${pfx}${cmd.id}`;
+					}
+				}));
+			});
+			call.message.channel.send({ embed: helpEmbed }).catch(() => {
 				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
 					.catch(function() {});
 			});
@@ -42,7 +42,7 @@ module.exports = {
 				if (cmdUsage == null) cmdUsage = "";
 				var cmdReq = command.requires;
 				if (cmdReq == null) cmdReq = "None";
-				helpembed = new Discord.RichEmbed()
+				helpEmbed = new Discord.RichEmbed()
 					.setTitle(`${pfx}${param1}`)
 					.setDescription(`Purpose: ${cmdDesc}` +
 						`\nUsage: \`${pfx}${param1}${cmdUsage}\``+
@@ -55,10 +55,8 @@ module.exports = {
 						.catch(function() {});
 				});
 			}
-			if (helpembed != undefined) {
-				call.message.channel.send({
-					embed: helpembed
-				}).catch(() => {
+			if (helpEmbed != undefined) {
+				call.message.channel.send({ embed: helpEmbed }).catch(() => {
 					call.message.author
 						.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
 						.catch(function() {});
