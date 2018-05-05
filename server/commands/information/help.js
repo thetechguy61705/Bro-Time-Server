@@ -20,11 +20,11 @@ module.exports = {
 			categories.forEach(category => {
 				helpEmbed.addField(category, call.commands.loaded.filter(cmd => cmd.categories[0].toLowerCase() === category).map(cmd => {
 					if (cmd.arguments != null) {
-						return `\n${pfx}${cmd.id}${cmd.arguments}`;
+						return `${pfx}${cmd.id}${cmd.arguments}`;
 					} else {
-						return `\n${pfx}${cmd.id}`;
+						return `${pfx}${cmd.id}`;
 					}
-				}));
+				}).join("\n"));
 			});
 			call.message.channel.send({ embed: helpEmbed }).catch(() => {
 				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
