@@ -62,7 +62,7 @@ config.BOTS.forEach((bot) => {
 								msg.delete().catch(function() {});
 								realGuild.members.get(muteUser).removeRole(realGuild.roles.find("name", "Muted")).catch(function() {});
 							} else {
-								client.settimeout(() => {
+								client.setTimeout(() => {
 									realGuild.members.get(muteUser).removeRole(realGuild.roles.find("name", "Muted")).catch(function() {});
 									msg.delete().catch(function() {});
 								}, timeUntilUnmute - Date.now());
@@ -80,7 +80,7 @@ config.BOTS.forEach((bot) => {
 				];
 				var loopNumber = 0;
 				var offlineInRole;
-				client.setinterval(function() {
+				client.setInterval(function() {
 					if(require("./commands/utility/togglecolor").multicolor) {
 						offlineInRole = multiColorRole.members.filter(member => member.presence.status === "offline");
 						if (offlineInRole.size !== multiColorRole.members.size) {
@@ -114,7 +114,7 @@ config.BOTS.forEach((bot) => {
 							giveawayPrize = msgargs.slice(5).join(" ");
 							if (giveawayEnd > 0) {
 								client.channels.get(giveawayChannel).fetchMessage(giveawayID).then(giveawayMessage => {
-									var editLoop = client.setinterval(function() {
+									var editLoop = client.setInterval(function() {
 										var giveawayEmbed;
 										giveawayEnd = giveawayEnd - 5000;
 										var hours = (((giveawayEnd) - (giveawayEnd % 3600000)) / 3600000);
