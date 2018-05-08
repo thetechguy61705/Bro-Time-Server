@@ -2,13 +2,13 @@ var { Collection, MessageMentions } = require("discord.js");
 var modules = new Collection();
 var Parameters = require("app/paramaters");
 var { CommandAccess } = require("./../../data/server");
-var walk = require("walk");
+var fs = require("fs");
 var path = require("path");
 var util = require("util");
 var prefixPattern = "^(%s)";
 var data = {};
 
-const COMMANDS = "../commands";
+const COMMANDS = __dirname + "/../commands";
 const TESTING = process.env.NODE_ENV !== "production";
 
 class Call {
@@ -46,6 +46,30 @@ class Call {
 	}
 }
 
+function loadModule(file, category) {
+	new Promise((resolve, reject) => {
+		try {
+			let module = require(file);
+			if (TESTING || module.test !== true) {
+				resolve(module);
+			} else {
+				throw null;
+			}
+		} catch (exc) {
+			reject(exc);
+		}
+	}).then((module) => {
+		if (category != null)
+			module.category = category;
+		modules.set(module.id, module);
+	}, (exc) => {
+		if (exc != null) {
+			console.warn(`Commaned failed to load ${path.parse(file).name}:`);
+			console.warn(exc.stack);
+		}
+	});
+}
+
 function load(command, commands) {
 	var commandData = data[command.id];
 	if (commandData === undefined) {
@@ -55,45 +79,27 @@ function load(command, commands) {
 	return commandData;
 }
 
-
-var walker = walk.walk(path.join(__dirname, COMMANDS));
-
-walker.on("file", (root, stat, next) => {
-	var match = stat.name.match(/^(.*)\.js$/);
-	if (match != null) {
-		new Promise((resolve, reject) => {
-			try {
-				var module = require(path.relative(__dirname, path.join(root, match[1])));
-				if (TESTING || module.test !== true) {
-					resolve(module);
-				} else {
-					throw null;
-				}
-			} catch (exc) {
-				reject(exc);
+try {
+	fs.readdirSync(COMMANDS).forEach((name) => {
+		try {
+			let file = path.join(COMMANDS, name);
+			let stats = fs.statSync(file);
+			if (stats.isDirectory()) {
+				fs.readdirSync(file).forEach((subname) => {
+					loadModule(path.join(file, subname), name);
+				});
+			} else {
+				loadModule(file);
 			}
-		}).then(module => {
-			var categories = path.relative(path.join(__dirname, COMMANDS), root).split(path.sep);
-			if (categories[0] === "")
-				categories = [];
-			module.categories = categories;
-			modules.set(module.id, module);
-		}, exc => {
-			if (exc != null) {
-				console.warn(`Commaned failed to load ${match}:`);
-				console.warn(exc.stack);
-			}
-		});
-	}
-	next();
-});
-
-walker.on("errors", (root, stats) => {
-	console.warn("Unable to load some command files:");
-	stats.forEach((stat) => {
-		console.warn(stat.error.stack);
+		} catch (exc) {
+			console.warn(`Failed to load file ${name}:`);
+			console.warn(exc.stack);
+		}
 	});
-});
+} catch (exc) {
+	console.warn(`Failed to load commands:`);
+	console.warn(exc.stack);
+}
 
 module.exports = {
 	MULTISTEP_DEFAULTS: 0,
