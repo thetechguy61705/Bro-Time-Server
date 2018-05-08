@@ -38,8 +38,9 @@ class DataAccess {
 }
 
 class CommandAccess extends DataAccess {
-	constructor(command) {
+	constructor(command, commands) {
 		super();
+		this.commands = commands;
 		this._command = command;
 	}
 

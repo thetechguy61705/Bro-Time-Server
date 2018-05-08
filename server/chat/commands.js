@@ -46,10 +46,10 @@ class Call {
 	}
 }
 
-function load(command) {
+function load(command, commands) {
 	var commandData = data[command.id];
 	if (commandData === undefined) {
-		commandData = new CommandAccess(command);
+		commandData = new CommandAccess(command, commands);
 		commandData.load();
 	}
 	return commandData;
@@ -73,7 +73,10 @@ walker.on("file", (root, stat, next) => {
 				reject(exc);
 			}
 		}).then(module => {
-			module.categories = path.relative(COMMANDS, root).split(path.sep);
+			var categories = path.relative(path.join(__dirname, COMMANDS), root).split(path.sep);
+			if (categories[0] === "")
+				categories = [];
+			module.categories = categories;
 			modules.set(module.id, module);
 		}, exc => {
 			if (exc != null) {
@@ -132,7 +135,7 @@ module.exports = {
 						var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
 
 						if (command != null) {
-							var data = load(command);
+							var data = load(command, this);
 							if (data.canAccess(message)) {
 								params.readSeparator();
 								command.execute(new Call(this, message, client, params));
