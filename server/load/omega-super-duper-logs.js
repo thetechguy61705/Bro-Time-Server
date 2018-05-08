@@ -20,8 +20,8 @@ module.exports = {
 									.setColor("BLUE")
 									.setTitle("Message Update")
 									.setDescription(`ID: ${oldMessage.id}`)
-									.addField("Old Message", `\`\`\`\n${oldMessage.content}${oldMessageAttachments} \`\`\`\nIn: ${oldMessage.channel}\nAt: \`${oldMessage.createdAt}\``)
-									.addField("New Message", `\`\`\`\n${newMessage.content}${newMessageAttachments} \`\`\`\nIn: ${newMessage.channel}\nAt: \`${newMessage.createdAt}\``);
+									.addField("Old Message", `\`\`\`\n${oldMessage.content.replace(/\`/gi, "°")}${oldMessageAttachments} \`\`\`\nIn: ${oldMessage.channel}\nAt: \`${oldMessage.createdAt}\``)
+									.addField("New Message", `\`\`\`\n${newMessage.content.replace(/\`/gi, "°")}${newMessageAttachments} \`\`\`\nIn: ${newMessage.channel}\nAt: \`${newMessage.createdAt}\``);
 								superLogChannel.send({
 									embed: updateEmbed
 								});
@@ -45,7 +45,7 @@ module.exports = {
 								.setColor("RED")
 								.setTitle("Message Delete")
 								.setDescription(`ID: ${message.id}`)
-								.addField("Message", `\`\`\`\n${message.content}${messageAttachments} \`\`\`\nDeleted in: ${message.channel}\nDeleted at: \`soon:tm:\``);
+								.addField("Message", `\`\`\`\n${message.content.replace(/\`/gi, "°")}${messageAttachments} \`\`\`\nDeleted in: ${message.channel}\nDeleted at: \`soon:tm:\``);
 							superLogChannel.send({
 								embed: updateEmbed
 							});
