@@ -1,9 +1,9 @@
 function getRow(rows, number) {
-  var numberLoop = 1;
-  while (numberLoop !== rows.length) {
-    if (rows[numberLoop][number] !== "⚫") return numberLoop;
-    numberLoop = numberLoop + 1;
-  }
+	var numberLoop = 1;
+	while (numberLoop !== rows.length) {
+		if (rows[numberLoop][number] !== "⚫") return numberLoop;
+		numberLoop = numberLoop + 1;
+	}
 }
 
 module.exports = {
@@ -18,10 +18,10 @@ module.exports = {
 	start: (session) => {
 		const eA = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣"];
 		var rows = [eA, ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
-	  	["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"]];
+			["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"]];
 		const author = session.players.first();
 		const target = session.players.last();
-		var connectFourEmbed = new Discord.RichEmbed().setColor(0x00AE86).setTitle("Connect Four").setFooter(`${author.tag}'s turn.`);
+		var connectFourEmbed = new require("discord.js").RichEmbed().setColor(0x00AE86).setTitle("Connect Four").setFooter(`${author.tag}'s turn.`);
 		connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map(row => row.join(" ")).join("\n"));
 		session.call.message.channel.send({ embed: connectFourEmbed }).then(async function(connectFour) {
 			var orderLoop = 0;
@@ -30,7 +30,7 @@ module.exports = {
 				orderLoop = orderLoop + 1;
 			}
 			var turn = author.id;
-			const filter = (reaction, user) => players.map(plr => plr.id).includes(user.id) && eA.includes(reaction.emoji.name);
+			const filter = (reaction, user) => session.players.map(plr => plr.id).includes(user.id) && eA.includes(reaction.emoji.name);
 			const collector = connectFour.createReactionCollector(filter, { time: 600000 });
 			collector.on("collect", reaction => {
 				reaction.remove(session.call.client.users.get(turn)).catch(function() {});
@@ -99,8 +99,8 @@ module.exports = {
 
 						if (rows.slice(1).map(row => row.every(coin => coin !== "⚫")).every(row => row === true)) {
 							noRepeat = true;
-							session.call.message.channel.send(`No one won. It was a draw.`).catch(function() {});
-							collector.stop("No one won. It was a draw.")
+							session.call.message.channel.send("No one won. It was a draw.").catch(function() {});
+							collector.stop("No one won. It was a draw.");
 						}
 					}
 				}
