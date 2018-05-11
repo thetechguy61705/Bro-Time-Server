@@ -46,12 +46,12 @@ function dispatchInvites(users, call) {
 
 }
 
-function endGame(session) {
+function endGame() {
 
 }
 
 function startGame(game, inviting, games, call) {
-	var loading, players, session;
+	var loading, players, session, endGameInstance;
 
 	loading = [new Promise((resolve, reject) => {
 		try {
@@ -63,11 +63,10 @@ function startGame(game, inviting, games, call) {
 	})];
 
 	session = {
-		players: null,
-		endGame: () => {
-			endGame(this);
-		}
+		players: null
 	};
+	endGameInstance = endGame.bind(session);
+	session.endGame = endGameInstance;
 	if (game.requiresInvite) {
 		let inviting = dispatchInvites(inviting, call);
 		inviting.then((accepted) => session.players = accepted);
@@ -79,9 +78,7 @@ function startGame(game, inviting, games, call) {
 
 		if (call.updateInterval > 0)
 			session.updateTimer = call.client.setInterval(1/Math.min(game.updateInterval, MAX_UPDATE_CYCLES)*1000, game.update);
-		session.endTimer = call.client.setTimeout(TIMEOUT, () => {
-			endGame(session);
-		});
+		session.endTimer = call.client.setTimeout(TIMEOUT, endGameInstance);
 
 		console.log("timers set");
 
