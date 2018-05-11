@@ -45,7 +45,6 @@ function collectUsers(params) {
 function listGames(message) {
 	var files = fs.readdirSync(__dirname + "/../games");
 	var gameFiles = files.filter(file => file.split(".").pop() === "js").map(file => file.slice(0, -3));
-	console.log(gameFiles);
 	if (message == null) return gameFiles;
 	var gameEmbed = new Discord.RichEmbed()
 		.setTitle("Available Games")
@@ -132,9 +131,7 @@ module.exports = {
 				}
 			}
 		}
-		if (!found) {
-			console.log("Hello World!");
+		if (!found)
 			listGames(call.message);
-		}
 	}
 };
