@@ -1,10 +1,13 @@
 var fs = require("fs");
 var { Collection } = require("discord.js");
+var { GameAccess } = require("./../../data/server");
 var modules = new Collection();
 var sessions = [];
 
-const TIMEOUT = 600000; // 10 minutes
-const MAX_UPDATE_CYCLES = 60; // times per second
+// 10 minutes
+const TIMEOUT = 600000;
+// times per second
+const MAX_UPDATE_CYCLES = 60;
 
 fs.readdirSync(__dirname + "/../games").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
@@ -42,7 +45,8 @@ function listGames(channel) {
 	channel.send("A list of games is not yet available.");
 }
 
-function dispatchInvites(users, call) {
+// users, call
+function dispatchInvites() {
 
 }
 
@@ -51,7 +55,7 @@ function endGame() {
 }
 
 function startGame(game, inviting, games, call) {
-	var loading, players, session, endGameInstance;
+	var loading, session, endGameInstance;
 
 	loading = [new Promise((resolve, reject) => {
 		try {

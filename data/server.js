@@ -55,6 +55,19 @@ class CommandAccess extends DataAccess {
 	}
 }
 
+class GameAccess extends DataAccess {
+	constructor(game, games) {
+		super();
+		this.games = games;
+		this._game = game;
+	}
+
+	load() {
+		super.load();
+		return this._game.load();
+	}
+}
+
 class BotAccess extends DataAccess {
 	constructor(area, client) {
 		super();
@@ -95,5 +108,6 @@ class BotAccess extends DataAccess {
 
 module.exports = {
 	BotAccess: BotAccess,
-	CommandAccess: CommandAccess
+	CommandAccess: CommandAccess,
+	GameAccess: GameAccess
 };
