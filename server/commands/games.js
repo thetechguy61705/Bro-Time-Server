@@ -43,21 +43,19 @@ function collectUsers(params) {
 }
 
 function listGames(message) {
-	console.log(message.content);
-	fs.readdirSync(__dirname + "/../games", (err, files) => {
-		var gameFiles = files.filter(file => file.split(".").pop() === "js").map(file => file.slice(0, -3));
-		console.log(gameFiles);
-		if (message == null) return gameFiles;
-		var gameEmbed = new Discord.RichEmbed()
-			.setTitle("Available Games")
-			.setDescription("`" + gameFiles.join("`\n`") + "`")
-			.setFooter(`Ran by ${message.author.username} (${message.author.id})`, message.author.dsiplayAvatarURL);
-		if (gameEmbed.description !== "``") {
-			return message.channel.send({ embed: gameEmbed });
-		} else {
-			return message.reply("Currently there are no games to view.");
-		}
-	});
+	var files = fs.readdirSync(__dirname + "/../games");
+	var gameFiles = files.filter(file => file.split(".").pop() === "js").map(file => file.slice(0, -3));
+	console.log(gameFiles);
+	if (message == null) return gameFiles;
+	var gameEmbed = new Discord.RichEmbed()
+		.setTitle("Available Games")
+		.setDescription("`" + gameFiles.join("`\n`") + "`")
+		.setFooter(`Ran by ${message.author.username} (${message.author.id})`, message.author.dsiplayAvatarURL);
+	if (gameEmbed.description !== "``") {
+		return message.channel.send({ embed: gameEmbed });
+	} else {
+		return message.reply("Currently there are no games to view.");
+	}
 }
 
 // users, call
