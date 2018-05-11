@@ -1,9 +1,10 @@
 module.exports = {
 	id: "ping",
+	aliases: ["pong"],
 	description: "Returns the response time of the bot in milliseconds, as well as a diagnostic.",
 	load: () => {},
 	execute: (call) => {
-		var delay = Math.round(call.client.ping);
+		const delay = Math.round(call.client.ping);
 		var diag;
 		if (delay <= 0) {
 			diag = "impossible";
