@@ -45,12 +45,12 @@ function collectUsers(params) {
 function listGames(message) {
 	fs.readdirSync(__dirname + "/../games", (err, files) => {
 		var gameFiles = files.filter(file => file.split(".").pop() === "js").map(file => file.slice(0, -3));
-		if (message === null) return gameFiles;
+		if (message == null) return gameFiles;
 		var gameEmbed = new Discord.RichEmbed()
 			.setTitle("Available Games")
 			.setDescription("`" + gameFiles.join("`\n`") + "`")
 			.setFooter(`Ran by ${message.author.username} (${message.author.id})`, message.author.dsiplayAvatarURL);
-		if (gameEmbed.description !== "``") message.channel.send({ embed: gameEmbed }).catch(function() {});
+		if (gameEmbed.description !== "``") message.channel.send({ embed: gameEmbed });
 		else message.reply("Currently there are no games to view.").catch(function() {});
 	});
 }
