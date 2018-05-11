@@ -1,16 +1,16 @@
 const Discord = require("discord.js");
 
-function add(command, help) {
+function add(command, help, prefix) {
 	var category = command.category || "Other";
-	var array = commandHelp[category];
+	var array = help[category];
 	if (array == null) {
 		array = [];
-		commandHelp[category] = array;
+		help[category] = array;
 	}
 	if (command.arguments != null) {
-		array.push(`\`${pfx}${command.id} ${command.arguments}\``);
+		array.push(`\`${prefix}${command.id} ${command.arguments}\``);
 	} else {
-		array.push(`\`${pfx}${command.id}\``);
+		array.push(`\`${prefix}${command.id}\``);
 	}
 }
 
