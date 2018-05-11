@@ -21,10 +21,10 @@ module.exports = {
 	arguments: "[command]",
 	load: () => {},
 	execute: (call) => {
-		var pfx = call.message.data.prefix;
+		const pfx = call.message.data.prefix;
 		var param1 = call.params.readRaw();
 		var helpEmbed;
-		if (param1 == null || param1 == undefined || param1 == "") {
+		if (param1 == "") {
 			var commandHelp = {};
 
 			call.commands.loaded.array()
