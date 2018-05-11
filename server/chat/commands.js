@@ -97,7 +97,7 @@ try {
 		}
 	});
 } catch (exc) {
-	console.warn(`Failed to load commands:`);
+	console.warn("Failed to load commands:");
 	console.warn(exc.stack);
 }
 
