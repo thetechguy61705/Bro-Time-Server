@@ -14,6 +14,7 @@ module.exports = {
 	minPlayers: 2,
 	maxPlayers: 2,
 	requiresInvite: true,
+	allowLateJoin: false,
 	load: () => {},
 	start: (session) => {
 		const eA = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣"];
