@@ -31,7 +31,7 @@ module.exports = {
 				.sort((a, b) => {
 					return a.id.localeCompare(b.id);
 				})
-				.forEach((command) {
+				.forEach((command) => {
 					add(command, commandHelp);
 				});
 
