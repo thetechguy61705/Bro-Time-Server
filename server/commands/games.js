@@ -43,12 +43,11 @@ function collectUsers(params) {
 }
 
 function listGames(message) {
-	var files = fs.readdirSync(__dirname + "/../games");
-	var gameFiles = files.filter(file => file.split(".").pop() === "js").map(file => file.slice(0, -3));
-	if (message == null) return gameFiles;
+	var gameList = modules.map(module => module.id);
+	if (message == null) return gameList;
 	var gameEmbed = new Discord.RichEmbed()
 		.setTitle("Available Games")
-		.setDescription("`" + gameFiles.join("`\n`") + "`")
+		.setDescription("`" + gameList.join("`\n`") + "`")
 		.setFooter(`Ran by ${message.author.username} (${message.author.id})`, message.author.dsiplayAvatarURL);
 	if (gameEmbed.description !== "``") {
 		return message.channel.send({ embed: gameEmbed });
