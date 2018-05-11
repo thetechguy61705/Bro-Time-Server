@@ -96,6 +96,7 @@ module.exports = {
 	id: "customcolor",
 	description: "Allows the user to create their own role, with a custom name and color.",
 	requires: "Bro Time Premium",
+	arguments: "... prompt",
 	load: () => {},
 	execute: async (call) => {
 		var input1 = call.params.readRaw().toLowerCase();
