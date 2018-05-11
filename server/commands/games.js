@@ -50,8 +50,11 @@ function listGames(message) {
 			.setTitle("Available Games")
 			.setDescription("`" + gameFiles.join("`\n`") + "`")
 			.setFooter(`Ran by ${message.author.username} (${message.author.id})`, message.author.dsiplayAvatarURL);
-		if (gameEmbed.description !== "``") message.channel.send({ embed: gameEmbed });
-		else message.reply("Currently there are no games to view.").catch(function() {});
+		if (gameEmbed.description !== "``") {
+			return message.channel.send({ embed: gameEmbed });
+		} else {
+			return message.reply("Currently there are no games to view.");
+		}
 	});
 }
 
