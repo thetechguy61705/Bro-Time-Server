@@ -58,7 +58,7 @@ function collectUsers(params) {
 }
 
 function listGames(message) {
-	var gameList = modules.map(module => module.id);
+	var gameList = modules.keyArray();
 	if (message == null) return gameList;
 	var gameEmbed = new Discord.RichEmbed()
 		.setTitle("Available Games")
