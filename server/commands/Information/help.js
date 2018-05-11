@@ -16,7 +16,7 @@ function add(command, help, prefix) {
 
 module.exports = {
 	id: "help",
-	aliases: ["h"],
+	aliases: ["?", "h"],
 	description: "Returns information and commands on the bot.",
 	arguments: "[command]",
 	load: () => {},
