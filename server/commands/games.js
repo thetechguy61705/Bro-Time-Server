@@ -28,6 +28,8 @@ fs.readdirSync(__dirname + "/../games").forEach(file => {
 	}
 });
 
+console.log(modules);
+
 function collectUsers(params) {
 	var user;
 	var users = [];
@@ -45,6 +47,7 @@ function collectUsers(params) {
 function listGames(message) {
 	fs.readdirSync(__dirname + "/../games", (err, files) => {
 		var gameFiles = files.filter(file => file.split(".").pop() === "js").map(file => file.slice(0, -3));
+		console.log(gameFiles);
 		if (message == null) return gameFiles;
 		var gameEmbed = new Discord.RichEmbed()
 			.setTitle("Available Games")
