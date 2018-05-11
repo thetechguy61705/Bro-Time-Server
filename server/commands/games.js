@@ -5,8 +5,18 @@ var { GameAccess } = require("./../../data/server");
 var modules = new Collection();
 var sessions = [];
 
-// 10 minutes
-const TIMEOUT = 600000;
+const DEFAULTS = [
+	{key: "autoStart", value: false},
+	{key: "minPlayers", value: 0},
+	{key: "maxPlayers", value: Infinity},
+	{key: "allowLateJoin", value: true},
+	{key: "requiresInvite", value: false},
+	// 3 minutes
+	{key: "timeout", value: 180000},
+	{key: "updateInterval", value: 0},
+	{key: "multithreaded", value: false}
+
+];
 // times per second
 const MAX_UPDATE_CYCLES = 60;
 
@@ -15,12 +25,17 @@ fs.readdirSync(__dirname + "/../games").forEach(file => {
 	if (match != null) {
 		new Promise((resolve, reject) => {
 			try {
-				resolve(require("../games/" + match[1]));
+				var game = require("../games/" + match[1]);
+				DEFAULTS.forEach((entry) => {
+					if (typeof game[entry.key] !== typeof entry.value)
+						game[entry.key] = entry.value;
+				});
+				resolve(game);
 			} catch (exc) {
 				reject(exc);
 			}
 		}).then(module => {
-			modules.push(module);
+			modules.set(module.id, module);
 		}, exc => {
 			console.warn(`Unable to load game module ${match}:`);
 			console.warn(exc.stack);
@@ -58,7 +73,11 @@ function listGames(message) {
 
 // users, call
 function dispatchInvites() {
-
+	// Send an invite message to the same channel.
+	// Tell users to react to join.
+	// Resolve once minPlayers is met.
+	// Stop collecting players if allowLateJoin is false.
+	return new Promise(() => {});
 }
 
 function endGame() {
@@ -78,12 +97,12 @@ function startGame(game, inviting, games, call) {
 	})];
 
 	session = {
-		players: null
+		players: new Collection()
 	};
 	endGameInstance = endGame.bind(session);
 	session.endGame = endGameInstance;
 	if (game.requiresInvite) {
-		let inviting = dispatchInvites(inviting, call);
+		let inviting = dispatchInvites(call, session.players, game.minPlayers, game.allowLateJoin);
 		inviting.then((accepted) => session.players = accepted);
 		loading.push(inviting);
 	}
@@ -93,7 +112,7 @@ function startGame(game, inviting, games, call) {
 
 		if (call.updateInterval > 0)
 			session.updateTimer = call.client.setInterval(1/Math.min(game.updateInterval, MAX_UPDATE_CYCLES)*1000, game.update);
-		session.endTimer = call.client.setTimeout(TIMEOUT, endGameInstance);
+		session.endTimer = call.client.setTimeout(session.timeout, endGameInstance);
 
 		console.log("timers set");
 
