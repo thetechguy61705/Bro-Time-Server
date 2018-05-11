@@ -32,7 +32,7 @@ module.exports = {
 					return a.id.localeCompare(b.id);
 				})
 				.forEach((command) => {
-					add(command, commandHelp);
+					add(command, commandHelp, pfx);
 				});
 
 			helpEmbed = new Discord.RichEmbed()
