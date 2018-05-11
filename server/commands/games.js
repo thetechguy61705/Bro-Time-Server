@@ -130,6 +130,6 @@ module.exports = {
 			}
 		}
 		if (!found)
-			listGames(call.message.channel);
+			listGames(call.message);
 	}
 };
