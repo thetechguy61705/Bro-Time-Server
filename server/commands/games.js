@@ -63,7 +63,8 @@ function listGames(message) {
 	var gameEmbed = new Discord.RichEmbed()
 		.setTitle("Available Games")
 		.setDescription("`" + gameList.join("`\n`") + "`")
-		.setFooter(`Ran by ${message.author.username} (${message.author.id})`, message.author.dsiplayAvatarURL);
+		.setFooter(`Ran by ${message.author.username} (${message.author.id})`, message.author.dsiplayAvatarURL)
+		.setColor(0x00AE86);
 	if (gameEmbed.description !== "``") {
 		return message.channel.send({ embed: gameEmbed });
 	} else {
