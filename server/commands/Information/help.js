@@ -1,5 +1,18 @@
 const Discord = require("discord.js");
 
+function add(command, help) {
+	var category = command.category || "Other";
+	var array = commandHelp[category];
+	if (array == null) {
+		array = [];
+		commandHelp[category] = array;
+	}
+	if (command.arguments != null) {
+		array.push(`\`${pfx}${command.id} ${command.arguments}\``);
+	} else {
+		array.push(`\`${pfx}${command.id}\``);
+	}
+}
 
 module.exports = {
 	id: "help",
@@ -13,25 +26,14 @@ module.exports = {
 		var helpEmbed;
 		if (param1 == null || param1 == undefined || param1 == "") {
 			var commandHelp = {};
-			function add(command) {
-				var category = command.category || "Other";
-				var array = commandHelp[category];
-				if (array == null) {
-					array = [];
-					commandHelp[category] = array;
-				}
-				if (command.arguments != null) {
-					array.push(`\`${pfx}${command.id} ${command.arguments}\``);
-				} else {
-					array.push(`\`${pfx}${command.id}\``);
-				}
-			}
 
 			call.commands.loaded.array()
 				.sort((a, b) => {
 					return a.id.localeCompare(b.id);
 				})
-				.forEach(add);
+				.forEach((command) {
+					add(command, commandHelp);
+				});
 
 			helpEmbed = new Discord.RichEmbed()
 				.setTitle("Commands")
