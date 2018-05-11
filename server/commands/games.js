@@ -28,8 +28,6 @@ fs.readdirSync(__dirname + "/../games").forEach(file => {
 	}
 });
 
-console.log(modules);
-
 function collectUsers(params) {
 	var user;
 	var users = [];
@@ -135,7 +133,9 @@ module.exports = {
 				}
 			}
 		}
-		if (!found)
+		if (!found) {
+			console.log("Hello World!");
 			listGames(call.message);
+		}
 	}
 };
