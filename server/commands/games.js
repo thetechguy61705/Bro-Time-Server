@@ -1,4 +1,4 @@
-const Discord = require("discord.js")
+const Discord = require("discord.js");
 var fs = require("fs");
 var { Collection } = require("discord.js");
 var { GameAccess } = require("./../../data/server");
@@ -50,9 +50,9 @@ function listGames(message) {
 			.setTitle("Available Games")
 			.setDescription("`" + gameFiles.join("`\n`") + "`")
 			.setFooter(`Ran by ${message.author.username} (${message.author.id})`, message.author.dsiplayAvatarURL);
-	});
-	if (gameEmbed.description !== "``") message.channel.send({ embed: gameEmbed }).catch(function() {}); 
+		if (gameEmbed.description !== "``") message.channel.send({ embed: gameEmbed }).catch(function() {});
 		else message.reply("Currently there are no games to view.").catch(function() {});
+	});
 }
 
 // users, call
