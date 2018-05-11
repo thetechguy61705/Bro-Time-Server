@@ -43,6 +43,7 @@ function collectUsers(params) {
 }
 
 function listGames(message) {
+	console.log(message.content);
 	fs.readdirSync(__dirname + "/../games", (err, files) => {
 		var gameFiles = files.filter(file => file.split(".").pop() === "js").map(file => file.slice(0, -3));
 		console.log(gameFiles);
