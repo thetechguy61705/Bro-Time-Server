@@ -10,4 +10,4 @@ Number.prototype.expandPretty = function() {
 	((seconds / 1000) > 1) ? seconds = `\`${seconds/1000}\` seconds, ` : ((seconds / 1000) === 1) ? seconds = `\`${seconds/1000}\` second, ` : seconds = "";
 	(days === "" && hours === "" && minutes === "" && seconds === "") ? milliseconds = `\`${milliseconds}\` milliseconds.` : milliseconds = `and \`${milliseconds}\` milliseconds.`;
 	return `${days}${hours}${minutes}${seconds}${milliseconds}`;
-}
+};
