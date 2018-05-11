@@ -1,6 +1,10 @@
 var fs = require("fs");
 var { Collection } = require("discord.js");
 var modules = new Collection();
+var sessions = [];
+
+const TIMEOUT = 600000; // 10 minutes
+const MAX_UPDATE_CYCLES = 60; // times per second
 
 fs.readdirSync(__dirname + "/../games").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
@@ -38,8 +42,57 @@ function listGames(channel) {
 	channel.send("A list of games is not yet available.");
 }
 
-function startGame(game, call) {
-	call.message.channel.send("Games can not yet be started.");
+function dispatchInvites(users, call) {
+
+}
+
+function endGame(session) {
+
+}
+
+function startGame(game, inviting, games, call) {
+	var loading, players, session;
+
+	loading = [new Promise((resolve, reject) => {
+		try {
+			console.log("loading game...");
+			resolve(new GameAccess(game, games).load());
+		} catch(exc) {
+			reject(exc);
+		}
+	})];
+
+	session = {
+		players: null,
+		endGame: () => {
+			endGame(this);
+		}
+	};
+	if (game.requiresInvite) {
+		let inviting = dispatchInvites(inviting, call);
+		inviting.then((accepted) => session.players = accepted);
+		loading.push(inviting);
+	}
+
+	Promise.all(loading).then(() => {
+		console.log("game loaded.");
+
+		if (call.updateInterval > 0)
+			session.updateTimer = call.client.setInterval(1/Math.min(game.updateInterval, MAX_UPDATE_CYCLES)*1000, game.update);
+		session.endTimer = call.client.setTimeout(TIMEOUT, () => {
+			endGame(session);
+		});
+
+		console.log("timers set");
+
+		game.start(session);
+
+		console.log("game started");
+
+		sessions.push(session);
+
+		console.log("session stored");
+	});
 }
 
 module.exports = {
@@ -59,7 +112,7 @@ module.exports = {
 				found = true;
 
 				if (!game.autostart) {
-					startGame(game, call);
+					startGame(game, users, this, call);
 				} else {
 					call.message.channel.send(`The game ${name} can not be started manually.`);
 				}
