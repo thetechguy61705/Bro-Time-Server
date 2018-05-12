@@ -36,7 +36,7 @@ module.exports = {
 			const filter = (reaction, user) => session.players.map(plr => plr.id).includes(user.id) && eA.includes(reaction.emoji.name);
 			const collector = connectFour.createReactionCollector(filter, { time: 600000 });
 			collector.on("collect", reaction => {
-				reaction.remove(session.context.client.users.get(turn)).catch(function() {});
+				reaction.remove(turn).catch(function() {});
 				if (reaction.users.last().id === turn) {
 					var currentRow = getRow(rows, eA.indexOf(reaction.emoji.name));
 					if (currentRow == null) currentRow = 6;
