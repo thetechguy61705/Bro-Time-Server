@@ -110,15 +110,15 @@ function invite(game, channel, players) {
 function endGame() {
 	clearTimeout(this.endTimer);
 	clearInterval(this.updateTimer);
-	this.game.end(session);
+	this.game.end(this);
 }
 
-function startGame(game, games, context) {
+function startGame(game, context) {
 	var loading, session;
 
 	loading = [new Promise((resolve, reject) => {
 		try {
-			resolve(new GameAccess(game, games).load());
+			resolve(new GameAccess(game, context.games).load());
 		} catch(exc) {
 			reject(exc);
 		}
@@ -176,7 +176,7 @@ module.exports = {
 				found = true;
 
 				if (!game.autostart) {
-					startGame(game, this, new Context(client, call.message));
+					startGame(game, new Context(client, call.message));
 				} else {
 					call.message.channel.send(`The game ${name} can not be started manually.`);
 				}
@@ -185,8 +185,8 @@ module.exports = {
 		if (!found)
 			listGames(call.message);
 	},
-	dispatchInput: (input) => {
-		sessions.forEach((session) => {
+	dispatchInput: () => {
+		sessions.forEach(() => {
 			// If applicable, send input.
 
 		});
