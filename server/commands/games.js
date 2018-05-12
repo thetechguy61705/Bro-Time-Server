@@ -86,7 +86,7 @@ function invite(game, channel, players) {
 	return new Promise((resolve, reject) => {
 		channel.send({ embed: inviteEmbed }).then((message) => {
 			message.react(channel.client.emojis.get("404768960014450689")).then(() => {
-				var collector = new ReactionCollector(message, (reaction, user) => reaction.emoji.id === "404768960014450689", {
+				var collector = new ReactionCollector(message, (reaction) => reaction.emoji.id === "404768960014450689", {
 					time: game.inviteTime
 				});
 				collector.on("collect", (reaction) => {
