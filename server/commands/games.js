@@ -92,6 +92,7 @@ function invite(game, channel, players) {
 			collector.on("collect", (reaction) => {
 				if (!players.keyArray().includes(reaction.users.last().id)) {
 					var user = reaction.users.last();
+					console.log(user.tag);
 					players.set(user.id, user);
 					if (players.size >= game.maxPlayers) {
 						collector.stop("ready");
