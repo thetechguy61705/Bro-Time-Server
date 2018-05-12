@@ -37,7 +37,7 @@ module.exports = {
 
 			helpEmbed = new Discord.RichEmbed()
 				.setTitle("Commands")
-				.setDescription(`Prefix: \`${pfx}\`\nUptime: \`${call.client.uptime.expandPretty()\``)
+				.setDescription(`Prefix: \`${pfx}\`\nUptime: ${call.client.uptime.expandPretty()}`)
 				.setColor(0x00AE86)
 				.setFooter(`Ran by ${call.message.author.username} (${call.message.author.id})`, call.message.author.displayAvatarURL);
 			for (var [category, commands] of Object.entries(commandHelp)) {
