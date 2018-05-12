@@ -62,8 +62,7 @@ function listGames(message) {
 	}
 }
 
-// users, call
-function dispatchInvites(game, call, players, allowLateJoin) {
+function dispatchInvites(game, call, players) {
 	// Send an invite message to the same channel.
 	// Tell users to react to join.
 	// Resolve once minPlayers is met.
