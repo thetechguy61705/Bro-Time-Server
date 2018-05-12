@@ -62,7 +62,7 @@ function listGames(message) {
 	}
 }
 
-function dispatchInvites(game, call, players) {
+function invite(game, call, players) {
 	var embed = new RichEmbed()
 		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id))
 		.addField("Minimum Players", game.minPlayers, true)
@@ -112,11 +112,12 @@ function startGame(game, games, call) {
 
 	session = {
 		game: game,
+		call: call,
 		players: new Collection(),
 		endGame: endGame.bind(session)
 	};
 	if (game.requiresInvite)
-		loading.push(dispatchInvites(game, call, session.players));
+		loading.push(invite(game, call, session.players));
 
 	Promise.all(loading).then(() => {
 		console.log("game loaded.");
@@ -163,5 +164,11 @@ module.exports = {
 		}
 		if (!found)
 			listGames(call.message);
+	},
+	dispatchInput: (input) => {
+		sessions.forEach((session) => {
+			// If applicable, send input.
+
+		});
 	}
 };
