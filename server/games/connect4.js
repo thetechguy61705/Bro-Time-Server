@@ -1,3 +1,5 @@
+const Discord = require("discord.js");
+
 function getRow(rows, number) {
 	var numberLoop = 1;
 	while (numberLoop !== rows.length) {
@@ -22,7 +24,7 @@ module.exports = {
 			["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"]];
 		const author = session.players.first();
 		const target = session.players.last();
-		var connectFourEmbed = new require("discord.js").RichEmbed().setColor(0x00AE86).setTitle("Connect Four").setFooter(`${author.tag}'s turn.`);
+		var connectFourEmbed = new Discord.RichEmbed().setColor(0x00AE86).setTitle("Connect Four").setFooter(`${author.tag}'s turn.`);
 		connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map(row => row.join(" ")).join("\n"));
 		session.context.channel.send({ embed: connectFourEmbed }).then(async function(connectFour) {
 			var orderLoop = 0;
