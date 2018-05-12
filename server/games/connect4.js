@@ -24,7 +24,7 @@ module.exports = {
 		const target = session.players.last();
 		var connectFourEmbed = new require("discord.js").RichEmbed().setColor(0x00AE86).setTitle("Connect Four").setFooter(`${author.tag}'s turn.`);
 		connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map(row => row.join(" ")).join("\n"));
-		session.call.message.channel.send({ embed: connectFourEmbed }).then(async function(connectFour) {
+		session.context.channel.send({ embed: connectFourEmbed }).then(async function(connectFour) {
 			var orderLoop = 0;
 			while (orderLoop != eA.length) {
 				await connectFour.react(eA[orderLoop]);
@@ -34,7 +34,7 @@ module.exports = {
 			const filter = (reaction, user) => session.players.map(plr => plr.id).includes(user.id) && eA.includes(reaction.emoji.name);
 			const collector = connectFour.createReactionCollector(filter, { time: 600000 });
 			collector.on("collect", reaction => {
-				reaction.remove(session.call.client.users.get(turn)).catch(function() {});
+				reaction.remove(session.context.client.users.get(turn)).catch(function() {});
 				if (reaction.users.last().id === turn) {
 					var currentRow = getRow(rows, eA.indexOf(reaction.emoji.name));
 					if (currentRow == null) currentRow = 6;
@@ -57,7 +57,7 @@ module.exports = {
 									row[indexOfCoin + 1] === row[indexOfCoin + 2] &&
 									row[indexOfCoin + 2] === row[indexOfCoin + 3]) {
 									if (noRepeat === false) {
-										session.call.message.channel.send(`${coin} won the game!`).catch(function() {});
+										session.context.channel.send(`${coin} won the game!`).catch(function() {});
 										noRepeat = true;
 									}
 									collector.stop(`${coin} won the game!`);
@@ -67,7 +67,7 @@ module.exports = {
 										rows[indexOfRow + 1][indexOfCoin] === rows[indexOfRow + 2][indexOfCoin] &&
 										rows[indexOfRow + 2][indexOfCoin] === rows[indexOfRow + 3][indexOfCoin]) {
 										if (noRepeat === false) {
-											session.call.message.channel.send(`${coin} won the game!`).catch(function() {});
+											session.context.channel.send(`${coin} won the game!`).catch(function() {});
 											noRepeat = true;
 										}
 										collector.stop(`${coin} won the game!`);
@@ -78,7 +78,7 @@ module.exports = {
 										rows[indexOfRow - 1][indexOfCoin + 1] === rows[indexOfRow - 2][indexOfCoin + 2] &&
 										rows[indexOfRow - 2][indexOfCoin + 2] === rows[indexOfRow - 3][indexOfCoin + 3]) {
 										if (noRepeat === false) {
-											session.call.message.channel.send(`${coin} won the game!`).catch(function() {});
+											session.context.channel.send(`${coin} won the game!`).catch(function() {});
 											noRepeat = true;
 										}
 										collector.stop(`${coin} won the game!`);
@@ -89,7 +89,7 @@ module.exports = {
 										rows[indexOfRow + 1][indexOfCoin + 1] === rows[indexOfRow + 2][indexOfCoin + 2] &&
 										rows[indexOfRow + 2][indexOfCoin + 2] === rows[indexOfRow + 3][indexOfCoin + 3]) {
 										if (noRepeat === false) {
-											session.call.message.channel.send(`${coin} won the game!`).catch(function() {});
+											session.context.channel.send(`${coin} won the game!`).catch(function() {});
 											noRepeat = true;
 										}
 										collector.stop(`${coin} won the game!`);
@@ -100,7 +100,7 @@ module.exports = {
 
 						if (rows.slice(1).map(row => row.every(coin => coin !== "⚫")).every(row => row === true)) {
 							noRepeat = true;
-							session.call.message.channel.send("No one won. It was a draw.").catch(function() {});
+							session.context.channel.send("No one won. It was a draw.").catch(function() {});
 							collector.stop("No one won. It was a draw.");
 						}
 					}

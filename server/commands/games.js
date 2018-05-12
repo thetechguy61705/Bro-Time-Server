@@ -1,10 +1,11 @@
 const Discord = require("discord.js");
 var fs = require("fs");
 var util = require("util");
-var { Collection, RichEmbed, ReactionCollector } = require("discord.js");
+var { Collection, RichEmbed, ReactionCollector, Message } = require("discord.js");
 var { GameAccess } = require("./../../data/server");
 var modules = new Collection();
 var sessions = [];
+var games;
 
 const DEFAULTS = [
 	{key: "autoStart", value: false},
@@ -47,6 +48,19 @@ fs.readdirSync(__dirname + "/../games").forEach(file => {
 	}
 });
 
+class Context {
+	constructor(client, scope) {
+		this.client = client;
+		this.games = games;
+		if (scope instanceof Message) {
+			this.message = scope;
+			this.channel = scope.channel;
+		} else {
+			this.channel = scope;
+		}
+	}
+}
+
 function listGames(message) {
 	var gameList = modules.keyArray();
 	if (message == null) return gameList;
@@ -62,7 +76,7 @@ function listGames(message) {
 	}
 }
 
-function invite(game, call, players) {
+function invite(game, channel, players) {
 	var embed = new RichEmbed()
 		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id))
 		.addField("Minimum Players", game.minPlayers, true)
@@ -70,7 +84,7 @@ function invite(game, call, players) {
 		.setTitle(`Invite to ${game.id}`)
 		.setColor(0x00AE86);
 	return new Promise((resolve, reject) => {
-		call.message.channel.send(embed).then((message) => {
+		channel.send(embed).then((message) => {
 			var collector = new ReactionCollector(message, () => true, {time: game.inviteTime});
 			collector.on("collect", (reaction) => {
 				if (!players.some((user) => reaction.users.has(user.id))) {
@@ -99,7 +113,7 @@ function endGame() {
 	this.game.end(session);
 }
 
-function startGame(game, games, call) {
+function startGame(game, games, context) {
 	var loading, session;
 
 	loading = [new Promise((resolve, reject) => {
@@ -112,19 +126,19 @@ function startGame(game, games, call) {
 
 	session = {
 		game: game,
-		call: call,
+		context: context,
 		players: new Collection(),
 		endGame: endGame.bind(session)
 	};
 	if (game.requiresInvite)
-		loading.push(invite(game, call, session.players));
+		loading.push(invite(game, context.channel, session.players));
 
 	Promise.all(loading).then(() => {
 		console.log("game loaded.");
 
-		if (call.updateInterval > 0)
-			session.updateTimer = call.client.setInterval(1/Math.min(game.updateInterval, MAX_UPDATE_CYCLES)*1000, game.update);
-		session.endTimer = call.client.setTimeout(game.timeout, session.endGame);
+		if (game.updateInterval > 0)
+			session.updateTimer = context.client.setInterval(1/Math.min(game.updateInterval, MAX_UPDATE_CYCLES)*1000, game.update);
+		session.endTimer = context.client.setTimeout(game.timeout, session.endGame);
 
 		console.log("timers set");
 
@@ -136,7 +150,11 @@ function startGame(game, games, call) {
 
 		console.log("session stored");
 	}, () => {
-		call.message.channel.send(`${call.message.author.username}'s invite to play ${game.id} has expired.`);
+		if (context.message == null) {
+			context.channel.send(`Failed to load ${game.id}.`);
+		} else {
+			context.channel.send(`${context.message.author.username}'s invite to play ${game.id} has expired.`);
+		}
 	});
 }
 
@@ -144,8 +162,10 @@ module.exports = {
 	id: "game",
 	aliases: ["games", "play"],
 	description: "Starts a game.",
-	load: () => {},
-	execute: (call) => {
+	load: () => {
+		games = this;
+	},
+	execute: (call, client) => {
 		var name = call.params.readParameter();
 		var found = false;
 
@@ -156,7 +176,7 @@ module.exports = {
 				found = true;
 
 				if (!game.autostart) {
-					startGame(game, this, call);
+					startGame(game, this, new Context(client, call.message));
 				} else {
 					call.message.channel.send(`The game ${name} can not be started manually.`);
 				}
