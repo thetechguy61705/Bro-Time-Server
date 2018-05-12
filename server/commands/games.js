@@ -118,8 +118,10 @@ function startGame(game, context) {
 
 	loading = [new Promise((resolve, reject) => {
 		try {
+			console.log("Ney!");
 			resolve(new GameAccess(game, context.games).load());
 		} catch(exc) {
+			console.log("Hey!");
 			reject(exc);
 		}
 	})];
