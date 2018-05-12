@@ -100,8 +100,9 @@ function invite(game, channel, players) {
 					}
 				}
 			});
-			collector.on("end", () => {
-				reject();
+			collector.on("end", (_, reason) => {
+				if (reason !== "ready")
+					reject();
 			});
 		});
 	});
