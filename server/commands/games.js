@@ -84,11 +84,12 @@ function invite(game, channel, players) {
 		.setTitle(`Invite to ${game.id}`)
 		.setColor(0x00AE86);
 	return new Promise((resolve, reject) => {
-		channel.send({ embed: inviteEmbed }).then((message) => {
-			var collector = new ReactionCollector(message, () => true, {time: game.inviteTime});
+		channel.send({ embed: inviteEmbed }).then(async function(message) {
+			await message.react(channel.client.emojis.get("404768960014450689"));
+			var collector = new ReactionCollector(message, (reaction) => reaction.emoji.id === "404768960014450689", {time: game.inviteTime});
 			collector.on("collect", (reaction) => {
-				if (!players.some((user) => reaction.users.has(user.id))) {
-					var user = reaction.users.first();
+				if (!players.keyArray().includes(reaction.users.last().id)) {
+					var user = reaction.users.last();
 					players.set(user.id, user);
 					if (players.size >= game.maxPlayers) {
 						collector.stop("ready");
