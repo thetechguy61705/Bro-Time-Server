@@ -94,15 +94,16 @@ function dispatchInvites(game, call, players) {
 }
 
 function endGame() {
-
+	clearTimeout(this.endTimer);
+	clearInterval(this.updateTimer);
+	this.game.end(session);
 }
 
 function startGame(game, games, call) {
-	var loading, session, endGameInstance;
+	var loading, session;
 
 	loading = [new Promise((resolve, reject) => {
 		try {
-			console.log("loading game...");
 			resolve(new GameAccess(game, games).load());
 		} catch(exc) {
 			reject(exc);
@@ -110,10 +111,10 @@ function startGame(game, games, call) {
 	})];
 
 	session = {
-		players: new Collection()
+		game: game,
+		players: new Collection(),
+		endGame: endGame.bind(session)
 	};
-	endGameInstance = endGame.bind(session);
-	session.endGame = endGameInstance;
 	if (game.requiresInvite)
 		loading.push(dispatchInvites(game, call, session.players));
 
@@ -122,7 +123,7 @@ function startGame(game, games, call) {
 
 		if (call.updateInterval > 0)
 			session.updateTimer = call.client.setInterval(1/Math.min(game.updateInterval, MAX_UPDATE_CYCLES)*1000, game.update);
-		session.endTimer = call.client.setTimeout(session.timeout, endGameInstance);
+		session.endTimer = call.client.setTimeout(game.timeout, session.endGame);
 
 		console.log("timers set");
 
@@ -134,7 +135,7 @@ function startGame(game, games, call) {
 
 		console.log("session stored");
 	}, () => {
-		console.log("game cancelled");
+		call.message.channel.send(`${call.message.author.username}'s invite to play ${game.id} has expired.`);
 	});
 }
 
