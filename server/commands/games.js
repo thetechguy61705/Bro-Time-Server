@@ -63,10 +63,6 @@ function listGames(message) {
 }
 
 function dispatchInvites(game, call, players) {
-	// Send an invite message to the same channel.
-	// Tell users to react to join.
-	// Resolve once minPlayers is met.
-	// Stop collecting players if allowLateJoin is false.
 	var embed = new RichEmbed()
 		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id))
 		.addField("Minimum Players", game.minPlayers, true)
@@ -80,7 +76,10 @@ function dispatchInvites(game, call, players) {
 				if (!players.some((user) => reaction.users.has(user.id))) {
 					var user = reaction.users.first();
 					players.set(user.id, user);
-					if (players.size >= game.minPlayers) {
+					if (players.size >= game.maxPlayers) {
+						collector.stop("ready");
+						resolve();
+					} else if (players.size == game.minPlayers) {
 						if (!game.allowLateJoin)
 							collector.stop("ready");
 						resolve();
@@ -115,11 +114,8 @@ function startGame(game, games, call) {
 	};
 	endGameInstance = endGame.bind(session);
 	session.endGame = endGameInstance;
-	if (game.requiresInvite) {
-		let inviting = dispatchInvites(game, call, session.players, game.minPlayers, game.maxPlayers, game.allowLateJoin);
-		inviting.then((accepted) => session.players = accepted);
-		loading.push(inviting);
-	}
+	if (game.requiresInvite)
+		loading.push(dispatchInvites(game, call, session.players));
 
 	Promise.all(loading).then(() => {
 		console.log("game loaded.");
