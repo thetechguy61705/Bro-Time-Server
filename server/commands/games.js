@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 var fs = require("fs");
-var { Collection } = require("discord.js");
+var util = require("util");
+var { Collection, RichEmbed, ReactionCollector } = require("discord.js");
 var { GameAccess } = require("./../../data/server");
 var modules = new Collection();
 var sessions = [];
@@ -11,12 +12,15 @@ const DEFAULTS = [
 	{key: "maxPlayers", value: Infinity},
 	{key: "allowLateJoin", value: true},
 	{key: "requiresInvite", value: false},
+	{key: "inviteTime", value: 180000},
 	// 3 minutes
 	{key: "timeout", value: 180000},
 	{key: "updateInterval", value: 0},
 	{key: "multithreaded", value: false}
-
 ];
+const INVITE = `%s
+
+React to this message to join.`;
 // times per second
 const MAX_UPDATE_CYCLES = 60;
 
@@ -43,20 +47,6 @@ fs.readdirSync(__dirname + "/../games").forEach(file => {
 	}
 });
 
-function collectUsers(params) {
-	var user;
-	var users = [];
-
-	do {
-		user = params.readUser();
-
-		if (user != null)
-			users.push(user);
-	} while (user != null);
-
-	return users;
-}
-
 function listGames(message) {
 	var gameList = modules.keyArray();
 	if (message == null) return gameList;
@@ -73,19 +63,41 @@ function listGames(message) {
 }
 
 // users, call
-function dispatchInvites() {
+function dispatchInvites(game, call, players, allowLateJoin) {
 	// Send an invite message to the same channel.
 	// Tell users to react to join.
 	// Resolve once minPlayers is met.
 	// Stop collecting players if allowLateJoin is false.
-	return new Promise(() => {});
+	var embed = new RichEmbed()
+		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id))
+		.addField("Minimum Players", game.minPlayers, true)
+		.addField("Maximum Players", game.maxPlayers, true)
+		.setTitle(`Invite to ${game.id}`)
+		.setColor(0x00AE86);
+	var message = await call.message.channel.send(embed);
+	var collector = new ReactionCollector(message, () => true, {time: game.inviteTime});
+	return new Promise((resolve, reject) => {
+		collector.on("collect", (reaction) => {
+			if (!players.some((user) => reaction.users.has(user.id))) {
+				players.set(user.id, user);
+				if (players.size == game.minPlayers) {
+					if (!game.allowLateJoin)
+						collector.stop("ready");
+					resolve();
+				}
+			}
+		});
+		collector.on("end", () => {
+			reject();
+		});
+	});
 }
 
 function endGame() {
 
 }
 
-function startGame(game, inviting, games, call) {
+function startGame(game, games, call) {
 	var loading, session, endGameInstance;
 
 	loading = [new Promise((resolve, reject) => {
@@ -103,7 +115,7 @@ function startGame(game, inviting, games, call) {
 	endGameInstance = endGame.bind(session);
 	session.endGame = endGameInstance;
 	if (game.requiresInvite) {
-		let inviting = dispatchInvites(call, session.players, game.minPlayers, game.allowLateJoin);
+		let inviting = dispatchInvites(game, call, session.players, game.minPlayers, game.maxPlayers, game.allowLateJoin);
 		inviting.then((accepted) => session.players = accepted);
 		loading.push(inviting);
 	}
@@ -140,11 +152,10 @@ module.exports = {
 			var game = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
 
 			if (game != null) {
-				var users = collectUsers(call.params);
 				found = true;
 
 				if (!game.autostart) {
-					startGame(game, users, this, call);
+					startGame(game, this, call);
 				} else {
 					call.message.channel.send(`The game ${name} can not be started manually.`);
 				}
