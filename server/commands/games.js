@@ -77,14 +77,14 @@ function listGames(message) {
 }
 
 function invite(game, channel, players) {
-	var embed = new RichEmbed()
+	const inviteEmbed = new RichEmbed()
 		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id))
 		.addField("Minimum Players", game.minPlayers, true)
 		.addField("Maximum Players", game.maxPlayers, true)
 		.setTitle(`Invite to ${game.id}`)
 		.setColor(0x00AE86);
 	return new Promise((resolve, reject) => {
-		channel.send(embed).then((message) => {
+		channel.send({ embed: inviteEmbed }).then((message) => {
 			var collector = new ReactionCollector(message, () => true, {time: game.inviteTime});
 			collector.on("collect", (reaction) => {
 				if (!players.some((user) => reaction.users.has(user.id))) {
@@ -118,10 +118,10 @@ function startGame(game, context) {
 
 	loading = [new Promise((resolve, reject) => {
 		try {
-			console.log("Ney!");
+			console.log("Hey!");
 			resolve(new GameAccess(game, context.games).load());
 		} catch(exc) {
-			console.log("Hey!");
+			console.log("Ney!");
 			reject(exc);
 		}
 	})];
