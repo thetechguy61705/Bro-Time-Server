@@ -74,21 +74,23 @@ function dispatchInvites(game, call, players, allowLateJoin) {
 		.addField("Maximum Players", game.maxPlayers, true)
 		.setTitle(`Invite to ${game.id}`)
 		.setColor(0x00AE86);
-	var message = await call.message.channel.send(embed);
-	var collector = new ReactionCollector(message, () => true, {time: game.inviteTime});
 	return new Promise((resolve, reject) => {
-		collector.on("collect", (reaction) => {
-			if (!players.some((user) => reaction.users.has(user.id))) {
-				players.set(user.id, user);
-				if (players.size == game.minPlayers) {
-					if (!game.allowLateJoin)
-						collector.stop("ready");
-					resolve();
+		call.message.channel.send(embed).then((message) => {
+			var collector = new ReactionCollector(message, () => true, {time: game.inviteTime});
+			collector.on("collect", (reaction) => {
+				if (!players.some((user) => reaction.users.has(user.id))) {
+					var user = reaction.users.first();
+					players.set(user.id, user);
+					if (players.size >= game.minPlayers) {
+						if (!game.allowLateJoin)
+							collector.stop("ready");
+						resolve();
+					}
 				}
-			}
-		});
-		collector.on("end", () => {
-			reject();
+			});
+			collector.on("end", () => {
+				reject();
+			});
 		});
 	});
 }
@@ -136,6 +138,8 @@ function startGame(game, games, call) {
 		sessions.push(session);
 
 		console.log("session stored");
+	}, () => {
+		console.log("game cancelled");
 	});
 }
 
