@@ -111,5 +111,5 @@ module.exports = {
 			});
 			collector.on("end", (_, reason) => connectFour.edit(`Interactive command ended: ${reason}`));
 		}).catch(function() {});
-	}
+	}, end: () => {}
 };
