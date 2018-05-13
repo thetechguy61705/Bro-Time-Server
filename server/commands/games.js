@@ -211,6 +211,7 @@ module.exports = {
 			listGames(call.message);
 	},
 	dispatchInput: (input) => {
+		console.log(input);
 		sessions.forEach((session) => {
 			if ((input.channel == null || input.channel == session.context.channel) &&
 				(!session.game.requiresInvite || session.host === input.user || session.players.exists(input.user))) {
