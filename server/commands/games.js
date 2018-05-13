@@ -144,8 +144,7 @@ function startGame(game, context) {
 		game: game,
 		context: context,
 		players: new Collection(),
-		endGame: endGame.bind(session),
-		trackingMessages: []
+		endGame: endGame.bind(session)
 	};
 	if (context.message != null)
 		session.host = context.message.author;
@@ -160,6 +159,7 @@ function startGame(game, context) {
 		session.endTimer = context.client.setTimeout(game.timeout, session.endGame);
 		session.restartEndTimer = (() => {
 			clearTimeout(this.endTimer);
+			console.log(this.game.timeout, this.endGame);
 			this.endTimer = this.context.client.setTimeout(this.game.timeout, this.endGame);
 		}).bind(session);
 
