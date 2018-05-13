@@ -93,7 +93,7 @@ function invite(game, channel, players) {
 		.setColor(0x00AE86);
 	return new Promise((resolve, reject) => {
 		channel.send({ embed: inviteEmbed }).then((message) => {
-			message.react(channel.client.emojis.get("404768960014450689")).then(() => {
+			message.react("404768960014450689").then(() => {
 				var collector = new ReactionCollector(message, (reaction, user) => reaction.emoji.id === "404768960014450689" && user.id !== channel.client.user.id, {
 					time: game.inviteTime
 				});
