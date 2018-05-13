@@ -60,8 +60,8 @@ class Context {
 	}
 }
 
-class Input() {
-	
+class Input {
+
 }
 
 function listGames(message) {
@@ -202,7 +202,7 @@ module.exports = {
 		sessions.forEach((session) => {
 			if (input.channel == session.context.channel &&
 				(session.players.size == 0 || session.players.exists(input.user)))
-					session.game.input(input);
+				session.game.input(input);
 		});
 	}
 };
