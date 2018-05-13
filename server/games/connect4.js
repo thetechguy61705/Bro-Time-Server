@@ -36,6 +36,7 @@ module.exports = {
 			const filter = (reaction, user) => session.players.map(plr => plr.id).includes(user.id) && eA.includes(reaction.emoji.name)
 				&& user.id !== session.context.client.user.id;
 			const collector = connectFour.createReactionCollector(filter, { time: 600000 });
+			session.connectFour = connectFour;
 			collector.on("collect", reaction => {
 				reaction.remove(author.id).catch(function() {});
 				reaction.remove(target.id).catch(function() {});
@@ -112,5 +113,9 @@ module.exports = {
 			});
 			collector.on("end", (_, reason) => connectFour.edit(`Interactive command ended: ${reason}`));
 		}).catch(function() {});
-	}, end: () => {}
+	},
+	input: (input, session) => {
+		return input.type === "reaction" && input.value.message === session.connectFour;
+	},
+	end: () => {},
 };

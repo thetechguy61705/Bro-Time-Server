@@ -61,7 +61,12 @@ class Context {
 }
 
 class Input {
-
+	constructor(type, value, user, channel = null) {
+		this.type = type;
+		this.value = value;
+		this.user = user;
+		this.channel = channel;
+	}
 }
 
 function listGames(message) {
@@ -139,7 +144,8 @@ function startGame(game, context) {
 		game: game,
 		context: context,
 		players: new Collection(),
-		endGame: endGame.bind(session)
+		endGame: endGame.bind(session),
+		trackingMessages: []
 	};
 	if (context.message != null)
 		session.host = context.message.author;
@@ -151,7 +157,11 @@ function startGame(game, context) {
 
 		if (game.updateInterval > 0)
 			session.updateTimer = context.client.setInterval(1/Math.min(game.updateInterval, MAX_UPDATE_CYCLES)*1000, game.update);
-		//session.endTimer = context.client.setTimeout(game.timeout, session.endGame);
+		session.endTimer = context.client.setTimeout(game.timeout, session.endGame);
+		session.restartEndTimer = (() => {
+			clearTimeout(this.endTimer);
+			this.endTimer = this.context.client.setTimeout(this.game.timeout, this.endGame);
+		}).bind(session);
 
 		console.log("timers set");
 
@@ -202,9 +212,11 @@ module.exports = {
 	},
 	dispatchInput: (input) => {
 		sessions.forEach((session) => {
-			if (input.channel == session.context.channel &&
-				(session.players.size == 0 || session.players.exists(input.user)))
-				session.game.input(input);
+			if ((input.channel == null || input.channel == session.context.channel) &&
+				(!session.game.requiresInvite || session.host === input.user || session.players.exists(input.user))) {
+				if (session.game.input(input, session))
+					session.restartEndTimer();
+			}
 		});
 	}
 };
