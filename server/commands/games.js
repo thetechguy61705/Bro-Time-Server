@@ -158,10 +158,10 @@ function startGame(game, context) {
 			session.updateTimer = context.client.setInterval(1/Math.min(game.updateInterval, MAX_UPDATE_CYCLES)*1000, game.update);
 		session.endTimer = context.client.setTimeout(session.endGame, game.timeout);
 		session.restartEndTimer = (() => {
-			console.log(this);
-			clearTimeout(this.endTimer);
-			this.endTimer = this.context.client.setTimeout(this.endGame, this.game.timeout);
-		}).bind(session);
+			console.log(session);
+			clearTimeout(session.endTimer);
+			session.endTimer = context.client.setTimeout(session.endGame, game.timeout);
+		});
 
 		console.log("timers set");
 
