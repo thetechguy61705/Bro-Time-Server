@@ -24,29 +24,6 @@ React with the <:pixeldolphin:404768960014450689> emoji to join the game.`;
 // times per second
 const MAX_UPDATE_CYCLES = 60;
 
-fs.readdirSync(__dirname + "/../games").forEach(file => {
-	var match = file.match(/^(.*)\.js$/);
-	if (match != null) {
-		new Promise((resolve, reject) => {
-			try {
-				var game = require("../games/" + match[1]);
-				DEFAULTS.forEach((entry) => {
-					if (typeof game[entry.key] !== typeof entry.value)
-						game[entry.key] = entry.value;
-				});
-				resolve(game);
-			} catch (exc) {
-				reject(exc);
-			}
-		}).then(module => {
-			modules.set(module.id, module);
-		}, exc => {
-			console.warn(`Unable to load game module ${match}:`);
-			console.warn(exc.stack);
-		});
-	}
-});
-
 class Context {
 	constructor(client, scope) {
 		this.client = client;
@@ -168,8 +145,32 @@ function startGame(game, context) {
 	});
 }
 
+fs.readdirSync(__dirname + "/../games").forEach(file => {
+	var match = file.match(/^(.*)\.js$/);
+	if (match != null) {
+		new Promise((resolve, reject) => {
+			try {
+				var game = require("../games/" + match[1]);
+				DEFAULTS.forEach((entry) => {
+					if (typeof game[entry.key] !== typeof entry.value)
+						game[entry.key] = entry.value;
+				});
+				resolve(game);
+			} catch (exc) {
+				reject(exc);
+			}
+		}).then(module => {
+			modules.set(module.id, module);
+		}, exc => {
+			console.warn(`Unable to load game module ${match}:`);
+			console.warn(exc.stack);
+		});
+	}
+});
+
 module.exports = {
 	Input: Input,
+	loaded: modules,
 
 	id: "game",
 	aliases: ["games", "play"],

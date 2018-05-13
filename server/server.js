@@ -2,9 +2,11 @@ var errorHandler = require("app/errorHandler");
 var config = require("../config");
 var fs = require("fs");
 var discord = require("discord.js");
+var clients = new discord.Collection();
 var loaders = [];
 var areaLoaders = [];
 var chatHandlers = [];
+
 fs.readdirSync(__dirname + "/chat").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
 	if (match != null) {
@@ -32,6 +34,7 @@ fs.readdirSync(__dirname + "/areaLoad").forEach(file => {
 	if (match != null)
 		areaLoaders.push(require("./areaLoad/" + match[1]));
 });
+
 config.BOTS.forEach((bot) => {
 	if (bot.token != null) {
 		let client = new discord.Client();
@@ -224,3 +227,5 @@ config.BOTS.forEach((bot) => {
 		console.log("Skipped missing token.");
 	}
 });
+
+module.exports = clients;
