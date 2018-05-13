@@ -61,6 +61,10 @@ class Context {
 	}
 }
 
+class Input() {
+	
+}
+
 function listGames(message) {
 	var gameList = modules.keyArray();
 	if (message == null) return gameList;
@@ -159,6 +163,8 @@ function startGame(game, context) {
 }
 
 module.exports = {
+	Input: Input,
+
 	id: "game",
 	aliases: ["games", "play"],
 	description: "Starts a game.",
@@ -185,10 +191,11 @@ module.exports = {
 		if (!found)
 			listGames(call.message);
 	},
-	dispatchInput: () => {
-		sessions.forEach(() => {
-			// If applicable, send input.
-
+	dispatchInput: (input) => {
+		sessions.forEach((session) => {
+			if (input.channel == session.context.channel &&
+				(session.players.size == 0 || session.players.exists(input.user)))
+					session.game.input(input);
 		});
 	}
 };
