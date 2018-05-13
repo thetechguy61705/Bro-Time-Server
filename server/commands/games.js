@@ -214,7 +214,7 @@ module.exports = {
 		console.log(input);
 		sessions.forEach((session) => {
 			if ((input.channel == null || input.channel == session.context.channel) &&
-				(!session.game.requiresInvite || session.host === input.user || session.players.exists(input.user))) {
+				(!session.game.requiresInvite || session.host.id === input.user.id || session.players.has(input.user.id))) {
 				if (session.game.input(input, session))
 					session.restartEndTimer();
 			}
