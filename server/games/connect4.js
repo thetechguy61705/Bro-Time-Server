@@ -33,7 +33,7 @@ module.exports = {
 				orderLoop = orderLoop + 1;
 			}
 			var turn = author.id;
-			const filter = (reaction, user) => (user.id == author.id || user.id == target.id) && eA.includes(reaction.emoji.name)
+			const filter = (reaction, user) => (user.id === author.id || user.id === target.id) && eA.includes(reaction.emoji.name)
 				&& user.id !== session.context.client.user.id;
 			const collector = connectFour.createReactionCollector(filter, { time: 600000 });
 			session.connectFour = connectFour;
