@@ -14,7 +14,6 @@ const DEFAULTS = [
 	{key: "allowLateJoin", value: true},
 	{key: "requiresInvite", value: false},
 	{key: "inviteTime", value: 180000},
-	// 3 minutes
 	{key: "timeout", value: 180000},
 	{key: "updateInterval", value: 0},
 	{key: "multithreaded", value: false}
