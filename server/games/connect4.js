@@ -37,7 +37,8 @@ module.exports = {
 				&& user.id !== session.context.client.user.id;
 			const collector = connectFour.createReactionCollector(filter, { time: 600000 });
 			collector.on("collect", reaction => {
-				reaction.remove(turn).catch(function() {});
+				reaction.remove(author.id).catch(function() {});
+				reaction.remove(target.id).catch(function() {});
 				if (reaction.users.last().id === turn) {
 					var currentRow = getRow(rows, eA.indexOf(reaction.emoji.name));
 					if (currentRow == null) currentRow = 6;
