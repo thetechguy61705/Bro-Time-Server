@@ -21,7 +21,7 @@ const DEFAULTS = [
 ];
 const INVITE = `%s
 
-React to this message to join.`;
+React with the <:pixeldolphin:404768960014450689> emoji to join the game.`;
 // times per second
 const MAX_UPDATE_CYCLES = 60;
 
