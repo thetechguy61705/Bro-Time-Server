@@ -181,39 +181,37 @@ config.BOTS.forEach((bot) => {
 		});
 
 		client.on("message", message => {
-			if (!message.author.bot) {
-				var area = message.channel.guild || message.channel;
-				var isServer = !(area instanceof discord.Channel);
-				var task = () => {
-					if (isServer)
-						loadedAreas.set(area.id, true);
-					message.data = area.data;
-					// Process the message.
-					for (var i = 0; i < chatHandlers.length; i++) {
-						try {
-							if (chatHandlers[i].exec(message, client))
-								break;
-						} catch (exc) {
-							console.warn("Failed to handle chat message:");
-							console.warn(exc.stack);
-						}
-					}
-				};
-				// Load area data.
-				if (!isServer || !loadedAreas.has(area.id)) {
-					let promises = [];
-					for (var i = 0; i < areaLoaders.length; i++)
-						promises.push(areaLoaders[i].exec(area, client));
-					Promise.all(promises).then(task).catch((exc) => {
-						console.warn(`Unable to load area ${area.id}:`);
+			var area = message.channel.guild || message.channel;
+			var isServer = !(area instanceof discord.Channel);
+			var task = () => {
+				if (isServer)
+					loadedAreas.set(area.id, true);
+				message.data = area.data;
+				// Process the message.
+				for (var i = 0; i < chatHandlers.length; i++) {
+					try {
+						if (chatHandlers[i].exec(message, client))
+							break;
+					} catch (exc) {
+						console.warn("Failed to handle chat message:");
 						console.warn(exc.stack);
-						message.reply("Unable to load. Retry in a few seconds.");
-						if (isServer)
-							loadedAreas.delete(area.id);
-					});
-				} else {
-					task();
+					}
 				}
+			};
+			// Load area data.
+			if (!isServer || !loadedAreas.has(area.id)) {
+				let promises = [];
+				for (var i = 0; i < areaLoaders.length; i++)
+					promises.push(areaLoaders[i].exec(area, client));
+				Promise.all(promises).then(task).catch((exc) => {
+					console.warn(`Unable to load area ${area.id}:`);
+					console.warn(exc.stack);
+					message.reply("Unable to load. Retry in a few seconds.");
+					if (isServer)
+						loadedAreas.delete(area.id);
+				});
+			} else {
+				task();
 			}
 		});
 
