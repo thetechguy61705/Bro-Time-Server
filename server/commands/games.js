@@ -97,10 +97,10 @@ function invite(game, channel, players) {
 						var user = reaction.users.last();
 						console.log(user.tag);
 						players.set(user.id, user);
-						if (players.size >= game.maxPlayers) {
+						if (players.size >= game.maxPlayers - 1) {
 							collector.stop("ready");
 							resolve();
-						} else if (players.size == game.minPlayers) {
+						} else if (players.size == game.minPlayers - 1) {
 							if (!game.allowLateJoin)
 								collector.stop("ready");
 							resolve();
@@ -141,6 +141,8 @@ function startGame(game, context) {
 		players: new Collection(),
 		endGame: endGame.bind(session)
 	};
+	if (context.message != null)
+		session.host = context.message.author;
 	if (game.requiresInvite)
 		loading.push(invite(game, context.channel, session.players));
 
