@@ -100,7 +100,6 @@ function invite(game, channel, players) {
 				collector.on("collect", (reaction) => {
 					if (!players.keyArray().includes(reaction.users.last().id)) {
 						var user = reaction.users.last();
-						console.log(user.tag);
 						players.set(user.id, user);
 						if (players.size >= game.maxPlayers - 1) {
 							collector.stop("ready");
@@ -132,10 +131,8 @@ function startGame(game, context) {
 
 	loading = [new Promise((resolve, reject) => {
 		try {
-			console.log("Hey!");
 			resolve(new GameAccess(game, context.games).load());
 		} catch(exc) {
-			console.log("Ney!");
 			reject(exc);
 		}
 	})];
@@ -152,26 +149,16 @@ function startGame(game, context) {
 		loading.push(invite(game, context.channel, session.players));
 
 	Promise.all(loading).then(() => {
-		console.log("game loaded.");
-
 		if (game.updateInterval > 0)
 			session.updateTimer = context.client.setInterval(1/Math.min(game.updateInterval, MAX_UPDATE_CYCLES)*1000, game.update);
 		session.endTimer = context.client.setTimeout(session.endGame, game.timeout);
 		session.restartEndTimer = (() => {
-			console.log(session);
 			clearTimeout(session.endTimer);
 			session.endTimer = context.client.setTimeout(session.endGame, game.timeout);
 		});
 
-		console.log("timers set");
-
 		game.start(session);
-
-		console.log("game started");
-
 		sessions.push(session);
-
-		console.log("session stored");
 	}, () => {
 		if (context.message == null) {
 			context.channel.send(`Failed to load ${game.id}.`);
@@ -211,7 +198,6 @@ module.exports = {
 			listGames(call.message);
 	},
 	dispatchInput: (input) => {
-		console.log(input);
 		sessions.forEach((session) => {
 			if ((input.channel == null || input.channel == session.context.channel) &&
 				(!session.game.requiresInvite || session.host.id === input.user.id || session.players.has(input.user.id))) {
