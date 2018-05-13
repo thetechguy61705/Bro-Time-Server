@@ -61,7 +61,7 @@ function listGames(message) {
 	}
 }
 
-function invite(game, channel, players) {
+function invite(game, channel, players, host) {
 	const inviteEmbed = new RichEmbed()
 		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id))
 		.addField("Minimum Players", game.minPlayers, true)
@@ -71,7 +71,7 @@ function invite(game, channel, players) {
 	return new Promise((resolve, reject) => {
 		channel.send({ embed: inviteEmbed }).then((message) => {
 			message.react("404768960014450689").then(() => {
-				var collector = new ReactionCollector(message, (reaction, user) => reaction.emoji.id === "404768960014450689" && user.id !== channel.client.user.id, {
+				var collector = new ReactionCollector(message, (reaction, user) => reaction.emoji.id === "404768960014450689" && user.id !== channel.client.user.id && user.id !== host.id, {
 					time: game.inviteTime
 				});
 				collector.on("collect", (reaction) => {
@@ -123,7 +123,7 @@ function startGame(game, context) {
 	if (context.message != null)
 		session.host = context.message.author;
 	if (game.requiresInvite)
-		loading.push(invite(game, context.channel, session.players));
+		loading.push(invite(game, context.channel, session.players, session.host));
 
 	Promise.all(loading).then(() => {
 		if (game.updateInterval > 0)
