@@ -20,7 +20,7 @@ module.exports = {
 								} else {
 									member.user.send(data.toString("utf8")).catch(function() {});
 								}
-							}).catch(function() {});
+							});
 						}).catch(function() {});
 					}
 				}

@@ -14,14 +14,13 @@ const DEFAULTS = [
 	{key: "allowLateJoin", value: true},
 	{key: "requiresInvite", value: false},
 	{key: "inviteTime", value: 180000},
-	// 3 minutes
 	{key: "timeout", value: 180000},
 	{key: "updateInterval", value: 0},
 	{key: "multithreaded", value: false}
 ];
 const INVITE = `%s
 
-React to this message to join.`;
+React with the <:pixeldolphin:404768960014450689> emoji to join the game.`;
 // times per second
 const MAX_UPDATE_CYCLES = 60;
 
@@ -81,31 +80,37 @@ function listGames(message) {
 }
 
 function invite(game, channel, players) {
-	var embed = new RichEmbed()
+	const inviteEmbed = new RichEmbed()
 		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id))
 		.addField("Minimum Players", game.minPlayers, true)
 		.addField("Maximum Players", game.maxPlayers, true)
 		.setTitle(`Invite to ${game.id}`)
 		.setColor(0x00AE86);
 	return new Promise((resolve, reject) => {
-		channel.send(embed).then((message) => {
-			var collector = new ReactionCollector(message, () => true, {time: game.inviteTime});
-			collector.on("collect", (reaction) => {
-				if (!players.some((user) => reaction.users.has(user.id))) {
-					var user = reaction.users.first();
-					players.set(user.id, user);
-					if (players.size >= game.maxPlayers) {
-						collector.stop("ready");
-						resolve();
-					} else if (players.size == game.minPlayers) {
-						if (!game.allowLateJoin)
+		channel.send({ embed: inviteEmbed }).then((message) => {
+			message.react(channel.client.emojis.get("404768960014450689")).then(() => {
+				var collector = new ReactionCollector(message, (reaction, user) => reaction.emoji.id === "404768960014450689" && user.id !== channel.client.user.id, {
+					time: game.inviteTime
+				});
+				collector.on("collect", (reaction) => {
+					if (!players.keyArray().includes(reaction.users.last().id)) {
+						var user = reaction.users.last();
+						console.log(user.tag);
+						players.set(user.id, user);
+						if (players.size >= game.maxPlayers) {
 							collector.stop("ready");
-						resolve();
+							resolve();
+						} else if (players.size == game.minPlayers) {
+							if (!game.allowLateJoin)
+								collector.stop("ready");
+							resolve();
+						}
 					}
-				}
-			});
-			collector.on("end", () => {
-				reject();
+				});
+				collector.on("end", (_, reason) => {
+					if (reason !== "ready")
+						reject();
+				});
 			});
 		});
 	});
@@ -122,8 +127,10 @@ function startGame(game, context) {
 
 	loading = [new Promise((resolve, reject) => {
 		try {
+			console.log("Hey!");
 			resolve(new GameAccess(game, context.games).load());
 		} catch(exc) {
+			console.log("Ney!");
 			reject(exc);
 		}
 	})];
@@ -142,7 +149,7 @@ function startGame(game, context) {
 
 		if (game.updateInterval > 0)
 			session.updateTimer = context.client.setInterval(1/Math.min(game.updateInterval, MAX_UPDATE_CYCLES)*1000, game.update);
-		session.endTimer = context.client.setTimeout(game.timeout, session.endGame);
+		//session.endTimer = context.client.setTimeout(game.timeout, session.endGame);
 
 		console.log("timers set");
 
@@ -171,7 +178,7 @@ module.exports = {
 	load: () => {
 		games = this;
 	},
-	execute: (call, client) => {
+	execute: (call) => {
 		var name = call.params.readParameter();
 		var found = false;
 
@@ -182,7 +189,7 @@ module.exports = {
 				found = true;
 
 				if (!game.autostart) {
-					startGame(game, new Context(client, call.message));
+					startGame(game, new Context(call.client, call.message));
 				} else {
 					call.message.channel.send(`The game ${name} can not be started manually.`);
 				}
