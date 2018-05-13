@@ -173,7 +173,7 @@ module.exports = {
 	load: () => {
 		games = this;
 	},
-	execute: (call, client) => {
+	execute: (call) => {
 		var name = call.params.readParameter();
 		var found = false;
 
@@ -184,7 +184,7 @@ module.exports = {
 				found = true;
 
 				if (!game.autostart) {
-					startGame(game, new Context(client, call.message));
+					startGame(game, new Context(call.client, call.message));
 				} else {
 					call.message.channel.send(`The game ${name} can not be started manually.`);
 				}
