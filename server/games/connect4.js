@@ -33,7 +33,8 @@ module.exports = {
 				orderLoop = orderLoop + 1;
 			}
 			var turn = author.id;
-			const filter = (reaction, user) => session.players.map(plr => plr.id).includes(user.id) && eA.includes(reaction.emoji.name);
+			const filter = (reaction, user) => session.players.map(plr => plr.id).includes(user.id) && eA.includes(reaction.emoji.name)
+				&& user.id !== session.context.client.user.id;
 			const collector = connectFour.createReactionCollector(filter, { time: 600000 });
 			collector.on("collect", reaction => {
 				reaction.remove(turn).catch(function() {});
