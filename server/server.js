@@ -2,9 +2,11 @@ var errorHandler = require("app/errorHandler");
 var config = require("../config");
 var fs = require("fs");
 var discord = require("discord.js");
+var clients = new discord.Collection();
 var loaders = [];
 var areaLoaders = [];
 var chatHandlers = [];
+
 fs.readdirSync(__dirname + "/chat").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
 	if (match != null) {
@@ -32,19 +34,20 @@ fs.readdirSync(__dirname + "/areaLoad").forEach(file => {
 	if (match != null)
 		areaLoaders.push(require("./areaLoad/" + match[1]));
 });
+
 config.BOTS.forEach((bot) => {
 	if (bot.token != null) {
-		let client = new discord.Client();
+		let client = new discord.Client({ fetchAllMembers: true });
 		let loadedAreas = new discord.Collection();
 
 		errorHandler(client);
-		client.setMaxListeners(30);
 
 		client.on("ready", () => {
 			const realGuild = client.guilds.get("330913265573953536");
 			console.log("Loading " + client.user.username);
+			clients.set(client.user.id, client);
 			loaders.forEach(loader => {
-				loader.exec(client, bot);
+				if (loader.exec) loader.exec(client, bot);
 			});
 			console.log("Finished loading " + client.user.username);
 
@@ -62,7 +65,7 @@ config.BOTS.forEach((bot) => {
 								msg.delete().catch(function() {});
 								realGuild.members.get(muteUser).removeRole(realGuild.roles.find("name", "Muted")).catch(function() {});
 							} else {
-								setTimeout(() => {
+								client.setTimeout(() => {
 									realGuild.members.get(muteUser).removeRole(realGuild.roles.find("name", "Muted")).catch(function() {});
 									msg.delete().catch(function() {});
 								}, timeUntilUnmute - Date.now());
@@ -80,8 +83,8 @@ config.BOTS.forEach((bot) => {
 				];
 				var loopNumber = 0;
 				var offlineInRole;
-				setInterval(function() {
-					if(require("./commands/utility/togglecolor").multicolor) {
+				client.setInterval(function() {
+					if(require("./commands/Utility/togglecolor").multicolor) {
 						offlineInRole = multiColorRole.members.filter(member => member.presence.status === "offline");
 						if (offlineInRole.size !== multiColorRole.members.size) {
 							multiColorRole.setColor(realGuild.roles.find("name", colors[loopNumber]).hexColor).catch(function() {});
@@ -114,7 +117,7 @@ config.BOTS.forEach((bot) => {
 							giveawayPrize = msgargs.slice(5).join(" ");
 							if (giveawayEnd > 0) {
 								client.channels.get(giveawayChannel).fetchMessage(giveawayID).then(giveawayMessage => {
-									var editLoop = setInterval(function() {
+									var editLoop = client.setInterval(function() {
 										var giveawayEmbed;
 										giveawayEnd = giveawayEnd - 5000;
 										var hours = (((giveawayEnd) - (giveawayEnd % 3600000)) / 3600000);
@@ -181,39 +184,37 @@ config.BOTS.forEach((bot) => {
 		});
 
 		client.on("message", message => {
-			if (!message.author.bot) {
-				var area = message.channel.guild || message.channel;
-				var isServer = !(area instanceof discord.Channel);
-				var task = () => {
-					if (isServer)
-						loadedAreas.set(area.id, true);
-					message.data = area.data;
-					// Process the message.
-					for (var i = 0; i < chatHandlers.length; i++) {
-						try {
-							if (chatHandlers[i].exec(message, client))
-								break;
-						} catch (exc) {
-							console.warn("Failed to handle chat message:");
-							console.warn(exc.stack);
-						}
-					}
-				};
-				// Load area data.
-				if (!isServer || !loadedAreas.has(area.id)) {
-					let promises = [];
-					for (var i = 0; i < areaLoaders.length; i++)
-						promises.push(areaLoaders[i].exec(area, client));
-					Promise.all(promises).then(task).catch((exc) => {
-						console.warn(`Unable to load area ${area.id}:`);
+			var area = message.channel.guild || message.channel;
+			var isServer = !(area instanceof discord.Channel);
+			var task = () => {
+				if (isServer)
+					loadedAreas.set(area.id, true);
+				message.data = area.data;
+				// Process the message.
+				for (var i = 0; i < chatHandlers.length; i++) {
+					try {
+						if (chatHandlers[i].exec(message, client))
+							break;
+					} catch (exc) {
+						console.warn("Failed to handle chat message:");
 						console.warn(exc.stack);
-						message.reply("Unable to load. Retry in a few seconds.");
-						if (isServer)
-							loadedAreas.delete(area.id);
-					});
-				} else {
-					task();
+					}
 				}
+			};
+			// Load area data.
+			if (!isServer || !loadedAreas.has(area.id)) {
+				let promises = [];
+				for (var i = 0; i < areaLoaders.length; i++)
+					promises.push(areaLoaders[i].exec(area, client));
+				Promise.all(promises).then(task).catch((exc) => {
+					console.warn(`Unable to load area ${area.id}:`);
+					console.warn(exc.stack);
+					message.reply("Unable to load. Retry in a few seconds.");
+					if (isServer)
+						loadedAreas.delete(area.id);
+				});
+			} else {
+				task();
 			}
 		});
 
@@ -226,3 +227,5 @@ config.BOTS.forEach((bot) => {
 		console.log("Skipped missing token.");
 	}
 });
+
+module.exports = clients;

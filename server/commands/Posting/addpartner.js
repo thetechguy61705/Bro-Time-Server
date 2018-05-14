@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 module.exports = {
 	id: "addpartner",
 	description: "Adds a new partner in the #partners channel",
-	arguments: "(title) (description) (discord invite OR thumbnail url)",
+	arguments: "(title) | (description) | (discord invite OR thumbnail url)",
 	requires: "Role: Community Manager Bro",
 	load: () => {},
 	execute: (call) => {
@@ -13,7 +13,7 @@ module.exports = {
 				const title = call.params.readRaw().split("|")[0];
 				const description = call.params.readRaw().split("|")[1].trim();
 				const thumbnail = call.params.readRaw().split("|")[2].trim();
-				if (!description.length > 2048) {
+				if (description.length < 2048) {
 					call.client.fetchInvite(thumbnail).then((invite) => {
 						const partnerEmbed = new Discord.RichEmbed()
 							.setTitle(title)

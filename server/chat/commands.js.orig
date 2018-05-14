@@ -1,8 +1,13 @@
 var { Collection, MessageMentions } = require("discord.js");
 var modules = new Collection();
 var Parameters = require("app/paramaters");
+<<<<<<< HEAD
 var { CommandAccess } = require("./../../data/data");
+var walk = require("walk");
+=======
+var { CommandAccess } = require("./../../data/server");
 var fs = require("fs");
+>>>>>>> refs/remotes/origin/master
 var path = require("path");
 var util = require("util");
 var prefixPattern = "^(%s)";

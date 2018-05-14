@@ -38,8 +38,9 @@ class DataAccess {
 }
 
 class CommandAccess extends DataAccess {
-	constructor(command) {
+	constructor(command, commands) {
 		super();
+		this.commands = commands;
 		this._command = command;
 	}
 
@@ -51,6 +52,19 @@ class CommandAccess extends DataAccess {
 	canAccess() {
 		// message
 		return true;
+	}
+}
+
+class GameAccess extends DataAccess {
+	constructor(game, games) {
+		super();
+		this.games = games;
+		this._game = game;
+	}
+
+	load() {
+		super.load();
+		return this._game.load();
 	}
 }
 
@@ -100,5 +114,6 @@ class BotAccess extends DataAccess {
 
 module.exports = {
 	BotAccess: BotAccess,
-	CommandAccess: CommandAccess
+	CommandAccess: CommandAccess,
+	GameAccess: GameAccess
 };

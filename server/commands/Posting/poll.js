@@ -3,6 +3,9 @@ const Discord = require("discord.js");
 module.exports = {
 	id: "poll",
 	aliases: ["makepoll", "createpoll", "p"],
+	description: "Sends a rich embed in the channel it was triggered with specified title and poll options" +
+		", then reacts to the rich embed correspondingly to the poll options.",
+	arguments: "(title): (option) | (option)",
 	load: () => {},
 	execute: (call) => {
 		const pollTitle = call.params.readRaw().split(":")[0];
