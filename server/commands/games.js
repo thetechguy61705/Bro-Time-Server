@@ -3,6 +3,7 @@ var fs = require("fs");
 var util = require("util");
 var { Collection, RichEmbed, ReactionCollector, Message } = require("discord.js");
 var { GameAccess } = require("./../../data/server");
+var clients = require("./../server");
 var modules = new Collection();
 var sessions = [];
 var games;
@@ -164,6 +165,9 @@ fs.readdirSync(__dirname + "/../games").forEach(file => {
 			}
 		}).then(module => {
 			modules.set(module.id, module);
+			clients.forEach((client) => {
+				
+			});
 		}, exc => {
 			console.warn(`Unable to load game module ${match}:`);
 			console.warn(exc.stack);

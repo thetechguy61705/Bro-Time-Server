@@ -41,7 +41,6 @@ config.BOTS.forEach((bot) => {
 		let loadedAreas = new discord.Collection();
 
 		errorHandler(client);
-		client.setMaxListeners(30);
 
 		client.on("ready", () => {
 			const realGuild = client.guilds.get("330913265573953536");
@@ -218,6 +217,7 @@ config.BOTS.forEach((bot) => {
 			}
 		});
 
+		clients.put(client.user.id, client);
 		client.login(bot.token);
 
 		process.on("SIGTERM", async () => {
