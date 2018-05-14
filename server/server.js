@@ -45,6 +45,7 @@ config.BOTS.forEach((bot) => {
 		client.on("ready", () => {
 			const realGuild = client.guilds.get("330913265573953536");
 			console.log("Loading " + client.user.username);
+			clients.put(client.user.id, client);
 			loaders.forEach(loader => {
 				if (loader.exec) loader.exec(client, bot);
 			});
@@ -217,7 +218,6 @@ config.BOTS.forEach((bot) => {
 			}
 		});
 
-		clients.put(client.user.id, client);
 		client.login(bot.token);
 
 		process.on("SIGTERM", async () => {
