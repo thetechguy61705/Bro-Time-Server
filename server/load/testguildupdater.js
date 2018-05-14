@@ -129,18 +129,6 @@ module.exports = {
 				}
 			});
 
-			client.on("guildBanAdd", (guild, user) => {
-				if (guild.id === realGuild.id) {
-					testGuild.ban(user);
-				}
-			});
-
-			client.on("guildBanRemove", (guild, user) => {
-				if (guild.id === realGuild.id) {
-					testGuild.unban(user);
-				}
-			});
-
 			client.on("roleCreate", (role) => {
 				if (role.guild.id === realGuild.id) {
 					testGuild.createRole({
