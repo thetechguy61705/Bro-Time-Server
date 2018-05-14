@@ -165,8 +165,8 @@ fs.readdirSync(__dirname + "/../games").forEach(file => {
 			}
 		}).then(module => {
 			modules.set(module.id, module);
-			clients.forEach((client) => {
-				
+			clients.forEach(() => {
+
 			});
 		}, exc => {
 			console.warn(`Unable to load game module ${match}:`);
