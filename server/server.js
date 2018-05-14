@@ -37,7 +37,7 @@ fs.readdirSync(__dirname + "/areaLoad").forEach(file => {
 
 config.BOTS.forEach((bot) => {
 	if (bot.token != null) {
-		let client = new discord.Client();
+		let client = new discord.Client({ fetchAllMembers: true });
 		let loadedAreas = new discord.Collection();
 
 		errorHandler(client);
