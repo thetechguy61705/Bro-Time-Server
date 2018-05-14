@@ -10,7 +10,7 @@ module.exports = {
 					call.message.reply(":( not many people voted :(");
 				}
 			}).catch(() => {
-				call.message.reply("NOOOOOOB XDDD");
+				call.message.reply("XD NOOB THE PROMISE GOT ***REJECTED***");
 			});
 	}
 };
