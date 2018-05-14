@@ -1,5 +1,8 @@
 module.exports = {
 	id: "role",
+	description: "Gives the user the specified role(s) if the role is below the author's highest role.",
+	arguments: "(user/option) [role/roles]",
+	requires: "Moderator permissions",
 	load: () => {},
 	execute: (call) => {
 		var roles = call.params.readRaw().split(" ").slice(1).join(" ").split(", ").filter(r => r !== "");

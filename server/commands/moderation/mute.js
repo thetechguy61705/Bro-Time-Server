@@ -2,6 +2,9 @@ const ms = require("ms");
 
 module.exports = {
 	id: "mute",
+	description: "Gives the user the \"Muted\" role for the specified period of time. If no time is specified, it will not automatically remove the role.",
+	arguments: "(user) [time]",
+	requires: "Moderator permissions",
 	load: () => {},
 	execute: (call) => {
 		const rawContent = call.params.readRaw();
@@ -21,7 +24,7 @@ module.exports = {
 									call.message.channel
 										.send(`***Successfully muted \`${target.user.tag}\` for ${ms(muteTime, { long: true })}.***`).catch(function() {});
 									call.client.channels.get("436714650835484707").send(`${target.user.id} ${Date.now() + muteTime}`).then(msg => {
-										setTimeout(() => {
+										call.client.setTimeout(() => {
 											target.removeRole(call.message.guild.roles.find("name", "Muted")).catch(function() {});
 											msg.delete().catch(function() {});
 										}, muteTime);

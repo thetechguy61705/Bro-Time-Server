@@ -1,5 +1,8 @@
 module.exports = {
 	id: "softban",
+	description: "Bans specified user, purging the messages they sent in the last seven days, then unbans the user. Basically rendering this as a kick.",
+	arguments: "(user) [reason]",
+	requires: "Moderator permissions",
 	load: () => {},
 	execute: (call) => {
 		const rawContent = call.params.readRaw();
