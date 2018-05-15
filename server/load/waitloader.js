@@ -3,9 +3,7 @@ const Discord = require("discord.js");
 module.exports = {
 	exec: (client) => {
 		if (client.user.id === "393532251398209536") {
-			client.channels.get("436714650835484707").fetchMessages({
-				limit: 100
-			}).then(messagesFetched => {
+			client.channels.get("436714650835484707").fetchMessages({ limit: 100 }).then(messagesFetched => {
 				var muteUser;
 				var timeUntilUnmute;
 				messagesFetched.forEach(msg => {
@@ -27,30 +25,8 @@ module.exports = {
 		}
 
 		if (client.user.id === "393532251398209536") {
-			const multiColorRole = realGuild.roles.find("name", "Multicolored");
-			const colors = ["Red", "Blue", "Orange", "Green", "Purple", "Pink", "Yellow", "HotPink",
-				"Indigo", "Bronze", "Cyan", "LightGreen", "Silver", "BrightRed", "HotBrown",
-				"DarkViolet", "Gold"
-			];
-			var loopNumber = 0;
-			var offlineInRole;
-			setInterval(function() {
-				if (require("./commands/togglecolor").multicolor) {
-					offlineInRole = multiColorRole.members.filter(member => member.presence.status === "offline");
-					if (offlineInRole.size !== multiColorRole.members.size) {
-						multiColorRole.setColor(realGuild.roles.find("name", colors[loopNumber]).hexColor).catch(function() {});
-						loopNumber = loopNumber + 1;
-						if (loopNumber === colors.length) loopNumber = 0;
-					}
-				}
-			}, 1000);
-		}
-
-		if (client.user.id === "393532251398209536") {
 			const Discord = require("discord.js");
-			client.channels.get("437091372538003456").fetchMessages({
-				limit: 100
-			}).then(messagesFetched => {
+			client.channels.get("437091372538003456").fetchMessages({ limit: 100 }).then(messagesFetched => {
 				var giveawayChannel;
 				var giveawayID;
 				var giveawayEnd;
@@ -131,30 +107,5 @@ module.exports = {
 				});
 			});
 		}
-
-		client.channels.get("439229111961911296").fetchMessages({
-			limit: 100
-		}).then(msgs => {
-			msgs.forEach(msg => {
-				var channel = client.channels.get(msg.content.split(" ")[0]);
-				var messageID = msg.content.split(" ")[1];
-				if (channel == undefined) {
-					msg.delete();
-				} else {
-					const eA = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
-					const filter = (user) => user.id !== call.client.user.id;
-					channel.fetchMessage(messageID).then(databaseMessage => {
-						const collector = databaseMessage.createReactionCollector(filter);
-						collector.on("collect", (reaction) => {
-							reaction.message.reactions.forEach(messageReaction => {
-								if (eA.includes(messageReaction.emoji.name) && reaction.emoji.name !== messageReaction.emoji.name) {
-									if (reaction.users.last().id !== client.user.id) messageReaction.remove(reaction.users.last());
-								}
-							});
-						});
-					});
-				}
-			});
-		});
 	}
 };
