@@ -14,7 +14,7 @@ module.exports = {
 							.setDescription(`Welcome to Bro Time ${member.user}! Have a good time here!`)
 							.setFooter(`Bro Time is now at ${member.guild.memberCount} members!`);
 						hangoutChannel.send({ embed: welcomeMessage }).then(() => {
-							fs.readFile(__dirname + "/./info/welcomemsg.md", (err, data) => {
+							fs.readFile(__dirname + "/./../info/welcomemsg.md", (err, data) => {
 								if (err) {
 									throw err;
 								} else {
