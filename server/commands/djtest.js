@@ -1,3 +1,5 @@
+const dj = require("app/dj");
+
 module.exports = {
 	id: "djtest",
 	load: () => {},
