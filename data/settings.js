@@ -3,9 +3,6 @@ var objects = [];
 var pool;
 
 class Settings {
-	static CACHE = 0x00000001;
-	static SAVE = 0x00000002;
-
 	static get(newPool, namespace, association) {
 		var serverId, userId;
 		pool = newPool;
@@ -56,5 +53,7 @@ class Settings {
 			});
 	}
 }
+Settings.CACHE = 0x00000001;
+Settings.SAVE = 0x00000002;
 
 module.exports = Settings;

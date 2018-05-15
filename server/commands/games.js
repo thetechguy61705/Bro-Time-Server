@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 var fs = require("fs");
 var util = require("util");
 var { Collection, RichEmbed, ReactionCollector, Message } = require("discord.js");
-var { GameAccess } = require("./../../data/server");
+var { GameAccess } = require("./../../data/data");
 var modules = new Collection();
 var sessions = [];
 var games;
