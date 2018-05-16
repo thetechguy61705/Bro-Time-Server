@@ -43,7 +43,6 @@ config.BOTS.forEach((bot) => {
 		errorHandler(client);
 
 		client.on("ready", () => {
-			const realGuild = client.guilds.get("330913265573953536");
 			console.log("Loading " + client.user.username);
 			clients.set(client.user.id, client);
 			loaders.forEach(loader => {
