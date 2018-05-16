@@ -1,5 +1,3 @@
-const dj = require("app/dj");
-
 module.exports = {
 	id: "commandstest",
 	load: () => {},
