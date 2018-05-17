@@ -63,7 +63,7 @@ function loadModule(file, category) {
 		modules.set(module.id, module);
 	}, (exc) => {
 		if (exc != null) {
-			console.warn(`Commaned failed to load ${path.parse(file).name}:`);
+			console.warn(`Command failed to load ${path.parse(file).name}:`);
 			console.warn(exc.stack);
 		}
 	});

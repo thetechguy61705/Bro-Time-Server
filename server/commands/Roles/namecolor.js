@@ -1,3 +1,5 @@
+const premium = require("app/premium");
+
 const allroles = ["Red", "Blue", "Orange", "Green", "Black", "Purple", "Pink", "Yellow",
 	"HotPink", "Indigo", "Bronze", "Cyan", "LightGreen", "Silver", "BrightRed", "HotBrown",
 	"DarkViolet", "Gold", "Multicolored"];
@@ -22,7 +24,7 @@ module.exports = {
 		let color = call.params.readRaw().toLowerCase();
 		let role = call.params.readRole();
 		if (allroles.map(r => r.toLowerCase()).includes(color)) {
-			if (call.message.member.roles.find("name", "Bro Time Premium")) {
+			if (premium(call.message.member)) {
 				removeColorRoles(call.message.guild.roles, call.message.member);
 				call.message.member.addRole(role).then(() => {
 					call.message.channel.send(`Successfully given you the \`${role.name}\` color role!`).catch(() => {

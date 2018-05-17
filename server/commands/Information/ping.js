@@ -3,7 +3,7 @@ module.exports = {
 	aliases: ["pong"],
 	description: "Returns the response time of the bot in milliseconds, as well as a diagnostic.",
 	execute: (call) => {
-		const delay = Math.round(call.client.ping);
+		const delay = call.client.pings[0];
 		var diag;
 		if (delay <= 0) {
 			diag = "impossible";
