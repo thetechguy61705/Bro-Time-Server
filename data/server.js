@@ -90,6 +90,5 @@ class BotAccess extends DataAccess {
 
 module.exports = {
 	BotAccess: BotAccess,
-	CommandAccess: CommandAccess,
 	GameAccess: GameAccess
 };
