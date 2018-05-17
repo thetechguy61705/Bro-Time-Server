@@ -20,6 +20,7 @@ module.exports = {
 				}
 				const filter = (reaction, user) => (user.id === author.id || user.id === target.id) && eA.includes(reaction.emoji.name);
 				const reactions = msg.createReactionCollector(filter, { time: 300000 });
+				session.tictactoe = msg;
 				reactions.on("collect", reaction => {
 					eA.forEach(emoji => {
 						if (emoji === reaction.emoji.name) {
@@ -41,6 +42,9 @@ module.exports = {
 					msg.edit(`Interactive command ended: ${reason}\n${eA[0]} | ${eA[1]} | ${eA[2]}\n———————\n${eA[3]} | ${eA[4]} | ${eA[5]}\n———————\n${eA[6]} | ${eA[7]} | ${eA[8]}`);
 				});
 			});
+	},
+	input: (input, session) => {
+		return input.type === "reaction" && input.value.message.id === session.tictactoe.id;
 	},
 	end: () => {},
 };
