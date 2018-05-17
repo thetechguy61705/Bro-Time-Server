@@ -6,7 +6,6 @@ var fs = require("fs");
 var path = require("path");
 var util = require("util");
 var prefixPattern = "^(%s)";
-var data = {};
 
 const COMMANDS = __dirname + "/../commands";
 const TESTING = process.env.NODE_ENV !== "production";
@@ -70,15 +69,6 @@ function loadModule(file, category) {
 	});
 }
 
-function load(command, commands) {
-	var commandData = data[command.id];
-	if (commandData === undefined) {
-		commandData = new CommandAccess(command, commands);
-		commandData.load();
-	}
-	return commandData;
-}
-
 try {
 	fs.readdirSync(COMMANDS).forEach((name) => {
 		try {
@@ -137,21 +127,12 @@ module.exports = {
 				params.readSeparator();
 				var name = params.readParameter();
 				if (name != null) {
-					try {
-						var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
+					var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
 
-						if (command != null) {
-							var data = load(command, this);
-							if (data.canAccess(message)) {
-								params.readSeparator();
-								command.execute(new Call(this, message, client, params));
-								used = true;
-							}
-						}
-					} catch (exc) {
-						console.warn(`Command failed to execute ${name}:`);
-						console.warn(exc.stack);
-						message.channel.send(`The ${name} command failed to load.`);
+					if (command != null) {
+						params.readSeparator();
+						command.execute(new Call(this, message, client, params));
+						used = true;
 					}
 				}
 			}

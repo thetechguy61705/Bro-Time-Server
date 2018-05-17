@@ -37,24 +37,6 @@ class DataAccess {
 	}
 }
 
-class CommandAccess extends DataAccess {
-	constructor(command, commands) {
-		super();
-		this.commands = commands;
-		this._command = command;
-	}
-
-	load() {
-		this._command.load(this);
-		super.load();
-	}
-
-	canAccess() {
-		// message
-		return true;
-	}
-}
-
 class GameAccess extends DataAccess {
 	constructor(game, games) {
 		super();
