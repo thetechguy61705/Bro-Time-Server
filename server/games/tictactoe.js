@@ -1,5 +1,3 @@
-const Discord = require("discord.js");
-
 module.exports = {
 	id: "tictactoe",
 	shortDescription: "Play tictactoe.",
@@ -15,7 +13,7 @@ module.exports = {
 		const target = session.players.last();
 		var turn = [author, "❌"];
 		var eA = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
-		call.message.channel.send(`${eA[0]} | ${eA[1]} | ${eA[2]}\n———————\n${eA[3]} | ${eA[4]} | ${eA[5]}\n———————\n${eA[6]} | ${eA[7]} | ${eA[8]}\n\n${turn[0]}"s turn.`).then(async function(msg) {
+		session.context.channel.send(`${eA[0]} | ${eA[1]} | ${eA[2]}\n———————\n${eA[3]} | ${eA[4]} | ${eA[5]}\n———————\n${eA[6]} | ${eA[7]} | ${eA[8]}\n\n${turn[0]}"s turn.`).then(async function(msg) {
 			for (var orderLoop = 0; orderLoop !== eA.length; orderLoop++) {
 				await msg.react(eA[orderLoop]);
 			}
@@ -28,7 +26,7 @@ module.exports = {
 					}
 				});
 
-				msg.edit(`${eA[0]} | ${eA[1]} | ${eA[2]}\n———————\n${eA[3]} | ${eA[4]} | ${eA[5]}\n———————\n${eA[6]} | ${eA[7]} | ${eA[8]}\n\n${turn[0]}"s turn.`).then(m => {
+				msg.edit(`${eA[0]} | ${eA[1]} | ${eA[2]}\n———————\n${eA[3]} | ${eA[4]} | ${eA[5]}\n———————\n${eA[6]} | ${eA[7]} | ${eA[8]}\n\n${turn[0]}"s turn.`).then(() => {
 					if ((eA[0] === eA[1] && eA[1] === eA[2]) || (eA[3] === eA[4] && eA[4] === eA[5]) || (eA[6] === eA[7] && eA[7] === eA[8]) ||
 						(eA[0] === eA[3] && eA[3] === eA[6]) || (eA[1] === eA[4] && eA[4] === eA[7]) || (eA[2] === eA[5] && eA[5] === eA[8]) ||
 						(eA[0] === eA[4] && eA[4] === eA[8]) || (eA[2] === eA[4] && eA[4] === eA[6])) {
