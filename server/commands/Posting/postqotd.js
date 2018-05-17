@@ -3,7 +3,6 @@ module.exports = {
 	description: "Posts the specified \"Question of The Day\" in <#330920609435353090>.",
 	arguments: "(qotd)",
 	requires: "Role: QoTD Host",
-	load: () => {},
 	execute: (call) => {
 		if(call.message.member.roles.has(call.message.guild.roles.find("name", "QOTD Host").id)) {
 			let ann = call.message.guild.channels.find("name", "announcements");

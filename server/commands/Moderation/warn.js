@@ -5,7 +5,6 @@ module.exports = {
 	description: "Sends the user a dm with the supplied reason.",
 	arguments: "(user) [reason]",
 	requires: "Moderator permissions",
-	load: () => {},
 	execute: (call) => {
 		const rawContent = call.params.readRaw();
 		const parameterOne = rawContent.split(" ")[0];

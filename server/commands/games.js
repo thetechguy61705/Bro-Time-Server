@@ -178,12 +178,11 @@ module.exports = {
 	id: "game",
 	aliases: ["games", "play"],
 	description: "Starts a game.",
-	load: () => {
-		games = this;
-	},
 	execute: (call) => {
 		var name = call.params.readParameter();
 		var found = false;
+		if (games != null)
+			games = this;
 
 		if (name != null) {
 			var game = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);

@@ -414,7 +414,6 @@ module.exports = {
 	aliases: ["information"],
 	description: "Returns information on the specified topic, if the topic is gameroles, ad, donate, namecolors, levelroles or howtogetrole.",
 	arguments: "(option)",
-	load: () => {},
 	execute: (call) => {
 		var prompt;
 		var choice = call.params.readParameter();

@@ -4,7 +4,6 @@ module.exports = {
 	id: "freerole",
 	description: "Gives the user the specified role if it is QOTD, ANN or GW.",
 	arguments: "(ANN/GW/QoTD)",
-	load: () => {},
 	execute: (call) => {
 		var finput = call.params.readRaw().trim();
 		if (joinableroles.includes(finput.toUpperCase())) {

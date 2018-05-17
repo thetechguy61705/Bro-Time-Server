@@ -97,7 +97,6 @@ module.exports = {
 	description: "Allows the user to create their own role, with a custom name and color.",
 	requires: "Bro Time Premium",
 	arguments: "... prompt",
-	load: () => {},
 	execute: async (call) => {
 		var input1 = call.params.readRaw().toLowerCase();
 		if (input1 == "remove" || input1 == "rem" || input1 == "delete" || input1 == "del") {

@@ -19,7 +19,6 @@ module.exports = {
 	aliases: ["?", "h"],
 	description: "Returns information and commands on the bot.",
 	arguments: "[command]",
-	load: () => {},
 	execute: (call) => {
 		const pfx = call.message.data.prefix;
 		var param1 = call.params.readRaw();

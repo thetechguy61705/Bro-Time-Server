@@ -1,8 +1,9 @@
+var vote = require("app/vote");
+
 module.exports = {
 	id: "votetest",
-	load: () => {},
 	execute: (call) => {
-		require("app/vote")(60000, call.message.channel, 2, () => true, `${call.message.guild.id} VOTE TEST`, "`<current>` out of <required> voted!", call.message.author)
+		vote(60000, call.message.channel, 2, () => true, `${call.message.guild.id} VOTE TEST`, "`<current>` out of <required> voted!", call.message.author)
 			.then((result) => {
 				if (result) {
 					call.message.reply("YAYYY COOL BEANS DOOD!!!");

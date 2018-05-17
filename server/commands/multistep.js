@@ -1,4 +1,4 @@
-var util;
+var util = require("util");
 
 function trim(output, max) {
 	if (output.length > max)
@@ -9,9 +9,6 @@ function trim(output, max) {
 module.exports = {
 	id: "multistep",
 	test: true,
-	load: () => {
-		util = require("util");
-	},
 	execute: (call) => {
 		var settings = 0;
 		var cancel = false;

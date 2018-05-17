@@ -5,7 +5,6 @@ module.exports = {
 	description: "Adds a new partner in the #partners channel",
 	arguments: "(title) | (description) | (discord invite OR thumbnail url)",
 	requires: "Role: Community Manager Bro",
-	load: () => {},
 	execute: (call) => {
 		const partnersChannel = call.message.guild.channels.find("id", "409156491640045571");
 		if (call.message.member.roles.has("409153912558583818")) {
