@@ -34,11 +34,7 @@ module.exports = {
 							(eA[0] === eA[4] && eA[4] === eA[8]) || (eA[2] === eA[4] && eA[4] === eA[6])) {
 							reactions.stop(`${turn[1]} won the game`);
 						}
-						if (turn[0].id === target.id) {
-							turn = [author, "❌"];
-						} else {
-							turn = [target, "⭕"];
-						}
+						turn = (turn[0].id === target.id) ? [author, "❌"] : [target, "⭕"];
 					});
 				});
 
