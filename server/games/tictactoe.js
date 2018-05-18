@@ -32,9 +32,13 @@ module.exports = {
 						if ((eA[0] === eA[1] && eA[1] === eA[2]) || (eA[3] === eA[4] && eA[4] === eA[5]) || (eA[6] === eA[7] && eA[7] === eA[8]) ||
 							(eA[0] === eA[3] && eA[3] === eA[6]) || (eA[1] === eA[4] && eA[4] === eA[7]) || (eA[2] === eA[5] && eA[5] === eA[8]) ||
 							(eA[0] === eA[4] && eA[4] === eA[8]) || (eA[2] === eA[4] && eA[4] === eA[6])) {
-							reactions.end(`${turn[1]} won the game`);
+							reactions.stop(`${turn[1]} won the game`);
 						}
-						(turn[0].id === target.id) ? turn = [author.id, "❌"]: turn = [target.id, "⭕"];
+						if (turn[0].id === target.id) {
+							turn = [author, "❌"];
+						} else {
+							turn = [target, "⭕"];
+						}
 					});
 				});
 
