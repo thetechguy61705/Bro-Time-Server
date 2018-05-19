@@ -7,7 +7,7 @@ module.exports = {
 		client.on("guildMemberAdd", member => {
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
-					if (!member.bot) {
+					if (!member.user.bot) {
 						const welcomeMessage = new Discord.RichEmbed()
 							.setTitle("Welcome")
 							.setColor("#FFA500")
@@ -29,7 +29,7 @@ module.exports = {
 		client.on("guildMemberRemove", member => {
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
-					if (!member.bot) {
+					if (!member.user.bot) {
 						const goodbyeMessage = new Discord.RichEmbed()
 							.setTitle("Goodbye")
 							.setColor("#0000ff")
