@@ -23,16 +23,8 @@ module.exports = {
 		return play;
 	},
 
-	relay() {
-
-	},
-
-	pause() {
-
-	},
-
-	continue() {
-
+	load(ticket) {
+		return ytdl.downloadFromInfo(ticket, this);
 	},
 
 	search() {
