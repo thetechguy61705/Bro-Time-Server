@@ -1,23 +1,40 @@
 var ytdl = require("ytdl-core");
+var miniget = require("miniget");
 
 const MIN_RATING = 3;
 
 module.exports = {
+	id: "youtube",
 	filter: "audio",
 	retires: 0,
 
-	getTicket(query) {
+	getTicket(query, key) {
 		return new Promise((resolve) => {
 			ytdl.getInfo(query, this, (err, info) => {
-				resolve(err == null ? info : null);
+				if (err == null) {
+					miniget(`https://www.googleapis.com/youtube/v3/videos?id=${info.video_id}&part=contentDetails&key=${key}`, (err, res, body) => {
+						if (err) {
+							console.warn(err.stack);
+							resolve(null);
+						} else {
+							var rating = JSON.parse(body).items[0].contentDetails.contentRating;
+							info.mature = rating != null && rating.ytRating === "ytAgeRestricted";
+							resolve(info);
+						}
+					});
+				} else {
+					console.warn(err.stack);
+					resolve(null);
+				}
 			});
 		});
 	},
 
 	getPlayable(ticket) {
 		var play = "good";
-		// todo: Check mpaa (or similar) rating. Set to "mature" if applicable.
-		if (ticket.allow_ratings !== "1" || parseFloat(ticket.avg_rating) < MIN_RATING) {
+		if (ticket.mature) {
+			play = "mature";
+		} else if (ticket.allow_ratings !== "1" || parseFloat(ticket.avg_rating) < MIN_RATING) {
 			play = "unknown";
 		}
 		return play;
