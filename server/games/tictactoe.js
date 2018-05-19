@@ -32,14 +32,17 @@ module.exports = {
 						if ((eA[0] === eA[1] && eA[1] === eA[2]) || (eA[3] === eA[4] && eA[4] === eA[5]) || (eA[6] === eA[7] && eA[7] === eA[8]) ||
 							(eA[0] === eA[3] && eA[3] === eA[6]) || (eA[1] === eA[4] && eA[4] === eA[7]) || (eA[2] === eA[5] && eA[5] === eA[8]) ||
 							(eA[0] === eA[4] && eA[4] === eA[8]) || (eA[2] === eA[4] && eA[4] === eA[6])) {
-							reactions.stop(`${turn[1]} won the game`);
+							reactions.stop(`${turn[1]} won the game.`);
+						} else if (eA.every(value => value === "❌" || value === "⭕")) {
+							reactions.stop("It was a tie.");
 						}
 						turn = (turn[0].id === target.id) ? [author, "❌"] : [target, "⭕"];
 					});
 				});
 
-				reactions.on("end", (_, reason) => {
+				reactions.on("end", (collected, reason) => {
 					msg.edit(`Interactive command ended: ${reason}\n${eA[0]} | ${eA[1]} | ${eA[2]}\n———————\n${eA[3]} | ${eA[4]} | ${eA[5]}\n———————\n${eA[6]} | ${eA[7]} | ${eA[8]}`);
+					collected.first().message.channel.send(reason).catch(function() {});
 				});
 			});
 	},
