@@ -1,5 +1,6 @@
 var ytdl = require("ytdl-core");
 var miniget = require("miniget");
+var querystring = require('querystring');
 
 const MIN_RATING = 3;
 
@@ -44,7 +45,15 @@ module.exports = {
 		return ytdl.downloadFromInfo(ticket, this);
 	},
 
-	search() {
-
+	search(query, key) {
+		return new Promise((resolve, reject) => {
+			miniget(`https://www.googleapis.com/youtube/v3/search?type=video&q=${querystring.escape(query)}&maxResults=5&part=id&key=${key}`, (err, res, body) => {
+				if (err == null) {
+					resolve(JSON.parse(body).items.map((item) => { return item.id.videoId; }));
+				} else {
+					resolve([]);
+				}
+			});
+		});
 	}
 };
