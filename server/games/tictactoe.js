@@ -16,12 +16,13 @@ module.exports = {
 		var eA = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
 		session.context.
 			channel.send(`${eA[0]} | ${eA[1]} | ${eA[2]}\n———————\n${eA[3]} | ${eA[4]} | ${eA[5]}\n———————\n${eA[6]} | ${eA[7]} | ${eA[8]}\n\n${turn[0]}'s turn.`).then(async function(msg) {
+				session.tictactoe = msg;
 				for (var orderLoop = 0; orderLoop !== eA.length; orderLoop++) {
 					await msg.react(eA[orderLoop]);
 				}
 				const filter = (reaction, user) => (user.id === author.id || user.id === target.id) && eA.includes(reaction.emoji.name);
 				const reactions = msg.createReactionCollector(filter, { time: 300000 });
-				session.tictactoe = msg;
+
 				reactions.on("collect", reaction => {
 					eA.forEach(emoji => {
 						if (emoji === reaction.emoji.name) {
