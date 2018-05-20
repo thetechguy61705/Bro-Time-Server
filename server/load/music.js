@@ -9,6 +9,7 @@ const TOKENS_MAPPING = {
 };
 const VOTE_TIMEOUT = 60000;
 const VOTE_REQUIRED = 0.30;
+const MUSIC_CHANNELS = ["music", "songs"];
 
 class Queue {
 	static request(message, prompt) {
@@ -24,16 +25,23 @@ class Queue {
 		return result;
 	}
 
-	play(query, message, client) {
-		this.reserve(message.user, client);
+	static isMusicChannel(channel) {
+		var name = channel.name.toLowerCase();
+		return MUSIC_CHANNELS.some((keyword) => { return name.startsWith(keyword) || name.endsWith(keyword); });
+	}
 
-		console.log("queueing:", query);
+	play(query, message, client) {
+		this.reserve(message.member, client).then(() => {
+			console.log("Playing:", query);
+		}, () => {
+			console.log("Can't play!");
+		});
 	}
 
 	stop() {
-		this.release();
-
-		console.log("stopping");
+		this.release().then(() => {
+			console.log("Stopped playing.");
+		});
 	}
 
 	skip() {
@@ -44,13 +52,25 @@ class Queue {
 
 	}
 
-	reserve(user, client) {
-		// If the user is in a music channel, join it, and create a voice connection
-		console.log(user, client);
+	reserve(member) {
+		return new Promise((resolve, reject) => {
+			if (member.voiceChannel != null && Queue.isMusicChannel(member.voiceChannel)) {
+				member.voiceChannel.join().then((connection) => {
+					this.connection = connection;
+					resolve();
+				}).catch(reject);
+			} else {
+				resolve();
+			}
+		});
 	}
 
 	release () {
-		// If a voice connection is active, Disconnect the voice connection, and leave the voice channel.
+		return new Promise((resolve) => {
+			if (this.connection != null)
+				this.connection.channel.leave();
+			resolve();
+		});
 	}
 
 	pause() {
