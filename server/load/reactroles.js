@@ -8,6 +8,7 @@ module.exports = {
 			"Call of Duty", "Destiny", "Psych"];
 		client.channels.get("447205162436788235").fetchMessages({ limit: 100 }).then(unfilteredMessages => {
 			var messages = unfilteredMessages.filter(m => m.embeds && m.embeds[0] && m.embeds[0].title);
+			console.log(freeRoles.difference(messages.map(message => message.embeds[0].title)).length);
 			if (freeRoles.difference(messages.map(message => message.embeds[0].title)).length === 0) {
 				messages.forEach(async function(message) {
 					if (message.author.id !== client.user.id) {
