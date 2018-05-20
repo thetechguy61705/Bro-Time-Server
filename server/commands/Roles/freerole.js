@@ -1,9 +1,9 @@
-const joinableroles = ["QOTD", "ANN", "GW"];
+const joinableroles = ["QOTD", "ANN", "GW", "MOVIES"];
 
 module.exports = {
 	id: "freerole",
 	description: "Gives the user the specified role if it is QOTD, ANN or GW.",
-	arguments: "(ANN/GW/QoTD)",
+	arguments: "(ANN/GW/QoTD/Movies)",
 	execute: (call) => {
 		var finput = call.params.readRaw().trim();
 		if (joinableroles.includes(finput.toUpperCase())) {
@@ -30,7 +30,7 @@ module.exports = {
 				});
 			}
 		} else {
-			call.message.channel.send("Please specify a valid freerole option. Freeroles: `ANN, GW, QOTD`").catch(() => {
+			call.message.channel.send("Please specify a valid freerole option. Freeroles: `ANN, GW, QOTD, Movies`").catch(() => {
 				call.message.author.send(`You atttempted to use the \`freerole\` command in ${call.message.channel}, but I do not have permissions to chat there.`)
 					.catch(function(){});
 			});
