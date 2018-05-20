@@ -7,6 +7,10 @@ module.exports = {
 			var loopNumber = 0;
 			var randomchoice;
 			var othercolors;
+			var onetimecolors = colors.filter(c => multiColorRole.hexColor !== c);
+			var onetimerandomchoice = Math.floor(Math.random() * onetimecolors.length);
+			multiColorRole.setColor(realGuild.roles.find("name", onetimecolors[onetimerandomchoice]).hexColor).catch(function() {});
+			console.log(`Changed color to ${onetimecolors[onetimerandomchoice]}.`);
 			client.setInterval(function() {
 				othercolors = colors.filter(c => multiColorRole.hexColor !== c);
 				randomchoice = Math.floor(Math.random() * othercolors.length);
