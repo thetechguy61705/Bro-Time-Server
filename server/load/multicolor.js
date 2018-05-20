@@ -11,8 +11,8 @@ module.exports = {
 			if (require("./commands/Utility/togglecolor").multicolor) {
 				var randomchoice = Math.floor(Math.random() * colors.length);
 				multiColorRole.setColor(realGuild.roles.find("name", colors[randomchoice]).hexColor).catch(function() {});
+				console.log("Set The Color");
 			}
-			console.log("Set The Color");
 			var loopNumber = 0;
 			var offlineInRole;
 			client.setInterval(function() {
