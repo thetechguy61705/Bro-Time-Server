@@ -106,8 +106,10 @@ module.exports = {
 	},
 	end: (session) => {
 		session.collector.stop("game ended");
-		session.connectFour.edit(`Interactive command ended: ${session.winner == null ?
-			"No one won. It was a draw." :
-			`${session.winner} won the game!`}`);
+		session.collector.on("end", (collected) => {
+			collected.last().message.edit(`Interactive command ended: ${session.winner == null ?
+				"No one won. It was a draw." :
+				`${session.winner} won the game!`}`);
+		}
 	}
 };
