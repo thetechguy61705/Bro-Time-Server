@@ -1,7 +1,7 @@
 module.exports = {
 	exec: (client) => {
 		var realGuild = client.guilds.get("330913265573953536");
-		if (client.user.id === "433065327836790784") {
+		if (client.user.id === "393532251398209536") {
 			const multiColorRole = realGuild.roles.find("name", "Multicolored");
 			const colors = ["Red", "Blue", "Orange", "Green", "Purple", "Yellow"];
 			var loopNumber = 0;
