@@ -16,7 +16,7 @@ module.exports = {
 					console.log("3");
 					if (message.author.id !== client.user.id) {
 						console.log("4");
-						if (message.reactions.has("404768960014450689")) {
+						if (message.reactions.has("pixeldolphin:404768960014450689")) {
 							console.log("5");
 							const filter = (reaction) => reaction.emoji.id === "404768960014450689";
 							const collector = message.createReactionCollector(filter);
