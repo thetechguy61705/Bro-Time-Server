@@ -43,7 +43,7 @@ class Queue {
 	}
 
 	stop(message) {
-		this.release(message.member).then(() => {
+		this.release(message.member.guild).then(() => {
 			console.log("Stopped playing.");
 		});
 	}
@@ -73,11 +73,11 @@ class Queue {
 		});
 	}
 
-	release(member) {
+	release(guild) {
 		return new Promise((resolve) => {
-			if (this.players.has(member.guild.id)) {
-				this.players.get(member.guild.id).channel.leave();
-				this.players.delete(member.guild.id);
+			if (this.players.has(guild.id)) {
+				this.players.get(guild.id).channel.leave();
+				this.players.delete(guild.id);
 			}
 			resolve();
 		});
