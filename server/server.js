@@ -48,7 +48,9 @@ config.BOTS.forEach((bot) => {
 			loaders.forEach(loader => {
 				try {
 					loader.exec(client, bot);
-				} catch() {}
+				} catch {
+					// ok
+				}
 			});
 			console.log("Finished loading " + client.user.username);
 		});
