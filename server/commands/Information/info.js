@@ -184,7 +184,7 @@ async function howToGetRole(message, Discord, prompt, param) {
 	if (param !== undefined) prompt = param;
 	var currentRole;
 	var obtainableRoles = ["`Story Teller`", "`Dolphin`", "`Meme Master`", "`Inviter`", "`Pro Inviter`", "`Cuber`", "`Artist`", "`Partner`",
-		"`Contributor`", "`Supporter`, "`Bug Smasher`"];
+		"`Contributor`", "`Supporter`", "`Bug Smasher`"];
 	var descriptions = ["Get part of your story on the starboard.",
 		"Tell cj your knowledge about dolphin’s dark deeds and he shall decide if you are worthy of the role.",
 		"Get one of your memes on the starboard.",
