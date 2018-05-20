@@ -7,6 +7,10 @@ module.exports = {
 				"Indigo", "Bronze", "Cyan", "LightGreen", "Silver", "BrightRed", "HotBrown",
 				"DarkViolet", "Gold"
 			];
+			if (require("./commands/Utility/togglecolor").multicolor) {
+				var randomchoice = Math.floor(Math.random() * colors.length);
+				multiColorRole.setColor(realGuild.roles.find("name", colors[randomchoice]).hexColor).catch(function() {});
+			}
 			var loopNumber = 0;
 			var offlineInRole;
 			client.setInterval(function() {
