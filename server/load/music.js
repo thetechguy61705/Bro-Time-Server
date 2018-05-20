@@ -12,9 +12,21 @@ const VOTE_REQUIRED = 0.30;
 const MUSIC_CHANNELS = ["music", "songs"];
 
 class Queue {
+	static isDj(member) {
+		const premiumRoles = ["330919872630358026", "402175094312665098", "436013049808420866", "436013613568884736", "DJ"];
+		var autoAllow = false;
+		if (member.roles.some(role => premiumRoles.includes(role.name) || premiumRoles.includes(role.id))) {
+			autoAllow = true;
+		} else if (member.voiceChannel != null) {
+			if (member.voiceChannel.members.filter(member => !member.user.bot).size === 1)
+				autoAllow = true;
+		}
+		return autoAllow;
+	}
+
 	static request(message, prompt) {
 		var result;
-		if (isDJ(message.member)) {
+		if (Queue.isDJ(message.member)) {
 			result = Promise.resolve(true);
 		} else {
 			var voiceChannel = message.member.voiceChannel;
