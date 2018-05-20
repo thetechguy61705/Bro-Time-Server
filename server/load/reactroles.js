@@ -20,7 +20,10 @@ module.exports = {
 				});
 				if (neededadded.length > 0) {
 					neededadded.forEach(async (value) => {
-						var embed = new Discord.RichEmbed().setTitle(value).setDescription(`React to get the ${value} role!`);
+						var embed = new Discord.RichEmbed()
+						.setTitle(value)
+						.setDescription(`React to add or remove the ${value} role!`)
+						.setColor("ORANGE")
 						reactchannel.send(embed).then((m) => {
 							let emote = reactchannel.guild.emojis.find("id", "404768960014450689");
 							m.react(emote);
