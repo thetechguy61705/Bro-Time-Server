@@ -18,7 +18,7 @@ module.exports = {
 				console.log(`Changed color to ${othercolors[randomchoice]}.`);
 				loopNumber++;
 				if (loopNumber === colors.length) loopNumber = 0;
-			}, 1000);
+			}, 3600000);
 		}
 	}
 };
