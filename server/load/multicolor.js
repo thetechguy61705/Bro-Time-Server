@@ -1,6 +1,6 @@
 module.exports = {
 	exec: (client) => {
-		console.log("Loaded Multicolor")
+		console.log("Loaded Multicolor");
 		var realGuild = client.guilds.get("330913265573953536");
 		if (client.user.id === "393532251398209536") {
 			const multiColorRole = realGuild.roles.find("name", "Multicolored");
@@ -12,7 +12,7 @@ module.exports = {
 				var randomchoice = Math.floor(Math.random() * colors.length);
 				multiColorRole.setColor(realGuild.roles.find("name", colors[randomchoice]).hexColor).catch(function() {});
 			}
-			console.log("Set The Color")
+			console.log("Set The Color");
 			var loopNumber = 0;
 			var offlineInRole;
 			client.setInterval(function() {
