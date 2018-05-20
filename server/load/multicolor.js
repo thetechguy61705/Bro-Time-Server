@@ -13,14 +13,16 @@ module.exports = {
 			multiColorRole.setColor(realGuild.roles.find("name", othercolors[randomchoice]).hexColor).catch(function() {});
 			var loopNumber = 0;
 			var offlineInRole;
-			client.setInterval(function() {
-				offlineInRole = multiColorRole.members.filter(member => member.presence.status === "offline");
-				if (offlineInRole.size !== multiColorRole.members.size) {
-					multiColorRole.setColor(realGuild.roles.find("name", colors[loopNumber]).hexColor).catch(function() {});
-					console.log(`Changed color to ${colors[loopNumber]}.`);
-					loopNumber = loopNumber + 1;
-					if (loopNumber === colors.length) loopNumber = 0;
-				}
+			setTimeout(function() {
+				client.setInterval(function() {
+					offlineInRole = multiColorRole.members.filter(member => member.presence.status === "offline");
+					if (offlineInRole.size !== multiColorRole.members.size) {
+						multiColorRole.setColor(realGuild.roles.find("name", colors[loopNumber]).hexColor).catch(function() {});
+						console.log(`Changed color to $ { colors[loopNumber] }.`);
+						loopNumber = loopNumber + 1;
+						if (loopNumber === colors.length) loopNumber = 0;
+					}
+				}, 3600000);
 			}, 3600000);
 		}
 	}
