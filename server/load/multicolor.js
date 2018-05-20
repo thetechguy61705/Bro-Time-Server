@@ -18,7 +18,7 @@ module.exports = {
 						if (loopNumber === colors.length) loopNumber = 0;
 					}
 				}
-			}, 3.6e+6);
+			}, 3600000);
 		}
 	}
 };
