@@ -46,12 +46,10 @@ config.BOTS.forEach((bot) => {
 			console.log("Loading " + client.user.username);
 			clients.set(client.user.id, client);
 			loaders.forEach(loader => {
-				console.log("Loading a loader.");
 				try {
 					loader.exec(client, bot);
-					console.log("Loaded a loader");
-				} catch(err) {
-					console.log("Failed to load a loader");
+				} catch {
+					// ok
 				}
 			});
 			console.log("Finished loading " + client.user.username);
