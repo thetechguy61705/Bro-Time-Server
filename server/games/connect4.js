@@ -110,6 +110,6 @@ module.exports = {
 			collected.last().message.edit(`Interactive command ended: ${session.winner == null ?
 				"No one won. It was a draw." :
 				`${session.winner} won the game!`}`);
-		}
+		});
 	}
 };
