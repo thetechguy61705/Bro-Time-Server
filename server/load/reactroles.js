@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 module.exports = {
 	exec: (client) => {
+		console.log("loaded reactionroles");
 		client.on("ready", async () => {
 			const neededadded = ["QOTD", "ANN", "GW", "MOVIES", "Roblox", "Minecraft", "Cuphead", "Fortnite", "Undertale", "Unturned", "VRChat",
 				"PUBG", "FNAF", "Clash of Clans", "Clash Royale", "Sims", "Terraria", "Subnautica", "Rocket League",
