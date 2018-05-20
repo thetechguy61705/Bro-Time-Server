@@ -186,7 +186,7 @@ module.exports = {
 
 		if (name != null) {
 			var game = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
-
+			console.log(game);
 			if (game != null) {
 				found = true;
 
