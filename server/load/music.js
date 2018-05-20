@@ -30,6 +30,10 @@ class Queue {
 		return MUSIC_CHANNELS.some((keyword) => { return name.startsWith(keyword) || name.endsWith(keyword); });
 	}
 
+	constructor() {
+		this.players = new Collection();
+	}
+
 	play(query, message, client) {
 		this.reserve(message.member, client).then(() => {
 			console.log("Playing:", query);
@@ -38,8 +42,8 @@ class Queue {
 		});
 	}
 
-	stop() {
-		this.release().then(() => {
+	stop(message) {
+		this.release(message.member).then(() => {
 			console.log("Stopped playing.");
 		});
 	}
@@ -54,21 +58,28 @@ class Queue {
 
 	reserve(member) {
 		return new Promise((resolve, reject) => {
-			if (this.connection == null && member.voiceChannel != null && Queue.isMusicChannel(member.voiceChannel)) {
-				member.voiceChannel.join().then((connection) => {
-					this.connection = connection;
-					resolve();
-				}).catch(reject);
+			if (!this.players.has(member.guild.id)) {
+				if (member.voiceChannel != null && Queue.isMusicChannel(member.voiceChannel)) {
+					member.voiceChannel.join().then((connection) => {
+						this.players.set(member.voiceChannel.guild.id, connection);
+						resolve(true);
+					}).catch(reject);
+				} else {
+					reject(new Error("The member is not in a voice channel."));
+				}
+				
 			} else {
-				resolve();
+				resolve(true);
 			}
 		});
 	}
 
-	release () {
+	release(member) {
 		return new Promise((resolve) => {
-			if (this.connection != null)
-				this.connection.channel.leave();
+			if (this.players.has(member.guild.id)) {
+				this.players.get(member.guild.id).channel.leave();
+				this.players.delete(member.guild.id);
+			}
 			resolve();
 		});
 	}
@@ -86,5 +97,13 @@ module.exports = {
 		}
 		tokens.set(client.user.id, botTokens);
 		client.music = new Queue();
+
+		/* client.on("message", (message) => {
+			if (message.content == "reserve") {
+				client.music.reserve(message.member);
+			} else if (message.content == "release") {
+				client.music.release(message.member);
+			}
+		}); */
 	}
 };
