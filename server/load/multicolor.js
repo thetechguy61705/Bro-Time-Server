@@ -3,10 +3,10 @@ module.exports = {
 		var realGuild = client.guilds.get("330913265573953536");
 		if (client.user.id === "393532251398209536") {
 			const multiColorRole = realGuild.roles.find("name", "Multicolored");
-		const colors = ["Red", "Blue", "Orange", "Green", "Purple", "Pink", "Yellow", "HotPink",
+			const colors = ["Red", "Blue", "Orange", "Green", "Purple", "Pink", "Yellow", "HotPink",
 				"Indigo", "Bronze", "Cyan", "LightGreen", "Silver", "BrightRed", "HotBrown",
 				"DarkViolet", "Gold"
-				       ];
+				];
 			var loopNumber = 0;
 			var offlineInRole;
 			client.setInterval(function() {
@@ -21,4 +21,4 @@ module.exports = {
 			}, 3.6e+6);
 		}
 	}
-}
+};
