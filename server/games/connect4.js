@@ -62,6 +62,7 @@ module.exports = {
 									row[indexOfCoin + 1] === row[indexOfCoin + 2] &&
 									row[indexOfCoin + 2] === row[indexOfCoin + 3]) {
 									session.winner = coin;
+									console.log(`Game is ${(session.game != null) ? "here" : "not here :/"}`);
 									session.endGame();
 								}
 								if (rows[indexOfRow + 1] !== undefined && rows[indexOfRow + 2] !== undefined && rows[indexOfRow + 3] !== undefined) {
@@ -69,6 +70,7 @@ module.exports = {
 										rows[indexOfRow + 1][indexOfCoin] === rows[indexOfRow + 2][indexOfCoin] &&
 										rows[indexOfRow + 2][indexOfCoin] === rows[indexOfRow + 3][indexOfCoin]) {
 										session.winner = coin;
+										console.log(`Game is ${(session.game != null) ? "here" : "not here :/"}`);
 										session.endGame();
 									}
 								}
@@ -77,6 +79,7 @@ module.exports = {
 										rows[indexOfRow - 1][indexOfCoin + 1] === rows[indexOfRow - 2][indexOfCoin + 2] &&
 										rows[indexOfRow - 2][indexOfCoin + 2] === rows[indexOfRow - 3][indexOfCoin + 3]) {
 										session.winner = coin;
+										console.log(`Game is ${(session.game != null) ? "here" : "not here :/"}`);
 										session.endGame();
 									}
 								}
@@ -85,6 +88,7 @@ module.exports = {
 										rows[indexOfRow + 1][indexOfCoin + 1] === rows[indexOfRow + 2][indexOfCoin + 2] &&
 										rows[indexOfRow + 2][indexOfCoin + 2] === rows[indexOfRow + 3][indexOfCoin + 3]) {
 										session.winner = coin;
+										console.log(`Game is ${(session.game != null) ? "here" : "not here :/"}`);
 										session.endGame();
 									}
 								}
@@ -92,6 +96,7 @@ module.exports = {
 						});
 
 						if (rows.slice(1).map(row => row.every(coin => coin !== "⚫")).every(row => row === true)) {
+							console.log(`Game is ${(session.game != null) ? "here" : "not here :/"}`);
 							session.endGame();
 						}
 					}
