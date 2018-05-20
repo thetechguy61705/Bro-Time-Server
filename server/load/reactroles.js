@@ -1,12 +1,11 @@
 const Discord = require("discord.js");
-const fs = require("fs");
 module.exports = {
 	exec: (client) => {
 		client.on("ready", async () => {
 			const neededadded = ["QOTD", "ANN", "GW", "MOVIES", "Roblox", "Minecraft", "Cuphead", "Fortnite", "Undertale", "Unturned", "VRChat",
-					"PUBG", "FNAF", "Clash of Clans", "Clash Royale", "Sims", "Terraria", "Subnautica", "Rocket League",
-					"Portal", "Hat in Time", "CSGO", "Splatoon", "Mario", "Starbound", "Garry's Mod", "Overwatch",
-					"Call of Duty", "Destiny", "Psych"];
+				"PUBG", "FNAF", "Clash of Clans", "Clash Royale", "Sims", "Terraria", "Subnautica", "Rocket League",
+				"Portal", "Hat in Time", "CSGO", "Splatoon", "Mario", "Starbound", "Garry's Mod", "Overwatch",
+				"Call of Duty", "Destiny", "Psych"];
 			var reactchannel = client.channels.find("name", "react-for-roles");
 			reactchannel.fetchMessages({
 				limit: 100
