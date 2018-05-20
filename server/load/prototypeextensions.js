@@ -13,9 +13,9 @@ Number.prototype.expandPretty = function() {
 };
 
 Array.prototype.difference = function(a) {
-    return this.filter(function(i) {return a.indexOf(i) < 0;});
+	return this.filter(function(i) {return a.indexOf(i) < 0;});
 };
 /*
-credits to Joshaven Potter from stackoverflow for this great prototype extension :D 
+credits to Joshaven Potter from stackoverflow for this great prototype extension :D
 https://stackoverflow.com/users/121607/joshaven-potter
 */
