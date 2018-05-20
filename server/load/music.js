@@ -67,7 +67,6 @@ class Queue {
 				} else {
 					reject(new Error("The member is not in a voice channel."));
 				}
-				
 			} else {
 				resolve(true);
 			}
