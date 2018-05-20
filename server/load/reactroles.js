@@ -25,7 +25,7 @@ module.exports = {
 								var member = message.guild.member(reaction.users.last());
 								if (member) {
 									console.log("7");
-									if (member.roles.has(message.guild.roles.find("name", message.embeds[0].title))) {
+									if (member.roles.has(message.guild.roles.find("name", message.embeds[0].title).id)) {
 										console.log("8");
 										member.removeRole(message.guild.roles.find("name", message.embeds[0].title));
 									} else {
