@@ -37,6 +37,7 @@ module.exports = {
 				&& user.id !== session.context.client.user.id;
 			const collector = connectFour.createReactionCollector(filter, { time: 600000 });
 			session.connectFour = connectFour;
+			session.collector = collector;
 			collector.on("collect", reaction => {
 				reaction.remove(author.id).catch(function() {});
 				reaction.remove(target.id).catch(function() {});
@@ -65,7 +66,8 @@ module.exports = {
 										session.context.channel.send(`${coin} won the game!`).catch(function() {});
 										noRepeat = true;
 									}
-									collector.stop(`${coin} won the game!`);
+									session.winner = coin;
+									session.endGame();
 								}
 								if (rows[indexOfRow + 1] !== undefined && rows[indexOfRow + 2] !== undefined && rows[indexOfRow + 3] !== undefined) {
 									if (coin !== "⚫" && coin === rows[indexOfRow + 1][indexOfCoin] &&
@@ -75,7 +77,8 @@ module.exports = {
 											session.context.channel.send(`${coin} won the game!`).catch(function() {});
 											noRepeat = true;
 										}
-										collector.stop(`${coin} won the game!`);
+										session.winner = coin;
+										session.endGame();
 									}
 								}
 								if (rows[indexOfRow - 1] !== undefined && rows[indexOfRow - 2] !== undefined && rows[indexOfRow - 3] !== undefined) {
@@ -86,7 +89,8 @@ module.exports = {
 											session.context.channel.send(`${coin} won the game!`).catch(function() {});
 											noRepeat = true;
 										}
-										collector.stop(`${coin} won the game!`);
+										session.winner = coin;
+										session.endGame();
 									}
 								}
 								if (rows[indexOfRow + 1] !== undefined && rows[indexOfRow + 2] !== undefined && rows[indexOfRow + 3] !== undefined) {
@@ -97,7 +101,8 @@ module.exports = {
 											session.context.channel.send(`${coin} won the game!`).catch(function() {});
 											noRepeat = true;
 										}
-										collector.stop(`${coin} won the game!`);
+										session.winner = coin;
+										session.endGame();
 									}
 								}
 							});
@@ -106,16 +111,22 @@ module.exports = {
 						if (rows.slice(1).map(row => row.every(coin => coin !== "⚫")).every(row => row === true)) {
 							noRepeat = true;
 							session.context.channel.send("No one won. It was a draw.").catch(function() {});
-							collector.stop("No one won. It was a draw.");
+							session.endGame();
 						}
 					}
 				}
 			});
-			collector.on("end", (_, reason) => connectFour.edit(`Interactive command ended: ${reason}`));
-		}).catch(function() {});
+		}).catch(function(exc) {
+			console.warn(exc.stack);
+		});
 	},
 	input: (input, session) => {
 		return input.type === "reaction" && input.value.message === session.connectFour;
 	},
-	end: () => {},
+	end: (session) => {
+		session.collector.stop("game ended");
+		session.connectFour.edit(`Interactive command ended: ${session.winner == null ?
+			"No one won. It was a draw." :
+			`${session.winner} won the game!`}`);
+	}
 };
