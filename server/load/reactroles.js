@@ -12,7 +12,7 @@ module.exports = {
 					if (message.author.id !== client.user.id) {
 						if (!message.reactions.has("pixeldolphin:404768960014450689"))
 							await message.react("404768960014450689");
-						const filter = (reaction) => reaction.emoji.id === "404768960014450689";
+						const filter = (reaction, user) => reaction.emoji.id === "404768960014450689" && user.id !== client.user.id;
 						const collector = message.createReactionCollector(filter);
 						collector.on("collect", (reaction) => {
 							reaction.remove(reaction.users.last());
@@ -35,7 +35,7 @@ module.exports = {
 						.setColor("CYAN");
 					client.channels.get("447205162436788235").send({ embed: newItemEmbed }).then(async function(newItemMessage) {
 						await newItemMessage.react("404768960014450689");
-						const filter = (reaction) => reaction.emoji.id === "404768960014450689";
+						const filter = (reaction, user) => reaction.emoji.id === "404768960014450689" && user.id !== client.user.id;
 						const collector = newItemMessage.createReactionCollector(filter);
 						collector.on("collect", (reaction) => {
 							reaction.remove(reaction.users.last());
