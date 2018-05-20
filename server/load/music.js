@@ -1,20 +1,31 @@
 var { Collection } = require("discord.js");
 var tokens = new Collection();
+var isDJ = require("app/dj");
+var vote = require("app/vote");
 
 // A map from source to token.
 const TOKENS_MAPPING = {
 	youtube: "google"
 };
+const VOTE_TIMEOUT = 60000;
+const VOTE_REQUIRED = 0.30;
 
 class Queue {
-	static request(user, action) {
-		// if DJ, accept immidiatly.
-		// else, start vote.
-		console.log(user, action);
+	static request(message, prompt) {
+		var result;
+		if (isDJ(message.member)) {
+			result = Promise.resolve(true);
+		} else {
+			var voiceChannel = message.member.voiceChannel;
+			result = vote(VOTE_TIMEOUT, message.channel, Math.floor(voiceChannel.members.size*VOTE_REQUIRED),
+				(user) => { return voiceChannel.members.has(user.id); },
+				null, prompt, message.user);
+		}
+		return result;
 	}
 
-	play(query, user, client) {
-		this.reserve(user, client);
+	play(query, message, client) {
+		this.reserve(message.user, client);
 
 		console.log("queueing:", query);
 	}
