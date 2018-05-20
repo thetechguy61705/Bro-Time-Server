@@ -93,6 +93,7 @@ try {
 module.exports = {
 	MULTISTEP_DEFAULTS: 0,
 	ANYONE: 0x00000001,
+	CANCELLABLE: 0x00000002,
 
 	_requests: new Collection(),
 
@@ -107,7 +108,12 @@ module.exports = {
 			request = requests.find((request) => request.settings&this.ANYONE !== 0);
 		}
 		if (request != null) {
-			request.resolve(new Call(this, message, client, new Parameters(message)));
+			clearTimeout(request.timeout);
+			if (request.settings&this.CANCELLABLE !== 0 && message.content.toLowerCase() === "cancel") {
+				request.reject();
+			} else {
+				request.resolve(new Call(this, message, client, new Parameters(message)));
+			}
 			this._requests.delete(request.author);
 		} else {
 			var prefix = message.content.match(new RegExp(util.format(prefixPattern,
