@@ -14,7 +14,7 @@ module.exports = {
 		var botTokens = new Map();
 		for (var [source, key] of Object.entries(TOKENS_MAPPING)) {
 			botTokens.set(source, bot[key]);
-		};
+		}
 		tokens[client.token] = botTokens;
 		client.music = new Queue();
 	}
