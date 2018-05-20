@@ -7,9 +7,7 @@ module.exports = {
 				"Portal", "Hat in Time", "CSGO", "Splatoon", "Mario", "Starbound", "Garry's Mod", "Overwatch",
 				"Call of Duty", "Destiny", "Psych"];
 			var reactchannel = client.channels.find("name", "react-for-roles");
-			reactchannel.fetchMessages({
-				limit: 100
-			}).then((messages) => {
+			reactchannel.fetchMessages({ limit: 100 }).then((messages) => {
 				messages.forEach((msg) => {
 					if (msg.embeds[0]) {
 						var index = neededadded.indexOf(msg.embeds[0].title);
