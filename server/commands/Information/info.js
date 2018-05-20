@@ -191,7 +191,7 @@ async function howToGetRole(message, Discord, prompt, param) {
 		"Invite 5 people to this server", "Invite 10 people to this server", "Be able to solve a 3x3 Rubik’s cube in less than 2 minutes.",
 		"Get one of your art pieces on the starboard.", "Be the owner of a discord server partnered with us.", "Contribute to the server or assets relating to it",
 		"Tip any amount, payment instructions in !info perks",
-		"Report an unknown bug to a developer of Bro Bot"
+		"Report an unknown bug to a developer of Bro Bot",
 	];
 	if (prompt.toLowerCase() === "preview") {
 		var roleEmbed = new Discord.RichEmbed()
