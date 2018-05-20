@@ -11,7 +11,7 @@ module.exports = {
 			client.channels.get("447205162436788235").fetchMessages({ limit: 100 }).then(messages => {
 				if (messages.size > 0) {
 					messages.forEach(message => {
-						if (message.author.id === client.user.id) {
+						if (message.author.id !== client.user.id) {
 							if (message.reactions.has("404768960014450689")) {
 								const filter = (reaction) => reaction.emoji.id === "404768960014450689";
 								const collector = message.createReactionCollector(filter);
