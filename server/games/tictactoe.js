@@ -38,7 +38,7 @@ module.exports = {
 							if ((eA[0] === eA[1] && eA[1] === eA[2]) || (eA[3] === eA[4] && eA[4] === eA[5]) || (eA[6] === eA[7] && eA[7] === eA[8]) ||
 								(eA[0] === eA[3] && eA[3] === eA[6]) || (eA[1] === eA[4] && eA[4] === eA[7]) || (eA[2] === eA[5] && eA[5] === eA[8]) ||
 								(eA[0] === eA[4] && eA[4] === eA[8]) || (eA[2] === eA[4] && eA[4] === eA[6])) {
-								reactions.stop(`${turn[1]} won the game.`);
+								reactions.stop(`${turnOp[1]} won the game.`);
 							} else if (eA.every(value => value === "❌" || value === "⭕")) {
 								reactions.stop("It was a tie.");
 							}
