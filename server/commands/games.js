@@ -124,7 +124,7 @@ function startGame(game, context) {
 		players: new Collection(),
 		endGame: endGame.bind(session)
 	};
-	console.log(session.game
+	console.log(session.game);
 	if (context.message != null)
 		session.host = context.message.author;
 	if (game.requiresInvite)
