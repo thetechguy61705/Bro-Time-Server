@@ -32,7 +32,7 @@ module.exports = {
 					const newItemEmbed = new Discord.RichEmbed()
 						.setTitle(newItem)
 						.setDescription(`React to get the ${newItem} role!`)
-						.setColor("CYAN");
+						.setColor("AQUA");
 					client.channels.get("447205162436788235").send({ embed: newItemEmbed }).then(async function(newItemMessage) {
 						await newItemMessage.react("404768960014450689");
 						const filter = (reaction, user) => reaction.emoji.id === "404768960014450689" && user.id !== client.user.id;
