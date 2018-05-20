@@ -6,7 +6,7 @@ module.exports = {
 			const colors = ["Red", "Blue", "Orange", "Green", "Purple", "Pink", "Yellow", "HotPink",
 				"Indigo", "Bronze", "Cyan", "LightGreen", "Silver", "BrightRed", "HotBrown",
 				"DarkViolet", "Gold"
-				];
+			];
 			var loopNumber = 0;
 			var offlineInRole;
 			client.setInterval(function() {
