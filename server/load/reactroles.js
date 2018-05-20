@@ -6,8 +6,7 @@ module.exports = {
 			"PUBG", "FNAF", "Clash of Clans", "Clash Royale", "Sims", "Terraria", "Subnautica", "Rocket League",
 			"Portal", "Hat in Time", "CSGO", "Splatoon", "Mario", "Starbound", "Garry's Mod", "Overwatch",
 			"Call of Duty", "Destiny", "Psych"];
-		client.channels.get("447205162436788235").fetchMessages({ limit: 100 }).then(unfilteredMessages => {
-			var messages = unfilteredMessages.filter(m => m.embeds && m.embeds[0] && m.embeds[0].title);
+		client.channels.get("447205162436788235").fetchMessages({ limit: 100 }).then(messages => {
 			console.log(freeRoles.difference(messages.map(message => message.embeds[0].title)).length);
 			if (freeRoles.difference(messages.map(message => message.embeds[0].title)).length === 0) {
 				messages.forEach(async function(message) {
