@@ -1,6 +1,5 @@
 var { Collection } = require("discord.js");
 var tokens = new Collection();
-var isDJ = require("app/dj");
 var vote = require("app/vote");
 
 // A map from source to token.
@@ -55,8 +54,14 @@ class Queue {
 	}
 
 	stop(message) {
-		this.release(message.member.guild).then(() => {
-			console.log("Stopped playing.");
+		Queue.request(message, "Stop playing music?").then((accepted) => {
+			this.release(message.member.guild).then(() => {
+				if (accepted)
+					message.channel.send("Stopped playing music.");
+			});
+		}, (exc) => {
+			console.warn(exc.stack);
+			message.channel.send("Unable to stop playing music (try again shortly).");
 		});
 	}
 
