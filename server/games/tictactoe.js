@@ -50,7 +50,7 @@ module.exports = {
 					msg.edit(`Interactive command ended: ${reason}\n${eA[0]} | ${eA[1]} | ${eA[2]}\n———————\n${eA[3]} | ${eA[4]} | ${eA[5]}\n———————\n${eA[6]} | ${eA[7]} | ${eA[8]}`);
 					collected.first().message.channel.send(reason).catch(function() {});
 				});
-		});
+			});
 	},
 	input: (input, session) => {
 		return input.type === "reaction" && input.value.message.id === session.tictactoe.id;
