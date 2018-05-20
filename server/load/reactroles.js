@@ -31,8 +31,7 @@ module.exports = {
 				freeRoles.difference(messages.map(message => message.embeds[0].title)).forEach(newItem => {
 					const newItemEmbed = new Discord.RichEmbed()
 						.setTitle(newItem)
-						.setDescription(`React to get the ${newItem} role!`)
-						.setColor("AQUA");
+						.setColor(client.guilds.get("330913265573953536").roles.find("name", newItem).hexColor);
 					client.channels.get("447205162436788235").send({ embed: newItemEmbed }).then(async function(newItemMessage) {
 						await newItemMessage.react("404768960014450689");
 						const filter = (reaction, user) => reaction.emoji.id === "404768960014450689" && user.id !== client.user.id;
