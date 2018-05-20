@@ -5,10 +5,10 @@ module.exports = {
 		if (client.user.id === "393532251398209536") {
 			const multiColorRole = realGuild.roles.find("name", "Multicolored");
 			const colors = ["Red", "Blue", "Orange", "Green", "Purple", "Pink", "Yellow"];
-			const othercolors = colors.map(r => realGuild.roles.find("name", r).hexColor)
+			const othercolors = colors.map(r => realGuild.roles.find("name", r).hexColor);
 			var index = othercolors.indexOf(multiColorRole.hexColor);
     			if (index > -1) {
-       			othercolors.splice(index, 1);
+       				othercolors.splice(index, 1);
    			}
 			var randomchoice = Math.floor(Math.random() * othercolors.length);
 			multiColorRole.setColor(realGuild.roles.find("name", othercolors[randomchoice]).hexColor).catch(function() {});
