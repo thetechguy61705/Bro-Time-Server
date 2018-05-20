@@ -54,7 +54,7 @@ class Queue {
 
 	reserve(member) {
 		return new Promise((resolve, reject) => {
-			if (member.voiceChannel != null && Queue.isMusicChannel(member.voiceChannel)) {
+			if (this.connection == null && member.voiceChannel != null && Queue.isMusicChannel(member.voiceChannel)) {
 				member.voiceChannel.join().then((connection) => {
 					this.connection = connection;
 					resolve();
