@@ -42,6 +42,7 @@ class Queue {
 	}
 
 	constructor() {
+		this.isDj = Queue.isDj;
 		this.players = new Collection();
 	}
 
