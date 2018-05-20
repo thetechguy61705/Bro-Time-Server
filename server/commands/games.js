@@ -107,6 +107,7 @@ function endGame() {
 }
 
 function startGame(game, context) {
+	console.log(game);
 	var loading, session;
 
 	loading = [new Promise((resolve, reject) => {
@@ -123,6 +124,7 @@ function startGame(game, context) {
 		players: new Collection(),
 		endGame: endGame.bind(session)
 	};
+	console.log(session.game
 	if (context.message != null)
 		session.host = context.message.author;
 	if (game.requiresInvite)
