@@ -56,16 +56,11 @@ module.exports = {
 							connectFourEmbed.setFooter(`${author.tag}'s turn.`);
 						}
 						connectFour.edit({ embed: connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map(row => row.join(" ")).join("\n")) });
-						var noRepeat = false;
 						rows.forEach(function(row, indexOfRow) {
 							row.forEach(function(coin, indexOfCoin) {
 								if (coin !== "⚫" && coin === row[indexOfCoin + 1] &&
 									row[indexOfCoin + 1] === row[indexOfCoin + 2] &&
 									row[indexOfCoin + 2] === row[indexOfCoin + 3]) {
-									if (noRepeat === false) {
-										session.context.channel.send(`${coin} won the game!`).catch(function() {});
-										noRepeat = true;
-									}
 									session.winner = coin;
 									session.endGame();
 								}
@@ -73,10 +68,6 @@ module.exports = {
 									if (coin !== "⚫" && coin === rows[indexOfRow + 1][indexOfCoin] &&
 										rows[indexOfRow + 1][indexOfCoin] === rows[indexOfRow + 2][indexOfCoin] &&
 										rows[indexOfRow + 2][indexOfCoin] === rows[indexOfRow + 3][indexOfCoin]) {
-										if (noRepeat === false) {
-											session.context.channel.send(`${coin} won the game!`).catch(function() {});
-											noRepeat = true;
-										}
 										session.winner = coin;
 										session.endGame();
 									}
@@ -85,10 +76,6 @@ module.exports = {
 									if (coin !== "⚫" && coin === rows[indexOfRow - 1][indexOfCoin + 1] &&
 										rows[indexOfRow - 1][indexOfCoin + 1] === rows[indexOfRow - 2][indexOfCoin + 2] &&
 										rows[indexOfRow - 2][indexOfCoin + 2] === rows[indexOfRow - 3][indexOfCoin + 3]) {
-										if (noRepeat === false) {
-											session.context.channel.send(`${coin} won the game!`).catch(function() {});
-											noRepeat = true;
-										}
 										session.winner = coin;
 										session.endGame();
 									}
@@ -97,10 +84,6 @@ module.exports = {
 									if (coin !== "⚫" && coin === rows[indexOfRow + 1][indexOfCoin + 1] &&
 										rows[indexOfRow + 1][indexOfCoin + 1] === rows[indexOfRow + 2][indexOfCoin + 2] &&
 										rows[indexOfRow + 2][indexOfCoin + 2] === rows[indexOfRow + 3][indexOfCoin + 3]) {
-										if (noRepeat === false) {
-											session.context.channel.send(`${coin} won the game!`).catch(function() {});
-											noRepeat = true;
-										}
 										session.winner = coin;
 										session.endGame();
 									}
@@ -109,8 +92,6 @@ module.exports = {
 						});
 
 						if (rows.slice(1).map(row => row.every(coin => coin !== "⚫")).every(row => row === true)) {
-							noRepeat = true;
-							session.context.channel.send("No one won. It was a draw.").catch(function() {});
 							session.endGame();
 						}
 					}
