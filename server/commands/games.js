@@ -100,10 +100,6 @@ function invite(game, channel, players, host) {
 	});
 }
 
-function endGame() {
-	
-}
-
 function startGame(game, context) {
 	console.log(game);
 	var loading, session;
