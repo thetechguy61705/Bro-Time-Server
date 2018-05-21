@@ -31,7 +31,7 @@ fs.readdirSync(__dirname + "/load").forEach(file => {
 		loaders.push(loader);
 	}
 });
-console.log(loaders);
+
 fs.readdirSync(__dirname + "/areaLoad").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
 	if (match != null)
@@ -48,6 +48,7 @@ config.BOTS.forEach((bot) => {
 		client.on("ready", () => {
 			console.log("Loading " + client.user.username);
 			clients.set(client.user.id, client);
+			console.log(loaders);
 			loaders.forEach(loader => {
 				console.log(loader.name);
 				loader.exec(client, bot);
