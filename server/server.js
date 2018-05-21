@@ -48,6 +48,7 @@ config.BOTS.forEach((bot) => {
 			console.log("Loading " + client.user.username);
 			clients.set(client.user.id, client);
 			loaders.forEach(loader => {
+				if (loader.name.startsWith("react")) console.log(client.user.username);
 				loader.exec(client, bot);
 			});
 			// eslint-disable-next-line no-console
