@@ -55,7 +55,9 @@ module.exports = {
 							turn = author.id;
 							connectFourEmbed.setFooter(`${author.tag}'s turn.`);
 						}
-						connectFour.edit({ embed: connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map(row => row.join(" ")).join("\n")) });
+						connectFour
+							.edit({ embed: connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map(row => row.join(" ")).join("\n")) })
+							.then(newConnectFour => session.connectFour = newConnectFour);
 						rows.forEach(function(row, indexOfRow) {
 							row.forEach(function(coin, indexOfCoin) {
 								if (coin !== "⚫" && coin === row[indexOfCoin + 1] &&
@@ -97,19 +99,17 @@ module.exports = {
 					}
 				}
 			});
-		}).catch(function(exc) {
-			console.warn(exc.stack);
-		});
+		}).catch(function() {});
 	},
 	input: (input, session) => {
 		return input.type === "reaction" && input.value.message === session.connectFour;
 	},
 	end: (session) => {
-		console.log("game ended");
-		console.log(session);
-		session.connectFour.edit(`Interactive command ended: ${session.winner == null ?
+		const result = `Interactive command ended: ${session.winner == null ?
 			"No one won. It was a draw." :
-			`${session.winner} won the game!`}`);
+			`${session.winner} won the game!`}`;
+		session.connectFour.edit(result);
+		session.connectFour.channel.send(result);
 		session.collector.stop("game ended");
 	}
 };
