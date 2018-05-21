@@ -101,10 +101,7 @@ function invite(game, channel, players, host) {
 }
 
 function endGame() {
-	console.log(this);
-	clearTimeout(this.endTimer);
-	clearInterval(this.updateTimer);
-	this.game.end(this);
+	
 }
 
 function startGame(game, context) {
@@ -123,7 +120,12 @@ function startGame(game, context) {
 		game: game,
 		context: context,
 		players: new Collection(),
-		endGame: endGame.bind(session)
+		endGame: () => {
+			console.log(session);
+			clearTimeout(session.endTimer);
+			clearInterval(session.updateTimer);
+			session.game.end(session);
+		}
 	};
 	console.log(session.game);
 	if (context.message != null)
