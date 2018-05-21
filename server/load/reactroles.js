@@ -1,7 +1,6 @@
-const Discord = require("discord.js");
-
 module.exports = {
 	exec: (client) => {
+		//const Discord = require("discord.js");
 		console.log("im rly sad pls dont log this that means i messed up badly");
 		console.log("hey there ;(");
 		const freeRoles = ["QOTD", "ANN", "GW", "MOVIES", "Roblox", "Minecraft", "Cuphead", "Fortnite", "Undertale", "Unturned", "VRChat",
@@ -9,7 +8,8 @@ module.exports = {
 			"Portal", "Hat in Time", "CSGO", "Splatoon", "Mario", "Starbound", "Garry's Mod", "Overwatch",
 			"Call of Duty", "Destiny", "Psych"];
 		client.channels.get("447205162436788235").fetchMessages({ limit: freeRoles.length }).then(messages => {
-			console.log("feels bad man");
+			console.log(messages);
+			/*console.log("feels bad man");
 			messages.forEach(async function(message) {
 				console.log("plz?");
 				if (message.author.id === client.user.id) {
@@ -58,9 +58,7 @@ module.exports = {
 
 					});
 				});
-			}
-		}).catch(() => {
-			console.log("HEY :D");
+			}*/
 		});
 	}
 };
