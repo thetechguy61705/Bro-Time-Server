@@ -26,9 +26,7 @@ fs.readdirSync(__dirname + "/chat").forEach(file => {
 });
 fs.readdirSync(__dirname + "/load").forEach(file => {
 	if (file.endsWith(".js")) {
-		let loader = require("./load/" + file);
-		loader.name = file;
-		loaders.push(loader);
+		loaders.push(require("./load/" + file));
 	}
 });
 
@@ -48,9 +46,7 @@ config.BOTS.forEach((bot) => {
 		client.on("ready", () => {
 			console.log("Loading " + client.user.username);
 			clients.set(client.user.id, client);
-			console.log(loaders);
 			loaders.forEach(loader => {
-				console.log(loader.name);
 				loader.exec(client, bot);
 			});
 			console.log("Finished loading " + client.user.username);
