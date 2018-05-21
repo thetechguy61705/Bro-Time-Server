@@ -31,6 +31,7 @@ fs.readdirSync(__dirname + "/load").forEach(file => {
 		loaders.push(loader);
 	}
 });
+console.log(loaders);
 fs.readdirSync(__dirname + "/areaLoad").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
 	if (match != null)
