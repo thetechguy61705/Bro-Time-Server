@@ -51,7 +51,7 @@ class Queue {
 			for (var source of sources) {
 				source.search(query, botTokens.get(source.id));
 			} */
-		} else if (Queue.isAcceptable(ticket, source, false, channel)) {
+		} else if (!Queue.isAcceptable(ticket, source, false, channel)) {
 			ticket = null;
 		}
 		return ticket;
@@ -77,7 +77,7 @@ class Queue {
 		this.reserve(message.member).then(() => {
 			Queue.getTicket(message.client, message.channel, query).then((ticket) => {
 				if (ticket != null) {
-					console.log("Playing:", ticket);
+					console.log("Playing:", ticket.video_url);
 				} else {
 					console.log("Can't find ticket.");
 				}
@@ -166,10 +166,10 @@ module.exports = {
 		client.music = new Queue();
 
 		/* client.on("message", (message) => {
-			if (message.content == "reserve") {
-				client.music.reserve(message.member);
-			} else if (message.content == "release") {
-				client.music.release(message.member);
+			if (message.content.startsWith("play")) {
+				client.music.play(message.content.substring(5), message);
+			} else if (message.content.startsWith("stop")) {
+				client.music.stop(message);
 			}
 		}); */
 	}
