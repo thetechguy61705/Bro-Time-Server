@@ -9,7 +9,7 @@ module.exports = {
 	exec: (client) => {
 		var channel = client.channels.map(c => c.name);
 		console.log(channel);
-		if (false) {
+		if (channel === "BALOZO DALIAZO") {
 			channel.fetchMessages({ limit: freeRoles.length }).then(messages => {
 				console.log("feels bad man");
 				messages.forEach(async function(message) {
