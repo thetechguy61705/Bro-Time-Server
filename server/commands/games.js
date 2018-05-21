@@ -101,7 +101,6 @@ function invite(game, channel, players, host) {
 }
 
 function startGame(game, context) {
-	console.log(game);
 	var loading, session;
 
 	loading = [new Promise((resolve, reject) => {
@@ -117,13 +116,11 @@ function startGame(game, context) {
 		context: context,
 		players: new Collection(),
 		endGame: () => {
-			console.log(session);
 			clearTimeout(session.endTimer);
 			clearInterval(session.updateTimer);
 			session.game.end(session);
 		}
 	};
-	console.log(session.game);
 	if (context.message != null)
 		session.host = context.message.author;
 	if (game.requiresInvite)
@@ -187,7 +184,6 @@ module.exports = {
 
 		if (name != null) {
 			var game = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
-			console.log(game);
 			if (game != null) {
 				found = true;
 
