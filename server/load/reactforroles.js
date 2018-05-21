@@ -7,7 +7,7 @@ const freeRoles = ["QOTD", "ANN", "GW", "MOVIES", "Roblox", "Minecraft", "Cuphea
 
 module.exports = {
 	exec: (client) => {
-		var channel = client.channels.map(c => c.name);
+		var channel = client.channels.map(c => c.name + " " + c.guild.name);
 		console.log(channel);
 		if (channel === "BALOZO DALIAZO") {
 			channel.fetchMessages({ limit: freeRoles.length }).then(messages => {
