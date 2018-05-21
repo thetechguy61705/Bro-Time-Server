@@ -1,4 +1,6 @@
 var { Collection } = require("discord.js");
+var fs = require("fs");
+var sources = [];
 var tokens = new Collection();
 var vote = require("app/vote");
 
@@ -35,13 +37,14 @@ class Queue {
 		return MUSIC_CHANNELS.some((keyword) => { return name.startsWith(keyword) || name.endsWith(keyword); });
 	}
 
-	constructor() {
+	constructor(client) {
 		this.isDj = Queue.isDj;
 		this.players = new Collection();
+		this.client = client;
 	}
 
-	play(query, message, client) {
-		this.reserve(message.member, client).then(() => {
+	play(query, message) {
+		this.reserve(message.member).then(() => {
 			console.log("Playing:", query);
 		}, () => {
 			console.log("Can't play!");
@@ -100,6 +103,23 @@ class Queue {
 	}
 }
 
+fs.readdirSync(__dirname + "/../music").forEach((file) => {
+	var match = file.match(/^(.*)\.js$/);
+	if (match != null) {
+		new Promise((resolve, reject) => {
+			try {
+				resolve(require("./../music/" + match[1]));
+			} catch (exc) {
+				reject(exc);
+			}
+		}).then((source) => {
+			sources.push(source);
+		}, (exc) => {
+			console.warn(`Unable to load music source ${match}:`);
+			console.warn(exc.stack);
+		});
+	}
+});
 module.exports = {
 	exec: (client, bot) => {
 		var botTokens = new Collection();
