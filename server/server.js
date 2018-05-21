@@ -25,10 +25,9 @@ fs.readdirSync(__dirname + "/chat").forEach(file => {
 	}
 });
 fs.readdirSync(__dirname + "/load").forEach(file => {
-	var match = file.match(/^(.*)\.js$/);
-	if (match != null) {
-		let loader = require("./load/" + match[1]);
-		loader.name = match[0];
+	if (file.endsWith(".js")) {
+		let loader = require("./load/" + file);
+		loader.name = file;
 		loaders.push(loader);
 	}
 });
