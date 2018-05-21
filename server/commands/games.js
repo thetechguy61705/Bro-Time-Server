@@ -101,6 +101,7 @@ function invite(game, channel, players, host) {
 }
 
 function endGame() {
+	console.log(this);
 	clearTimeout(this.endTimer);
 	clearInterval(this.updateTimer);
 	this.game.end(this);
