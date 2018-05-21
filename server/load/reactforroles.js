@@ -28,7 +28,7 @@ module.exports = {
 						});
 					});
 				}
-		
+
 				client.on("messageReactionAdd", (reaction) => {
 					if (messages.some(msg => msg.id === reaction.message.id) && reaction.emoji.id === "404768960014450689") {
 						reaction.remove(reaction.users.last());
@@ -39,7 +39,7 @@ module.exports = {
 							} else {
 								member.addRole(channel.guild.roles.find("name", reaction.message.embeds[0].title));
 							}
-						}						
+						}
 					}
 				});
 			});
