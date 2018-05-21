@@ -105,10 +105,10 @@ module.exports = {
 		return input.type === "reaction" && input.value.message === session.connectFour;
 	},
 	end: (session) => {
-		const result = `Interactive command ended: ${session.winner == null ?
+		const result = (session.winner == null) ?
 			"No one won. It was a draw." :
-			`${session.winner} won the game!`}`;
-		session.connectFour.edit(result);
+			`${session.winner} won the game!`;
+		session.connectFour.edit("Interactive command ended: " + result);
 		session.connectFour.channel.send(result);
 		session.collector.stop("game ended");
 	}
