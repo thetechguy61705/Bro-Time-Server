@@ -11,14 +11,14 @@ module.exports = {
 			var onetimerandomchoice = Math.floor(Math.random() * onetimecolors.length);
 			multiColorRole.setColor(realGuild.roles.find("name", onetimecolors[onetimerandomchoice]).hexColor).catch(function() {});
 			console.log(`Changed color to ${onetimecolors[onetimerandomchoice]}.`);
-			setInterval(function() {
+			client.setInterval(function() {
 				othercolors = colors.filter(c => multiColorRole.hex !== realGuild.roles.find("name", c).hex);
 				randomchoice = Math.floor(Math.random() * othercolors.length);
 				multiColorRole.setColor(realGuild.roles.find("name", othercolors[randomchoice]).hexColor).catch(function() {});
 				console.log(`Changed color to ${othercolors[randomchoice]}.`);
 				loopNumber++;
 				if (loopNumber === colors.length) loopNumber = 0;
-			}, 1000);
+			}, 2000);
 		}
 	}
 };
