@@ -44,11 +44,13 @@ config.BOTS.forEach((bot) => {
 		errorHandler(client);
 
 		client.on("ready", () => {
+			// eslint-disable-next-line no-console
 			console.log("Loading " + client.user.username);
 			clients.set(client.user.id, client);
 			loaders.forEach(loader => {
 				loader.exec(client, bot);
 			});
+			// eslint-disable-next-line no-console
 			console.log("Finished loading " + client.user.username);
 		});
 
@@ -93,7 +95,7 @@ config.BOTS.forEach((bot) => {
 			await client.destroy();
 		});
 	} else {
-		console.log("Skipped missing token.");
+		console.warn("Skipped missing token.");
 	}
 });
 
