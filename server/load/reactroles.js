@@ -8,7 +8,7 @@ module.exports = {
 			"PUBG", "FNAF", "Clash of Clans", "Clash Royale", "Sims", "Terraria", "Subnautica", "Rocket League",
 			"Portal", "Hat in Time", "CSGO", "Splatoon", "Mario", "Starbound", "Garry's Mod", "Overwatch",
 			"Call of Duty", "Destiny", "Psych"];
-		client.channels.get("447205162436788235").fetchMessages({ limit: 100 }).then(messages => {
+		client.channels.get("447205162436788235").fetchMessages({ limit: freeRoles.length }).then(messages => {
 			console.log("feels bad man");
 			messages.forEach(async function(message) {
 				console.log("plz?");
