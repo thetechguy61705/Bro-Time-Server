@@ -17,10 +17,10 @@ fs.readdirSync(__dirname + "/chat").forEach(file => {
 				reject(exc);
 			}
 		}).then(handler => {
-			console.warn(exc.stack);
 			chatHandlers.push(handler);
 		}, exc => {
 			console.warn(`Unable to load chat module ${match}:`);
+			console.warn(exc.stack);
 		});
 	}
 });
