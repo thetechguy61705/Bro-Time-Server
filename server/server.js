@@ -49,6 +49,7 @@ config.BOTS.forEach((bot) => {
 			console.log("Loading " + client.user.username);
 			clients.set(client.user.id, client);
 			loaders.forEach(loader => {
+				console.log(loader.name);
 				loader.exec(client, bot);
 			});
 			console.log("Finished loading " + client.user.username);
