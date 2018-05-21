@@ -28,7 +28,7 @@ fs.readdirSync(__dirname + "/load").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
 	if (match != null) {
 		let loader = require("./load/" + match[1]);
-		loader.name = match;
+		loader.name = match[0];
 		loaders.push(loader);
 	}
 });
