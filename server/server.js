@@ -17,10 +17,10 @@ fs.readdirSync(__dirname + "/chat").forEach(file => {
 				reject(exc);
 			}
 		}).then(handler => {
+			console.warn(exc.stack);
 			chatHandlers.push(handler);
 		}, exc => {
 			console.warn(`Unable to load chat module ${match}:`);
-			console.warn(exc.stack);
 		});
 	}
 });
@@ -48,8 +48,8 @@ config.BOTS.forEach((bot) => {
 			loaders.forEach(loader => {
 				if (loader.exec != null) {
 					loader.exec(client, bot);
-					console.log("HI");
-				}
+					console.log(loader.name + " SUCCEEDED");
+				} else console.log(loader.name + " FAILED");
 			});
 			console.log("Finished loading " + client.user.username);
 		});
