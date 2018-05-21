@@ -11,7 +11,7 @@ module.exports = {
 			var onetimerandomchoice = Math.floor(Math.random() * onetimecolors.length);
 			multiColorRole.setColor(realGuild.roles.find("name", onetimecolors[onetimerandomchoice]).hexColor).catch(function() {});
 			console.log(`Changed color to ${onetimecolors[onetimerandomchoice]}.`);
-			client.setInterval(function() {
+			setInterval(function() {
 				othercolors = colors.filter(c => multiColorRole.hex !== realGuild.roles.find("name", c).hex);
 				randomchoice = Math.floor(Math.random() * othercolors.length);
 				multiColorRole.setColor(realGuild.roles.find("name", othercolors[randomchoice]).hexColor).catch(function() {});
