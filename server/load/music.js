@@ -37,6 +37,36 @@ class Queue {
 		return MUSIC_CHANNELS.some((keyword) => { return name.startsWith(keyword) || name.endsWith(keyword); });
 	}
 
+	static async getTicket(client, channel, query) {
+		var ticket;
+		var botTokens = tokens.get(client.user.id);
+		for (var source of sources) {
+			ticket = await source.getTicket(query, botTokens.get(source.id));
+			if (ticket != null)
+				break;
+		}
+		if (ticket == null) {
+			console.log("search required...");
+			/* var searches = [];
+			for (var source of sources) {
+				source.search(query, botTokens.get(source.id));
+			} */
+		} else if (Queue.isAcceptable(ticket, source, false, channel)) {
+			ticket = null;
+		}
+		return ticket;
+	}
+
+	static isAcceptable(ticket, source, matureAllowed, channel) {
+		var playable = source.getPlayable(ticket);
+		if (playable == "mature" && !matureAllowed)
+			channel.send("Mature music is not allowed here.");
+		return playable === "good" ||
+			(playable !== "bad" &&
+			(matureAllowed || playable !== "mature") &&
+			playable !== "unknown");
+	}
+
 	constructor(client) {
 		this.isDj = Queue.isDj;
 		this.players = new Collection();
@@ -45,7 +75,13 @@ class Queue {
 
 	play(query, message) {
 		this.reserve(message.member).then(() => {
-			console.log("Playing:", query);
+			Queue.getTicket(message.client, message.channel, query).then((ticket) => {
+				if (ticket != null) {
+					console.log("Playing:", ticket);
+				} else {
+					console.log("Can't find ticket.");
+				}
+			});
 		}, () => {
 			console.log("Can't play!");
 		});
