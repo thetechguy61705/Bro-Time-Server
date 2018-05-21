@@ -5,7 +5,7 @@ module.exports = {
 				const multiColorRole = guild.roles.find("name", "Multicolored");
 				if (multiColorRole) {
 					const colors = ["Red", "Blue", "Orange", "Green", "Purple", "Yellow"];
-					if (guild.roles.find("name", "Red") 
+					if (guild.roles.find("name", "Red")
 					&& guild.roles.find("name", "Blue")
 					&& guild.roles.find("name", "Orange")
 					&& guild.roles.find("name", "Green")
