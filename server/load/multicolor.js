@@ -2,7 +2,7 @@ module.exports = {
 	exec: (client) => {
 		client.guilds.forEach((guild) => {
 			if (client.user.id === "393532251398209536") {
-				const multiColorRole = guild.roles.find("name", "Multicolored");
+				var multiColorRole = guild.roles.find("name", "Multicolored");
 				if (multiColorRole) {
 					const colors = ["Red", "Blue", "Orange", "Green", "Purple", "Yellow"];
 					if (guild.roles.find("name", "Red")
