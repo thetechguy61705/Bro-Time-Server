@@ -7,7 +7,7 @@ const freeRoles = ["QOTD", "ANN", "GW", "MOVIES", "Roblox", "Minecraft", "Cuphea
 
 module.exports = {
 	exec: (client) => {
-		var channel = client.channels.get("447205162436788235");
+		var channel = client.channels.find(c => c.name === "react-for-roles" && c.guild.id === "330913265573953536");
 		if (channel != null) {
 			channel.fetchMessages({ limit: freeRoles.length }).then(messages => {
 				console.log("feels bad man");
