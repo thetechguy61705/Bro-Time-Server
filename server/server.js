@@ -26,8 +26,11 @@ fs.readdirSync(__dirname + "/chat").forEach(file => {
 });
 fs.readdirSync(__dirname + "/load").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
-	if (match != null)
-		loaders.push(require("./load/" + match[1]));
+	if (match != null) {
+		let loader = require("./load/" + match[1]);
+		loader.name = match;
+		loaders.push(loader);
+	}
 });
 fs.readdirSync(__dirname + "/areaLoad").forEach(file => {
 	var match = file.match(/^(.*)\.js$/);
