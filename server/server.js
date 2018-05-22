@@ -8,18 +8,17 @@ var areaLoaders = [];
 var chatHandlers = [];
 
 fs.readdirSync(__dirname + "/chat").forEach(file => {
-	var match = file.match(/^(.*)\.js$/);
-	if (match != null) {
+	if (file.endsWith(".js")) {
 		new Promise((resolve, reject) => {
 			try {
-				resolve(require("./chat/" + match[1]));
+				resolve(require("./chat/" + file));
 			} catch (exc) {
 				reject(exc);
 			}
 		}).then(handler => {
 			chatHandlers.push(handler);
 		}, exc => {
-			console.warn(`Unable to load chat module ${match}:`);
+			console.warn(`Unable to load chat module ${file}:`);
 			console.warn(exc.stack);
 		});
 	}
@@ -29,11 +28,9 @@ fs.readdirSync(__dirname + "/load").forEach(file => {
 		loaders.push(require("./load/" + file));
 	}
 });
-
 fs.readdirSync(__dirname + "/areaLoad").forEach(file => {
-	var match = file.match(/^(.*)\.js$/);
-	if (match != null)
-		areaLoaders.push(require("./areaLoad/" + match[1]));
+	if (file.endsWith(".js"))
+		areaLoaders.push(require("./areaLoad/" + file));
 });
 
 config.BOTS.forEach((bot) => {
