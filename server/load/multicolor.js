@@ -6,7 +6,7 @@ module.exports = {
 				var multiColorRole = guild.roles.find("name", "Multicolored");
 				if (multiColorRole) {
 					const colors = ["Red", "Blue", "Orange", "Green", "Purple", "Yellow"];
-					const hexcolors = colors.map(c => brotime.roles.find(`name`, c).hexColor);
+					const hexcolors = colors.map(c => brotime.roles.find("name", c).hexColor);
 					var loopNumber = hexcolors.indexOf(multiColorRole.hexColor) + 1;
 					if (!loopNumber) loopNumber = 0;
 					if (loopNumber === colors.length) loopNumber = 0;
