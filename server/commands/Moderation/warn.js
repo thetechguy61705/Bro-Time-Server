@@ -14,7 +14,7 @@ module.exports = {
 				if (target !== null) {
 					if (!target.user.bot) {
 						if (target.highestRole.position < call.message.member.highestRole.position) {
-							let reason = (parameterTwo != null) ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
+							var reason = (parameterTwo != null) ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
 							target.send(`You have been warned in the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}.`).then(() => {
 								call.message.channel.send(`***Successfully warned \`${target.user.tag}\`.***`).catch(function() {});
 								const warnEmbed = new Discord.RichEmbed().setAuthor(target.user.tag, target.user.displayAvatarURL).setDescription(reason.substr(1).slice(0, -1))
