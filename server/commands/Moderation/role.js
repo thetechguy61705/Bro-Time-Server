@@ -73,13 +73,9 @@ module.exports = {
 									.catch(function() {});
 								roleTarget.members.forEach(member => {
 									if (roles[1].startsWith("-")) {
-										if (member.roles.has(roleToChangeFromTarget.id)) {
-											member.removeRole(roleToChangeFromTarget).catch(function() {});
-										}
+										if (member.roles.has(roleToChangeFromTarget.id)) member.removeRole(roleToChangeFromTarget).catch(function() {});
 									} else {
-										if (!member.roles.has(roleToChangeFromTarget.id)) {
-											member.addRole(roleToChangeFromTarget).catch(function() {});
-										}
+										if (!member.roles.has(roleToChangeFromTarget.id)) member.addRole(roleToChangeFromTarget).catch(function() {});
 									}
 								});
 							} else {
@@ -105,8 +101,9 @@ module.exports = {
 								call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position;
 					});
 					if (roleTarget !== null) {
-						if (paramaterTwo.startsWith("-")) usersToRole = call.message.guild.members.filter(m => m.roles.has(roleTarget.id)).size;
-						else usersToRole = call.message.guild.members.filter(m => !m.roles.has(roleTarget.id)).size;
+						usersToRole = (paramaterTwo.startsWith("-"))
+							? call.message.guild.members.filter(m => m.roles.has(roleTarget.id)).size
+							: call.message.guild.members.filter(m => !m.roles.has(roleTarget.id)).size;
 						if (usersToRole !== 0) {
 							if (usersToRole > 100) timeEstimate = "This may take some time.";
 							call.message.channel.send(`Changing roles for \`${usersToRole}\` members. ${timeEstimate}`).catch(function() {});
