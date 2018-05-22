@@ -16,7 +16,7 @@ module.exports = {
 			if (target !== null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					if (!target.roles.has(call.message.guild.roles.find("name", "Muted").id)) {
-						let muteTime = (parameterTwo !== undefined) ? ms(parameterTwo) : null;
+						var muteTime = (parameterTwo !== undefined) ? ms(parameterTwo) : null;
 						if (muteTime) {
 							if (muteTime >= 10000) {
 								target.addRole(call.message.guild.roles.find("name", "Muted")).then(() => {
