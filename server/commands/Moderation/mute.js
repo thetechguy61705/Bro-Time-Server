@@ -16,12 +16,12 @@ module.exports = {
 			if (target !== null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					if (!target.roles.has(call.message.guild.roles.find("name", "Muted").id)) {
-						if (parameterTwo !== undefined) var muteTime = ms(parameterTwo);
+						let muteTime;
+						if (parameterTwo !== undefined) muteTime = ms(parameterTwo);
 						if (muteTime) {
 							if (muteTime >= 10000) {
 								target.addRole(call.message.guild.roles.find("name", "Muted")).then(() => {
-									call.message.channel
-										.send(`***Successfully muted \`${target.user.tag}\` for ${ms(muteTime, { long: true })}.***`).catch(function() {});
+									call.message.channel.send(`***Successfully muted \`${target.user.tag}\` for ${ms(muteTime, { long: true })}.***`).catch(function() {});
 									call.client.channels.get("436714650835484707").send(`${target.user.id} ${Date.now() + muteTime}`).then(msg => {
 										call.client.setTimeout(() => {
 											target.removeRole(call.message.guild.roles.find("name", "Muted")).catch(function() {});
@@ -31,9 +31,7 @@ module.exports = {
 								}).catch(() => {
 									call.message.channel.send(`Failed to mute \`${target.user.tag}\`.`).catch(function() {});
 								});
-							} else {
-								call.message.reply("The time to mute the user must be at least 10 seconds.").catch(function() {});
-							}
+							} else call.message.reply("The time to mute the user must be at least 10 seconds.").catch(function() {});
 						} else {
 							target.addRole(call.message.guild.roles.find("name", "Muted")).then(() => {
 								call.message.channel.send(`***Successfully muted \`${target.user.tag}\`.***`).catch(function() {});
@@ -43,8 +41,7 @@ module.exports = {
 						}
 					} else {
 						call.message.reply("That user is already muted.").catch(() => {
-							call.message.author
-								.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+							call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 						});
 					}
 				} else {
