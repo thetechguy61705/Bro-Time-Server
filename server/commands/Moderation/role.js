@@ -4,21 +4,21 @@ module.exports = {
 	arguments: "(user/option) [role/roles]",
 	requires: "Moderator permissions",
 	execute: (call) => {
-		let roles = call.params.readRaw().split(" ").slice(1).join(" ").split(", ").filter(r => r !== "");
+		var roles = call.params.readRaw().split(" ").slice(1).join(" ").split(", ").filter(r => r !== "");
 		const paramaterOne = call.params.readRaw().split(" ")[0], paramaterTwo = call.params.readRaw().split(" ")[1],
 			modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
-		let options = ["removeall", "all", "bots", "humans", "in"], timeEstimate = "", target = null, usersToRole,
+		var options = ["removeall", "all", "bots", "humans", "in"], timeEstimate = "", target = null, usersToRole,
 			roleTarget, roleToChangeFromTarget;
 		if (!options.includes(paramaterOne.toLowerCase())) target = call.message.guild.members.find(member => paramaterOne.includes(member.user.id) ||
 		member.user.tag.toLowerCase().startsWith(paramaterOne.toLowerCase()));
 		if (call.message.member.roles.some(role => modRoles.includes(role.id))) {
 			if (target !== null) {
-				let rolesToChange = roles.map(roleToMap => call.message.guild.roles.find(r => r.name.toLowerCase().startsWith(roleToMap.toLowerCase())));
-				let rolesToRemove = rolesToChange.filter(role => role !== null).filter(role => target.roles.find("name", role.name))
+				var rolesToChange = roles.map(roleToMap => call.message.guild.roles.find(r => r.name.toLowerCase().startsWith(roleToMap.toLowerCase())));
+				var rolesToRemove = rolesToChange.filter(role => role !== null).filter(role => target.roles.find("name", role.name))
 					.filter(role => call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position);
-				let rolesToAdd = rolesToChange.filter(role => role !== null).filter(role => !target.roles.find("name", role.name))
+				var rolesToAdd = rolesToChange.filter(role => role !== null).filter(role => !target.roles.find("name", role.name))
 					.filter(role => call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position);
-				let messageToSend = "";
+				var messageToSend = "";
 				if (rolesToAdd.length !== 0) {
 					rolesToAdd.forEach(roleToAdd => {
 						target.addRole(roleToAdd).catch(function() {});
@@ -42,7 +42,7 @@ module.exports = {
 				if (paramaterOne === "removeall") {
 					target = call.message.guild.members.find(member => paramaterTwo.includes(member.user.id) || member.user.tag.startsWith(paramaterTwo));
 					if (target !== null) {
-						let removeAllRoles = target.roles.filter(role => call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position)
+						var removeAllRoles = target.roles.filter(role => call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position)
 							.filter(role => role.name !== "@everyone");
 						target.removeRoles(removeAllRoles).then(() => {
 							call.message.channel.send(`Role(s) removed from \`${target.user.tag}\`: \`${removeAllRoles.map(rM => rM.name).join("`, `")}\``)
