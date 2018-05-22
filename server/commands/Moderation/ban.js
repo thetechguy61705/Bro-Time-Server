@@ -12,7 +12,7 @@ module.exports = {
 			const target = call.message.guild.members.find(m => parameterOne.includes(`${m.user.id}`));
 			if (target !== null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
-					let reason = (parameterTwo != undefined) ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
+					var reason = (parameterTwo != undefined) ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
 					if (target.bannable) {
 						target.send(`You have been banned from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`).then(() => {
 							target.ban({ days:7, reason:`Banned by ${call.message.author.tag} for ${reason}` }).then(() => {
