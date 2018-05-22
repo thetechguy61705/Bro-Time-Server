@@ -13,7 +13,7 @@ module.exports = {
 			if (target !== null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					let reason;
-					reason = (parameterTwo != null) ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : reason = "`No reason specified.`";
+					reason = (parameterTwo != null) ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
 					if (target.kickable) {
 						target.send(`You have been kicked from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`).then(() => {
 							target.kick(`Kicked by ${call.message.author.tag} for ${reason}`).then(() => {
