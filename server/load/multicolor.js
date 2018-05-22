@@ -2,31 +2,22 @@ module.exports = {
 	exec: (client) => {
 		client.guilds.forEach((guild) => {
 			if (client.user.id === "393532251398209536") {
+				var brotime = client.guilds.get("330913265573953536");
 				var multiColorRole = guild.roles.find("name", "Multicolored");
 				if (multiColorRole) {
 					const colors = ["Red", "Blue", "Orange", "Green", "Purple", "Yellow"];
-					if (guild.roles.find("name", "Red")
-					&& guild.roles.find("name", "Blue")
-					&& guild.roles.find("name", "Orange")
-					&& guild.roles.find("name", "Green")
-					&& guild.roles.find("name", "Purple")
-					&& guild.roles.find("name", "Yellow")) {
-						var loopNumber = 0;
-						var randomchoice;
-						var othercolors;
-						var onetimecolors = colors.filter(c => multiColorRole.hex !== guild.roles.find("name", c).hex);
-						var onetimerandomchoice = Math.floor(Math.random() * onetimecolors.length);
-						multiColorRole.setColor(guild.roles.find("name", onetimecolors[onetimerandomchoice]).hexColor).catch(function() {});
-						console.log(`Changed color to ${onetimecolors[onetimerandomchoice]}.`);
-						client.setInterval(function() {
-							othercolors = colors.filter(c => multiColorRole.hex !== guild.roles.find("name", c).hex);
-							randomchoice = Math.floor(Math.random() * othercolors.length);
-							multiColorRole.setColor(guild.roles.find("name", othercolors[randomchoice]).hexColor).catch(function() {});
-							console.log(`Changed color to ${othercolors[randomchoice]}.`);
-							loopNumber++;
-							if (loopNumber === colors.length) loopNumber = 0;
-						}, 2000);
-					}
+					const hexcolors = colors.map(c => brotime.roles.find(`name`, c).hexColor);
+					var loopNumber = hexcolors.indexOf(multiColorRole.hexColor) + 1;
+					if (!loopNumber) loopNumber = 0;
+					if (loopNumber === colors.length) loopNumber = 0;
+					multiColorRole.setColor(brotime.roles.find("name", colors[loopNumber]).hexColor).catch(function() {});
+					loopNumber++;
+					client.setInterval(function() {
+						if (loopNumber === colors.length) loopNumber = 0;
+						multiColorRole.setColor(brotime.roles.find("name", colors[loopNumber]).hexColor).catch(function() {});
+						loopNumber++;
+						if (loopNumber === colors.length) loopNumber = 0;
+					}, 3600000);
 				}
 			}
 		});
