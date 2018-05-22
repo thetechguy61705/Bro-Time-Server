@@ -32,7 +32,6 @@ module.exports = {
 						});
 
 						turn = (turn[0].id === target.id) ? [author, "❌"] : [target, "⭕"];
-						turnOp = (turnOp[0].id === author.id) ? [target, "❌"] : [author, "⭕"];
 
 						msg.edit(`${eA[0]} | ${eA[1]} | ${eA[2]}\n———————\n${eA[3]} | ${eA[4]} | ${eA[5]}\n———————\n${eA[6]} | ${eA[7]} | ${eA[8]}\n\n${turn[0]}'s turn.`)
 							.then(newMessage => {
@@ -40,7 +39,7 @@ module.exports = {
 								if ((eA[0] === eA[1] && eA[1] === eA[2]) || (eA[3] === eA[4] && eA[4] === eA[5]) || (eA[6] === eA[7] && eA[7] === eA[8]) ||
 									(eA[0] === eA[3] && eA[3] === eA[6]) || (eA[1] === eA[4] && eA[4] === eA[7]) || (eA[2] === eA[5] && eA[5] === eA[8]) ||
 									(eA[0] === eA[4] && eA[4] === eA[8]) || (eA[2] === eA[4] && eA[4] === eA[6])) {
-									session.winner = turn[1];
+									session.winner = (turn[1] === "❌") ? "⭕" : "❌";
 									session.endGame();
 								} else if (eA.every(value => value === "❌" || value === "⭕")) {
 									session.endGame();
