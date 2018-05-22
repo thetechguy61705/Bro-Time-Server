@@ -22,7 +22,7 @@ module.exports = {
 				}
 				const filter = (reaction, user) => (user.id === author.id || user.id === target.id) && eA.includes(reaction.emoji.name);
 				const reactions = msg.createReactionCollector(filter, { time: 300000 });
-
+				session.collector = reactions;
 				reactions.on("collect", reaction => {
 					if (reaction.users.last().id === turn[0].id) {
 						eA.forEach(emoji => {
@@ -34,26 +34,31 @@ module.exports = {
 						turn = (turn[0].id === target.id) ? [author, "❌"] : [target, "⭕"];
 						turnOp = (turnOp[0].id === author.id) ? [target, "❌"] : [author, "⭕"];
 
-						msg.edit(`${eA[0]} | ${eA[1]} | ${eA[2]}\n———————\n${eA[3]} | ${eA[4]} | ${eA[5]}\n———————\n${eA[6]} | ${eA[7]} | ${eA[8]}\n\n${turn[0]}'s turn.`).then(() => {
-							if ((eA[0] === eA[1] && eA[1] === eA[2]) || (eA[3] === eA[4] && eA[4] === eA[5]) || (eA[6] === eA[7] && eA[7] === eA[8]) ||
-								(eA[0] === eA[3] && eA[3] === eA[6]) || (eA[1] === eA[4] && eA[4] === eA[7]) || (eA[2] === eA[5] && eA[5] === eA[8]) ||
-								(eA[0] === eA[4] && eA[4] === eA[8]) || (eA[2] === eA[4] && eA[4] === eA[6])) {
-								reactions.stop(`${turnOp[1]} won the game.`);
-							} else if (eA.every(value => value === "❌" || value === "⭕")) {
-								reactions.stop("It was a tie.");
-							}
-						});
+						msg.edit(`${eA[0]} | ${eA[1]} | ${eA[2]}\n———————\n${eA[3]} | ${eA[4]} | ${eA[5]}\n———————\n${eA[6]} | ${eA[7]} | ${eA[8]}\n\n${turn[0]}'s turn.`)
+							.then(newMessage => {
+								session.tictactoe = newMessage;
+								if ((eA[0] === eA[1] && eA[1] === eA[2]) || (eA[3] === eA[4] && eA[4] === eA[5]) || (eA[6] === eA[7] && eA[7] === eA[8]) ||
+									(eA[0] === eA[3] && eA[3] === eA[6]) || (eA[1] === eA[4] && eA[4] === eA[7]) || (eA[2] === eA[5] && eA[5] === eA[8]) ||
+									(eA[0] === eA[4] && eA[4] === eA[8]) || (eA[2] === eA[4] && eA[4] === eA[6])) {
+									session.winner = turn[1];
+									session.endGame();
+								} else if (eA.every(value => value === "❌" || value === "⭕")) {
+									session.endGame();
+								}
+							});
 					} else reaction.remove(reaction.users.last());
-				});
-
-				reactions.on("end", (collected, reason) => {
-					msg.edit(`Interactive command ended: ${reason}\n${eA[0]} | ${eA[1]} | ${eA[2]}\n———————\n${eA[3]} | ${eA[4]} | ${eA[5]}\n———————\n${eA[6]} | ${eA[7]} | ${eA[8]}`);
-					collected.first().message.channel.send(reason).catch(function() {});
 				});
 			});
 	},
 	input: (input, session) => {
 		return input.type === "reaction" && input.value.message.id === session.tictactoe.id;
 	},
-	end: () => {},
+	end: (session) => {
+		const result = (session.winner == null) ?
+			"No one won. It was a draw." :
+			`${session.winner} won the game!`;
+		session.tictactoe.edit("Interactive command ended: " + result);
+		session.tictactoe.channel.send(result);
+		session.collector.stop("game ended");
+	},
 };
