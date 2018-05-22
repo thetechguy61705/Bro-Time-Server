@@ -16,7 +16,7 @@ module.exports = {
 					if (parameterTwo != undefined) {
 						reason = "`" + rawContent.substr(parameterOne.length + 1) + "`";
 					} else {
-						reason = "`No reason specified.`"
+						reason = "`No reason specified.`";
 					}
 					if (target.kickable) {
 						target.send(`You have been kicked from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`).then(() => {
