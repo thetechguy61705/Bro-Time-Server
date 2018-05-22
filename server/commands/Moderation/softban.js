@@ -10,9 +10,7 @@ module.exports = {
 			const target = call.message.guild.members.find(m => parameterOne.includes(`${m.user.id}`));
 			if (target !== null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
-					let reason;
-					if (parameterTwo != undefined) reason = "`" + rawContent.substr(parameterOne.length + 1) + "`";
-					else reason = "`No reason specified.`";
+					let reason = (parameterTwo != null) ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
 					if (target.bannable) {
 						target.send(`You have been softbanned/kicked from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`)
 							.then(() => {
