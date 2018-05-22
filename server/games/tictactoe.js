@@ -55,7 +55,7 @@ module.exports = {
 		const result = (session.winner == null) ?
 			"No one won. It was a draw." :
 			`${session.winner} won the game!`;
-		session.tictactoe.edit("Interactive command ended: " + result);
+		session.tictactoe.edit(`Interactive command ended: ${result}\n${session.tictactoe.content}`);
 		session.tictactoe.channel.send(result);
 		session.collector.stop("game ended");
 	},
