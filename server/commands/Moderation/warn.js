@@ -6,50 +6,35 @@ module.exports = {
 	arguments: "(user) [reason]",
 	requires: "Moderator permissions",
 	execute: (call) => {
-		const rawContent = call.params.readRaw();
-		const parameterOne = rawContent.split(" ")[0];
-		const parameterTwo = rawContent.split(" ")[1];
-		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
+		const rawContent = call.params.readRaw(), parameterOne = rawContent.split(" ")[0], parameterTwo = rawContent.split(" ")[1],
+			modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
 		if (call.message.member.roles.some(role => modRoles.includes(role.id))) {
-			const target = call.message.guild.members
-				.find(member => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
+			const target = call.message.guild.members.find(member => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
 			if (parameterOne !== "") {
 				if (target !== null) {
 					if (!target.user.bot) {
 						if (target.highestRole.position < call.message.member.highestRole.position) {
-							var reason;
-							if (parameterTwo != undefined) {
-								reason = "`" + rawContent.substr(parameterOne.length + 1) + "`";
-							} else {
-								reason = "`No reason specified.`";
-							}
+							let reason;
+							if (parameterTwo != undefined) reason = "`" + rawContent.substr(parameterOne.length + 1) + "`";
+							else reason = "`No reason specified.`";
 							target.send(`You have been warned in the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}.`).then(() => {
 								call.message.channel.send(`***Successfully warned \`${target.user.tag}\`.***`).catch(function() {});
-								const warnEmbed = new Discord.RichEmbed()
-									.setAuthor(target.user.tag, target.user.displayAvatarURL)
-									.setDescription(reason.substr(1).slice(0, -1))
+								const warnEmbed = new Discord.RichEmbed().setAuthor(target.user.tag, target.user.displayAvatarURL).setDescription(reason.substr(1).slice(0, -1))
 									.setFooter(`Warned by ${call.message.author.tag} (${call.message.author.id})`)
 									.setColor("ORANGE")
 									.setTimestamp();
-								call.client.channels.get("436353363786072104").send({
-									embed: warnEmbed
-								}).catch(function() {});
+								call.client.channels.get("436353363786072104").send({embed: warnEmbed}).catch(function() {});
 							}).catch(() => {
 								call.message.channel.send(`***Successfully warned \`${target.user.tag}\`.***`).catch(function() {});
-								const warnEmbed = new Discord.RichEmbed()
-									.setAuthor(target.user.tag, target.user.displayAvatarURL)
-									.setDescription(reason.substr(1).slice(0, -1))
+								const warnEmbed = new Discord.RichEmbed().setAuthor(target.user.tag, target.user.displayAvatarURL).setDescription(reason.substr(1).slice(0, -1))
 									.setFooter(`Warned by ${call.message.author.tag} (${call.message.author.id})`)
 									.setColor("ORANGE")
 									.setTimestamp();
-								call.client.channels.get("436353363786072104").send({
-									embed: warnEmbed
-								}).catch(function() {});
+								call.client.channels.get("436353363786072104").send({embed: warnEmbed}).catch(function() {});
 							});
 						} else {
 							call.message.reply("Specified user is too high in this guild's hierarchy to be warned by you.").catch(() => {
-								call.message.author
-									.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+								call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 							});
 						}
 					} else {
