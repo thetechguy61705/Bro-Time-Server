@@ -12,12 +12,9 @@ module.exports = {
 			const target = call.message.guild.members.find(m => parameterOne.includes(`${m.user.id}`));
 			if (target !== null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
-					var reason;
-					if (parameterTwo != undefined) {
-						reason = "`" + rawContent.substr(parameterOne.length + 1) + "`";
-					} else {
-						reason = "`No reason specified.`";
-					}
+					let reason;
+					if (parameterTwo != undefined) reason = "`" + rawContent.substr(parameterOne.length + 1) + "`";
+					else reason = "`No reason specified.`";
 					if (target.kickable) {
 						target.send(`You have been kicked from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`).then(() => {
 							target.kick(`Kicked by ${call.message.author.tag} for ${reason}`).then(() => {
@@ -34,8 +31,7 @@ module.exports = {
 						});
 					} else {
 						call.message.reply("I do not have permission to kick this user.").catch(() => {
-							call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`)
-								.catch(function() {});
+							call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
 						});
 					}
 				} else {
