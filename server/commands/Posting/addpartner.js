@@ -27,7 +27,7 @@ module.exports = {
 				var partnerEmbed = new Discord.RichEmbed()
 					.setTitle(title)
 					.setColor("#FFA500")
-					.setDescription(description)
+					.setDescription(description);
 				call.client.fetchInvite(thumbnail).then((invite) => {
 					partnerEmbed.setThumbnail(invite.guild.iconURL);
 					addPartner(partnersChannel, partnerEmbed, call.message);
