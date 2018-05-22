@@ -12,27 +12,16 @@ module.exports = {
 			const target = call.message.guild.members.find(m => parameterOne.includes(`${m.user.id}`));
 			if (target !== null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
-					var reason;
-					if (parameterTwo != undefined) {
-						reason = "`" + rawContent.substr(parameterOne.length + 1) + "`";
-					} else {
-						reason = "`No reason specified.`";
-					}
+					let reason = (parameterTwo != undefined) ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
 					if (target.bannable) {
 						target.send(`You have been banned from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`).then(() => {
-							target.ban({
-								days:7,
-								reason:`Banned by ${call.message.author.tag} for ${reason}`
-							}).then(() => {
+							target.ban({ days:7, reason:`Banned by ${call.message.author.tag} for ${reason}` }).then(() => {
 								call.message.channel.send(`***Successfully banned \`${target.user.tag}\`.***`).catch(function() {});
 							}).catch(() => {
 								call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).catch(function() {});
 							});
 						}).catch(() => {
-							target.ban({
-								days:7,
-								reason:`Banned by ${call.message.author.tag} for ${reason}`
-							}).then(() => {
+							target.ban({days:7, reason:`Banned by ${call.message.author.tag} for ${reason}`}).then(() => {
 								call.message.channel.send(`***Successfully banned \`${target.user.tag}\`.***`).catch(function() {});
 							}).catch(() => {
 								call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).catch(function() {});
