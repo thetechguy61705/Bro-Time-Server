@@ -13,13 +13,13 @@ Number.prototype.expandPretty = function() {
 };
 
 Number.prototype.diagnostic = function() {
-	return (this <= 0) ? "impossible"
-		: (this < 200) ? "great"
-		: (this < 350) ? "good"
-		: (this < 500) ? "ok"
-		: (this < 750) ? "bad"
-		: (this < 1000) ? "terrible"
-		: "worse than dial up";
+	return (this <= 0) ? "impossible" :
+		(this < 200) ? "great" :
+		(this < 350) ? "good" :
+		(this < 500) ? "ok" :
+		(this < 750) ? "bad" :
+		(this < 1000) ? "terrible" :
+		"worse than dial up";
 };
 
 Array.prototype.difference = function(a) {
