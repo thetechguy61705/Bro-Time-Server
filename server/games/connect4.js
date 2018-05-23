@@ -1,11 +1,9 @@
 const Discord = require("discord.js");
 
-function getRow(rows, number) {
-	var numberLoop = 1;
-	while (numberLoop !== rows.length) {
-		if (rows[numberLoop][number] !== "⚫") return numberLoop;
-		numberLoop = numberLoop + 1;
-	}
+function getRow(rows, num) {
+	for (var numberLoop = 1; numberLoop !== rows.length; numberLoop++)
+		if (rows[numberLoop][num] !== "⚫")
+			return numberLoop;
 }
 
 module.exports = {
