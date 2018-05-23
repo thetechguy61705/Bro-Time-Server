@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 function getRow(rows, num) {
 	for (var numberLoop = 1; numberLoop !== rows.length; numberLoop++)
-		if (rows[numberLoop][num] !== "⚫") 
+		if (rows[numberLoop][num] !== "⚫")
 			return numberLoop;
 }
 
