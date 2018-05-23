@@ -50,7 +50,7 @@ module.exports = {
 			param1 = param1.toLowerCase();
 			if (call.commands.loaded.map(cmd => cmd.id).includes(param1.toLowerCase())) {
 				const command = call.commands.loaded.get(param1.toLowerCase()), aliases = (command.aliases != null) ? command.aliases : ["None"],
-					cmdDesc = (command.description != null) ? command.descriptiom : "None", cmdUsage = (command.arguments != null) ? " " + command.arguments : "",
+					cmdDesc = (command.description != null) ? command.description : "None", cmdUsage = (command.arguments != null) ? " " + command.arguments : "",
 					cmdReq = (command.requires != null) ? command.requires : "None";
 				helpEmbed = new Discord.RichEmbed()
 					.setTitle(`${pfx}${param1}`)
