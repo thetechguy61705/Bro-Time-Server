@@ -8,6 +8,8 @@ var config = {
 	},
 	NAMES: []
 };
+config.NAMES["430096406275948554"] = "Test Bro Bot";
+config.NAMES["398948242790023168"] = "Bro Time Kitchen";
 
 try {
 	var userConfig = require("./user_config");
