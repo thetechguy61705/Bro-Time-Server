@@ -14,21 +14,16 @@ module.exports = {
 				if (pollOptions.length <= 9 && pollOptions.length >= 2) {
 					const eA = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
 					pollOptions = pollOptions.map((pollOption, index) => {
-						return `${eA[index]} ${pollOption.trim()}`;
+						return eA[index] + " " + pollOption.trim();
 					});
 					const pollEmbed = new Discord.RichEmbed()
 						.setTitle(pollTitle)
 						.setDescription(pollOptions.join("\n"))
 						.setColor(0x00AE86)
 						.setFooter(`${call.client.user.username} | Poll by ${call.message.author.tag}.`);
-					call.message.channel.send({
-						embed: pollEmbed
-					}).then(async function(poll) {
-						var orderLoop = 0;
-						while (orderLoop !== pollOptions.length) {
+					call.message.channel.send({ embed: pollEmbed }).then(async function(poll) {
+						for (var orderLoop = 0; orderLoop !== pollOptions.length; orderLoop++)
 							await poll.react(eA[orderLoop]);
-							orderLoop = orderLoop + 1;
-						}
 					}).catch(() => {
 						call.message.reply("Something went wrong and I could not create the poll.").catch(() => {
 							call.message.author
