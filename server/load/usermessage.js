@@ -1,13 +1,17 @@
 const Discord = require("discord.js");
 const fs = require("fs");
-
 module.exports = {
 	exec: (client) => {
+		var roles = [
+			"ANN", "Newbie Bro", "White"
+		]
 		const hangoutChannel = client.channels.find("id", "433831764105101332");
 		client.on("guildMemberAdd", member => {
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
+					var rolestoadd = roles.map(r => member.guild.roles.find("name", r).id);
 					if (!member.user.bot) {
+						member.addRoles(rolestoadd).catch(function() {});
 						const welcomeMessage = new Discord.RichEmbed()
 							.setTitle("Welcome")
 							.setColor("#FFA500")
@@ -22,7 +26,9 @@ module.exports = {
 								}
 							});
 						}).catch(function() {});
-					}
+					} else {
+						var botrole = member.guild.roles.get("330966583214211072");
+						member.addRole(botrole).catch(function() {});
 				}
 			}
 		});
