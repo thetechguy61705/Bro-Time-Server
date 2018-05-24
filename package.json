@@ -33,7 +33,8 @@
     "escape-string-regexp": "^1.0.5",
     "ffmpeg-binaries": "^3.2.2-3",
     "miniget": "^1.2.0",
-    "pg": "^7.4.1",
+    "ms": "^2.1.1",
+    "pg": "^7.4.3",
     "ytdl-core": "^0.20.4"
   },
   "devDependencies": {
