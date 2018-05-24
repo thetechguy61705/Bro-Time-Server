@@ -1,3 +1,4 @@
+var config = require("../../config");
 var { Collection } = require("discord.js");
 var fs = require("fs");
 var sources = [];
@@ -6,7 +7,7 @@ var vote = require("app/vote");
 
 // A map from source to token.
 const TOKENS_MAPPING = {
-	youtube: "google"
+	youtube: "GOOGLE"
 };
 const VOTE_TIMEOUT = 60000;
 const VOTE_REQUIRED = 0.30;
@@ -39,9 +40,8 @@ class Queue {
 
 	static async getTicket(client, channel, query) {
 		var ticket;
-		var botTokens = tokens.get(client.user.id);
 		for (var source of sources) {
-			ticket = await source.getTicket(query, botTokens.get(source.id));
+			ticket = await source.getTicket(query, tokens.get(source.id));
 			if (ticket != null)
 				break;
 		}
@@ -49,7 +49,7 @@ class Queue {
 			console.log("search required...");
 			/* var searches = [];
 			for (var source of sources) {
-				source.search(query, botTokens.get(source.id));
+				source.search(query, tokens.get(source.id));
 			} */
 		} else if (!Queue.isAcceptable(ticket, source, false, channel)) {
 			ticket = null;
@@ -157,12 +157,10 @@ fs.readdirSync(__dirname + "/../music").forEach((file) => {
 	}
 });
 module.exports = {
-	exec: (client, bot) => {
-		var botTokens = new Collection();
+	exec: (client) => {
 		for (var [source, key] of Object.entries(TOKENS_MAPPING)) {
-			botTokens.set(source, bot[key]);
+			tokens.set(source, config[key]);
 		}
-		tokens.set(client.user.id, botTokens);
 		client.music = new Queue();
 
 		/* client.on("message", (message) => {

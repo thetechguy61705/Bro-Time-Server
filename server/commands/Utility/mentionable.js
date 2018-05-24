@@ -5,18 +5,12 @@ module.exports = {
 	requires: "Moderator permissions",
 	execute: (call) => {
 		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
-		const prefix = call.message.data.prefix;
+		const prefix = (call.message.guild || call.message.channel).data.prefix || "/";
 		let role = call.params.readRole();
 		if (call.message.member.roles.some(r => modRoles.includes(r.id))) {
 			if (role) {
-				var mentionToSet;
-				if (call.message.content.toLowerCase().startsWith(`${prefix}mt`)) {
-					mentionToSet = true;
-				} else if (call.message.content.toLowerCase().startsWith(`${prefix}mf`)) {
-					mentionToSet = false;
-				} else {
-					mentionToSet = !role.mentionable;
-				}
+				var mentionToSet = (call.message.content.toLowerCase().startsWith(prefix + "mt")) ? true
+					: (call.message.content.toLowerCase().startsWith(prefix + "mf")) ? false : !role.mentionable;
 				role.setMentionable(mentionToSet).then(() => {
 					call.message.delete().catch(function() {});
 				}).catch(() => {
