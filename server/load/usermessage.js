@@ -6,7 +6,7 @@ module.exports = {
 		client.on("guildMemberAdd", (member) => {
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
-					hangoutChannel = member.guild.channels.find("name", "hangout"),
+					hangoutChannel = member.guild.channels.find("name", "hangout");
 					const roles = [
 						member.guild.roles.find("name", "ANN"),
 						member.guild.roles.find("name", "Newbie Bro"),
