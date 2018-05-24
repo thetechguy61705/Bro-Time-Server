@@ -9,7 +9,7 @@ module.exports = {
 		let role = call.params.readRole();
 		if (call.message.member.roles.some(r => modRoles.includes(r.id))) {
 			if (role) {
-				var mentionToSet = (call.message.content.toLowerCase().startsWith(prefix + "mt")) ? true 
+				var mentionToSet = (call.message.content.toLowerCase().startsWith(prefix + "mt")) ? true
 					: (call.message.content.toLowerCase().startsWith(prefix + "mf")) ? false : !role.mentionable;
 				role.setMentionable(mentionToSet).then(() => {
 					call.message.delete().catch(function() {});
