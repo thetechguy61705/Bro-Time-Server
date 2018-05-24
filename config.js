@@ -1,4 +1,7 @@
 var config = {
+	CLIENT: {
+		fetchAllMembers: true
+	},
 	TOKEN: process.env.BRO_TIME_TOKEN,
 	GOOGLE: process.env.GOOGLE_KEY,
 	DB_CONNECTIONS: 20,
