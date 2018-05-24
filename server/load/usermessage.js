@@ -4,7 +4,7 @@ module.exports = {
 	exec: (client) => {
 		var roles = [
 			"ANN", "Newbie Bro", "White"
-		]
+		];
 		const hangoutChannel = client.channels.find("id", "433831764105101332");
 		client.on("guildMemberAdd", member => {
 			if (client.user.id === "393532251398209536") {
