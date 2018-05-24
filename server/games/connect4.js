@@ -92,6 +92,7 @@ module.exports = {
 						});
 
 						if (rows.slice(1).map(row => row.every(coin => coin !== "⚫")).every(row => row === true)) {
+							console.log(rows.slice(1).every(row => row.every(333
 							session.endGame();
 						}
 					}
@@ -107,7 +108,7 @@ module.exports = {
 			"No one won. It was a draw." :
 			`${session.winner} won the game!`;
 		session.connectFour.edit("Interactive command ended: " + result);
-		session.connectFour.channel.send(result);
+		session.connectFour.channel.send(result).then(msg => console.log(msg.content));
 		session.collector.stop("game ended");
 	}
 };
