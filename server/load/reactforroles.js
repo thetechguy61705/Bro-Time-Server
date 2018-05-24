@@ -43,6 +43,6 @@ module.exports = {
 					}
 				});
 			});
-		} else console.log("failed rip.");
+		}
 	}
 };
