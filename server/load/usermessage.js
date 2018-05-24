@@ -2,11 +2,12 @@ const Discord = require("discord.js");
 const fs = require("fs");
 module.exports = {
 	exec: (client) => {
+		var hangoutChannel;
 		client.on("guildMemberAdd", (member) => {
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
-					const hangoutChannel = member.guild.channels.find("name", "hangout"),
-					roles = [
+					hangoutChannel = member.guild.channels.find("name", "hangout"),
+					const roles = [
 						member.guild.roles.find("name", "ANN"),
 						member.guild.roles.find("name", "Newbie Bro"),
 						member.guild.roles.find("name", "White")
@@ -35,6 +36,7 @@ module.exports = {
 		client.on("guildMemberRemove", (member) => {
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
+					hangoutChannel = member.guild.channels.find("name", "hangout");
 					if (!member.user.bot) {
 						const goodbyeMessage = new Discord.RichEmbed()
 							.setTitle("Goodbye")
