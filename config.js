@@ -10,10 +10,8 @@ var config = {
 
 try {
 	var userConfig = require("./user_config");
-	for (var [key, value] of Object.entries(userConfig)) {
+	for (var [key, value] of Object.entries(userConfig))
 		config[key] = value;
-	}
-	console.log(config);
 } catch (exc) {
 	if (exc.code !== "MODULE_NOT_FOUND")
 		throw exc;
