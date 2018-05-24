@@ -29,6 +29,7 @@ module.exports = {
 					} else {
 						var botrole = member.guild.roles.get("330966583214211072");
 						member.addRole(botrole).catch(function() {});
+					}
 				}
 			}
 		});
