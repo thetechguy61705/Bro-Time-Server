@@ -51,7 +51,6 @@ client.on("message", message => {
 			console.warn(exc.stack);
 		}
 	}
-	
 });
 
 client.login(config.TOKEN);

@@ -1,7 +1,6 @@
-var { Collection, GuildChannel } = require("discord.js");
+var { GuildChannel } = require("discord.js");
 var fs = require("fs");
 var areaLoaders = [];
-var loadedAreas = new Collection();
 
 function load(area) {
 	for (var areaLoader of areaLoaders)
