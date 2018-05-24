@@ -40,9 +40,7 @@ module.exports = {
 				reaction.remove(author.id).catch(function() {});
 				reaction.remove(target.id).catch(function() {});
 				if (reaction.users.last().id === turn) {
-					var currentRow = getRow(rows, eA.indexOf(reaction.emoji.name));
-					if (currentRow == null) currentRow = 6;
-					else currentRow = currentRow - 1;
+					var currentRow = (getRow(rows, eA.indexOf(reaction.emoji.name)) == null) ? 6 : getRow(rows, eA.indexOf(reaction.emoji.name)) - 1;
 					if (currentRow !== 0) {
 						if (turn === author.id) {
 							rows[currentRow][eA.indexOf(reaction.emoji.name)] = "🔴";
