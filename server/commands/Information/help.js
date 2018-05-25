@@ -21,6 +21,7 @@ module.exports = {
 	arguments: "[command]",
 	execute: (call) => {
 		const data = call.message.getData().get("data");
+		console.log(data);
 		const prefix = data != null ? data.prefix : "Unknown";
 		var param1 = call.params.readRaw();
 		var helpEmbed;

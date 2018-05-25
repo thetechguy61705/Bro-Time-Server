@@ -5,6 +5,7 @@ module.exports = {
 	exec(area, client, storage) {
 		var data = new BotAccess(area, client);
 		data.load();
+		console.log("prefix loaded");
 		storage.set("data", data);
 	}
 };
