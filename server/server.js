@@ -8,7 +8,7 @@ var loaders = [];
 var chatHandlers = [];
 var client = new discord.Client(config.CLIENT);
 
-const LOAD_TIMEOUT = 60000
+const LOAD_TIMEOUT = 60000;
 
 class Profiler {
 	static writeLegend() {
@@ -50,7 +50,7 @@ Object.defineProperty(Profiler, "states", {
 Profiler.states.Started.symbol = "S";
 Profiler.states.Started.description = "Loading has started.";
 Profiler.states.Ended.symbol = "E";
-Profiler.states.Ended.description = "Finished loading."
+Profiler.states.Ended.description = "Finished loading.";
 Profiler.states.Timeout.symbol = "T";
 Profiler.states.Timeout.description = "Took too long to load.";
 Profiler.states.freezeEnums();
@@ -85,10 +85,11 @@ client.on("ready", () => {
 	Profiler.writeLegend();
 	loaders.forEach(loader => {
 		new Promise((resolve) => {
-			var profiler = new Profiler(loader.id.length + (loader.profilerBytes || 2));
-			profiler.writeStart(loader.id);
+			// var profiler = new Profiler(loader.id.length + (loader.profilerBytes || 2));
+			// profiler.writeStart(loader.id);
 			if (loader.exec != null)
 				loader.exec(client);
+			resolve();
 		});
 	});
 	// eslint-disable-next-line no-console
