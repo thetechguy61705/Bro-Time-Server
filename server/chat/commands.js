@@ -116,8 +116,9 @@ module.exports = {
 			}
 			this._requests.delete(request.author);
 		} else {
+			var data = (message.guild || message.channel).data;
 			var prefix = message.content.match(new RegExp(util.format(prefixPattern,
-				(message.guild || message.channel).data.prefix || "/"), "i"));
+				data != null ? data.prefix : "/"), "i"));
 			var using;
 			if (prefix != null) {
 				using = true;

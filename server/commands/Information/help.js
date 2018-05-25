@@ -20,7 +20,8 @@ module.exports = {
 	description: "Returns information and commands on the bot.",
 	arguments: "[command]",
 	execute: (call) => {
-		const pfx = (call.message.guild || call.message.channel).data.prefix || "Unknown";
+		const data = (call.message.guild || call.message.channel).data;
+		const prefix = data != null ? data.prefix : "Unknown";
 		var param1 = call.params.readRaw();
 		var helpEmbed;
 		if (param1 == "") {
@@ -31,12 +32,12 @@ module.exports = {
 					return a.id.localeCompare(b.id);
 				})
 				.forEach((command) => {
-					add(command, commandHelp, pfx);
+					add(command, commandHelp, prefix);
 				});
 
 			helpEmbed = new Discord.RichEmbed()
 				.setTitle("Commands")
-				.setDescription(`Prefix: \`${pfx}\`\nUptime: ${call.client.uptime.expandPretty()}`)
+				.setDescription(`Prefix: \`${prefix}\`\nUptime: ${call.client.uptime.expandPretty()}`)
 				.setColor(0x00AE86)
 				.setFooter(`Ran by ${call.message.author.username} (${call.message.author.id})`, call.message.author.displayAvatarURL);
 			for (var [category, commands] of Object.entries(commandHelp)) {
@@ -53,9 +54,9 @@ module.exports = {
 					cmdDesc = (command.description != null) ? command.description : "None", cmdUsage = (command.arguments != null) ? " " + command.arguments : "",
 					cmdReq = (command.requires != null) ? command.requires : "None";
 				helpEmbed = new Discord.RichEmbed()
-					.setTitle(`${pfx}${param1}`)
+					.setTitle(`${prefix}${param1}`)
 					.setDescription(`Purpose: ${cmdDesc}` +
-						`\nUsage: \`${pfx}${param1}${cmdUsage}\``+
+						`\nUsage: \`${prefix}${param1}${cmdUsage}\``+
 						`\nRequires: \`${cmdReq}\`` +
 						`\nAliases: \`${aliases.join("`, `")}\``)
 					.setColor(0x00AE86);
