@@ -5,7 +5,8 @@ module.exports = {
 	requires: "Moderator permissions",
 	execute: (call) => {
 		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
-		const prefix = (call.message.guild || call.message.channel).data.prefix || "/";
+		const data = call.message.getData().get("data");
+		const prefix = data != null ? data.prefix : "/";
 		let role = call.params.readRole();
 		if (call.message.member.roles.some(r => modRoles.includes(r.id))) {
 			if (role) {
