@@ -1,20 +1,14 @@
 var { GuildChannel } = require("discord.js");
 var fs = require("fs");
 var areaLoaders = [];
-var profiler;
 
 async function load(area, client) {
 	for (var areaLoader of areaLoaders) {
-		var subProfiler = profiler.newSubProfiler(areaLoader.id.length + (areaLoader.profilerBytes || 2));
-		subProfiler.writeStart(areaLoader.id);
 		try {
-			subProfiler.writeState(subProfiler.states.Started);
-			var promise = areaLoader.exec(area, client, subProfiler);
+			var promise = areaLoader.exec(area, client);
 			if (promise != null)
 				await promise;
-			subProfiler.writeState(subProfiler.states.Ended);
 		} catch (exc) {
-			subProfiler.writeState(subProfiler.states.Error);
 			console.warn(exc.stack);
 		}
 	}
@@ -32,8 +26,7 @@ fs.readdirSync(__dirname + "/../areaLoad").forEach(file => {
 
 module.exports = {
 	id: "areas",
-	exec: (client, newProfiler) => {
-		profiler = newProfiler;
+	exec: (client) => {
 		var promises = [];
 		for (var guild of client.guilds)
 			promises.push(load(guild, client));
