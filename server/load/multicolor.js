@@ -1,4 +1,5 @@
 module.exports = {
+	id: "multicolor",
 	exec: (client) => {
 		client.guilds.forEach((guild) => {
 			if (client.user.id === "393532251398209536") {

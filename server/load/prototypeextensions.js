@@ -23,3 +23,5 @@ Array.prototype.difference = function(a) {
 credits to Joshaven Potter from stackoverflow for this great prototype extension :D
 https://stackoverflow.com/users/121607/joshaven-potter
 */
+
+module.exports.id = "prototypes";

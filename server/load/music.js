@@ -157,6 +157,7 @@ fs.readdirSync(__dirname + "/../music").forEach((file) => {
 	}
 });
 module.exports = {
+	id: "music",
 	exec: (client) => {
 		for (var [source, key] of Object.entries(TOKENS_MAPPING)) {
 			tokens.set(source, config[key]);

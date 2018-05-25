@@ -25,9 +25,10 @@ class Profiler {
 	}
 
 	constructor(size) {
-		this.buffer = Buffer.alloc(size + 1);
-		stdout.write(this.buffer);
-		this.timeout = client.setTimeout(() => { this.writeState(Profiler.states.Timeout); }, LOAD_TIMEOUT);
+		this.ended = false;
+		this.used = [];
+		this.buffer = Buffer.alloc(size + 2);
+		this.offset = 0;
 	}
 
 	newSubProfiler() {
@@ -35,24 +36,37 @@ class Profiler {
 	}
 
 	writeStart(id) {
-		this.buffer.write(id + " ");
+		this.buffer.write(id + " ", this.offset);
+		this.offset = id.length + 1;
 	}
 
 	writeState(state) {
-		if (state === Profiler.states.Ended)
-			clearTimeout(this.timeout);
-		this.buffer.write(state.symbol);
+		if (!this.ended && !this.used.some((other) => other === state)) {
+			this.buffer.write(state.symbol, this.offset);
+			this.offset += state.symbol.length;
+			if (state.ends) {
+				this.ended = true;
+				this.buffer.write("\n", this.offset);
+				stdout.write(this.buffer, "ascii");
+			}
+		}
+		
 	}
 }
 Object.defineProperty(Profiler, "states", {
-	value: new Enum(["Started", "Ended", "Timeout"])
+	value: new Enum(["Started", "Ended", "Timeout", "Error"])
 });
 Profiler.states.Started.symbol = "S";
 Profiler.states.Started.description = "Loading has started.";
-Profiler.states.Ended.symbol = "E";
+Profiler.states.Ended.symbol = "F";
 Profiler.states.Ended.description = "Finished loading.";
+Profiler.states.Ended.ends = true;
 Profiler.states.Timeout.symbol = "T";
 Profiler.states.Timeout.description = "Took too long to load.";
+Profiler.states.Timeout.ends = true;
+Profiler.states.Error.symbol = "E";
+Profiler.states.Error.description = "An error occured.";
+Profiler.states.Error.ends = true;
 Profiler.states.freezeEnums();
 
 fs.readdirSync(__dirname + "/chat").forEach(file => {
@@ -80,20 +94,38 @@ fs.readdirSync(__dirname + "/load").forEach(file => {
 errorHandler(client);
 
 client.on("ready", () => {
+	var loading = [];
 	// eslint-disable-next-line no-console
 	console.log("Loading...");
 	Profiler.writeLegend();
 	loaders.forEach(loader => {
-		new Promise((resolve) => {
-			// var profiler = new Profiler(loader.id.length + (loader.profilerBytes || 2));
-			// profiler.writeStart(loader.id);
-			if (loader.exec != null)
-				loader.exec(client);
+		loading.push(new Promise(async (resolve) => {
+			var profiler = new Profiler(loader.id.length + (loader.profilerBytes || 2));
+			profiler.writeStart(loader.id);
+			var timeout = client.setTimeout(() => {
+				profiler.writeState(Profiler.states.Timeout);
+				resolve();
+			}, LOAD_TIMEOUT);
+			try {
+				profiler.writeState(Profiler.states.Started);
+				if (loader.exec != null) {
+					var promise = loader.exec(client, profiler);
+					if (promise != null)
+						await promise;
+				}
+				profiler.writeState(Profiler.states.Ended);
+			} catch (exc) {
+				Profiler.writeState(Profiler.states.Error);
+				console.warn(exc.stack);
+			}
+			clearTimeout(timeout);
 			resolve();
-		});
+		}));
 	});
-	// eslint-disable-next-line no-console
-	console.log("Finished loading!");
+	Promise.all(loading).then(() => {
+		// eslint-disable-next-line no-console
+		console.log("Finished loading!");
+	});
 });
 
 client.on("message", message => {

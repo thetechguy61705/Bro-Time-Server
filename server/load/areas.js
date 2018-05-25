@@ -18,6 +18,7 @@ fs.readdirSync(__dirname + "/../areaLoad").forEach(file => {
 });
 
 module.exports = {
+	id: "areas",
 	exec: (client) => {
 		client.guilds.forEach(load);
 		client.channels.forEach(loadChannel);

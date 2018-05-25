@@ -3,6 +3,7 @@ var excludedUsers = ["140163987500302336", "320666152693006344", "39187881526309
 var partiallyExcludedUsers = ["293060399106883584"];
 
 module.exports = {
+	id: "testguild",
 	exec: (client) => {
 		var testGuild = client.guilds.get("430096406275948554");
 		var realGuild = client.guilds.get("330913265573953536");
