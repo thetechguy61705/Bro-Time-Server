@@ -30,6 +30,7 @@
   "homepage": "https://github.com/cloewen8/Bro-Time-Server#readme",
   "dependencies": {
     "discord.js": "^11.3.2",
+    "enum": "^2.5.0",
     "escape-string-regexp": "^1.0.5",
     "ffmpeg-binaries": "^3.2.2-3",
     "miniget": "^1.2.0",
