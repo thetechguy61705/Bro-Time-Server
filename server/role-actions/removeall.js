@@ -6,8 +6,8 @@ module.exports = {
 			const rolesToRemove = target.roles
 				.filter(role => call.message.member.highestRole.position > role.position && call.message.guild.me.highestRole.position > role.position && role.name !== "@everyone");
 			if (rolesToRemove.size !== 0) {
-				target.removeRoles(rolesToRemove).then(() => {
-					call.message.channel.send("Removing all roles from `" + target.user.tag + "`.").catch(() => {});
+				target.removeRoles(removeAllRoles).then(() => {
+					call.message.channel.send(`Role(s) removed from \`${target.user.tag}\`: \`${removeAllRoles.map(rM => rM.name).join("`, `")}\``).catch(() => {});
 				}).catch(() => {
 					call.message.reply("There was an error removing roles from that user.").catch(() => {
 						call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
