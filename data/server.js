@@ -1,5 +1,5 @@
 var config = require("../config");
-var discord = require("discord.js");
+var { Guild } = require("discord.js");
 const { Pool } = require("pg");
 const escapeRegExp = require("escape-string-regexp");
 
@@ -54,10 +54,10 @@ class BotAccess extends DataAccess {
 	constructor(area, client) {
 		super();
 		this._client = client;
-		if (area instanceof discord.Channel) {
-			this.dm = area;
-		} else {
+		if (area instanceof Guild) {
 			this.server = area;
+		} else {
+			this.channel = area;
 		}
 	}
 

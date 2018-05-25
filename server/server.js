@@ -24,23 +24,34 @@ class Profiler {
 		console.log(rows.join("\n"));
 	}
 
-	constructor(size) {
+	constructor(size, parent) {
+		this.states = Profiler.states;
+		this.parent = parent;
 		this.ended = false;
 		this.used = [];
 		this.buffer = Buffer.alloc(size + 2);
 		this.offset = 0;
+		this.subProfilers = [];
 	}
 
-	newSubProfiler() {
-
+	newSubProfiler(size) {
+		var subProfiler = new Profiler(this.id.length + size + 4, this);
+		subProfiler.buffer.write(this.id, subProfiler.offset);
+		subProfiler.offset += this.id.length;
+		subProfiler.buffer.write(" -> ", subProfiler.offset);
+		subProfiler.offset += 4;
+		this.subProfilers.push(subProfiler);
+		return subProfiler;
 	}
 
 	writeStart(id) {
+		this.id = id;
 		this.buffer.write(id + " ", this.offset);
-		this.offset = id.length + 1;
+		this.offset += id.length + 1;
 	}
 
 	writeState(state) {
+		var subProfiler;
 		if (!this.ended && !this.used.some((other) => other === state)) {
 			this.buffer.write(state.symbol, this.offset);
 			this.offset += state.symbol.length;
@@ -48,12 +59,21 @@ class Profiler {
 				this.ended = true;
 				this.buffer.write("\n", this.offset);
 				stdout.write(this.buffer, "ascii");
+				if (state === Profiler.states.Error) {
+					if (this.parent != null)
+						this.parent.writeState(state);
+					for (subProfiler of this.subProfilers)
+						subProfiler.writeState(Profiler.states.Interrupted);
+				} else if (state !== Profiler.states.Ended) {
+					for (subProfiler of this.subProfilers)
+						subProfiler.writeState(state);
+				}
 			}
 		}
 	}
 }
 Object.defineProperty(Profiler, "states", {
-	value: new Enum(["Started", "Ended", "Timeout", "Error"])
+	value: new Enum(["Started", "Ended", "Timeout", "Error", "Interrupted"])
 });
 Profiler.states.Started.symbol = "S";
 Profiler.states.Started.description = "Loading has started.";
@@ -66,6 +86,9 @@ Profiler.states.Timeout.ends = true;
 Profiler.states.Error.symbol = "E";
 Profiler.states.Error.description = "An error occured.";
 Profiler.states.Error.ends = true;
+Profiler.states.Interrupted.symbol = "I";
+Profiler.states.Interrupted.description = "A parent loader interrupted this loader.";
+Profiler.states.Interrupted.ends = true;
 Profiler.states.freezeEnums();
 
 fs.readdirSync(__dirname + "/chat").forEach(file => {
@@ -114,7 +137,7 @@ client.on("ready", () => {
 				}
 				profiler.writeState(Profiler.states.Ended);
 			} catch (exc) {
-				Profiler.writeState(Profiler.states.Error);
+				profiler.writeState(Profiler.states.Error);
 				console.warn(exc.stack);
 			}
 			clearTimeout(timeout);
