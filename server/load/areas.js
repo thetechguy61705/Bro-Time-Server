@@ -2,14 +2,21 @@ var { GuildChannel } = require("discord.js");
 var fs = require("fs");
 var areaLoaders = [];
 
-function load(area) {
-	for (var areaLoader of areaLoaders)
-		areaLoader.exec(area);
+async function load(area, client) {
+	for (var areaLoader of areaLoaders) {
+		try {
+			var promise = areaLoader.exec(area, client);
+			if (promise != null)
+				await promise;
+		} catch (exc) {
+			console.warn(exc.stack);
+		}
+	}
 }
 
-function loadChannel(channel) {
+function loadChannel(channel, client) {
 	if (!(channel instanceof GuildChannel))
-		load(channel);
+		return load(channel, client);
 }
 
 fs.readdirSync(__dirname + "/../areaLoad").forEach(file => {
@@ -18,10 +25,15 @@ fs.readdirSync(__dirname + "/../areaLoad").forEach(file => {
 });
 
 module.exports = {
+	id: "areas",
 	exec: (client) => {
-		client.guilds.forEach(load);
-		client.channels.forEach(loadChannel);
+		var promises = [];
+		for (var guild of client.guilds)
+			promises.push(load(guild, client));
+		for (var channel of client.channels)
+			promises.push(loadChannel(channel, client));
 		client.on("guildCreate", load);
 		client.on("channelCreate", loadChannel);
+		return Promise.all(promises);
 	}
 };

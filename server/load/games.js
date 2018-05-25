@@ -1,4 +1,5 @@
 module.exports = {
+	id: "games",
 	exec: (client) => {
 		var games = require("./../commands/games");
 		client.on("message", (message) => {

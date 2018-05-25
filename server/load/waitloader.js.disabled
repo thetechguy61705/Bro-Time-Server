@@ -1,4 +1,8 @@
+// Disabled until fixed.
+// Please consider using an area loader. It will gaurentee giveaways load after the guild does.
+
 module.exports = {
+	id: "giveaways",
 	exec: (client) => {
 		const realGuild = client.guilds.get("330913265573953536");
 

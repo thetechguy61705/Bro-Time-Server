@@ -6,6 +6,7 @@ const freeRoles = ["QOTD", "ANN", "GW", "MOVIES", "Roblox", "Minecraft", "Cuphea
 	"Call of Duty", "Destiny", "Psych"];
 
 module.exports = {
+	id: "reactroles",
 	exec: (client) => {
 		var channel = client.channels.map(c => c.name + " " + c.guild.name);
 		if (channel === "BALOZO DALIAZO") {
