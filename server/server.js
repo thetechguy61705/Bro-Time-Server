@@ -3,9 +3,12 @@ var config = require("../config");
 var Enum = require("enum");
 var fs = require("fs");
 var discord = require("discord.js");
+var stdout = process.stdout;
 var loaders = [];
 var chatHandlers = [];
 var client = new discord.Client(config.CLIENT);
+
+const LOAD_TIMEOUT = 60000
 
 class Profiler {
 	static writeLegend() {
@@ -14,28 +17,31 @@ class Profiler {
 		rows.push(`┏━┳${"━".repeat(descLength)}┓`);
 		rows.push(`┃S┃${"Description".padEnd(descLength)}┃`);
 		rows.push(`┣━╋${"━".repeat(descLength)}┫`);
-		for (var state of Profiler.states) {
+		for (var state of Profiler.states)
 			rows.push(`┃${state.symbol}┃${state.description.padEnd(descLength)}┃`);
-		}
 		rows.push(`┗━┻${"━".repeat(descLength)}┛`);
 		// eslint-disable-next-line no-console
 		console.log(rows.join("\n"));
 	}
 
-	constructor() {
-
+	constructor(size) {
+		this.buffer = Buffer.alloc(size + 1);
+		stdout.write(this.buffer);
+		this.timeout = client.setTimeout(() => { this.writeState(Profiler.states.Timeout); }, LOAD_TIMEOUT);
 	}
 
 	newSubProfiler() {
 
 	}
 
-	writeStart() {
-
+	writeStart(id) {
+		this.buffer.write(id + " ");
 	}
 
 	writeState(state) {
-
+		if (state === Profiler.states.Ended)
+			clearTimeout(this.timeout);
+		this.buffer.write(state.symbol);
 	}
 }
 Object.defineProperty(Profiler, "states", {
@@ -78,8 +84,12 @@ client.on("ready", () => {
 	console.log("Loading...");
 	Profiler.writeLegend();
 	loaders.forEach(loader => {
-		if (loader.exec != null)
-			loader.exec(client);
+		new Promise((resolve) => {
+			var profiler = new Profiler(loader.id.length + (loader.profilerBytes || 2));
+			profiler.writeStart(loader.id);
+			if (loader.exec != null)
+				loader.exec(client);
+		});
 	});
 	// eslint-disable-next-line no-console
 	console.log("Finished loading!");
