@@ -50,7 +50,6 @@ class Profiler {
 				stdout.write(this.buffer, "ascii");
 			}
 		}
-		
 	}
 }
 Object.defineProperty(Profiler, "states", {
