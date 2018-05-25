@@ -20,7 +20,7 @@ module.exports = {
 	description: "Returns information and commands on the bot.",
 	arguments: "[command]",
 	execute: (call) => {
-		const data = (call.message.guild || call.message.channel).data;
+		const data = call.message.getData().get("data");
 		const prefix = data != null ? data.prefix : "Unknown";
 		var param1 = call.params.readRaw();
 		var helpEmbed;
