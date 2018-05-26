@@ -1,6 +1,5 @@
 var errorHandler = require("app/errorHandler");
 var config = require("../config");
-var areas = require("./load/areas");
 var Enum = require("enum");
 var fs = require("fs");
 var discord = require("discord.js");
@@ -152,9 +151,6 @@ client.on("ready", () => {
 });
 
 client.on("message", message => {
-	message.getData = () => {
-		return areas.getData((message.guild || message.channel).id);
-	};
 	for (var handler of chatHandlers) {
 		try {
 			if (handler.exec(message, client))

@@ -54,11 +54,9 @@ class BotAccess extends DataAccess {
 	constructor(area, client) {
 		super();
 		this._client = client;
-		if (area instanceof Guild) {
+		if (area instanceof Guild)
 			this.server = area;
-		} else {
-			this.channel = area;
-		}
+		this.prefix = DM_PREFIX;
 	}
 
 	async load() {
@@ -71,8 +69,6 @@ class BotAccess extends DataAccess {
 			                                   FROM discord.Servers
 			                                   WHERE Server_Id = $1`, [this.server.id])).rows[0].prefix;
 			client.release();
-		} else {
-			this.prefix = DM_PREFIX;
 		}
 	}
 

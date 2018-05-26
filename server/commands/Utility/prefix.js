@@ -7,7 +7,7 @@ module.exports = {
 	// This command requires the restrictions api. I'll take it out of testing then.
 	test: true,
 	execute: (call) => {
-		var data = call.message.getData().get("data");
+		var data = (call.message.guild || call.message.channel).data;
 		if (data != null) {
 			data.setPrefix(call.params.readParameter(true)).then((newPrefix) => {
 				call.message.channel.send(new RichEmbed()
