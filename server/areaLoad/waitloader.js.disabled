@@ -1,5 +1,5 @@
-// Disabled until fixed.
-// Please consider using an area loader. It will gaurentee giveaways load after the guild does.
+// Giveaways have been moved to the giveaways area loader.
+// The unmute feature is currently unused.
 
 module.exports = {
 	id: "giveaways",
