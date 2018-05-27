@@ -35,7 +35,7 @@ module.exports = {
 				add(command, commandHelp, prefix);
 			});
 
-			helpEmbed.setTitle("Commands").setDescription(`Prefix: \`${prefix}\`\nUptime: ${call.client.uptime.expandPretty()}`)
+			helpEmbed.setTitle("Commands").setDescription(`Prefix: \`${prefix}\`\nUptime: ${call.client.uptime.expandPretty()}`);
 			for (var [category, commands] of Object.entries(commandHelp)) {
 				helpEmbed.addField(category, commands.join("\n"));
 			}
