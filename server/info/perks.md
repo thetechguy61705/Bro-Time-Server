@@ -2,7 +2,6 @@ Thank you for supporting Bro Time by purchasing these perks for just $3 or suppo
 
 **Perks ($3 For All)**
 - Your very own custom color
-- Access to all premium colors
 - Bro Time Premium role
 - Access to Bro Time Premium only chat
 
