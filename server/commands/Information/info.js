@@ -100,13 +100,13 @@ async function nameColors(message, Discord, prompt, param) {
 	if (param !== undefined) prompt = param;
 	var currentRole;
 	var endMessage = ["`Black`", "`White`", "`Red`", "`BrightRed`", "`Orange`", "`Bronze`", "`Gold`", "`HotBrown`",
-	"`Salmon`", "`Yellow`", "`Green`", "`DarkGreen`", "`LimeGreen`", "`LightGreen`", "`Blue`", "`GrayBlue`",
-	"`Cyan`", "`Purple`", "`Indigo`", "`DarkViolet`", "`Magenta`", "`HotPink`", "`Pink`", "`Invisible`", "`Multicolored`"];
-	
+		"`Salmon`", "`Yellow`", "`Green`", "`DarkGreen`", "`LimeGreen`", "`LightGreen`", "`Blue`", "`GrayBlue`",
+		"`Cyan`", "`Purple`", "`Indigo`", "`DarkViolet`", "`Magenta`", "`HotPink`", "`Pink`", "`Invisible`", "`Multicolored`"];
+
 	var colorRoles = ["`Black`", "`White`", "`Red`", "`BrightRed`", "`Orange`", "`Bronze`", "`Gold`", "`HotBrown`",
-	"`Salmon`", "`Yellow`", "`Green`", "`DarkGreen`", "`LimeGreen`", "`LightGreen`", "`Blue`", "`GrayBlue`",
-	"`Cyan`", "`Purple`", "`Indigo`", "`DarkViolet`", "`Magenta`", "`HotPink`", "`Pink`", "`Invisible`", "`Multicolored`"];
-	
+		"`Salmon`", "`Yellow`", "`Green`", "`DarkGreen`", "`LimeGreen`", "`LightGreen`", "`Blue`", "`GrayBlue`",
+		"`Cyan`", "`Purple`", "`Indigo`", "`DarkViolet`", "`Magenta`", "`HotPink`", "`Pink`", "`Invisible`", "`Multicolored`"];
+
 	if (prompt.toLowerCase() === "preview") {
 		currentRole = message.guild.roles.find("name", colorRoles[0].substr(1).slice(0, -1));
 		var nameColorEmbed = new Discord.RichEmbed()
