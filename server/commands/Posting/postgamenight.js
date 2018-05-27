@@ -39,7 +39,6 @@ module.exports = {
 	execute: async (call) => {
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {
 			const game = await awaitReply(call.message, "What is the game you want to host on?", 60000);
-			console.log(game.author.tag);
 			if (game.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
 			var gamerole;
 			if (games.includes(game.content.toLowerCase())) {
