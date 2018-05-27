@@ -19,7 +19,7 @@ async function awaitReply(message, question, limit = 60000){
 	message.reply(question).then(async function(){
 		try {
 			const collected = await message.channel.awaitMessages(filter, { max: 1, time: limit, errors: ["time"] });
-			return collected.first().content;
+			return collected.first();
 		} catch (error) {
 			return false;
 		}
@@ -39,31 +39,32 @@ module.exports = {
 	execute: async (call) => {
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {
 			const game = await awaitReply(call.message, "What is the game you want to host on?", 60000);
-			if (game == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
+			console.log(game.author.tag);
+			if (game.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
 			var gamerole;
-			if (games.includes(game)) {
-				gamerole = call.message.guild.roles.find(r=> r.name.toLowerCase() === game.toLowerCase());
+			if (games.includes(game.content.toLowerCase())) {
+				gamerole = call.message.guild.roles.find(r=> r.name.toLowerCase() === game.content.toLowerCase());
 			} else {
-				gamerole = game;
+				gamerole = game.content;
 			}
 			const link = await awaitReply(call.message, "What is the link of your game? If none respond with `none`.", 60000);
-			if (link == "cancel") return call.message.channel.send("Canceled Prompt.").catch(function(){});
+			if (link.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled Prompt.").catch(function(){});
 			var islink = isURL(link);
-			if (islink || link.toLowerCase() == "none") {
+			if (islink || link.content.toLowerCase() == "none") {
 				var varlink;
-				if (link.toLowerCase() == "none") {
+				if (link.content.toLowerCase() == "none") {
 					varlink = "`none`";
 				} else {
-					varlink = link;
+					varlink = link.content;
 				}
 				const other = await awaitReply(call.message, "Any other information? If none respond with `none`.", 60000);
-				if (other == "cancel") return call.message.channel.send("**Canceled Prompt.**").catch(function(){});
+				if (other.content.toLowerCase() == "cancel") return call.message.channel.send("**Canceled Prompt.**").catch(function(){});
 				let annchannel = call.message.guild.channels.find("name", "announcements");
-				if (games.includes(game)) {
+				if (games.includes(game.content.toLowerCase())) {
 					gamerole.setMentionable(true).then(() => {
-						annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other}\`\n*Posted by ${call.message.author}*`)
+						annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other.content}\`\n*Posted by ${call.message.author}*`)
 							.then(function(){
-								game.setMentionable(false).catch(function(){
+								gamerole.setMentionable(false).catch(function(){
 									call.message.author
 										.send(`Could not change the role mentionability of ${gamerole.name} back to normal. Please do this manually.`)
 										.catch(function(){});
