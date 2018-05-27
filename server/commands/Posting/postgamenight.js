@@ -49,6 +49,7 @@ module.exports = {
 				gamerole = game.content;
 			}
 			const link = await awaitReply(call.message, "What is the link of your game? If none respond with `none`.", 60000);
+			console.log(link);
 			if (link.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled Prompt.").catch(function(){});
 			var islink = isURL(link);
 			if (islink || link.content.toLowerCase() == "none") {
