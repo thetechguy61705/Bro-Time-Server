@@ -23,31 +23,29 @@ module.exports = {
 		var awaitReply;
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {
 			var game = await call.requestInput(0, "What is the game you want to host on?", 60000);
-			console.log(game);
-			if (game.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
+			if (game.call.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
 			var gamerole;
-			if (games.includes(game.content.toLowerCase())) {
-				gamerole = call.message.guild.roles.find(r=> r.name.toLowerCase() === game.content.toLowerCase());
+			if (games.includes(game.call.message.content.toLowerCase())) {
+				gamerole = call.message.guild.roles.find(r=> r.name.toLowerCase() === game.call.message.content.toLowerCase());
 			} else {
-				gamerole = game.content;
+				gamerole = game.call.message.content;
 			}
-			const link = await awaitReply(call.message, "What is the link of your game? If none respond with `none`.", 60000);
-			console.log(link);
-			if (link.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled Prompt.").catch(function(){});
-			var islink = isURL(link);
-			if (islink || link.content.toLowerCase() == "none") {
+			var link = await call.requestInput(0, "What is the link of your game? If none respond with `none`.", 60000);
+			if (link.call.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled Prompt.").catch(function(){});
+			var islink = isURL(link.call.message.content);
+			if (islink || link.call.message.content.toLowerCase() == "none") {
 				var varlink;
-				if (link.content.toLowerCase() == "none") {
+				if (link.call.message.content.toLowerCase() == "none") {
 					varlink = "`none`";
 				} else {
-					varlink = link.content;
+					varlink = link.call.message.content;
 				}
-				const other = await awaitReply(call.message, "Any other information? If none respond with `none`.", 60000);
-				if (other.content.toLowerCase() == "cancel") return call.message.channel.send("**Canceled Prompt.**").catch(function(){});
+				var other = await call.requestInput(0, "Any other information? If none respond with `none`.", 60000);
+				if (other.call.message.content.toLowerCase() == "cancel") return call.message.channel.send("**Canceled Prompt.**").catch(function(){});
 				let annchannel = call.message.guild.channels.find("name", "announcements");
-				if (games.includes(game.content.toLowerCase())) {
+				if (games.includes(game.call.message.content.toLowerCase())) {
 					gamerole.setMentionable(true).then(() => {
-						annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other.content}\`\n*Posted by ${call.message.author}*`)
+						annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other.call.message.content}\`\n*Posted by ${call.message.author}*`)
 							.then(function(){
 								gamerole.setMentionable(false).catch(function(){
 									call.message.author
