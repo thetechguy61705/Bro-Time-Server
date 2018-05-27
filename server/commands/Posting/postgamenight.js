@@ -14,33 +14,15 @@ function isURL(str) {
 	// credit to Tom Gullen https://stackoverflow.com/users/356635/tom-gullen from stackoverflow <3
 }
 
-async function awaitReply(message, question, limit = 60000){
-	const filter = m => m.author.id === message.author.id;
-	message.reply(question).then(async function(){
-		try {
-			const collected = await message.channel.awaitMessages(filter, { maxMatches: 1, time: limit, errors: ["time"] });
-			console.log(collected.first().author.tag);
-			return collected.first();
-		} catch (error) {
-			console.log("it errored");
-			return false;
-		}
-	}).catch(function(){
-		message.channel.send(`You attempted to run the \`postgamenigh\` command in ${message.channel}, but I can not chat there`)
-			.catch(function(){});
-		return "cancel";
-	});
-}
-
-
 module.exports = {
 	id: "postgamenight",
 	description: "Posts the specified \"Gamenight\" in <#330920609435353090>.",
 	arguments: "... prompt",
 	requires: "Role: Game Night Host",
 	execute: async (call) => {
+		var awaitReply;
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {
-			var game = await awaitReply(call.message, "What is the game you want to host on?", 60000);
+			var game = await call.requestInput(0, "What is the game you want to host on?", 60000);
 			console.log(game);
 			if (game.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
 			var gamerole;
