@@ -1,7 +1,6 @@
 module.exports = {
-	run: (call, actions) => {
-		const paramOne = call.params.readParameter(),
-			target = (paramOne != null) ? call.message.guild.members.find(member => member.user.tag.toLowerCase().startsWith(paramOne.toLowerCase()) || paramOne.includes(member.user.id)) : null;
+	run: (call, actions, parameter) => {
+		const target = (parameter != null) ? call.message.guild.members.find(member => member.user.tag.toLowerCase().startsWith(parameter.toLowerCase()) || parameter.includes(member.user.id)) : null;
 		var rolesToChange = { rolesToAdd: [], rolesToRemove: [] };
 		if (target != null) {
 			(call.params.readParameter(true) || "").split(",").forEach(role => {
