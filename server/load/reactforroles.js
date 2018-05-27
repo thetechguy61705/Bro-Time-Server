@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 const freeRoles = ["QOTD", "ANN", "GW", "MOVIES", "Roblox", "Minecraft", "Cuphead", "Fortnite", "Undertale", "Unturned", "VRChat",
 	"PUBG", "FNAF", "Clash of Clans", "Clash Royale", "Sims", "Terraria", "Subnautica", "Rocket League",
 	"Portal", "Hat in Time", "CSGO", "Splatoon", "Mario", "Starbound", "Garry's Mod", "Overwatch",
-	"Call of Duty", "Destiny", "Psych"];
+	"Call of Duty", "Destiny", "Psych", "Bro Time Games"];
 
 module.exports = {
 	id: "reactroles",
