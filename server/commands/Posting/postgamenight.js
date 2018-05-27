@@ -24,27 +24,27 @@ module.exports = {
 			var game = await call.requestInput(0, "What is the game you want to host on?", 60000);
 			if (game.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
 			var gamerole;
-			if (games.includes(game.call.message.content.toLowerCase())) {
-				gamerole = call.message.guild.roles.find(r=> r.name.toLowerCase() === game.call.message.content.toLowerCase());
+			if (games.includes(game.message.content.toLowerCase())) {
+				gamerole = call.message.guild.roles.find(r=> r.name.toLowerCase() === game.message.content.toLowerCase());
 			} else {
-				gamerole = game.call.message.content;
+				gamerole = game.message.content;
 			}
 			var link = await call.requestInput(0, "What is the link of your game? If none respond with `none`.", 60000);
-			if (link.call.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled Prompt.").catch(function(){});
-			var islink = isURL(link.call.message.content);
-			if (islink || link.call.message.content.toLowerCase() == "none") {
+			if (link.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled Prompt.").catch(function(){});
+			var islink = isURL(link.message.content);
+			if (islink || link.message.content.toLowerCase() == "none") {
 				var varlink;
-				if (link.call.message.content.toLowerCase() == "none") {
+				if (link.message.content.toLowerCase() == "none") {
 					varlink = "`none`";
 				} else {
-					varlink = link.call.message.content;
+					varlink = link.message.content;
 				}
 				var other = await call.requestInput(0, "Any other information? If none respond with `none`.", 60000);
-				if (other.call.message.content.toLowerCase() == "cancel") return call.message.channel.send("**Canceled Prompt.**").catch(function(){});
+				if (other.message.content.toLowerCase() == "cancel") return call.message.channel.send("**Canceled Prompt.**").catch(function(){});
 				let annchannel = call.message.guild.channels.find("name", "announcements");
-				if (games.includes(game.call.message.content.toLowerCase())) {
+				if (games.includes(game.message.content.toLowerCase())) {
 					gamerole.setMentionable(true).then(() => {
-						annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other.call.message.content}\`\n*Posted by ${call.message.author}*`)
+						annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other.message.content}\`\n*Posted by ${call.message.author}*`)
 							.then(function(){
 								gamerole.setMentionable(false).catch(function(){
 									call.message.author
