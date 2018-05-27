@@ -22,6 +22,7 @@ module.exports = {
 	execute: async (call) => {
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {
 			var game = await call.requestInput(0, "What is the game you want to host on?", 60000);
+			if (!game) return call.message.channel.send("Canceled prompt because there was no resonse after one minute.").catch(function(){});
 			if (game.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
 			var gamerole;
 			if (games.includes(game.message.content.toLowerCase())) {
@@ -30,6 +31,7 @@ module.exports = {
 				gamerole = game.message.content;
 			}
 			var link = await call.requestInput(0, "What is the link of your game? If none respond with `none`.", 60000);
+			if (!link) return call.message.channel.send("Canceled prompt because there was no resonse after one minute.").catch(function(){});
 			if (link.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled Prompt.").catch(function(){});
 			var islink = isURL(link.message.content);
 			if (islink || link.message.content.toLowerCase() == "none") {
@@ -40,6 +42,7 @@ module.exports = {
 					varlink = link.message.content;
 				}
 				var other = await call.requestInput(0, "Any other information? If none respond with `none`.", 60000);
+				if (!other) return call.message.channel.send("Canceled prompt because there was no resonse after one minute.").catch(function(){});
 				if (other.message.content.toLowerCase() == "cancel") return call.message.channel.send("**Canceled Prompt.**").catch(function(){});
 				let annchannel = call.message.guild.channels.find("name", "announcements");
 				if (games.includes(game.message.content.toLowerCase())) {
