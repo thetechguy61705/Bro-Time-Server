@@ -19,8 +19,10 @@ async function awaitReply(message, question, limit = 60000){
 	message.reply(question).then(async function(){
 		try {
 			const collected = await message.channel.awaitMessages(filter, { maxMatches: 1, time: limit, errors: ["time"] });
+			console.log(collected.first().author.tag);
 			return collected.first();
 		} catch (error) {
+			console.log("it errored");
 			return false;
 		}
 	}).catch(function(){
