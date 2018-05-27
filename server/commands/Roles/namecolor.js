@@ -1,6 +1,6 @@
 const allroles = ["Black", "White", "Red", "BrightRed", "Orange", "Bronze", "Gold", "HotBrown",
 	"Salmon", "Yellow", "Green", "DarkGreen", "LimeGreen", "LightGreen", "Blue", "GrayBlue",
-	"Cyan", "Purple", "Indigo", "DarkViolet", "Magenta", "HotPink", "Pink", "Multicolored"];
+	"Cyan", "Purple", "Indigo", "DarkViolet", "Magenta", "HotPink", "Pink", "Invisible", "Multicolored"];
 
 function removeColorRoles(roles, user) {
 	allroles.forEach((color) => {
