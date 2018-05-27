@@ -22,7 +22,7 @@ module.exports = {
 	execute: async (call) => {
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {
 			var game = await call.requestInput(0, "What is the game you want to host on?", 60000);
-			if (game.call.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
+			if (game.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
 			var gamerole;
 			if (games.includes(game.call.message.content.toLowerCase())) {
 				gamerole = call.message.guild.roles.find(r=> r.name.toLowerCase() === game.call.message.content.toLowerCase());
