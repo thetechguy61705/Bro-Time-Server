@@ -62,7 +62,7 @@ module.exports = {
 						});
 					});
 				} else {
-					annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other}\`\n*Posted by ${call.message.author}*`)
+					annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other.message.content}\`\n*Posted by ${call.message.author}*`)
 						.catch(function(){
 							call.message.author.send(`There was an error while sending a message in ${annchannel}.`).catch(function(){});
 						});
