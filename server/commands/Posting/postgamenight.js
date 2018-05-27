@@ -20,7 +20,6 @@ module.exports = {
 	arguments: "... prompt",
 	requires: "Role: Game Night Host",
 	execute: async (call) => {
-		var awaitReply;
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {
 			var game = await call.requestInput(0, "What is the game you want to host on?", 60000);
 			if (game.call.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
