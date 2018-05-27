@@ -7,7 +7,7 @@ module.exports = {
 		if(call.message.member.roles.has(call.message.guild.roles.find("name", "QOTD Host").id)) {
 			let ann = call.message.guild.channels.find("name", "announcements");
 			let qotd = call.params.readRaw(" ");
-			if(qotd !== " ") {
+			if(qotd !== "") {
 				let qotdrole = call.message.guild.roles.find("name", "QOTD");
 				qotdrole.setMentionable(true).then(() => {
 					ann.send(`<@&387375439745908747>: **${qotd}**\n*Posted by ${call.message.author}*`);
