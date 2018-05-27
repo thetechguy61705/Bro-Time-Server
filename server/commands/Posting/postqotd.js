@@ -16,13 +16,13 @@ module.exports = {
 					call.message.channel.send("Something went wrong and I couldn't send the QoTD");
 				});
 			} else {
-				call.message.reply("Invalid permissions: requires role: `QOTD Host`").catch(() => {
+				call.message.reply("You did not supply the question to post. Please try again.").catch(() => {
 					call.message.author.send(`You attempted to run the \`postqotd\` command in ${call.message.channel}, but I can not chat there.`)
 						.catch(function(){});
 				});
 			}
 		} else {
-			call.message.reply("You did not supply the question to post. Please try again.").catch(() => {
+			call.message.reply("Invalid permissions: requires role: `QOTD Host`").catch(() => {
 				call.message.author.send(`You attempted to run the \`postqotd\` command in ${call.message.channel}, but I can not chat there.`)
 					.catch(function(){});
 			});
