@@ -32,10 +32,12 @@ module.exports = {
 				};
 				session.endGame();
 			}).catch(() => {
-				session.context.channel.send("Someone did not respond within 60 seconds.").catch(() => {});
+				session.context.channel.send("Someone did not respond with a valid option within 60 seconds.").catch(() => {});
+				session.endGame();
 			});
 		}).catch(() => {
 			session.context.channel.send("I could not send a dm message to one or more of the participating players.").catch(() => {});
+			session.endGame();
 		});
 	},
 	input: () => {},

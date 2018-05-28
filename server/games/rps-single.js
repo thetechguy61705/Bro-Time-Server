@@ -13,7 +13,7 @@ module.exports = {
 			OPCHOICES = ["paper", "scissors", "rock"],
 			FILTER = (m) => m.author.id === session.host.id && CHOICES.includes(m.content.toLowerCase());
 		session.context.channel.send("Choose one of the following options: `rock`, `paper` or `scissors`.").then((rpsMessage) => {
-			rpsMessage.channel.awaitMessages(FILTER, { maxMatches: 1, time: 60000 }).then(rps => {
+			rpsMessage.channel.awaitMessages(FILTER, { maxMatches: 1, time: 60000, errors: ["time"] }).then((rps) => {
 				const BOT_CHOICE = CHOICES[Math.floor(Math.random() * CHOICES.length)];
 				session.rps = {
 					winner: (CHOICES.indexOf(BOT_CHOICE) === OPCHOICES.indexOf(rps.first().content.toLowerCase())) ?
@@ -23,11 +23,15 @@ module.exports = {
 					playerChoice: rps.first().content.toUpperCase()
 				};
 				session.endGame();
+			}).catch(() => {
+				session.context.channel.send(`${session.host}, You did not respond with a valid option within 60 seconds.`).catch(() => {});
+				session.endGame();
 			});
-		});
+		}).catch(() => {});
 	},
 	input: () => {},
 	end: (session) => {
-		session.context.channel.send(`${session.host}, I chose \`${session.rps.botChoice}\`, you chose \`${session.rps.playerChoice}\`. ${session.rps.winner}`);
+		if (session.rps != null)
+			session.context.channel.send(`${session.host}, I chose \`${session.rps.botChoice}\`, you chose \`${session.rps.playerChoice}\`. ${session.rps.winner}`);
 	},
 };
