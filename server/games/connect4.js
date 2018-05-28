@@ -19,7 +19,7 @@ module.exports = {
 	start: (session) => {
 		const eA = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣"], author = session.host, target = session.players.last();
 		var rows = [eA, ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
-			["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"]],
+				["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"]],
 			connectFourEmbed = new Discord.RichEmbed().setColor(0x00AE86).setTitle("Connect Four").setFooter(`${author.tag}'s turn.`);
 		connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map(row => row.join(" ")).join("\n"));
 		session.context.channel.send({ embed: connectFourEmbed }).then(async function(connectFour) {
