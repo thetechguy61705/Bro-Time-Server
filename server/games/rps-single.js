@@ -21,7 +21,7 @@ module.exports = {
 						(BOT_CHOICE === rps.first().content.toLowerCase()) ? "It was a draw!" : "I win!",
 					botChoice: BOT_CHOICE.toUpperCase(),
 					playerChoice: rps.first().content.toUpperCase()
-				}
+				};
 				session.endGame();
 			});
 		});

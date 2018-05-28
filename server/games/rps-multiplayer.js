@@ -29,7 +29,7 @@ module.exports = {
 						(results[1].first().content.toLowerCase() === results[0].first().content.toLowerCase()) ? "It was a draw!" : results[0].first().author.toString() + " won!",
 					firstChoice: results[0].first(),
 					lastChoice: results[1].first()
-				}
+				};
 				session.endGame();
 			}).catch(() => {
 				session.context.channel.send("Someone did not respond within 60 seconds.").catch(() => {});
