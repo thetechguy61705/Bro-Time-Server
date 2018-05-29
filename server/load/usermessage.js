@@ -2,28 +2,9 @@ const Discord = require("discord.js");
 const fs = require("fs");
 module.exports = {
 	id: "guildnames",
-	exec: async (client) => {
-		var brotime = client.guilds.get("330913265573953536");
-		var oldinvites;
-		if (client.user.id === "393532251398209536") {
-			oldinvites = await brotime.fetchInvites();
-		}
+	exec: (client) => {
 		var hangoutChannel;
-		var newinvites;
-		client.on("guildMemberAdd", async (member) => {
-			newinvites = await brotime.fetchInvites();
-			newinvites = newinvites.array();
-			oldinvites = oldinvites.array();
-			var inviteused = await new Promise(function(resolve) {
-				oldinvites.forEach((oldinvite) => {
-					if(oldinvite.uses < newinvites[oldinvites.indexOf(oldinvite)]) {
-						resolve(oldinvite);
-					}
-				});
-			});
-			var inviter;
-			if(inviteused.code === "rjM8wdZ") inviter = "The Main";
-			if(!inviteused.code === "rjM8wdZ") inviter = `${inviteused.inviter.tag}'s`;
+		client.on("guildMemberAdd", (member) => {
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
 					hangoutChannel = member.guild.channels.find("name", "hangout");
@@ -38,7 +19,7 @@ module.exports = {
 							.setTitle("Welcome")
 							.setColor("#FFA500")
 							.setDescription(`Welcome to Bro Time ${member.user}! Have a good time here!`)
-							.setFooter(`Bro Time is now at ${member.guild.memberCount} members! || Joined through ${inviter.toLowerCase()} invite`);
+							.setFooter(`Bro Time is now at ${member.guild.memberCount} members!`);
 						hangoutChannel.send({ embed: welcomeMessage }).then(() => {
 							fs.readFile(__dirname + "/./../info/welcomemsg.md", (err, data) => {
 								if (err) {
@@ -48,14 +29,6 @@ module.exports = {
 								}
 							});
 						}).catch(function() {});
-						const logMessage = new Discord.RichEmbed()
-							.setTitle("New Member")
-							.addField("User Tag", member.tag)
-							.addField("User Id", member.id)
-							.addField("Joined Via", `${inviter} Invite`);
-						var logchannel = client.channels.get("396096204720701440");
-						logchannel.send(logMessage);
-						oldinvites = await brotime.fetchInvites();
 					} else member.addRole(member.guild.roles.find("name", "Bots")).catch(function() {});
 				}
 			}
