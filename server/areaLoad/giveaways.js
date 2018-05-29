@@ -64,7 +64,9 @@ function pickWinner(client, message, authorName, giveawayWinners, prize) {
 
 function reloadGiveaways(channel, client) {
 	if (channel instanceof TextChannel && channel.id === "437091372538003456") {
+		console.log("giveaway channel found");
 		channel.fetchMessages({ limit: 100 }).then(messagesFetched => {
+			console.log("messages fetched");
 			var giveawayChannel;
 			var giveawayID;
 			var giveawayEnd;
@@ -74,7 +76,9 @@ function reloadGiveaways(channel, client) {
 			var args;
 			var entryPromise;
 			messagesFetched.forEach((creator) => {
+				console.log("checking message");
 				if (canHost(creator.author)) {
+					console.log("is creator!");
 					args = creator.content.split(" ");
 					giveawayChannel = args[0];
 					giveawayID = args[1];
@@ -83,6 +87,7 @@ function reloadGiveaways(channel, client) {
 					giveawayAuthor = client.users.get(args[4]).tag;
 					giveawayPrize = args.slice(5).join(" ");
 					entryPromise = channel.client.channels.get(giveawayChannel).fetchMessage(giveawayID);
+					console.log(giveawayEnd);
 					if (giveawayEnd > 0) {
 						entryPromise.then((message) => {
 							acceptEntry(client, message, giveawayEnd, giveawayAuthor, giveawayWinners, giveawayPrize);
