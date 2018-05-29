@@ -14,14 +14,15 @@ module.exports = {
 			newinvites = bot.fetchInvites().array();
 			var index;
 			var inviteused = new Promise(function(resolve) {
-			oldinvites.forEach((oldinvite) => {
-				if(oldinvite.uses < newinvites[oldinvites.indexOf(oldinvite)]) {
-					resolve(oldinvite);
-				}
+				oldinvites.forEach((oldinvite) => {
+					if(oldinvite.uses < newinvites[oldinvites.indexOf(oldinvite)]) {
+						resolve(oldinvite);
+					}
+				});
 			});
-				var inviter;
-				if(inviteused.code === "rjM8wdZ") inviter = "The Main"
-				if(!inviteused.code === "rjM8wdZ") inviter = `${inviteused.inviter.tag}\'s`
+			var inviter;
+			if(inviteused.code === "rjM8wdZ") inviter = "The Main";
+			if(!inviteused.code === "rjM8wdZ") inviter = `${inviteused.inviter.tag}\'s`;
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
 					hangoutChannel = member.guild.channels.find("name", "hangout");
@@ -50,8 +51,9 @@ module.exports = {
 							.setTitle("New Member")
 							.addField("User Tag", member.tag)
 							.addField("User Id", member.id)
-							.addField("Joined Via", `${inviter} Invite`)
-
+							.addField("Joined Via", `${inviter} Invite`);
+						var logchannel = bot.channels.get("396096204720701440");
+						logchannel.send(logMessage);
 					} else member.addRole(member.guild.roles.find("name", "Bots")).catch(function() {});
 				}
 			}
