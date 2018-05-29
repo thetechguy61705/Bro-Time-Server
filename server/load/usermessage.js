@@ -13,6 +13,7 @@ module.exports = {
 		client.on("guildMemberAdd", async (member) => {
 			newinvites = await brotime.fetchInvites();
 			newinvites = newinvites.array();
+			oldinvites = oldinvites.array();
 			var inviteused = new Promise(function(resolve) {
 				oldinvites.forEach((oldinvite) => {
 					if(oldinvite.uses < newinvites[oldinvites.indexOf(oldinvite)]) {
