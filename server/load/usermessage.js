@@ -14,7 +14,7 @@ module.exports = {
 			newinvites = await brotime.fetchInvites();
 			newinvites = newinvites.array();
 			oldinvites = oldinvites.array();
-			var inviteused = new Promise(function(resolve) {
+			var inviteused = await new Promise(function(resolve) {
 				oldinvites.forEach((oldinvite) => {
 					if(oldinvite.uses < newinvites[oldinvites.indexOf(oldinvite)]) {
 						resolve(oldinvite);
