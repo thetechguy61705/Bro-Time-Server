@@ -11,7 +11,7 @@ module.exports = {
 		var hangoutChannel;
 		var newinvites;
 		client.on("guildMemberAdd", async (member) => {
-			newinvites = client.fetchInvites().array();
+			newinvites = await brotime.fetchInvites().array();
 			var inviteused = new Promise(function(resolve) {
 				oldinvites.forEach((oldinvite) => {
 					if(oldinvite.uses < newinvites[oldinvites.indexOf(oldinvite)]) {
