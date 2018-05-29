@@ -63,7 +63,8 @@ function pickWinner(client, message, authorName, giveawayWinners, prize) {
 }
 
 function reloadGiveaways(channel, client) {
-	if (channel instanceof TextChannel && channel.id === "437091372538003456") {
+	// channel instanceof TextChannel && 
+	if (channel.id === "437091372538003456") {
 		console.log("giveaway channel found");
 		channel.fetchMessages({ limit: 100 }).then(messagesFetched => {
 			console.log("messages fetched");
