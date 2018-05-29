@@ -2,9 +2,26 @@ const Discord = require("discord.js");
 const fs = require("fs");
 module.exports = {
 	id: "guildnames",
-	exec: (client) => {
+	exec: async (client) => {
+		var brotime = bot.guilds.get("330913265573953536");
+		var oldinvites;
+		if (client.user.id === "393532251398209536") {
+			oldinvites = await brotime.fetchInvites();
+		}
 		var hangoutChannel;
-		client.on("guildMemberAdd", (member) => {
+		var newinvites;
+		client.on("guildMemberAdd", async (member) => {
+			newinvites = bot.fetchInvites().array();
+			var index;
+			var inviteused = new Promise(function(resolve) {
+			oldinvites.forEach((oldinvite) => {
+				if(oldinvite.uses < newinvites[oldinvites.indexOf(oldinvite)]) {
+					resolve(oldinvite);
+				}
+			});
+				var inviter;
+				if(inviteused.code === "rjM8wdZ") inviter = "The Main"
+				if(!inviteused.code === "rjM8wdZ") inviter = `${inviteused.inviter.tag}\'s`
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
 					hangoutChannel = member.guild.channels.find("name", "hangout");
@@ -19,7 +36,7 @@ module.exports = {
 							.setTitle("Welcome")
 							.setColor("#FFA500")
 							.setDescription(`Welcome to Bro Time ${member.user}! Have a good time here!`)
-							.setFooter(`Bro Time is now at ${member.guild.memberCount} members!`);
+							.setFooter(`Bro Time is now at ${member.guild.memberCount} members! || Joined through ${inviter.toLowerCase()} invite`);
 						hangoutChannel.send({ embed: welcomeMessage }).then(() => {
 							fs.readFile(__dirname + "/./../info/welcomemsg.md", (err, data) => {
 								if (err) {
@@ -29,6 +46,12 @@ module.exports = {
 								}
 							});
 						}).catch(function() {});
+						const logMessage = new Discord.RichEmbed()
+							.setTitle("New Member")
+							.addField("User Tag", member.tag)
+							.addField("User Id", member.id)
+							.addField("Joined Via", `${inviter} Invite`)
+
 					} else member.addRole(member.guild.roles.find("name", "Bots")).catch(function() {});
 				}
 			}
