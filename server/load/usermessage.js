@@ -3,7 +3,7 @@ const fs = require("fs");
 module.exports = {
 	id: "guildnames",
 	exec: async (client) => {
-		var brotime = bot.guilds.get("330913265573953536");
+		var brotime = client.guilds.get("330913265573953536");
 		var oldinvites;
 		if (client.user.id === "393532251398209536") {
 			oldinvites = await brotime.fetchInvites();
@@ -11,8 +11,7 @@ module.exports = {
 		var hangoutChannel;
 		var newinvites;
 		client.on("guildMemberAdd", async (member) => {
-			newinvites = bot.fetchInvites().array();
-			var index;
+			newinvites = client.fetchInvites().array();
 			var inviteused = new Promise(function(resolve) {
 				oldinvites.forEach((oldinvite) => {
 					if(oldinvite.uses < newinvites[oldinvites.indexOf(oldinvite)]) {
@@ -22,7 +21,7 @@ module.exports = {
 			});
 			var inviter;
 			if(inviteused.code === "rjM8wdZ") inviter = "The Main";
-			if(!inviteused.code === "rjM8wdZ") inviter = `${inviteused.inviter.tag}\'s`;
+			if(!inviteused.code === "rjM8wdZ") inviter = `${inviteused.inviter.tag}'s`;
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
 					hangoutChannel = member.guild.channels.find("name", "hangout");
@@ -52,8 +51,9 @@ module.exports = {
 							.addField("User Tag", member.tag)
 							.addField("User Id", member.id)
 							.addField("Joined Via", `${inviter} Invite`);
-						var logchannel = bot.channels.get("396096204720701440");
+						var logchannel = client.channels.get("396096204720701440");
 						logchannel.send(logMessage);
+						oldinvites = await brotime.fetchInvites();
 					} else member.addRole(member.guild.roles.find("name", "Bots")).catch(function() {});
 				}
 			}
