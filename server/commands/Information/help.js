@@ -40,8 +40,7 @@ module.exports = {
 				helpEmbed.addField(category, commands.join("\n"));
 			}
 			call.message.channel.send({ embed: helpEmbed }).catch(() => {
-				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
-					.catch(function() {});
+				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`).catch(() => {});
 			});
 		} else if (call.commands.loaded.map(cmd => cmd.id).includes(param1.toLowerCase())) {
 			const command = call.commands.loaded.get(param1.toLowerCase()),
@@ -56,14 +55,12 @@ module.exports = {
 		} else {
 			call.message.reply("Invalid command name. Please run `!help (command)` or just `!help`").catch(() => {
 				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`)
-					.catch(function() {});
+					.catch(() => {});
 			});
 		}
 		if (helpEmbed != null) {
 			call.message.channel.send({ embed: helpEmbed }).catch(() => {
-				call.message.author
-					.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`)
-					.catch(function() {});
+				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`).catch(() => {});
 			});
 		}
 	}

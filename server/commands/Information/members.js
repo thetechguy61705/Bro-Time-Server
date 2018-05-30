@@ -35,21 +35,21 @@ module.exports = {
 				call.message.channel.send({ embed: memberEmbed }).then(async function(sentEmbed) {
 					const emojiArray = ["◀", "▶"];
 					const filter = (reaction, user) => emojiArray.includes(reaction.emoji.name) && user.id === call.message.author.id;
-					await sentEmbed.react(emojiArray[0]).catch(function() {});
-					await sentEmbed.react(emojiArray[1]).catch(function() {});
+					await sentEmbed.react(emojiArray[0]).catch(() => {});
+					await sentEmbed.react(emojiArray[1]).catch(() => {});
 					var reactions = sentEmbed.createReactionCollector(filter, { time: 120000 });
 					reactions.on("collect", async function(reaction) {
 						await reaction.remove(call.message.author);
 						if (reaction.emoji.name === "◀") {
 							if (page !== 1) {
-								page = page - 1;
-								membersLength = membersLength - 20;
+								page -= 1;
+								membersLength -= 20;
 								membersToSend = members.split("\n").slice(membersLength, membersLength+20);
 							}
 						} else {
 							if (page !== totalPages) {
-								page = page+1;
-								membersLength = membersLength + 20;
+								page += 1;
+								membersLength += 20;
 								membersToSend = members.split("\n").slice(membersLength, membersLength+20);
 							}
 						}
@@ -58,25 +58,25 @@ module.exports = {
 							.setFooter(`Page ${page}/${totalPages}`);
 						if (content !== "") memberEmbed.setTitle(`Users in ${call.message.guild.roles.find(r => r.name.toLowerCase().startsWith(content.toLowerCase())).name}`);
 						if (content === "") memberEmbed.setTitle("Users");
-						sentEmbed.edit(memberEmbed).catch(function() {});
+						sentEmbed.edit({ embed: memberEmbed }).catch(() => {});
 					});
 					reactions.on("end", () => sentEmbed.edit("Interactive command ended: 2 minutes passed."));
 				}).catch(() => {
 					call.message.reply("There was an error while trying to send this embed.").catch(() => {
-						call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+						call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 					});
 				});
 			} else {
 				memberEmbed.setDescription(members);
 				call.message.channel.send({ embed: memberEmbed }).catch(() => {
 					call.message.reply("There was an error while trying to send this embed.").catch(() => {
-						call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+						call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 					});
 				});
 			}
 		} else {
 			call.message.reply("Please specify a valid role, or supply no parameter for everyone in this server.").catch(() => {
-				call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+				call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 			});
 		}
 	}
