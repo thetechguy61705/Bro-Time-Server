@@ -18,22 +18,23 @@ module.exports = {
 	arguments: "(title) | (description) | (discord invite OR thumbnail url)",
 	requires: "Role: Community Manager Bro",
 	execute: (call) => {
-		const partnersChannel = call.message.guild.channels.get("409156491640045571");
 		if (call.message.member.roles.has("409153912558583818")) {
 			if (call.params.readRaw()) {
-				const title = call.params.readRaw().split("|")[0];
-				const description = call.params.readRaw().split("|")[1].trim();
-				const thumbnail = call.params.readRaw().split("|")[2].trim();
-				var partnerEmbed = new Discord.RichEmbed()
-					.setTitle(title)
-					.setColor("#FFA500")
-					.setDescription(description);
-				call.client.fetchInvite(thumbnail).then((invite) => {
+				const PARTNER_CHANNEL = call.message.guild.channels.get("409156491640045571"),
+					SPLIT_ARGS = call.params.readRaw().split("|").map(arg => arg.trim()),
+					TITLE = SPLIT_ARGS[0],
+					DESCRIPTION = SPLIT_ARGS[1],
+					THUMBNAIL = SPLIT_ARGS[2],
+					PARTNER_EMBED = new Discord.RichEmbed()
+						.setTitle(TITLE)
+						.setColor("#FFA500")
+						.setDescription(DESCRIPTION);
+				call.client.fetchInvite(THUMBNAIL).then((invite) => {
 					partnerEmbed.setThumbnail(invite.guild.iconURL);
-					addPartner(partnersChannel, partnerEmbed, call.message);
+					addPartner(PARTNER_CHANNEL, PARTNER_EMBED, call.message);
 				}).catch(() => {
-					partnerEmbed.setThumbnail(thumbnail);
-					addPartner(partnersChannel, partnerEmbed, call.message);
+					partnerEmbed.setThumbnail(THUMBNAIL);
+					addPartner(PARTNER_CHANNEL, PARTNER_EMBED, call.message);
 				});
 			} else {
 				call.message.reply("You did not provide the necessary parameters! `!addpartner (title) (description) (discord invite OR thumbnail url)`").catch(() => {
