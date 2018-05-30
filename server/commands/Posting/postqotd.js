@@ -8,9 +8,9 @@ module.exports = {
 			const ANN_CHANNEL = call.message.guild.channels.find("name", "announcements"),
 				QOTD = call.params.readRaw(" "),
 				QOTD_ROLE = call.message.guild.roles.find("name", "QOTD");
-			if (qotd !== "") {
+			if (QOTD !== "") {
 				QOTD_ROLE.setMentionable(true).then(() => {
-					ann.send(`${QOTD_ROLE}: **${QOTD}**\n*Posted by ${call.message.author}*`);
+					ANN_CHANNEL.send(`${QOTD_ROLE}: **${QOTD}**\n*Posted by ${call.message.author}*`);
 					QOTD_ROLE.setMentionable(false);
 				}).catch(() => {
 					call.message.channel.send("Something went wrong and I couldn't send the QoTD");
