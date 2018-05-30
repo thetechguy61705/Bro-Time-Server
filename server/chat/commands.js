@@ -1,4 +1,5 @@
 var { Collection, MessageMentions } = require("discord.js");
+var escapeStringRegexp = require('escape-string-regexp');
 var modules = new Collection();
 var Parameters = require("app/paramaters");
 var fs = require("fs");
@@ -118,7 +119,7 @@ module.exports = {
 		} else {
 			var data = (message.guild || message.channel).data;
 			var prefix = message.content.match(new RegExp(util.format(prefixPattern,
-				data != null ? data.prefix : "/"), "i"));
+				escapeStringRegexp(data != null ? data.prefix : "/")), "i"));
 			var using;
 			if (prefix != null) {
 				using = true;
