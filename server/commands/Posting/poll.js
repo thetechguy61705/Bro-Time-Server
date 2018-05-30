@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const EMOJI_ARRAY = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
 
 module.exports = {
 	id: "poll",
@@ -12,7 +13,6 @@ module.exports = {
 			var pollOptions = call.params.readRaw().split(":").slice(1).join(":").split("|");
 			if (pollOptions[0] !== "") {
 				if (pollOptions.length <= 9 && pollOptions.length >= 2) {
-					const EMOJI_ARRAY = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
 					pollOptions = pollOptions.map((pollOption, index) => {
 						return EMOJI_ARRAY[index] + " " + pollOption.trim();
 					});
@@ -23,7 +23,7 @@ module.exports = {
 						.setFooter(`${call.client.user.username} | Poll by ${call.message.author.tag}.`);
 					call.message.channel.send({ embed: POLL_EMBED }).then(async (poll) => {
 						for (var orderLoop = 0; orderLoop !== pollOptions.length; orderLoop++)
-							await poll.react(eA[orderLoop]);
+							await poll.react(EMOJI_ARRAY[orderLoop]);
 					}).catch(() => {
 						call.message.reply("Something went wrong and I could not create the poll.").catch(() => {
 							call.message.author

@@ -8,7 +8,7 @@ module.exports = {
 		const INPUT = call.params.readRaw().trim();
 		if (FREE_ROLES.includes(INPUT.toUpperCase())) {
 			const FREE_ROLE = call.message.guild.roles.find("name", INPUT.toUpperCase());
-			if (call.message.member.roles.has(role.id)) {
+			if (call.message.member.roles.has(FREE_ROLE.id)) {
 				call.message.member.removeRole(FREE_ROLE).then(() => {
 					call.message.channel.send(`Successfully removed the \`${INPUT}\` free role from you.`).catch(() => {
 						call.message.author.send(`Successfully removed the \`${INPUT}\` free role from you.`).catch(() => {});
