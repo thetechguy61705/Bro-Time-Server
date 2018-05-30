@@ -30,10 +30,10 @@ module.exports = {
 						.setColor("#FFA500")
 						.setDescription(DESCRIPTION);
 				call.client.fetchInvite(THUMBNAIL).then((invite) => {
-					partnerEmbed.setThumbnail(invite.guild.iconURL);
+					PARTNER_EMBED.setThumbnail(invite.guild.iconURL);
 					addPartner(PARTNER_CHANNEL, PARTNER_EMBED, call.message);
 				}).catch(() => {
-					partnerEmbed.setThumbnail(THUMBNAIL);
+					PARTNER_EMBED.setThumbnail(THUMBNAIL);
 					addPartner(PARTNER_CHANNEL, PARTNER_EMBED, call.message);
 				});
 			} else {
