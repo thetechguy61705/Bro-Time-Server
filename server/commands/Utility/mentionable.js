@@ -4,32 +4,29 @@ module.exports = {
 	arguments: "(role)",
 	requires: "Moderator permissions",
 	execute: (call) => {
-		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
-		const data = (call.message.guild || call.message.channel).data;
-		const prefix = data != null ? data.prefix : "/";
-		let role = call.params.readRole();
+		const MOD_ROLES = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"],
+			DATA = (call.message.guild || call.message.channel).data,
+			PREFIX = data != null ? data.prefix : "/",
+			ROLE = call.params.readRole();
 		if (call.message.member.roles.some(r => modRoles.includes(r.id))) {
-			if (role) {
-				var mentionToSet = (call.message.content.toLowerCase().startsWith(prefix + "mt")) ? true
-					: (call.message.content.toLowerCase().startsWith(prefix + "mf")) ? false : !role.mentionable;
-				role.setMentionable(mentionToSet).then(() => {
-					call.message.delete().catch(function() {});
+			if (ROLE != null) {
+				const MENTION = (call.message.content.toLowerCase().startsWith(PREFIX + "mt")) ? true
+					: (call.message.content.toLowerCase().startsWith(PREFIX + "mf")) ? false : !role.mentionable;
+				ROLE.setMentionable(MENTION).then(() => {
+					call.message.delete().catch(() => {});
 				}).catch(() => {
-					call.message.reply(`There was an error changing the mentionability of the role \`${role.name}\` to \`${mentionToSet}\`.`).catch(() => {
-						call.message.author.send(`You attempted to use the \`mt\` command in ${call.message.channel}, but I do not have permission to chat there.`)
-							.catch(function() {});
+					call.message.reply(`There was an error changing the mentionability of the role \`${role.name}\` to \`${MENTION}\`.`).catch(() => {
+						call.message.author.send(`You attempted to use the \`mt\` command in ${call.message.channel}, but I do not have permission to chat there.`).catch(() => {});
 					});
 				});
 			} else {
 				call.message.reply("Invalid role. Please try again.").catch(() => {
-					call.message.author.send(`You attempted to use the \`mt\` command in ${call.message.channel}, but I do not have permission to chat there.`)
-						.catch(function() {});
+					call.message.author.send(`You attempted to use the \`mt\` command in ${call.message.channel}, but I do not have permission to chat there.`).catch(() => {});
 				});
 			}
 		} else {
 			call.message.reply("You do not have permission to use this command!").catch(() => {
-				call.message.author.send(`You attempted to use the \`mt\` command in ${call.message.channel}, but I do not have permission to chat there.`)
-					.catch(function() {});
+				call.message.author.send(`You attempted to use the \`mt\` command in ${call.message.channel}, but I do not have permission to chat there.`).catch(() => {});
 			});
 		}
 	}
