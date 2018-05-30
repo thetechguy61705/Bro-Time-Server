@@ -1,5 +1,5 @@
 var { Collection, MessageMentions } = require("discord.js");
-var escapeStringRegexp = require('escape-string-regexp');
+var escapeStringRegexp = require("escape-string-regexp");
 var modules = new Collection();
 var Parameters = require("app/paramaters");
 var fs = require("fs");
