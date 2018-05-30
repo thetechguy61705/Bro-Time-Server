@@ -9,7 +9,8 @@
 		"sourceType": "module"
 	},
 	"plugins": [
-		"json"
+		"json",
+		"promise"
 	],
 	"rules": {
 		"max-len": [
