@@ -42,7 +42,6 @@
 			"error",
 			"always"
 		],
-		"promise/always-return": "warn",
 		"promise/no-return-wrap": "warn",
 		"promise/param-names": "warn",
 		"promise/catch-or-return": "warn",
