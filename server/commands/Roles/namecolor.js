@@ -23,7 +23,7 @@ module.exports = {
 			removeColorRoles(call.message.guild.roles, call.message.member);
 			call.message.member.addRole(ROLE).then(() => {
 				call.message.channel.send(`Successfully given you the \`${ROLE.name}\` color role!`).catch(() => {
-					call.message.author.send(`Successfully given you the \`${role.name}\` color role, note that I can not chat in ${call.message.channel}.`).catch(() => {});
+					call.message.author.send(`Successfully given you the \`${ROLE.name}\` color role, note that I can not chat in ${call.message.channel}.`).catch(() => {});
 				});
 			}).catch(() => {
 				call.message.channel.send("There was an error while giving you the color role. Please try again.").catch(() => {
