@@ -26,7 +26,7 @@ module.exports = {
 											target.removeRole(call.message.guild.roles.find("name", "Muted")).catch(function() {});
 											msg.delete().catch(function() {});
 										}, muteTime);
-									});
+									}).catch(() => {});
 								}).catch(() => {
 									call.message.channel.send(`Failed to mute \`${target.user.tag}\`.`).catch(function() {});
 								});
