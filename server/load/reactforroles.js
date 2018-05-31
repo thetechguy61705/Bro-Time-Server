@@ -19,11 +19,11 @@ module.exports = {
 					});
 
 					if (freeRoles.difference(messages.map(message => message.embeds[0].title)).length > 0) {
-						freeRoles.difference(messages.map(message => message.embeds[0].title)).forEach(newItem => {
+						freeRoles.difference(messages.map(message => message.embeds[0].title)).forEach((newItem) => {
 							const newItemEmbed = new Discord.RichEmbed()
 								.setTitle(newItem)
 								.setColor(client.guilds.get("330913265573953536").roles.find("name", newItem).hexColor);
-							client.channels.get("447205162436788235").send({ embed: newItemEmbed }).then(newItemMessage => {
+							client.channels.get("447205162436788235").send({ embed: newItemEmbed }).then((newItemMessage) => {
 								messages.set(newItemMessage.id, newItemMessage);
 								newItemMessage.react("447964052858077204");
 							});
@@ -43,6 +43,8 @@ module.exports = {
 							}
 						}
 					});
+				}).catch((err) => {
+					console.warn(err.stack);
 				});
 			}
 		}

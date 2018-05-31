@@ -22,8 +22,8 @@ Array.prototype.difference = function(a) {
 	return this.filter(function(i) { return a.indexOf(i) < 0; });
 };
 
-Discord.prototype.Message.reactMultiple = function(reactions) {
-	for (var reaction of reactions) { this.react(reaction); };
+Discord.Message.prototype.reactMultiple = async function(reactions) {
+	for (var reaction of reactions) { await this.react(reaction); console.log(reaction); }
 };
 
 /*

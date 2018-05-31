@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const EMOJI_ARRAY = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣"];
 
 function getRow(rows, num) {
 	for (var numberLoop = 1; numberLoop !== rows.length; numberLoop++)
@@ -17,48 +18,40 @@ module.exports = {
 	allowLateJoin: false,
 	load: () => {},
 	start: (session) => {
-		const eA = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣"], author = session.host, target = session.players.last();
-		var rows = [eA, ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
+		const author = session.host, target = session.players.last();
+		var rows = [EMOJI_ARRAY, ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
 				["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"]],
 			connectFourEmbed = new Discord.RichEmbed().setColor(0x00AE86).setTitle("Connect Four").setFooter(`${author.tag}'s turn.`);
 		connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map(row => row.join(" ")).join("\n"));
-		session.context.channel.send({ embed: connectFourEmbed }).then(async function(connectFour) {
-			for (var orderLoop = 0; orderLoop != eA.length; orderLoop++)
-				await connectFour.react(eA[orderLoop]);
+		session.context.channel.send({ embed: connectFourEmbed }).then(async (connectFour) => {
+			await connectFour.reactMultiple(EMOJI_ARRAY);
 			var turn = author.id;
-			const filter = (reaction, user) => (user.id === author.id || user.id === target.id) && eA.includes(reaction.emoji.name)
+			const filter = (reaction, user) => (user.id === author.id || user.id === target.id) && EMOJI_ARRAY.includes(reaction.emoji.name)
 				&& user.id !== session.context.client.user.id,
 				collector = connectFour.createReactionCollector(filter, { time: 600000 });
 			session.connectFour = connectFour;
 			session.collector = collector;
 			session.embed = connectFourEmbed;
 			collector.on("collect", reaction => {
-				reaction.remove(author.id).catch(function() {});
-				reaction.remove(target.id).catch(function() {});
+				reaction.remove(reaction.users.last());
 				if (reaction.users.last().id === turn) {
-					const currentRow = (getRow(rows, eA.indexOf(reaction.emoji.name)) == null) ? 6 : getRow(rows, eA.indexOf(reaction.emoji.name)) - 1;
+					const currentRow = (getRow(rows, EMOJI_ARRAY.indexOf(reaction.emoji.name)) == null) ? 6 : getRow(rows, EMOJI_ARRAY.indexOf(reaction.emoji.name)) - 1;
 					if (currentRow !== 0) {
-						if (turn === author.id) {
-							rows[currentRow][eA.indexOf(reaction.emoji.name)] = "🔴";
-							turn = target.id;
-							connectFourEmbed.setFooter(`${target.tag}'s turn.`);
-						} else {
-							rows[currentRow][eA.indexOf(reaction.emoji.name)] = "🔵";
-							turn = author.id;
-							connectFourEmbed.setFooter(`${author.tag}'s turn.`);
-						}
+						rows[currentRow][EMOJI_ARRAY.indexOf(reaction.emoji.name)] = (turn === author.id) ? "🔴" : "🔵";
+						turn = (turn === author.id) ? target.id : author.id;
+						connectFour.setFooter(`${(turn === author.id) ? target.tag : author.tag}'s turn.`);
 						session.embed = connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map(row => row.join(" ")).join("\n"));
 						connectFour.edit({ embed: connectFourEmbed })
-							.then(newConnectFour => session.connectFour = newConnectFour);
-						rows.forEach(function(row, indexOfRow) {
-							row.forEach(function(coin, indexOfCoin) {
+							.then(newConnectFour => session.connectFour = newConnectFour).catch(() => {});
+						rows.forEach((row, indexOfRow) => {
+							row.forEach((coin, indexOfCoin) => {
 								if (coin !== "⚫" && coin === row[indexOfCoin + 1] &&
 									row[indexOfCoin + 1] === row[indexOfCoin + 2] &&
 									row[indexOfCoin + 2] === row[indexOfCoin + 3]) {
 									session.winner = coin;
 									session.endGame();
 								}
-								if (rows[indexOfRow + 1] !== undefined && rows[indexOfRow + 2] !== undefined && rows[indexOfRow + 3] !== undefined) {
+								if (rows[indexOfRow + 1] != null && rows[indexOfRow + 2] != null && rows[indexOfRow + 3] != null) {
 									if (coin !== "⚫" && coin === rows[indexOfRow + 1][indexOfCoin] &&
 										rows[indexOfRow + 1][indexOfCoin] === rows[indexOfRow + 2][indexOfCoin] &&
 										rows[indexOfRow + 2][indexOfCoin] === rows[indexOfRow + 3][indexOfCoin]) {
@@ -66,7 +59,7 @@ module.exports = {
 										session.endGame();
 									}
 								}
-								if (rows[indexOfRow - 1] !== undefined && rows[indexOfRow - 2] !== undefined && rows[indexOfRow - 3] !== undefined) {
+								if (rows[indexOfRow - 1] != null && rows[indexOfRow - 2] != null && rows[indexOfRow - 3] != null) {
 									if (coin !== "⚫" && coin === rows[indexOfRow - 1][indexOfCoin + 1] &&
 										rows[indexOfRow - 1][indexOfCoin + 1] === rows[indexOfRow - 2][indexOfCoin + 2] &&
 										rows[indexOfRow - 2][indexOfCoin + 2] === rows[indexOfRow - 3][indexOfCoin + 3]) {
@@ -74,7 +67,7 @@ module.exports = {
 										session.endGame();
 									}
 								}
-								if (rows[indexOfRow + 1] !== undefined && rows[indexOfRow + 2] !== undefined && rows[indexOfRow + 3] !== undefined) {
+								if (rows[indexOfRow + 1] != null && rows[indexOfRow + 2] != null && rows[indexOfRow + 3] != null) {
 									if (coin !== "⚫" && coin === rows[indexOfRow + 1][indexOfCoin + 1] &&
 										rows[indexOfRow + 1][indexOfCoin + 1] === rows[indexOfRow + 2][indexOfCoin + 2] &&
 										rows[indexOfRow + 2][indexOfCoin + 2] === rows[indexOfRow + 3][indexOfCoin + 3]) {
@@ -90,7 +83,7 @@ module.exports = {
 					}
 				}
 			});
-		}).catch(function() {});
+		}).catch(() => {});
 	},
 	input: (input, session) => {
 		return input.type === "reaction" && input.value.message === session.connectFour;
