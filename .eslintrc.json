@@ -44,10 +44,9 @@
 		],
 		"promise/no-return-wrap": "warn",
 		"promise/param-names": "warn",
-		"promise/catch-or-return": "warn",
+		"promise/catch-or-return": ["warn", { "allowThen": true }],
 		"promise/no-promise-in-callback": "warn",
 		"promise/no-callback-in-promise": "warn",
-		"promise/avoid-new": "warn",
 		"promise/no-new-statics": "warn",
 		"promise/no-return-in-finally": "warn",
 		"no-console": ["warn", { "allow": ["warn", "error"] }]
