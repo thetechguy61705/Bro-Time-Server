@@ -11,12 +11,12 @@ module.exports = {
 		const GIVEAWAY_PRIZE = call.params.readRaw().split(":")[0];
 		if (call.message.member.roles.has("394526142826020874")) {
 			if (call.params.readRaw().split(":")[1] !== undefined) {
-				var giveawayTime = call.params.readRaw().split(":").slice(1).join(":").split(" ").filter(arg => arg !== "")[0];
+				var giveawayTime = call.params.readRaw().split(":").slice(1).join(":").split(" ").filter((arg) => arg !== "")[0];
 				if (ms(giveawayTime)) {
 					if (call.message.mentions.channels.first() !== undefined) {
 						giveawayTime = ms(giveawayTime);
 						if (giveawayTime > 0 && giveawayTime <= 604800000) {
-							var winners = call.params.readRaw().split(":").slice(1).join(":").split(" ").filter(arg => arg !== "")[2];
+							var winners = call.params.readRaw().split(":").slice(1).join(":").split(" ").filter((arg) => arg !== "")[2];
 							if (!isNaN(parseInt(winners))) {
 								if (parseInt(winners) > 0 && parseInt(winners) < 20) {
 									winners = Math.round(parseInt(winners));
@@ -27,10 +27,10 @@ module.exports = {
 										.setDescription(`**React with 🎉 to enter**\nTime remaining: **${giveawayTime.expandPretty()}**`)
 										.setColor(0x00AE86)
 										.setFooter(`${call.client.user.username} | Giveaway by ${call.message.author.tag}.`);
-									GIVEAWAY_CHANNEL.send("🎉 **GIVEAWAY** 🎉", { embed: giveawayEmbed }).then(msg => {
+									GIVEAWAY_CHANNEL.send("🎉 **GIVEAWAY** 🎉", { embed: giveawayEmbed }).then((msg) => {
 										call.client.channels.get("437091372538003456")
 											.send(`${msg.channel.id} ${msg.id} ${Date.now() + giveawayTime} ${winners} ${call.message.author.id} ${GIVEAWAY_PRIZE}`)
-											.then(databaseMesage => {
+											.then((databaseMesage) => {
 												msg.react("🎉").catch(() => {});
 												var editLoop = setInterval(function() {
 													giveawayTime -= 5000;
@@ -42,8 +42,8 @@ module.exports = {
 															.setFooter(`${call.client.user.username} | Giveaway by ${call.message.author.tag}.`);
 														msg.edit("🎉 **GIVEAWAY** 🎉", { embed: giveawayEmbed });
 													} else {
-														msg.reactions.find(r => r.emoji.name === "🎉").fetchUsers().then(users => {
-															winner = users.filter(r => r.id !== call.client.user.id && r.id !== call.message.author.id)
+														msg.reactions.find((r) => r.emoji.name === "🎉").fetchUsers().then((users) => {
+															winner = users.filter((r) => r.id !== call.client.user.id && r.id !== call.message.author.id)
 																.random(winners);
 															if (winner.length === 0) winner = ["**Not enough users entered.**"];
 															giveawayEmbed = new Discord.RichEmbed()

@@ -19,7 +19,7 @@ module.exports = {
 	execute: (call) => {
 		const COLOR = call.params.readRaw().toLowerCase(),
 			ROLE = call.params.readRole();
-		if (COLOR_ROLES.map(r => r.toLowerCase()).includes(COLOR)) {
+		if (COLOR_ROLES.map((r) => r.toLowerCase()).includes(COLOR)) {
 			removeColorRoles(call.message.guild.roles, call.message.member);
 			call.message.member.addRole(ROLE).then(() => {
 				call.message.channel.send(`Successfully given you the \`${ROLE.name}\` color role!`).catch(() => {

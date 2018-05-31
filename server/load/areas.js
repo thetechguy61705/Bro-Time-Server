@@ -19,7 +19,7 @@ function loadChannel(channel, client) {
 		return load(channel, client);
 }
 
-fs.readdirSync(__dirname + "/../areaLoad").forEach(file => {
+fs.readdirSync(__dirname + "/../areaLoad").forEach((file) => {
 	if (file.endsWith(".js"))
 		areaLoaders.push(require("../areaLoad/" + file));
 });

@@ -26,7 +26,7 @@ module.exports = {
 			if (game.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
 			var gamerole;
 			if (games.includes(game.message.content.toLowerCase())) {
-				gamerole = call.message.guild.roles.find(r=> r.name.toLowerCase() === game.message.content.toLowerCase());
+				gamerole = call.message.guild.roles.find((r)=> r.name.toLowerCase() === game.message.content.toLowerCase());
 			} else {
 				gamerole = game.message.content;
 			}

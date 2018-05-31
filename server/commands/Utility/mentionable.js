@@ -8,7 +8,7 @@ module.exports = {
 			DATA = (call.message.guild || call.message.channel).data,
 			PREFIX = DATA != null ? DATA.prefix : "/",
 			ROLE = call.params.readRole();
-		if (call.message.member.roles.some(r => MOD_ROLES.includes(r.id))) {
+		if (call.message.member.roles.some((r) => MOD_ROLES.includes(r.id))) {
 			if (ROLE != null) {
 				const MENTION = (call.message.content.toLowerCase().startsWith(PREFIX + "mt")) ? true
 					: (call.message.content.toLowerCase().startsWith(PREFIX + "mf")) ? false : !ROLE.mentionable;

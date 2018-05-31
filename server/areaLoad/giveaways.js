@@ -33,9 +33,9 @@ function acceptEntry(client, message, endTime, authorName, giveawayWinners, priz
 }
 
 function pickWinner(client, message, authorName, giveawayWinners, prize) {
-	message.reactions.find(r => r.emoji.name === EMOJI).fetchUsers().then(users => {
+	message.reactions.find((r) => r.emoji.name === EMOJI).fetchUsers().then((users) => {
 		var winner = users
-			.filter(r => r.id !== client.user.id && r.id !== authorName.id)
+			.filter((r) => r.id !== client.user.id && r.id !== authorName.id)
 			.random(giveawayWinners);
 		if (winner.length === 0)
 			winner = ["**Not enough users entered.**"];
@@ -66,7 +66,7 @@ function reloadGiveaways(channel, client) {
 	// channel instanceof TextChannel &&
 	if (channel.id === "437091372538003456") {
 		console.log("giveaway channel found");
-		channel.fetchMessages({ limit: 100 }).then(messagesFetched => {
+		channel.fetchMessages({ limit: 100 }).then((messagesFetched) => {
 			console.log("messages fetched");
 			var giveawayChannel, giveawayID, giveawayEnd, giveawayWinners, giveawayAuthor, giveawayPrize, args, entryPromise;
 			messagesFetched.forEach((creator) => {

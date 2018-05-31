@@ -19,7 +19,7 @@ module.exports = {
 	requires: "Moderator permissions",
 	execute: (call) => {
 		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
-		if (call.message.member.roles.some(role => modRoles.includes(role.id))) {
+		if (call.message.member.roles.some((role) => modRoles.includes(role.id))) {
 			const parameter = call.params.readParameter(), action = actions.get(parameter);
 			(action || actions.get("default")).run(call, actions, parameter).catch((err) => {
 				console.log("Role action failed:");

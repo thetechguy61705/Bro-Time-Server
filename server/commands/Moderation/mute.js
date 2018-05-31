@@ -10,9 +10,9 @@ module.exports = {
 		const parameterOne = rawContent.split(" ")[0];
 		const parameterTwo = rawContent.split(" ")[1];
 		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
-		if (call.message.member.roles.some(role => modRoles.includes(role.id))) {
+		if (call.message.member.roles.some((role) => modRoles.includes(role.id))) {
 			const target = call.message.guild.members
-				.find(member => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
+				.find((member) => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
 			if (target !== null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					if (!target.roles.has(call.message.guild.roles.find("name", "Muted").id)) {
@@ -21,7 +21,7 @@ module.exports = {
 							if (muteTime >= 10000) {
 								target.addRole(call.message.guild.roles.find("name", "Muted")).then(() => {
 									call.message.channel.send(`***Successfully muted \`${target.user.tag}\` for ${ms(muteTime, { long: true })}.***`).catch(function() {});
-									call.client.channels.get("436714650835484707").send(`${target.user.id} ${Date.now() + muteTime}`).then(msg => {
+									call.client.channels.get("436714650835484707").send(`${target.user.id} ${Date.now() + muteTime}`).then((msg) => {
 										call.client.setTimeout(() => {
 											target.removeRole(call.message.guild.roles.find("name", "Muted")).catch(function() {});
 											msg.delete().catch(function() {});

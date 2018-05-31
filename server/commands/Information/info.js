@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const fs = require("fs");
 
 async function awaitReply(message, question, limit = 60000) {
-	const filter = m => m.author.id === message.author.id;
+	const filter = (m) => m.author.id === message.author.id;
 	await message.reply(question);
 	try {
 		const collected = await message.channel.awaitMessages(filter, {
@@ -424,7 +424,7 @@ module.exports = {
 		];
 		var plainOptions = ["advertisement", "gameroles", "namecolors", "howtogetrole", "perks", "levelroles"];
 		if(choice === null) {
-			awaitReply(call.message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`).then(userChoice => {
+			awaitReply(call.message, `Specify the information you want. Choices: \`${plainOptions.join("`, `")}\`.`).then((userChoice) => {
 				if(!options.includes(userChoice.toLowerCase())) {
 					call.message.reply(`Invalid choice. Choices are: \`${plainOptions.join("`, `")}\`.`);
 				} else {

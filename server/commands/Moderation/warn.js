@@ -8,8 +8,8 @@ module.exports = {
 	execute: (call) => {
 		const rawContent = call.params.readRaw(), parameterOne = rawContent.split(" ")[0], parameterTwo = rawContent.split(" ")[1],
 			modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
-		if (call.message.member.roles.some(role => modRoles.includes(role.id))) {
-			const target = call.message.guild.members.find(member => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
+		if (call.message.member.roles.some((role) => modRoles.includes(role.id))) {
+			const target = call.message.guild.members.find((member) => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
 			if (parameterOne !== "") {
 				if (target !== null) {
 					if (!target.user.bot) {

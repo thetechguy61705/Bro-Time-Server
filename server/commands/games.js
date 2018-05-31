@@ -146,7 +146,7 @@ function startGame(game, context) {
 	});
 }
 
-fs.readdirSync(__dirname + "/../games").forEach(file => {
+fs.readdirSync(__dirname + "/../games").forEach((file) => {
 	var match = file.match(/^(.*)\.js$/);
 	if (match != null) {
 		new Promise((resolve, reject) => {
@@ -160,9 +160,9 @@ fs.readdirSync(__dirname + "/../games").forEach(file => {
 			} catch (exc) {
 				reject(exc);
 			}
-		}).then(module => {
+		}).then((module) => {
 			modules.set(module.id, module);
-		}, exc => {
+		}, (exc) => {
 			console.warn(`Unable to load game module ${match}:`);
 			console.warn(exc.stack);
 		});
