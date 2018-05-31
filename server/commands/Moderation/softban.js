@@ -26,37 +26,37 @@ module.exports = {
 							});
 						}).catch(() => {
 							target.ban({ days: 7, reason: `Banned by ${call.message.author.tag} for ${reason}` }).then(() => {
-									call.message.guild.unban({
-										user: target.user,
-										reason: `Softbanned by ${call.message.author.tag} for ${reason}`
-									}).then(() => {
-											call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`).catch(() => {});
-									}).catch(() => {
+								call.message.guild.unban({
+									user: target.user,
+									reason: `Softbanned by ${call.message.author.tag} for ${reason}`
+								}).then(() => {
+									call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`).catch(() => {});
+								}).catch(() => {
 									call.message.reply(`Failed to unban \`${target.user.tag}\`.`).catch(() => {});
 								});
 							}).catch(() => {
 								call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).catch(() => {});
 							});
 						});
+					} else {
+						call.message.reply("I do not have permission to ban this user.").catch(() => {
+							call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+						});
+					}
 				} else {
-					call.message.reply("I do not have permission to ban this user.").catch(() => {
+					call.message.reply("That user is too far up in this guild's hierarchy to be banned by you.").catch(() => {
 						call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 					});
 				}
 			} else {
-				call.message.reply("That user is too far up in this guild's hierarchy to be banned by you.").catch(() => {
+				call.message.reply("Please mention or supply the id of a valid user.").catch(() => {
 					call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 				});
 			}
 		} else {
-			call.message.reply("Please mention or supply the id of a valid user.").catch(() => {
+			call.message.reply("You do not have permissions to trigger this command.").catch(() => {
 				call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 			});
 		}
-	} else {
-		call.message.reply("You do not have permissions to trigger this command.").catch(() => {
-			call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-		});
 	}
-}
 };
