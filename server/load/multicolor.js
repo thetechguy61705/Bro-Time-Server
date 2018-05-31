@@ -9,7 +9,7 @@ module.exports = {
 					const colors = ["Orange", "Blue", "Gold", "Indigo", "Pink", "Bronze",
 						"Yellow", "Purple", "Cyan", "HotPink", "Green", "HotBrown", "Magenta", "BrightRed",
 						"LimeGreen", "DarkViolet", "GrayBlue", "Red", "DarkGreen", "Salmon", "LightGreen"];
-					const hexcolors = colors.map(c => brotime.roles.find("name", c).hexColor);
+					const hexcolors = colors.map((c) => brotime.roles.find("name", c).hexColor);
 					var loopNumber = hexcolors.indexOf(multiColorRole.hexColor) + 1;
 					if (!loopNumber) loopNumber = 0;
 					if (loopNumber === colors.length) loopNumber = 0;

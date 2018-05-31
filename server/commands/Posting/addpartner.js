@@ -21,7 +21,7 @@ module.exports = {
 		if (call.message.member.roles.has("409153912558583818")) {
 			if (call.params.readRaw()) {
 				const PARTNER_CHANNEL = call.message.guild.channels.get("409156491640045571"),
-					SPLIT_ARGS = call.params.readRaw().split("|").map(arg => arg.trim()),
+					SPLIT_ARGS = call.params.readRaw().split("|").map((arg) => arg.trim()),
 					TITLE = SPLIT_ARGS[0],
 					DESCRIPTION = SPLIT_ARGS[1],
 					THUMBNAIL = SPLIT_ARGS[2],

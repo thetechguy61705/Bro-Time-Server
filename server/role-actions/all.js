@@ -3,10 +3,10 @@ module.exports = {
 	run: (call) => {
 		const greedyParam = call.params.readParameter(true), roles = (greedyParam != null) ? greedyParam.split(",") : [];
 		var rolesToChange = { rolesToAdd: [], rolesToRemove: [] };
-		roles.forEach(role => {
+		roles.forEach((role) => {
 			const ammToSlice = (role.trim().startsWith("+") || role.trim().startsWith("-")) ? 1 : 0;
 			var newRole = call.message.guild.roles
-				.find(r => r.id === role.trim().slice(ammToSlice) || r.name.toLowerCase().startsWith(role.trim().slice(ammToSlice).toLowerCase()));
+				.find((r) => r.id === role.trim().slice(ammToSlice) || r.name.toLowerCase().startsWith(role.trim().slice(ammToSlice).toLowerCase()));
 			if (newRole != null && newRole.position < call.message.member.highestRole.position && newRole.position < call.message.guild.me.highestRole.position) {
 				if (role.trim().startsWith("-")) rolesToChange.rolesToRemove.push(newRole);
 				else rolesToChange.rolesToAdd.push(newRole);
@@ -15,7 +15,7 @@ module.exports = {
 		if (rolesToChange.rolesToAdd.concat(rolesToChange.rolesToRemove).length !== 0) {
 			call.message.channel.send("Changing roles for everyone in this guild.")
 				.catch(() => call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {}));
-			call.message.guild.members.forEach(member => {
+			call.message.guild.members.forEach((member) => {
 				rolesToChange.rolesToRemove.forEach((role) => {
 					member.removeRole(role);
 				});

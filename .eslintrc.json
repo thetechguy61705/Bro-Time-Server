@@ -30,10 +30,6 @@
 			"error"
 		],
 		"comma-spacing": "error",
-		"linebreak-style": [
-			"error",
-			"windows"
-		],
 		"quotes": [
 			"error",
 			"double"
@@ -42,6 +38,7 @@
 			"error",
 			"always"
 		],
+		"arrow-parens": ["error", "always"],
 		"promise/no-return-wrap": "warn",
 		"promise/param-names": "warn",
 		"promise/catch-or-return": ["warn", { "allowThen": true }],

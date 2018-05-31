@@ -22,7 +22,7 @@ module.exports = {
 		var rows = [EMOJI_ARRAY, ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
 				["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"]],
 			connectFourEmbed = new Discord.RichEmbed().setColor(0x00AE86).setTitle("Connect Four").setFooter(`${author.tag}'s turn.`);
-		connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map(row => row.join(" ")).join("\n"));
+		connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map((row) => row.join(" ")).join("\n"));
 		session.context.channel.send({ embed: connectFourEmbed }).then(async (connectFour) => {
 			await connectFour.reactMultiple(EMOJI_ARRAY);
 			var turn = author.id;
@@ -32,7 +32,7 @@ module.exports = {
 			session.connectFour = connectFour;
 			session.collector = collector;
 			session.embed = connectFourEmbed;
-			collector.on("collect", reaction => {
+			collector.on("collect", (reaction) => {
 				reaction.remove(reaction.users.last());
 				if (reaction.users.last().id === turn) {
 					const currentRow = (getRow(rows, EMOJI_ARRAY.indexOf(reaction.emoji.name)) == null) ? 6 : getRow(rows, EMOJI_ARRAY.indexOf(reaction.emoji.name)) - 1;
@@ -40,9 +40,9 @@ module.exports = {
 						rows[currentRow][EMOJI_ARRAY.indexOf(reaction.emoji.name)] = (turn === author.id) ? "🔴" : "🔵";
 						turn = (turn === author.id) ? target.id : author.id;
 						connectFour.setFooter(`${(turn === author.id) ? target.tag : author.tag}'s turn.`);
-						session.embed = connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map(row => row.join(" ")).join("\n"));
+						session.embed = connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map((row) => row.join(" ")).join("\n"));
 						connectFour.edit({ embed: connectFourEmbed })
-							.then(newConnectFour => session.connectFour = newConnectFour).catch(() => {});
+							.then((newConnectFour) => session.connectFour = newConnectFour).catch(() => {});
 						rows.forEach((row, indexOfRow) => {
 							row.forEach((coin, indexOfCoin) => {
 								if (coin !== "⚫" && coin === row[indexOfCoin + 1] &&
@@ -78,7 +78,7 @@ module.exports = {
 							});
 						});
 
-						if (rows.slice(1).map(row => row.every(coin => coin !== "⚫")).every(row => row === true))
+						if (rows.slice(1).map((row) => row.every((coin) => coin !== "⚫")).every((row) => row === true))
 							session.endGame();
 					}
 				}

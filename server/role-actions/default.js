@@ -1,12 +1,15 @@
 module.exports = {
 	run: (call, actions, parameter) => {
-		const target = (parameter != null) ? call.message.guild.members.find(member => member.user.tag.toLowerCase().startsWith(parameter.toLowerCase()) || parameter.includes(member.user.id)) : null;
+		const target = (parameter != null) ?
+			call.message.guild.members.find((member) => member.user.tag.toLowerCase().startsWith(parameter.toLowerCase()) ||
+				parameter.includes(member.user.id)) :
+			null;
 		var rolesToChange = { rolesToAdd: [], rolesToRemove: [] };
 		if (target != null) {
-			(call.params.readParameter(true) || "").split(",").forEach(role => {
+			(call.params.readParameter(true) || "").split(",").forEach((role) => {
 				const ammToSlice = (role.trim().startsWith("+") || role.trim().startsWith("-")) ? 1 : 0;
 				var newRole = call.message.guild.roles
-					.find(r => r.id === role.trim().slice(ammToSlice) || r.name.toLowerCase().startsWith(role.trim().slice(ammToSlice).toLowerCase()));
+					.find((r) => r.id === role.trim().slice(ammToSlice) || r.name.toLowerCase().startsWith(role.trim().slice(ammToSlice).toLowerCase()));
 				if (newRole != null && newRole.position < call.message.member.highestRole.position && newRole.position < call.message.guild.me.highestRole.position) {
 					if (role.trim().startsWith("-")) rolesToChange.rolesToRemove.push(newRole);
 					else {

@@ -91,7 +91,7 @@ Profiler.states.Interrupted.description = "A parent loader interrupted this load
 Profiler.states.Interrupted.ends = true;
 Profiler.states.freezeEnums();
 
-fs.readdirSync(__dirname + "/chat").forEach(file => {
+fs.readdirSync(__dirname + "/chat").forEach((file) => {
 	if (file.endsWith(".js")) {
 		new Promise((resolve, reject) => {
 			try {
@@ -99,15 +99,15 @@ fs.readdirSync(__dirname + "/chat").forEach(file => {
 			} catch (exc) {
 				reject(exc);
 			}
-		}).then(handler => {
+		}).then((handler) => {
 			chatHandlers.push(handler);
-		}, exc => {
+		}, (exc) => {
 			console.warn(`Unable to load chat module ${file}:`);
 			console.warn(exc.stack);
 		});
 	}
 });
-fs.readdirSync(__dirname + "/load").forEach(file => {
+fs.readdirSync(__dirname + "/load").forEach((file) => {
 	if (file.endsWith(".js")) {
 		loaders.push(require("./load/" + file));
 	}
@@ -150,7 +150,7 @@ client.on("ready", () => {
 	}).catch(() => {});
 });
 
-client.on("message", message => {
+client.on("message", (message) => {
 	for (var handler of chatHandlers) {
 		try {
 			if (handler.exec(message, client))

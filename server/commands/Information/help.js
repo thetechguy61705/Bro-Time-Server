@@ -42,7 +42,7 @@ module.exports = {
 			call.message.channel.send({ embed: helpEmbed }).catch(() => {
 				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`).catch(() => {});
 			});
-		} else if (call.commands.loaded.map(cmd => cmd.id).includes(param1.toLowerCase())) {
+		} else if (call.commands.loaded.map((cmd) => cmd.id).includes(param1.toLowerCase())) {
 			const command = call.commands.loaded.get(param1.toLowerCase()),
 				aliases = (command.aliases != null) ? command.aliases : ["None"],
 				cmdDesc = (command.description != null) ? command.description : "None",

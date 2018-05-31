@@ -8,8 +8,8 @@ module.exports = {
 			parameterOne = rawContent.split(" ")[0],
 			parameterTwo = rawContent.split(" ")[1],
 			modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
-		if (call.message.member.roles.some(role => modRoles.includes(role.id))) {
-			const target = call.message.guild.members.find(m => parameterOne.includes(`${m.user.id}`));
+		if (call.message.member.roles.some((role) => modRoles.includes(role.id))) {
+			const target = call.message.guild.members.find((m) => parameterOne.includes(`${m.user.id}`));
 			if (target != null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					var reason = (parameterTwo != null) ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
