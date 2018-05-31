@@ -28,11 +28,10 @@ module.exports = {
 										.setColor(0x00AE86)
 										.setFooter(`${call.client.user.username} | Giveaway by ${call.message.author.tag}.`);
 									GIVEAWAY_CHANNEL.send("🎉 **GIVEAWAY** 🎉", { embed: giveawayEmbed }).then(msg => {
-										call.client.channels
-											.get("437091372538003456")
+										call.client.channels.get("437091372538003456")
 											.send(`${msg.channel.id} ${msg.id} ${Date.now() + giveawayTime} ${winners} ${call.message.author.id} ${GIVEAWAY_PRIZE}`)
 											.then(databaseMesage => {
-												msg.react("🎉").catch(function() {});
+												msg.react("🎉").catch(() => {});
 												var editLoop = setInterval(function() {
 													giveawayTime -= 5000;
 													if (giveawayTime > 0) {
@@ -53,57 +52,57 @@ module.exports = {
 																.setColor(0x00AE86)
 																.setFooter(`${call.client.user.username} | Giveaway by ${call.message.author.tag}.`);
 															msg.edit("🎉 **GIVEAWAY ENDED** 🎉", { embed: giveawayEmbed }).then(() => {
-																databaseMesage.delete().catch(function() {});
+																databaseMesage.delete().catch(() => {});
 																if (winner[0] !== "**Not enough users entered.**") {
-																	msg.channel.send(`${winner.join(", ")} won **${GIVEAWAY_PRIZE}**!`).catch(function() {});
+																	msg.channel.send(`${winner.join(", ")} won **${GIVEAWAY_PRIZE}**!`).catch(() => {});
 																}
-															}).catch(function() {});
+															}).catch(() => {});
 															clearInterval(editLoop);
-														});
+														}).catch(() => {});
 													}
 												}, 5000);
 											}).catch(() => {
 												call.message.reply("There was an error sending the giveaway in that channel.").catch(() => {
 													call.message.author
 														.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`)
-														.catch(function() {});
+														.catch(() => {});
 												});
 											});
-									});
+									}).catch(() => {});
 								} else {
 									call.message.reply("Please mention a valid amount of winners. Example: `!giveaway title: 10m #giveaways 3`.").catch(() => {
-										call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+										call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 									});
 								}
 							} else {
 								call.message.reply("Please specify a valid amount of winners. Example: `!giveaway title: 10m #giveaways 3`.")
 									.catch(() => {
-										call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+										call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 									});
 							}
 						} else {
 							call.message.reply("Please make the giveaway time greater than 10 seconds and less than 7 days. Example: `!giveaway title: 10m #giveaways 3`.").catch(() => {
-								call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+								call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 							});
 						}
 					} else {
 						call.message.reply("Please mention a valid giveaway channel. Example: `!giveaway title: 10m #giveaways 3`.").catch(() => {
-							call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+							call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 						});
 					}
 				} else {
 					call.message.reply("Please specify a valid giveaway time. Example: `!giveaway title: 10m #giveaways 3`.").catch(() => {
-						call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+						call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 					});
 				}
 			} else {
 				call.message.reply("Please specify a valid giveaway title. Example: `!giveaway title: 10m #giveaways 3`.").catch(() => {
-					call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+					call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 				});
 			}
 		} else {
 			call.message.reply("You do not have permissions to use this command. Requires `Role: Giveaways`").catch(() => {
-				call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+				call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 			});
 		}
 	}

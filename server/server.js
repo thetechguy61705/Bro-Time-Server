@@ -120,7 +120,7 @@ client.on("ready", () => {
 	// eslint-disable-next-line no-console
 	console.log("Loading...");
 	Profiler.writeLegend();
-	loaders.forEach(loader => {
+	loaders.forEach((loader) => {
 		loading.push(new Promise(async (resolve) => {
 			var profiler = new Profiler(loader.id.length + (loader.profilerBytes || 2));
 			profiler.writeStart(loader.id);
@@ -147,7 +147,7 @@ client.on("ready", () => {
 	Promise.all(loading).then(() => {
 		// eslint-disable-next-line no-console
 		console.log("Finished loading!");
-	});
+	}).catch(() => {});
 });
 
 client.on("message", message => {

@@ -22,8 +22,7 @@ module.exports = {
 						.setColor(0x00AE86)
 						.setFooter(`${call.client.user.username} | Poll by ${call.message.author.tag}.`);
 					call.message.channel.send({ embed: POLL_EMBED }).then(async (poll) => {
-						for (var orderLoop = 0; orderLoop !== pollOptions.length; orderLoop++)
-							await poll.react(EMOJI_ARRAY[orderLoop]);
+						poll.reactMultiple(EMOJI_ARRAY.slice(0, pollOptions.length));
 					}).catch(() => {
 						call.message.reply("Something went wrong and I could not create the poll.").catch(() => {
 							call.message.author
