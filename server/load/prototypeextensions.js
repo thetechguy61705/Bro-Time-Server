@@ -1,3 +1,5 @@
+const Discord = require("discord.js");
+
 Number.prototype.expandPretty = function() {
 	var days = ((this) - (this % 86400000)) / 86400000;
 	var hours = (((this) - (this % 3600000)) / 3600000) - (days * 24);
@@ -19,6 +21,11 @@ Number.prototype.diagnostic = function() {
 Array.prototype.difference = function(a) {
 	return this.filter(function(i) { return a.indexOf(i) < 0; });
 };
+
+Discord.prototype.Message.reactMultiple = function(reactions) {
+	for (var reaction of reactions) { this.react(reaction); };
+};
+
 /*
 credits to Joshaven Potter from stackoverflow for this great prototype extension :D
 https://stackoverflow.com/users/121607/joshaven-potter
