@@ -59,7 +59,7 @@ function pickWinner(client, message, authorName, giveawayWinners, prize) {
 		}, (exc) => {
 			handleError(message, exc);
 		});
-	});
+	}).catch(() => {});
 }
 
 function reloadGiveaways(channel, client) {
@@ -68,14 +68,7 @@ function reloadGiveaways(channel, client) {
 		console.log("giveaway channel found");
 		channel.fetchMessages({ limit: 100 }).then(messagesFetched => {
 			console.log("messages fetched");
-			var giveawayChannel;
-			var giveawayID;
-			var giveawayEnd;
-			var giveawayWinners;
-			var giveawayAuthor;
-			var giveawayPrize;
-			var args;
-			var entryPromise;
+			var giveawayChannel, giveawayID, giveawayEnd, giveawayWinners, giveawayAuthor, giveawayPrize, args, entryPromise;
 			messagesFetched.forEach((creator) => {
 				console.log("checking message");
 				if (canHost(creator.author)) {
@@ -92,15 +85,15 @@ function reloadGiveaways(channel, client) {
 					if (giveawayEnd > 0) {
 						entryPromise.then((message) => {
 							acceptEntry(client, message, giveawayEnd, giveawayAuthor, giveawayWinners, giveawayPrize);
-						});
+						}).catch(() => {});
 					} else {
 						entryPromise.then((message) => {
 							pickWinner(client, message, giveawayAuthor, giveawayWinners, giveawayPrize);
-						});
+						}).catch(() => {});
 					}
 				}
 			});
-		});
+		}).catch(() => {});
 	}
 }
 
