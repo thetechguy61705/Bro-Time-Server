@@ -21,7 +21,10 @@ module.exports = {
 		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
 		if (call.message.member.roles.some(role => modRoles.includes(role.id))) {
 			const parameter = call.params.readParameter(), action = actions.get(parameter);
-			(action || actions.get("default")).run(call, actions, parameter);
+			(action || actions.get("default")).run(call, actions, parameter).catch((err) => {
+				console.log("Role action failed:");
+				console.log(err);
+			});
 		} else {
 			call.message.reply("You do not have permission to use this command.").catch(() => {
 				call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
