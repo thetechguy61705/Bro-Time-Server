@@ -1,4 +1,5 @@
 module.exports = {
+	id: "in",
 	run: (call) => {
 		const paramOne = call.params.readParameter(),
 			target = (paramOne != null) ? call.message.guild.roles.find((role) => role.id === paramOne || role.name.toLowerCase().startsWith(paramOne.toLowerCase())) : null;
