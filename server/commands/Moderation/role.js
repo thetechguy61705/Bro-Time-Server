@@ -6,7 +6,7 @@ var actions = new Discord.Collection();
 fs.readdirSync(__dirname + "/../../actions/role").forEach((file) => {
 	try {
 		const ACTION = require("../../actions/role/" + file);
-		actions.set(action.id, action);
+		actions.set(ACTION.id, ACTION);
 	} catch(err) {
 		console.log(err);
 	}
@@ -20,7 +20,7 @@ module.exports = {
 	requires: "Moderator permissions",
 	execute: (call) => {
 		if (call.message.member.roles.some((role) => MOD_ROLES.includes(role.id))) {
-			const PARAMETER = (call.params.readParameter() || "").toLowerCase(), 
+			const PARAMETER = (call.params.readParameter() || "").toLowerCase(),
 				ACTION = actions.find((a) => a.id === PARAMETER || (a.aliases || []).includes(PARAMETER));
 			(ACTION || actions.get("default")).run(call, actions, PARAMETER).catch((err) => {
 				console.log("Role action failed:");
