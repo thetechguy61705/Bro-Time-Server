@@ -18,8 +18,8 @@ Number.prototype.diagnostic = function() {
 	return (this <= 0) ? "impossible" : (this < 200) ? "great" : (this < 350) ? "good" : (this < 500) ? "ok" : (this < 750) ? "bad" : (this < 1000) ? "terrible" : "worse than dial up";
 };
 
-Array.prototype.difference = function(a) {
-	return this.filter(function(i) { return a.indexOf(i) < 0; });
+Array.prototype.difference = function(arr) {
+	return this.filter((val) => { return arr.indexOf(val) < 0; });
 };
 
 /*
