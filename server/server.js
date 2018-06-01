@@ -145,21 +145,21 @@ client.on("ready", () => {
 		}));
 	});
 	Promise.all(loading).then(() => {
+		client.on("message", (message) => {
+			for (var handler of chatHandlers) {
+				try {
+					if (handler.exec(message, client))
+						break;
+				} catch (exc) {
+					console.warn("Failed to handle chat message:");
+					console.warn(exc.stack);
+				}
+			}
+		});
+
 		// eslint-disable-next-line no-console
 		console.log("Finished loading!");
 	}).catch(() => {});
-});
-
-client.on("message", (message) => {
-	for (var handler of chatHandlers) {
-		try {
-			if (handler.exec(message, client))
-				break;
-		} catch (exc) {
-			console.warn("Failed to handle chat message:");
-			console.warn(exc.stack);
-		}
-	}
 });
 
 client.login(config.TOKEN);

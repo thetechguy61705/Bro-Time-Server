@@ -3,6 +3,10 @@ module.exports = {
 	description: "Kicks specified user.",
 	arguments: "(user) [reason]",
 	requires: "Moderator permissions",
+	botRequires: "KICK_MEMBERS",
+	botRequiresMessage: "To be able to kick users.",
+	userRequires: "KICK_MEMBERS",
+	userRequiresMessage: "To be able to kick users.",
 	execute: (call) => {
 		const rawContent = call.params.readRaw();
 		const parameterOne = rawContent.split(" ")[0];
