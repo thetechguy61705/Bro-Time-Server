@@ -8,7 +8,7 @@ Number.prototype.expandPretty = function() {
 	var milliseconds = (((this % 3600000) % 60000) % 1000) - (((this % 3600000) % 60000) % 1);
 	days = (days > 1) ? `\`${days}\` days, `: (days === 1) ? `\`${days}\` day, ` : "";
 	hours = (hours > 1) ? `\`${hours}\` hours, `: (hours === 1) ? `\`${hours}\` hour, ` : "";
-	minutes = (minutes > 1) ? minutes = `\`${minutes}\` minutes, `: (minutes === 1) ? `\`${minutes}\` minute, ` : "";
+	minutes = (minutes > 1) ? `\`${minutes}\` minutes, `: (minutes === 1) ? `\`${minutes}\` minute, ` : "";
 	seconds = ((seconds / 1000) > 1) ? `\`${seconds/1000}\` seconds, `: ((seconds / 1000) === 1) ? `\`${seconds/1000}\` second, ` : "";
 	milliseconds = (days === "" && hours === "" && minutes === "" && seconds === "") ? `\`${milliseconds}\` milliseconds.` : `and \`${milliseconds}\` milliseconds.`;
 	return `${days}${hours}${minutes}${seconds}${milliseconds}`;
