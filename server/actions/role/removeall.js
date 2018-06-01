@@ -1,4 +1,5 @@
 module.exports = {
+	id: "removeall",
 	run: (call) => {
 		const parameter = call.params.readParameter(),
 			target = (parameter != null) ? call.message.guild.members.find((member) => parameter.includes(member.user.id) || member.user.tag.startsWith(parameter)) : null;

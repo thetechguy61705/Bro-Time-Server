@@ -1,4 +1,5 @@
 module.exports = {
+	id: "in",
 	run: (call) => {
 		const paramOne = call.params.readParameter(),
 			target = (paramOne != null) ? call.message.guild.roles.find((role) => role.id === paramOne || role.name.toLowerCase().startsWith(paramOne.toLowerCase())) : null;
@@ -14,9 +15,9 @@ module.exports = {
 				}
 			});
 			if (rolesToChange.rolesToAdd.concat(rolesToChange.rolesToRemove).length !== 0) {
-				call.message.channel.send("Changing roles for people not in the `" + target.name + "` role.")
+				call.message.channel.send("Changing roles for people in the `" + target.name + "` role.")
 					.catch(() => call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {}));
-				call.message.guild.members.filter((member) => !member.roles.keyArray().includes(target.id)).forEach((member) => {
+				target.members.forEach((member) => {
 					rolesToChange.rolesToRemove.forEach((role) => {
 						member.removeRole(role);
 					});

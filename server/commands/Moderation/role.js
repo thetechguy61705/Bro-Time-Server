@@ -1,11 +1,12 @@
 const Discord = require("discord.js");
 const fs = require("fs");
+const MOD_ROLES = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
 var actions = new Discord.Collection();
 
-fs.readdirSync(__dirname + "/../../role-actions").forEach((file) => {
+fs.readdirSync(__dirname + "/../../actions/role").forEach((file) => {
 	try {
-		const action = require("../../role-actions/" + file);
-		actions.set(file.substring(0, file.length - 3), action);
+		const ACTION = require("../../actions/role/" + file);
+		actions.set(ACTION.id, ACTION);
 	} catch(err) {
 		console.log(err);
 	}
@@ -22,10 +23,10 @@ module.exports = {
 	userRequires: "MANAGE_ROLES",
 	userRequiresMessage: "To give roles.",
 	execute: (call) => {
-		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
-		if (call.message.member.roles.some((role) => modRoles.includes(role.id))) {
-			const parameter = call.params.readParameter(), action = actions.get(parameter);
-			(action || actions.get("default")).run(call, actions, parameter).catch((err) => {
+		if (call.message.member.roles.some((role) => MOD_ROLES.includes(role.id))) {
+			const PARAMETER = (call.params.readParameter() || "").toLowerCase(),
+				ACTION = actions.find((a) => a.id === PARAMETER || (a.aliases || []).includes(PARAMETER));
+			(ACTION || actions.get("default")).run(call, actions, PARAMETER).catch((err) => {
 				console.log("Role action failed:");
 				console.log(err);
 			});
