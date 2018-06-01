@@ -1,4 +1,5 @@
 module.exports = {
+	id: "all",
 	aliases: ["everyone"],
 	run: (call) => {
 		const greedyParam = call.params.readParameter(true), roles = (greedyParam != null) ? greedyParam.split(",") : [];
