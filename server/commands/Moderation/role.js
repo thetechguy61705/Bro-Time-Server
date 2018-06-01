@@ -17,6 +17,10 @@ module.exports = {
 	description: "Gives the user the specified role(s) if the role is below the author's highest role.",
 	arguments: "(user/option) [role/roles]",
 	requires: "Moderator permissions",
+	botRequires: "MANAGE_ROLES",
+	botRequiresMessage: "To give roles.",
+	userRequires: "MANAGE_ROLES",
+	userRequiresMessage: "To give roles.",
 	execute: (call) => {
 		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
 		if (call.message.member.roles.some((role) => modRoles.includes(role.id))) {
