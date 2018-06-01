@@ -40,7 +40,7 @@ Discord.Permissions.prototype.list = function(checkAdmin = true) {
 			list.push(name);
 	}
 	return list;
-}
+};
 
 Discord.Client.prototype.requestPermissions = function(member, channel, permissions = Discord.Permissions.DEFAULT, usage) {
 	var has = !(member instanceof Discord.GuildMember) || member.hasPermission(permissions, true, true);
