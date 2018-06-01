@@ -33,11 +33,11 @@ Discord.Message.prototype.reactMultiple = async function(reactions) {
 };
 
 Discord.Client.prototype.requestPermissions = function(member, channel, permissions = Discord.Permissions.DEFAULT, usage) {
-	var has = member.hasPermission(permissions, true, true);
+	var has = !(member instanceof Discord.GuildMember) || member.hasPermission(permissions, true, true);
 	if (!has)
 		channel.send(new Discord.RichEmbed()
 			.setTitle("Permissions Required")
-			.setDescription("To:\n" + (usage instanceof Array ?
+			.setDescription(`For ${member.nickname} to:\n` + (usage instanceof Array ?
 				usage.map((use) => "• " + use) :
 				"• " + usage))
 			.setFooter("Permissions: " + Object.keys((permissions instanceof Discord.Permissions ?
