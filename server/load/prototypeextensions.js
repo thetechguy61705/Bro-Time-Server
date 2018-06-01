@@ -1,5 +1,10 @@
 const Discord = require("discord.js");
 
+/*
+credits to Joshaven Potter from stackoverflow for this great prototype extension :D
+https://stackoverflow.com/users/121607/joshaven-potter
+*/
+
 Number.prototype.expandPretty = function() {
 	var days = ((this) - (this % 86400000)) / 86400000;
 	var hours = (((this) - (this % 3600000)) / 3600000) - (days * 24);
@@ -23,12 +28,22 @@ Array.prototype.difference = function(a) {
 };
 
 Discord.Message.prototype.reactMultiple = async function(reactions) {
-	for (var reaction of reactions) { await this.react(reaction); console.log(reaction); }
+	for (var reaction of reactions)
+		await this.react(reaction); console.log(reaction);
 };
 
-/*
-credits to Joshaven Potter from stackoverflow for this great prototype extension :D
-https://stackoverflow.com/users/121607/joshaven-potter
-*/
+Discord.Client.prototype.requestPermissions = function(member, channel, permissions = Discord.Permissions.DEFAULT, usage) {
+	var has = member.hasPermission(permissions, true, true);
+	if (!has)
+		channel.send(new Discord.RichEmbed()
+			.setTitle("Permissions Required")
+			.setDescription("To:\n" + (usage instanceof Array ?
+				usage.map((use) => "• " + use) :
+				"• " + usage))
+			.setFooter("Permissions: " + Object.keys((permissions instanceof Discord.Permissions ?
+				permissions :
+				new Discord.Permissions(permissions)).serialize()).join(", ")));
+	return has;
+};
 
 module.exports.id = "prototypes";
