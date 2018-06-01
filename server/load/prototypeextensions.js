@@ -1,10 +1,5 @@
 const Discord = require("discord.js");
 
-/*
-credits to Joshaven Potter from stackoverflow for this great prototype extension :D
-https://stackoverflow.com/users/121607/joshaven-potter
-*/
-
 Number.prototype.expandPretty = function() {
 	var days = ((this) - (this % 86400000)) / 86400000;
 	var hours = (((this) - (this % 3600000)) / 3600000) - (days * 24);
@@ -27,9 +22,14 @@ Array.prototype.difference = function(a) {
 	return this.filter(function(i) { return a.indexOf(i) < 0; });
 };
 
+/*
+credits to Joshaven Potter from stackoverflow for the Array.difference() great prototype extension :D
+https://stackoverflow.com/users/121607/joshaven-potter
+*/
+
 Discord.Message.prototype.reactMultiple = async function(reactions) {
 	for (var reaction of reactions)
-		await this.react(reaction); console.log(reaction);
+		await this.react(reaction);
 };
 
 Discord.Client.prototype.requestPermissions = function(member, channel, permissions = Discord.Permissions.DEFAULT, usage) {
