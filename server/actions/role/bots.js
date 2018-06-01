@@ -1,5 +1,6 @@
 module.exports = {
 	id: "bots",
+	aliases: ["automations"],
 	run: (call) => {
 		const greedyParam = call.params.readParameter(true), roles = (greedyParam != null) ? greedyParam.split(",") : [];
 		var rolesToChange = { rolesToAdd: [], rolesToRemove: [] };
