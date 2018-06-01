@@ -32,6 +32,16 @@ Discord.Message.prototype.reactMultiple = async function(reactions) {
 		await this.react(reaction);
 };
 
+Discord.Permissions.prototype.list = function(checkAdmin = true) {
+	var list = [];
+	var containing = this.serialize(checkAdmin);
+	for (var name of Object.keys(Discord.Permissions.FLAGS)) {
+		if (containing[name])
+			list.push(name);
+	}
+	return list;
+}
+
 Discord.Client.prototype.requestPermissions = function(member, channel, permissions = Discord.Permissions.DEFAULT, usage) {
 	var has = !(member instanceof Discord.GuildMember) || member.hasPermission(permissions, true, true);
 	if (!has)
@@ -40,9 +50,9 @@ Discord.Client.prototype.requestPermissions = function(member, channel, permissi
 			.setDescription(`For ${member.nickname} to:\n` + (usage instanceof Array ?
 				usage.map((use) => "• " + use) :
 				"• " + usage))
-			.setFooter("Permissions: " + Object.keys((permissions instanceof Discord.Permissions ?
+			.setFooter("Permissions: " + (permissions instanceof Discord.Permissions ?
 				permissions :
-				new Discord.Permissions(permissions)).serialize()).join(", ")));
+				new Discord.Permissions(permissions)).list().join(", ")));
 	return has;
 };
 

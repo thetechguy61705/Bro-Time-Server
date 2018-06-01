@@ -69,6 +69,23 @@ function loadModule(file, category) {
 	});
 }
 
+function hasPermissions(command, message, client) {
+	var has = true;
+	if (message.guild != null) {
+		if (command.botRequires != null)
+			has = client.requestPermissions(message.guild.members.get(client.user.id),
+				message.channel,
+				command.botRequires,
+				command.botRequiresMessage || `To use ${command.id}.`);
+		if (has && command.userRequires != null)
+			has = client.requestPermissions(message.member,
+				message.channel,
+				command.userRequires,
+				command.userRequiresMessage || `To use ${command.id}.`);
+	}
+	return has;
+}
+
 try {
 	fs.readdirSync(COMMANDS).forEach((name) => {
 		try {
@@ -141,7 +158,7 @@ module.exports = {
 			if (name != null) {
 				var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
 
-				if (command != null) {
+				if (command != null && hasPermissions(command, message, client)) {
 					params.readSeparator();
 					command.execute(new Call(this, message, client, params));
 					used = true;
