@@ -20,9 +20,9 @@ module.exports = {
 	requires: "Moderator permissions",
 	execute: (call) => {
 		if (call.message.member.roles.some((role) => MOD_ROLES.includes(role.id))) {
-			const parameter = (call.params.readParameter() || ""), 
-				ACTION = actions.find((a) => a.id === parameter.toLowerCase() || (a.aliases || []).includes(parameter));
-			(action || actions.get("default")).run(call, actions, parameter).catch((err) => {
+			const PARAMETER = (call.params.readParameter() || "").toLowerCase(), 
+				ACTION = actions.find((a) => a.id === PARAMETER || (a.aliases || []).includes(PARAMETER));
+			(ACTION || actions.get("default")).run(call, actions, PARAMETER).catch((err) => {
 				console.log("Role action failed:");
 				console.log(err);
 			});
