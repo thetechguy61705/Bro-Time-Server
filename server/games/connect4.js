@@ -39,7 +39,7 @@ module.exports = {
 					if (currentRow !== 0) {
 						rows[currentRow][EMOJI_ARRAY.indexOf(reaction.emoji.name)] = (turn === author.id) ? "🔴" : "🔵";
 						turn = (turn === author.id) ? target.id : author.id;
-						connectFour.setFooter(`${(turn === author.id) ? target.tag : author.tag}'s turn.`);
+						connectFourEmbed.setFooter(`${(turn === author.id) ? target.tag : author.tag}'s turn.`);
 						session.embed = connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map((row) => row.join(" ")).join("\n"));
 						connectFour.edit({ embed: connectFourEmbed })
 							.then((newConnectFour) => session.connectFour = newConnectFour).catch(() => {});
