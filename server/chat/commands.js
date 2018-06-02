@@ -59,7 +59,7 @@ function loadModule(file, category) {
 		}
 	}).then((module) => {
 		module.category = (category != null) ? category : "Other";
-		module.file = file;
+		module.file = path.parse(file).name;
 		modules.set(module.id, module);
 	}, (exc) => {
 		if (exc != null) {
