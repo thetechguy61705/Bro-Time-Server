@@ -58,7 +58,7 @@ module.exports = {
 					.catch(() => {});
 			});
 		}
-		if (helpEmbed != null) {
+		if (helpEmbed.description != null) {
 			call.message.channel.send({ embed: helpEmbed }).catch(() => {
 				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`).catch(() => {});
 			});
