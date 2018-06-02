@@ -1,5 +1,6 @@
 module.exports = {
-	aliases: ["everyone"],
+	id: "bots",
+	aliases: ["automations"],
 	run: (call) => {
 		const greedyParam = call.params.readParameter(true), roles = (greedyParam != null) ? greedyParam.split(",") : [];
 		var rolesToChange = { rolesToAdd: [], rolesToRemove: [] };
@@ -13,9 +14,9 @@ module.exports = {
 			}
 		});
 		if (rolesToChange.rolesToAdd.concat(rolesToChange.rolesToRemove).length !== 0) {
-			call.message.channel.send("Changing roles for everyone in this guild.")
+			call.message.channel.send("Changing roles for all bots in this guild.")
 				.catch(() => call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {}));
-			call.message.guild.members.forEach((member) => {
+			call.message.guild.members.filter((member) => member.user.bot).forEach((member) => {
 				rolesToChange.rolesToRemove.forEach((role) => {
 					member.removeRole(role);
 				});
