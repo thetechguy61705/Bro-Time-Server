@@ -1,7 +1,7 @@
 module.exports = {
 	id: "default",
 	run: (call, actions, parameter) => {
-		const target = (parameter != null) ?
+		const target = (parameter != "" && parameter != null) ?
 			call.message.guild.members.find((member) => member.user.tag.toLowerCase().startsWith(parameter.toLowerCase()) ||
 				parameter.includes(member.user.id)) :
 			null;
