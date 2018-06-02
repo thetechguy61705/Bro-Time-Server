@@ -58,8 +58,8 @@ function loadModule(file, category) {
 			reject(exc);
 		}
 	}).then((module) => {
-		if (category != null)
-			module.category = category;
+		module.category = (category != null) ? category : "Other";
+		module.file = file;
 		modules.set(module.id, module);
 	}, (exc) => {
 		if (exc != null) {
