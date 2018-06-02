@@ -39,9 +39,6 @@ module.exports = {
 			for (var [category, commands] of Object.entries(commandHelp)) {
 				helpEmbed.addField(category, commands.join("\n"));
 			}
-			call.message.channel.send({ embed: helpEmbed }).catch(() => {
-				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`).catch(() => {});
-			});
 		} else if (call.commands.loaded.map((cmd) => cmd.id).includes(param1.toLowerCase())) {
 			const command = call.commands.loaded.get(param1.toLowerCase()),
 				aliases = (command.aliases != null) ? command.aliases : ["None"],
@@ -58,7 +55,7 @@ module.exports = {
 					.catch(() => {});
 			});
 		}
-		if (helpEmbed != null) {
+		if (helpEmbed.description != null) {
 			call.message.channel.send({ embed: helpEmbed }).catch(() => {
 				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`).catch(() => {});
 			});
