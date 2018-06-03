@@ -95,15 +95,34 @@ class WalletAccess {
 		if (this.isBank) {
 			result = Infinity;
 		} else {
-			result = (await pool.query(`SELECT COALESCE((SELECT Amount
-			                                             FROM discord.Wallet
-			                                             WHERE User_Id = $1), 0) AS "Amount";`, [this._userId])).rows[0].Amount;
+			try {
+				result = (await pool.query(`SELECT COALESCE((SELECT Amount
+				                                             FROM discord.Wallet
+				                                             WHERE User_Id = $1), 0) AS "Amount";`, [this._userId])).rows[0].Amount;
+			} catch () {
+				throw new Error("Unable to get the wallet's total.");
+			}
 		}
 		return result;
 	}
 
 	async change(amount) {
-		console.log(amount);
+		try {
+			pool.query(`INSERT INTO discord.Wallet(User_Id, Amount)
+			            	VALUES($1, $2)
+			            ON CONFLICT ON CONSTRAINT Wallet_User_Id_PK DO UPDATE
+			            	SET Amount = discord.Wallet.Amount + $2;`, [this._userId, amount]);
+		} catch(exc) {
+			if (exc.description.includes("wallet_amount_c")) {
+				if (amount < 0) {
+					throw new Error("The wallet can't have a negative amount.");
+				} else {
+					throw new Error("The wallet can't have over 1 billion.");
+				}
+			} else {
+				throw new Error("Unable to change amount.");
+			}
+		}
 	}
 
 	async transfer(amount, toUserId) {
