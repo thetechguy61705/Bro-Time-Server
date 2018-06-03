@@ -11,9 +11,13 @@ module.exports = {
 
 			if (TARGET != null) {
 				if (AMOUNT != null && !isNaN(AMOUNT)) {
-					call.getWallet(TARGET.id).change(AMOUNT);
+					call.getWallet(TARGET.id).change(AMOUNT).then(() => {
+						call.message.channel.send(`Changed ${TARGET.user.tag}'s balance by ${AMOUNT}`).catch(() => {});
+					}).catch(() => {
+						call.message.channel.send(`Failed to change ${TARGET.user.tag}'s balance by ${AMOUNT}`).catch(() => {});
+					});
 				} else {
-					call.message.reply("You did not specify a valid amount to raise from.").catch(() => {
+					call.message.reply("You did not specify a valid amount to give to the user.").catch(() => {
 						call.message.author.send(`You attempted to use the \`grant\` command in ${call.message.channel}, but I can not chat there.`)
 							.catch(() => {});
 					});
