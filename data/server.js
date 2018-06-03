@@ -112,7 +112,7 @@ class WalletAccess {
 			            	VALUES($1, $2)
 			            ON CONFLICT ON CONSTRAINT Wallet_User_Id_PK DO UPDATE
 			            	SET Amount = discord.Wallet.Amount + $2;`, [this._userId, amount]);
-		} catch(exc) {
+		} catch (exc) {
 			if (exc.description.includes("wallet_amount_c")) {
 				if (amount < 0) {
 					throw new Error("The wallet can't have a negative amount.");
@@ -126,7 +126,19 @@ class WalletAccess {
 	}
 
 	async transfer(amount, toUserId) {
-		console.log(amount, toUserId);
+		try {
+			pool.query(`BEGIN;
+			            UPDATE discord.Wallet
+			            	SET Amount = Amount - $3
+			            WHERE User_Id = $1;
+			            INSERT INTO discord.Wallet(User_Id, Amount)
+			            	VALUES($2, $3)
+			            ON CONFLICT ON CONSTRAINT Wallet_User_Id_PK DO UPDATE
+			            	SET Amount = discord.Wallet.Amount + $3;
+			            COMMIT;`, [this._userId, toUserId, amount]);
+		} catch {
+			throw new Error("Unable to transfer amount.");
+		}
 	}
 }
 
