@@ -95,9 +95,9 @@ class WalletAccess {
 		if (this.isBank) {
 			result = Infinity;
 		} else {
-			result = pool.query(`SELECT COALESCE((SELECT Amount
-			                                      FROM discord.Wallet
-			                                      WHERE User_Id = $1), 0) AS "Amount";`, [this._userId]).rows[0].Amount;
+			result = (await pool.query(`SELECT COALESCE((SELECT Amount
+			                                             FROM discord.Wallet
+			                                             WHERE User_Id = $1), 0) AS "Amount";`, [this._userId])).rows[0].Amount;
 		}
 		return result;
 	}
