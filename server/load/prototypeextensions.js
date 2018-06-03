@@ -1,7 +1,5 @@
 const Discord = require("discord.js");
 
-require("enum").register();
-
 Number.prototype.expandPretty = function() {
 	var days = ((this) - (this % 86400000)) / 86400000;
 	var hours = (((this) - (this % 3600000)) / 3600000) - (days * 24);

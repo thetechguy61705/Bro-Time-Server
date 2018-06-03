@@ -9,6 +9,8 @@ var client = new discord.Client(config.CLIENT);
 
 const LOAD_TIMEOUT = 60000;
 
+require("enum").register();
+
 class Profiler {
 	static writeLegend() {
 		var rows = [];
