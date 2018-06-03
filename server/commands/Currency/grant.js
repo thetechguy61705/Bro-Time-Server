@@ -6,7 +6,7 @@ module.exports = {
 		if (OWNERS.includes(call.message.author.id)) {
 			var param = call.params.readParameter();
 			param = (param != null) ? param.toLowerCase() : "";
-			const TARGET = call.message.guild.members.find((member) => param.includes(member.id) || param === member.user.tag),
+			const TARGET = call.message.guild.members.find((member) => param.includes(member.id) || param === member.user.tag.toLowerCase()),
 				AMOUNT = Number(call.params.readParameter());
 
 			if (TARGET != null) {
