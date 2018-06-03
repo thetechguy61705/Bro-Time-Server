@@ -9,11 +9,11 @@ module.exports = {
 		if (TARGET != null) {
 			if (AMOUNT != null && !isNaN(AMOUNT)) {
 				if (AMOUNT >= 1) {
-					var userBalance = await call.getWallet(message.author.id).getTotal();
+					var userBalance = await call.getWallet(call.message.author.id).getTotal();
 					if (userBalance >= AMOUNT) {
-						var targetBalance = await call.getWallet(target.user.id).getTotal();
+						var targetBalance = await call.getWallet(TARGET.user.id).getTotal();
 						if ((targetBalance + AMOUNT) < 1000000000) {
-							call.getWallet(message.author.id).transfer(Math.round(AMOUNT), TARGET.user.id).then(() => {
+							call.getWallet(call.message.author.id).transfer(Math.round(AMOUNT), TARGET.user.id).then(() => {
 								call.message.reply(`You have successfully given ${AMOUNT} Bro Bits to ${TARGET.user.tag}.`).catch(() => {});
 							});
 						} else {
