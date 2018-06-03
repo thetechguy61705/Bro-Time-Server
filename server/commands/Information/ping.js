@@ -2,6 +2,7 @@ module.exports = {
 	id: "ping",
 	aliases: ["pong"],
 	description: "Returns the response time of the bot in milliseconds, as well as a diagnostic.",
+	access: "Public",
 	execute: (call) => {
 		const delay = call.client.pings[0];
 		call.message.channel.send(`Pong! Latency: \`pinging...\`. API latency: \`${delay} ms; ${delay.diagnostic()}.\`!`).then((msg) => {

@@ -10,6 +10,7 @@ var prefixPattern = "^(%s)";
 
 const COMMANDS = __dirname + "/../commands";
 const TESTING = process.env.NODE_ENV !== "production";
+const ACCESS = new Enum(["Public", "Private", "Server"], { ignoreCase: true });
 
 class Call {
 	constructor(commands, message, client, params) {
@@ -91,6 +92,19 @@ function hasPermissions(command, message, client) {
 	return has;
 }
 
+function checkAccess(command, message) {
+	var access = ACCESS.get(command.access);
+	var result;
+	if (access === ACCESS.Public) {
+		result = true;
+	} else if (access === ACCESS.Private) {
+		result = message.guild == null;
+	} else {
+		result = message.guild != null;
+	}
+	return result;
+}
+
 try {
 	fs.readdirSync(COMMANDS).forEach((name) => {
 		try {
@@ -163,7 +177,7 @@ module.exports = {
 			if (name != null) {
 				var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
 
-				if (command != null && hasPermissions(command, message, client)) {
+				if (command != null && checkAccess(command, message) && hasPermissions(command, message, client)) {
 					params.readSeparator();
 					command.execute(new Call(this, message, client, params));
 					used = true;
