@@ -3,7 +3,7 @@ module.exports = {
 	aliases: ["give"],
 	execute: async (call) => {
 		var param = call.params.readParameter();
-		param = (param != null) param.toLowerCase() : "";
+		param = (param != null) ? param.toLowerCase() : "";
 		const TARGET = call.message.guild.members.find((member) => param.includes(member.user.id) || param.startsWith(member.user.tag.toLowerCase())),
 			AMOUNT = Number(call.params.readParameter());
 		if (TARGET != null) {
