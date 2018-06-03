@@ -3,6 +3,9 @@
 		"es6": true,
 		"node": true
 	},
+	"globals": {
+		"Enum": false
+	},
 	"extends": "eslint:recommended",
 	"parser": "babel-eslint",
 	"parserOptions": {

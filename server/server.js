@@ -1,6 +1,5 @@
 var errorHandler = require("app/errorHandler");
 var config = require("../config");
-var Enum = require("enum");
 var fs = require("fs");
 var discord = require("discord.js");
 var stdout = process.stdout;
