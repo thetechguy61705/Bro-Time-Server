@@ -84,7 +84,26 @@ class BotAccess extends DataAccess {
 	}
 }
 
+class WalletAccess {
+	constructor(userId = null) {
+		this._userId = userId;
+	}
+
+	getTotal() {
+
+	}
+
+	change(amount) {
+		console.log(amount);
+	}
+
+	transfer(amount, toUserId) {
+		console.log(amount, toUserId);
+	}
+}
+
 module.exports = {
 	BotAccess: BotAccess,
-	GameAccess: GameAccess
+	GameAccess: GameAccess,
+	WalletAccess: WalletAccess
 };
