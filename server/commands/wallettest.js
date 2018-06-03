@@ -1,8 +1,8 @@
 module.exports = {
 	id: "wallettest",
 	exec: (call) => {
-		call.getWallet(id).getTotal().then((total) => {
-			message.channel.send(total.toString());
+		call.getWallet(call.message.author.id).getTotal().then((total) => {
+			call.message.channel.send(total.toString());
 		});
 	}
 };
