@@ -10,24 +10,24 @@ module.exports = {
 				AMOUNT = Number(call.params.readParameter());
 
 			if (TARGET != null) {
-				if (AMOUNT != null && AMOUNT !== NaN) {
-					call.getWallet(TARGET.id).change()
+				if (AMOUNT != null && !isNaN(AMOUNT)) {
+					call.getWallet(TARGET.id).change(AMOUNT);
 				} else {
 					call.message.reply("You did not specify a valid amount to raise from.").catch(() => {
 						call.message.author.send(`You attempted to use the \`grant\` command in ${call.message.channel}, but I can not chat there.`)
-							.catch(() => {}); 
+							.catch(() => {});
 					});
 				}
 			} else {
 				call.message.reply("You did not specify a valid user.").catch(() => {
 					call.message.author.send(`You attempted to use the \`grant\` command in ${call.message.channel}, but I can not chat there.`)
-						.catch(() => {}); 
+						.catch(() => {});
 				});
 			}
 		} else {
 			call.message.reply("You do not have permissions to use this command.").catch(() => {
 				call.message.author.send(`You attempted to use the \`grant\` command in ${call.message.channel}, but I can not chat there.`)
-					.catch(() => {}); 
+					.catch(() => {});
 			});
 		}
 	}
