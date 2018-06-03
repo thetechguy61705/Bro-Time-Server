@@ -99,7 +99,7 @@ class WalletAccess {
 				result = (await pool.query(`SELECT COALESCE((SELECT Amount
 				                                             FROM discord.Wallet
 				                                             WHERE User_Id = $1), 0) AS "Amount";`, [this._userId])).rows[0].Amount;
-			} catch () {
+			} catch {
 				throw new Error("Unable to get the wallet's total.");
 			}
 		}
