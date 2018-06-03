@@ -44,11 +44,14 @@ module.exports = {
 				aliases = (command.aliases != null) ? command.aliases : ["None"],
 				cmdDesc = (command.description != null) ? command.description : "None",
 				cmdUsage = (command.arguments != null) ? " " + command.arguments : "",
-				cmdReq = (command.requires != null) ? command.requires : "None";
+				cmdReq = (command.requires != null) ? command.requires : "None",
+				cmdFile = command.file + ".js";
 			helpEmbed.setTitle(`${prefix}${param1}`).setDescription(`Purpose: ${cmdDesc}` +
 				`\nUsage: \`${prefix}${param1}${cmdUsage}\`` +
 				`\nRequires: \`${cmdReq}\`` +
-				`\nAliases: \`${aliases.join("`, `")}\``);
+				`\nAliases: \`${aliases.join("`, `")}\`` +
+				`\nCategory: \`${command.category}\`` +
+				`\n\n[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server/tree/master/server/commands/${(command.category !== "Other") ? command.category + "/" : ""}${cmdFile})`);
 		} else {
 			call.message.reply("Invalid command name. Please run `!help (command)` or just `!help`").catch(() => {
 				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`)
