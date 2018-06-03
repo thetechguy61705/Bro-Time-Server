@@ -143,7 +143,7 @@ class WalletAccess {
 				pool.query(`UPDATE discord.Wallet
 				            	SET Amount = Amount - $2
 				            WHERE User_Id = $1;`, [this._userId, amount]);
-			} else {
+			} else if (toUserId != null) {
 				pool.query(`INSERT INTO discord.Wallet(User_Id, Amount)
 				            	VALUES($1, $2)
 				            ON CONFLICT ON CONSTRAINT Wallet_User_Id_PK DO UPDATE
