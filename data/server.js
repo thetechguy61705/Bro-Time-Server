@@ -97,7 +97,7 @@ class WalletAccess {
 		} else {
 			result = pool.query(`SELECT COALESCE((SELECT Amount AS "Amount"
 			                                      FROM discord.Wallet
-			                                      WHERE User_Id = ${this._userId}), 0);`);
+			                                      WHERE User_Id = $1), 0);`, [this._userId]);
 		}
 		return result;
 	}
