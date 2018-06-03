@@ -44,7 +44,7 @@ module.exports = {
 				aliases = (command.aliases != null) ? command.aliases : ["None"],
 				cmdDesc = (command.description != null) ? command.description : "None",
 				cmdUsage = (command.arguments != null) ? " " + command.arguments : "",
-				cmdReq = (command.requires != null) ? command.requires : "None";
+				cmdReq = (command.requires != null) ? command.requires : "None",
 				cmdFile = command.file + ".js";
 			helpEmbed.setTitle(`${prefix}${param1}`).setDescription(`Purpose: ${cmdDesc}` +
 				`\nUsage: \`${prefix}${param1}${cmdUsage}\`` +
