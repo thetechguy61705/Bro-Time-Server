@@ -86,18 +86,27 @@ class BotAccess extends DataAccess {
 
 class WalletAccess {
 	constructor(userId = null) {
+		this.isBank = userId == null;
 		this._userId = userId;
 	}
 
-	getTotal() {
-
+	async getTotal() {
+		var result;
+		if (this.isBank) {
+			result = Infinity;
+		} else {
+			result = pool.query(`SELECT COALESCE((SELECT Amount AS "Amount"
+			                                      FROM discord.Wallet
+			                                      WHERE User_Id = ${this._userId}), 0);`);
+		}
+		return result;
 	}
 
-	change(amount) {
+	async change(amount) {
 		console.log(amount);
 	}
 
-	transfer(amount, toUserId) {
+	async transfer(amount, toUserId) {
 		console.log(amount, toUserId);
 	}
 }

@@ -2,6 +2,7 @@ var { Collection, MessageMentions } = require("discord.js");
 var escapeStringRegexp = require("escape-string-regexp");
 var modules = new Collection();
 var Parameters = require("app/paramaters");
+var { WalletAccess } = require("./../../data/server");
 var fs = require("fs");
 var path = require("path");
 var util = require("util");
@@ -42,6 +43,10 @@ class Call {
 			request.reject();
 			this.commands._requests.delete(author.id);
 		}
+	}
+
+	getWallet(userId = null) {
+		return new WalletAccess(userId);
 	}
 }
 
