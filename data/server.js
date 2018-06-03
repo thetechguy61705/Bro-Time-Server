@@ -139,7 +139,7 @@ class WalletAccess {
 				            ON CONFLICT ON CONSTRAINT Wallet_User_Id_PK DO UPDATE
 				            	SET Amount = discord.Wallet.Amount + $3;
 				            COMMIT;`, [this._userId, toUserId, amount]);
-			} else if (!isBank) {
+			} else if (!this.isBank) {
 				pool.query(`UPDATE discord.Wallet
 				            	SET Amount = Amount - $2
 				            WHERE User_Id = $1;`, [this._userId, amount]);
