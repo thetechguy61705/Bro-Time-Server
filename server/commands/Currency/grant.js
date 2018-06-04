@@ -2,6 +2,9 @@ const OWNERS = ["236341625763135500", "245877990938902529", "432650511825633317"
 
 module.exports = {
 	id: "grant",
+	description: "Force give/take away Bro Bits to/from a user.",
+	arguments: "(user) (amount)",
+	requires: "Role: Co-Owner Bro, Owner Bro",
 	execute: (call) => {
 		if (OWNERS.includes(call.message.author.id)) {
 			var param = call.params.readParameter();
