@@ -1,5 +1,7 @@
 module.exports = {
 	id: "balance",
+	description: "Returns a user's Bro Bit balance.",
+	arguments: "[user]",
 	aliases: ["bal"],
 	execute: (call) => {
 		var param = call.params.readParameter();
