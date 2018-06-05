@@ -35,7 +35,7 @@ module.exports = {
 						if (reaction.emoji.name === EMOJI_ARRAY[0]) {
 							emojiNumber = (emojiNumber !== 0) ? emojiNumber - 1 : LEVEL_ROLES.length - 1;
 						} else {
-							emojiNumber = (emojiNumber !== LEVEL_ROLES.length - 1) ? emojiNumber + 1 : 0;0
+							emojiNumber = (emojiNumber !== LEVEL_ROLES.length - 1) ? emojiNumber + 1 : 0;
 						}
 						levelEmbed = updateEmbed(levelEmbed, call.message.guild, emojiNumber);
 						newMessage.edit({ embed: levelEmbed }).catch(() => {});
