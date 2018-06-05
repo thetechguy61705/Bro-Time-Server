@@ -14,6 +14,6 @@ module.exports = {
 					call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 				});
 			}
-	});
+		});
 	}
 };
