@@ -50,7 +50,7 @@ module.exports = {
 				var newParameter = call.params.readRaw();
 				if (newParameter != null && newParameter != "") {
 					var specifiedLevel = LEVEL_ROLES.map((level) => level.toLowerCase()).indexOf(newParameter.toLowerCase());
-					if (specifedLevel > -1) {
+					if (specifiedLevel > -1) {
 						call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed, call.message.guild, specifiedLevel) });
 					} else {
 						call.message.reply("Invalid level specified. Please try out `!info levelroles list` and take one of those levels. Prompt cancelled.").catch(() => {
