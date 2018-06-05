@@ -17,7 +17,7 @@ module.exports = {
 	id: "gameroles",
 	aliases: ["games"],
 	run: async (call, actions, rerun, parameter) => {
-		var parameter = (parameter || (rerun === true)
+		parameter = (parameter || (rerun === true)
 			? await call.requestInput(0, "Invalid choice. Choices are `preview`, `specify` or `list`. Please retry. Say `cancel` to cancel the prompt.", 60000)
 			: call.params.readParameter());
 		if (parameter && parameter.message != null) parameter = parameter.message.content;
