@@ -10,7 +10,6 @@ fs.readdirSync(__dirname + "/../../actions/role").forEach((file) => {
 	} catch(err) {
 		console.log(err);
 	}
-
 });
 
 module.exports = {
