@@ -86,72 +86,22 @@ class BotAccess extends DataAccess {
 
 class WalletAccess {
 	constructor(userId = null) {
-		this.isBank = userId == null;
 		this._userId = userId;
 	}
 
 	async getTotal() {
-		var result;
-		if (this.isBank) {
+		var result = (await pool.query(`SELECT discord.WalletGet($1)`, [this._userId])).rows[0];
+		if (result === -1)
 			result = Infinity;
-		} else {
-			try {
-				result = (await pool.query(`SELECT COALESCE((SELECT Amount
-				                            	FROM discord.Wallet
-				                            	WHERE User_Id = $1), 0) AS "Amount";`, [this._userId])).rows[0].Amount;
-			} catch (exc) {
-				throw new Error("Unable to get the wallet's total.");
-			}
-		}
 		return result;
 	}
 
 	async change(amount) {
-		if (!this.isBank) {
-			try {
-				pool.query(`INSERT INTO discord.Wallet(User_Id, Amount)
-				            	VALUES($1, $2)
-				            ON CONFLICT ON CONSTRAINT Wallet_User_Id_PK DO UPDATE
-				            	SET Amount = discord.Wallet.Amount + $2;`, [this._userId, amount]);
-			} catch (exc) {
-				if (exc.description.includes("wallet_amount_c")) {
-					if (amount < 0) {
-						throw new Error("The wallet can't have a negative amount.");
-					} else {
-						throw new Error("The wallet can't have over 1 billion.");
-					}
-				} else {
-					throw new Error("Unable to change amount.");
-				}
-			}
-		}
+		await pool.query(`SELECT discord.WalletChange($2, $1) FOR UPDATE`, [this._userId, amount]);
 	}
 
 	async transfer(amount, toUserId = null) {
-		try {
-			if (!this.isBank && toUserId != null) {
-				pool.query(`BEGIN;
-				            UPDATE discord.Wallet
-				            	SET Amount = Amount - $3
-				            WHERE User_Id = $1;
-				            INSERT INTO discord.Wallet(User_Id, Amount)
-				            	VALUES($2, $3)
-				            ON CONFLICT ON CONSTRAINT Wallet_User_Id_PK DO UPDATE
-				            	SET Amount = discord.Wallet.Amount + $3;
-				            COMMIT;`, [this._userId, toUserId, amount]);
-			} else if (!this.isBank) {
-				pool.query(`UPDATE discord.Wallet
-				            	SET Amount = Amount - $2
-				            WHERE User_Id = $1;`, [this._userId, amount]);
-			} else if (toUserId != null) {
-				pool.query(`INSERT INTO discord.Wallet(User_Id, Amount)
-				            	VALUES($1, $2)
-				            ON CONFLICT ON CONSTRAINT Wallet_User_Id_PK DO UPDATE
-				            	SET Amount = discord.Wallet.Amount + $2;`, [toUserId, amount]);
-			}
-		} catch (exc) {
-			throw new Error("Unable to transfer amount.");
-		}
+		await pool.query(`SELECT discord.WalletTransfer($3, $1, $2) FOR UPDATE`, [this._userId, toUserId, amount]);
 	}
 }
 
