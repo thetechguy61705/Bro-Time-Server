@@ -90,18 +90,18 @@ class WalletAccess {
 	}
 
 	async getTotal() {
-		var result = (await pool.query(`SELECT discord.WalletGet($1)`, [this._userId])).rows[0];
+		var result = (await pool.query("SELECT discord.WalletGet($1)", [this._userId])).rows[0];
 		if (result === -1)
 			result = Infinity;
 		return result;
 	}
 
 	async change(amount) {
-		await pool.query(`SELECT discord.WalletChange($2, $1) FOR UPDATE`, [this._userId, amount]);
+		await pool.query("SELECT discord.WalletChange($2, $1) FOR UPDATE", [this._userId, amount]);
 	}
 
 	async transfer(amount, toUserId = null) {
-		await pool.query(`SELECT discord.WalletTransfer($3, $1, $2) FOR UPDATE`, [this._userId, toUserId, amount]);
+		await pool.query("SELECT discord.WalletTransfer($3, $1, $2) FOR UPDATE", [this._userId, toUserId, amount]);
 	}
 }
 
