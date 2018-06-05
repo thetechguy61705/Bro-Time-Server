@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const EMOJI_ARRAY = ["◀", "▶"];
 
 module.exports = {
 	id: "members",
@@ -29,15 +30,13 @@ module.exports = {
 					totalPages = members.split("\n").length / 20;
 				} else {
 					totalPages = (members.split("\n").length + (20 - (members.split("\n").length % 20)));
-					totalPages = totalPages / 20;
+					totalPages /= 20;
 				}
 				memberEmbed.setDescription(membersToSend.join("\n")).setFooter(`Page ${page}/${totalPages}`);
 				call.message.channel.send({ embed: memberEmbed }).then(async function(sentEmbed) {
-					const emojiArray = ["◀", "▶"];
-					const filter = (reaction, user) => emojiArray.includes(reaction.emoji.name) && user.id === call.message.author.id;
-					await sentEmbed.react(emojiArray[0]).catch(() => {});
-					await sentEmbed.react(emojiArray[1]).catch(() => {});
-					var reactions = sentEmbed.createReactionCollector(filter, { time: 120000 });
+					await sentEmbed.reactMultiple(EMOJI_ARRAY);
+					const FILTER = (reaction, user) => EMOJI_ARRAY.includes(reaction.emoji.name) && user.id === call.message.author.id;
+					var reactions = sentEmbed.createReactionCollector(FILTER, { time: 120000 });
 					reactions.on("collect", async function(reaction) {
 						await reaction.remove(call.message.author);
 						if (reaction.emoji.name === "◀") {
