@@ -99,7 +99,7 @@ class WalletAccess {
 				result = (await pool.query(`SELECT COALESCE((SELECT Amount
 				                            	FROM discord.Wallet
 				                            	WHERE User_Id = $1), 0) AS "Amount";`, [this._userId])).rows[0].Amount;
-			} catch {
+			} catch (exc) {
 				throw new Error("Unable to get the wallet's total.");
 			}
 		}
@@ -149,7 +149,7 @@ class WalletAccess {
 				            ON CONFLICT ON CONSTRAINT Wallet_User_Id_PK DO UPDATE
 				            	SET Amount = discord.Wallet.Amount + $2;`, [toUserId, amount]);
 			}
-		} catch {
+		} catch (exc) {
 			throw new Error("Unable to transfer amount.");
 		}
 	}
