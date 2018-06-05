@@ -12,8 +12,10 @@ module.exports = {
 			if (AMOUNT != null && !isNaN(AMOUNT)) {
 				if (AMOUNT >= 1) {
 					var userBalance = await call.getWallet(call.message.author.id).getTotal();
+					userBalance = userBalance.walletget;
 					if (userBalance >= AMOUNT) {
 						var targetBalance = await call.getWallet(TARGET.user.id).getTotal();
+						targetBalance = targetBalance.walletget;
 						if ((targetBalance + AMOUNT) < 1000000000) {
 							call.getWallet(call.message.author.id).transfer(Math.round(AMOUNT), TARGET.user.id).then(() => {
 								call.message.reply(`You have successfully given ${AMOUNT} Bro Bits to ${TARGET.user.tag}.`).catch(() => {});
