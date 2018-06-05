@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const { RichEmbed } = require("discord.js");
 const fs = require("fs");
 var actions = new Discord.Collection();
 
