@@ -3,7 +3,7 @@ const fs = require("fs");
 module.exports = {
 	id: "advertisement",
 	aliases: ["ad"],
-	run: (call, actions) => {
+	run: (call) => {
 		fs.readFile(__dirname + "/../../info/ad.md", (err, data) => {
 			if(err) {
 				throw err;
