@@ -71,7 +71,9 @@ function invite(game, channel, players, host) {
 		.setColor(0x00AE86);
 	if (channel.guild.roles.find("name", "Bro Time Games")) {
 		var allowedToPing = channel.guild.roles.find("name", "Bro Time Games").members.filter((m) => m.user.presence.status === "online").array();
-		allowedToPing = allowedToPing.filter((m) => !noPing.find(m));
+		if(noPing.length > 0) {
+			allowedToPing = allowedToPing.filter((m) => !noPing.find(m));
+		}
 		if (allowedToPing) {
 			allowedToPing = allowedToPing.slice(0, 3);
 			var messagecontent = `Pinging members in Bro Time Games role: ${allowedToPing.map((m) => m.toString()).join(", ")}`;
