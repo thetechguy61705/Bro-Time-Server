@@ -1,7 +1,3 @@
-const Discord = require("discord.js");
-var excludedUsers = ["140163987500302336", "320666152693006344", "391878815263096833"];
-var partiallyExcludedUsers = ["293060399106883584"];
-
 module.exports = {
 	id: "testguild",
 	exec: (client) => {
