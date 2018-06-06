@@ -84,8 +84,8 @@ function invite(game, channel, players, host) {
 				var collector = new ReactionCollector(message, (reaction, user) =>
 					reaction.emoji.id === "404768960014450689" &&
 					user.id !== message.author.id &&
-					user.id !== host.id, {
-						time: game.inviteTime
+						user.id !== host.id, {
+							time: game.inviteTime
 					});
 				collector.on("collect", (reaction) => {
 					if (!players.keyArray().includes(reaction.users.last().id)) {
