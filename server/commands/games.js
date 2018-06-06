@@ -5,18 +5,19 @@ var { Collection, RichEmbed, ReactionCollector, Message } = require("discord.js"
 var { GameAccess } = require("./../../data/server");
 var modules = new Collection();
 var sessions = [];
+var noPing = [];
 var games;
 
 const DEFAULTS = [
-	{key: "autoStart", value: false},
-	{key: "minPlayers", value: 0},
-	{key: "maxPlayers", value: Infinity},
-	{key: "allowLateJoin", value: true},
-	{key: "requiresInvite", value: false},
-	{key: "inviteTime", value: 180000},
-	{key: "timeout", value: 180000},
-	{key: "updateInterval", value: 0},
-	{key: "multithreaded", value: false}
+	{ key: "autoStart", value: false },
+	{ key: "minPlayers", value: 0 },
+	{ key: "maxPlayers", value: Infinity },
+	{ key: "allowLateJoin", value: true },
+	{ key: "requiresInvite", value: false },
+	{ key: "inviteTime", value: 180000 },
+	{ key: "timeout", value: 180000 },
+	{ key: "updateInterval", value: 0 },
+	{ key: "multithreaded", value: false }
 ];
 const INVITE = `%s
 
@@ -68,13 +69,22 @@ function invite(game, channel, players, host) {
 		.addField("Maximum Players", game.maxPlayers, true)
 		.setTitle(`Invite to ${game.id}`)
 		.setColor(0x00AE86);
+	if (channel.guild.roles.find("name", "Bro Time Games")) {
+		var allowedToPing = channel.guild.roles.find("name", "Bro Time Games").members.filter((m) => m.user.presence.status === "online").array();
+		allowedToPing = allowedToPing.filter((m) => !noPing.find(m));
+		if (allowedToPing) {
+			allowedToPing = allowedToPing.slice(0, 3);
+			var messagecontent = `Pinging members in Bro Time Games role: ${allowedToPing.map((m) => m.toString()).join(", ")}`;
+			channel.send(messagecontent);
+		}
+	}
 	return new Promise((resolve, reject) => {
 		channel.send({ embed: inviteEmbed }).then((message) => {
 			message.react("404768960014450689").then(() => {
 				var collector = new ReactionCollector(message, (reaction, user) =>
 					reaction.emoji.id === "404768960014450689" &&
 					user.id !== message.author.id &&
-					user.id !== host.id, {
+						user.id !== host.id, {
 					time: game.inviteTime
 				});
 				collector.on("collect", (reaction) => {
@@ -95,8 +105,8 @@ function invite(game, channel, players, host) {
 					if (reason !== "ready")
 						reject();
 				});
-			}).catch(() => {});
-		}).catch(() => {});
+			}).catch(() => { });
+		}).catch(() => { });
 	});
 }
 
@@ -106,7 +116,7 @@ function startGame(game, context) {
 	loading = [new Promise((resolve, reject) => {
 		try {
 			resolve(new GameAccess(game, context.games).load());
-		} catch(exc) {
+		} catch (exc) {
 			reject(exc);
 		}
 	})];
@@ -128,7 +138,7 @@ function startGame(game, context) {
 
 	Promise.all(loading).then(() => {
 		if (game.updateInterval > 0)
-			session.updateTimer = context.client.setInterval(1/Math.min(game.updateInterval, MAX_UPDATE_CYCLES)*1000, game.update);
+			session.updateTimer = context.client.setInterval(1 / Math.min(game.updateInterval, MAX_UPDATE_CYCLES) * 1000, game.update);
 		session.endTimer = context.client.setTimeout(session.endGame, game.timeout);
 		session.restartEndTimer = (() => {
 			clearTimeout(session.endTimer);
