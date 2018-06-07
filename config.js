@@ -1,5 +1,5 @@
 var config = {
-	TOKEN: "NDExOTM0ODI1MTUxNDYzNDI0.DfoEUw.dhGjoT0AlXYDIUDDxTVukb5e8Fg",
+	TOKEN: process.env.BRO_TIME_TOKEN,
 	GOOGLE: process.env.GOOGLE_KEY,
 	DB_CONNECTIONS: 20,
 	DB: process.env.DB,
