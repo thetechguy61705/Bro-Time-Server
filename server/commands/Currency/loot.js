@@ -6,7 +6,8 @@ module.exports = {
 	rateLimit: [],
 	execute: (call) => {
 		if (module.exports.rateLimit.indexOf(call.message.author.id) === -1) {
-			var randomBits = Math.ceil(Math.random() * (premium(call.message.member)) ? 20 : 10);
+			var multiplier = (premium(call.message.member)) ? 20 : 10;
+			var randomBits = Math.ceil(Math.random() * multiplier);
 			call.getWallet(call.message.author.id).change(randomBits).then(() => {
 				call.message.reply("You looted " + randomBits + " Bro Bits!").catch(() => {});
 				module.exports.rateLimit.push(call.message.author.id);
