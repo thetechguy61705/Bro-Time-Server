@@ -92,8 +92,8 @@ class WalletAccess {
 	async getTotal() {
 		var result = (await pool.query("SELECT discord.WalletGet($1)", [this._userId])).rows[0];
 		if (result === -1)
-			result = Infinity;
-		return result;
+			result = { walletget: Infinity };
+		return result.walletget;
 	}
 
 	async change(amount) {
