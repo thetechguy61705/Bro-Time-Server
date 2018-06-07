@@ -15,7 +15,7 @@ module.exports = {
 				call.message.reply("Failed to give you Bro Bits.").catch(() => {});
 			});
 		} else {
-			call.message.reply("You must wait 5 minutes from the last time you used the command").catch(() => {
+			call.message.reply("You must wait 5 minutes from the last time you used the command.").catch(() => {
 				call.message.author.send(`You attempted to run the \`loot\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 			});
 		}
