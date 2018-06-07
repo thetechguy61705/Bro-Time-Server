@@ -10,13 +10,11 @@ module.exports = {
 	userRequires: "MANAGE_ROLES",
 	userRequiresMessage: "To be able to mute users.",
 	execute: (call) => {
-		const rawContent = call.params.readRaw();
-		const parameterOne = rawContent.split(" ")[0];
-		const parameterTwo = rawContent.split(" ")[1];
+		const parameterOne = call.params.readParameter(), parameterTwo = call.params.readParameter();
 		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
 		if (call.message.member.roles.some((role) => modRoles.includes(role.id))) {
-			const target = call.message.guild.members
-				.find((member) => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
+			const target = call.message.guild.members.find((member) => (parameterOne || "").includes(member.user.id) ||
+				member.user.tag.toLowerCase().startsWith(parameterOne));
 			if (target !== null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					if (!target.roles.has(call.message.guild.roles.find("name", "Muted").id)) {
