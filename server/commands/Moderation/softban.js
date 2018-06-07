@@ -7,7 +7,7 @@ module.exports = {
 	botRequiresMessage: "To be able to ban users.",
 	userRequires: "BAN_MEMBERS",
 	userRequiresMessage: "To be able to ban users.",
-	execute: (call) => {
+	execute: async (call) => {
 		const rawContent = call.params.readRaw(),
 			parameterOne = rawContent.split(" ")[0],
 			parameterTwo = rawContent.split(" ")[1],
@@ -18,29 +18,17 @@ module.exports = {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					var reason = (parameterTwo != null) ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
 					if (target.bannable) {
-						target.send(`You have been softbanned/kicked from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`).then(() => {
-							target.ban({ days: 7, reason: `Softbanned by ${call.message.author.tag} for ${reason}` }).then(() => {
-								call.message.guild.unban(target.user, `Softbanned by ${call.message.author.tag} for ${reason}`).then(() => {
-									call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`).catch(() => {});
-								}).catch(() => {
-									call.message.reply(`Failed to unban \`${target.user.tag}\`.`).catch(() => {});
-								});
+						try {
+							await target.send(`You have been softbanned/kicked from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);
+						} catch(_) {}
+						target.ban({ days: 7, reason: `Banned by ${call.message.author.tag} for ${reason}` }).then(() => {
+							call.message.guild.unban({ user: target.user, reason: `Softbanned by ${call.message.author.tag} for ${reason}` }).then(() => {
+								call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`).catch(() => {});
 							}).catch(() => {
-								call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).catch(() => {});
+								call.message.reply(`Failed to unban \`${target.user.tag}\`.`).catch(() => {});
 							});
 						}).catch(() => {
-							target.ban({ days: 7, reason: `Banned by ${call.message.author.tag} for ${reason}` }).then(() => {
-								call.message.guild.unban({
-									user: target.user,
-									reason: `Softbanned by ${call.message.author.tag} for ${reason}`
-								}).then(() => {
-									call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`).catch(() => {});
-								}).catch(() => {
-									call.message.reply(`Failed to unban \`${target.user.tag}\`.`).catch(() => {});
-								});
-							}).catch(() => {
-								call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).catch(() => {});
-							});
+							call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).catch(() => {});
 						});
 					} else {
 						call.message.reply("I do not have permission to ban this user.").catch(() => {
