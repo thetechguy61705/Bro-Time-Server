@@ -5,7 +5,7 @@ module.exports = {
 	description: "Kicks specified user.",
 	arguments: "(user) [reason]",
 	requires: "Moderator permissions",
-	execute: (call) => {
+	execute: async (call) => {
 		const rawContent = call.params.readRaw(),
 			parameterOne = call.params.readParameter(),
 			parameterTwo = call.params.readParameter();
@@ -21,7 +21,7 @@ module.exports = {
 							console.warn(err.stack);
 						}
 
-					]	target.kick(`Kicked by ${call.message.author.tag} for ${reason}`).then(() => {
+						target.kick(`Kicked by ${call.message.author.tag} for ${reason}`).then(() => {
 							call.message.channel.send(`***Successfully kicked \`${target.user.tag}\`.***`).catch(function() {});
 						}).catch(() => {
 							call.message.channel.send(`Failed to kick \`${target.user.tag}\`.`).catch(function() {});
