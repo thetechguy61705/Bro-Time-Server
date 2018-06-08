@@ -20,6 +20,7 @@ module.exports = {
 						} catch(err) {
 							console.warn(err.stack);
 						}
+
 						target.ban({ days: 7, reason: `Banned by ${call.message.author.tag} for ${reason}` }).then(() => {
 							call.message.guild.unban(target.user, `Softbanned by ${call.message.author.tag} for ${reason}`).then(() => {
 								call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`).catch(() => {});

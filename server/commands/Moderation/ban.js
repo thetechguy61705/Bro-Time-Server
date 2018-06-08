@@ -1,31 +1,30 @@
+const Moderator = require("app/moderator");
+
 module.exports = {
 	id: "ban",
 	description: "Bans specified user.",
 	arguments: "(user) [reason]",
 	requires: "Moderator permissions",
 	execute: (call) => {
-		const rawContent = call.params.readRaw();
-		const parameterOne = rawContent.split(" ")[0];
-		const parameterTwo = rawContent.split(" ")[1];
-		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
-		if (call.message.member.roles.some((role) => modRoles.includes(role.id))) {
+		const rawContent = call.params.readRaw(),
+			parameterOne = call.params.readParameter(),
+			parameterTwo = call.params.readParameter();
+		if (Moderator(call.message.member)) {
 			const target = call.message.guild.members.find((m) => parameterOne.includes(`${m.user.id}`));
 			if (target !== null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					var reason = (parameterTwo != undefined) ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
 					if (target.bannable) {
-						target.send(`You have been banned from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`).then(() => {
-							target.ban({ days:7, reason:`Banned by ${call.message.author.tag} for ${reason}` }).then(() => {
-								call.message.channel.send(`***Successfully banned \`${target.user.tag}\`.***`).catch(function() {});
-							}).catch(() => {
-								call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).catch(function() {});
-							});
+						try {
+							await target.send(`You have been banned from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);
+						} catch(err) {
+							console.warn(err.stack);
+						}
+
+						target.ban({ days:7, reason:`Banned by ${call.message.author.tag} for ${reason}` }).then(() => {
+							call.message.channel.send(`***Successfully banned \`${target.user.tag}\`.***`).catch(function() {});
 						}).catch(() => {
-							target.ban({days:7, reason:`Banned by ${call.message.author.tag} for ${reason}`}).then(() => {
-								call.message.channel.send(`***Successfully banned \`${target.user.tag}\`.***`).catch(function() {});
-							}).catch(() => {
-								call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).catch(function() {});
-							});
+							call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`).catch(function() {});
 						});
 					} else {
 						call.message.reply("I do not have permission to ban this user.").catch(() => {

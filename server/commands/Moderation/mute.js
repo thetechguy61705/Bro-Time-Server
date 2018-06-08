@@ -1,4 +1,5 @@
 const ms = require("ms");
+const Moderator = require("app/moderator");
 
 module.exports = {
 	id: "mute",
@@ -7,15 +8,14 @@ module.exports = {
 	requires: "Moderator permissions",
 	execute: (call) => {
 		const parameterOne = call.params.readParameter(), parameterTwo = call.params.readParameter();
-		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
-		if (call.message.member.roles.some((role) => modRoles.includes(role.id))) {
+		if (Moderator(call.message.member)) {
 			const target = call.message.guild.members.find((member) => (parameterOne || "").includes(member.user.id) ||
 				member.user.tag.toLowerCase().startsWith(parameterOne));
 			if (target !== null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					if (!target.roles.has(call.message.guild.roles.find("name", "Muted").id)) {
-						var muteTime = (parameterTwo !== undefined) ? ms(parameterTwo) : null;
-						if (muteTime) {
+						var muteTime = (parameterTwo != null) ? ms(parameterTwo) : null;
+						if (muteTime != null) {
 							if (muteTime >= 10000) {
 								target.addRole(call.message.guild.roles.find("name", "Muted")).then(() => {
 									call.message.channel.send(`***Successfully muted \`${target.user.tag}\` for ${ms(muteTime, { long: true })}.***`).catch(function() {});
