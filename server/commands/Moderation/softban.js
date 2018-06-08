@@ -20,7 +20,7 @@ module.exports = {
 							console.warn(err.stack);
 						}
 						target.ban({ days: 7, reason: `Banned by ${call.message.author.tag} for ${reason}` }).then(() => {
-							call.message.guild.unban({ user: target.user, reason: `Softbanned by ${call.message.author.tag} for ${reason}` }).then(() => {
+							call.message.guild.unban(target.user, `Softbanned by ${call.message.author.tag} for ${reason}`).then(() => {
 								call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`).catch(() => {});
 							}).catch(() => {
 								call.message.reply(`Failed to unban \`${target.user.tag}\`.`).catch(() => {});
