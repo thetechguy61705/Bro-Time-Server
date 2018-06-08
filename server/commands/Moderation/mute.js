@@ -5,10 +5,6 @@ module.exports = {
 	description: "Gives the user the \"Muted\" role for the specified period of time. If no time is specified, it will not automatically remove the role.",
 	arguments: "(user) [time]",
 	requires: "Moderator permissions",
-	botRequires: "MANAGE_ROLES",
-	botRequiresMessage: "To be able to mute users.",
-	userRequires: "MANAGE_ROLES",
-	userRequiresMessage: "To be able to mute users.",
 	execute: (call) => {
 		const parameterOne = call.params.readParameter(), parameterTwo = call.params.readParameter();
 		const modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
