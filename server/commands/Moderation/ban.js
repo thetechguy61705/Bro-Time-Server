@@ -5,7 +5,7 @@ module.exports = {
 	description: "Bans specified user.",
 	arguments: "(user) [reason]",
 	requires: "Moderator permissions",
-	execute: (call) => {
+	execute: async (call) => {
 		const rawContent = call.params.readRaw(),
 			parameterOne = call.params.readParameter(),
 			parameterTwo = call.params.readParameter();
