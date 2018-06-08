@@ -3,10 +3,6 @@ module.exports = {
 	description: "Bans specified user.",
 	arguments: "(user) [reason]",
 	requires: "Moderator permissions",
-	botRequires: "BAN_MEMBERS",
-	botRequiresMessage: "To be able to ban users.",
-	userRequires: "BAN_MEMBERS",
-	userRequiresMessage: "To be able to ban users.",
 	execute: (call) => {
 		const rawContent = call.params.readRaw();
 		const parameterOne = rawContent.split(" ")[0];
