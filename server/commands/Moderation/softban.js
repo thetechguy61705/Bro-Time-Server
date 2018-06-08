@@ -1,3 +1,5 @@
+const Moderator = require("app/moderator");
+
 module.exports = {
 	id: "softban",
 	description: "Bans specified user, purging the messages they sent in the last seven days, then unbans the user. Basically rendering this as a kick.",
@@ -5,10 +7,9 @@ module.exports = {
 	requires: "Moderator permissions",
 	execute: async (call) => {
 		const rawContent = call.params.readRaw(),
-			parameterOne = rawContent.split(" ")[0],
-			parameterTwo = rawContent.split(" ")[1],
-			modRoles = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"];
-		if (call.message.member.roles.some((role) => modRoles.includes(role.id))) {
+			parameterOne = call.params.readParameter(),
+			parameterTwo = call.params.readParameter();
+		if (Moderator(call.message.member)) {
 			const target = call.message.guild.members.find((m) => parameterOne.includes(`${m.user.id}`));
 			if (target != null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
