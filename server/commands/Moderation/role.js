@@ -17,10 +17,6 @@ module.exports = {
 	description: "Gives the user the specified role(s) if the role is below the author's highest role.",
 	arguments: "(user/option) [role/roles]",
 	requires: "Moderator permissions",
-	botRequires: "MANAGE_ROLES",
-	botRequiresMessage: "To give roles.",
-	userRequires: "MANAGE_ROLES",
-	userRequiresMessage: "To give roles.",
 	execute: (call) => {
 		if (call.message.member.roles.some((role) => MOD_ROLES.includes(role.id))) {
 			const PARAMETER = (call.params.readParameter() || "").toLowerCase(),
