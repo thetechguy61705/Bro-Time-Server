@@ -16,7 +16,9 @@ module.exports = {
 					if (target.bannable) {
 						try {
 							await target.send(`You have been softbanned/kicked from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);
-						} catch(_) {}
+						} catch(err) {
+							console.warn(err.stack);
+						}
 						target.ban({ days: 7, reason: `Banned by ${call.message.author.tag} for ${reason}` }).then(() => {
 							call.message.guild.unban({ user: target.user, reason: `Softbanned by ${call.message.author.tag} for ${reason}` }).then(() => {
 								call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`).catch(() => {});
