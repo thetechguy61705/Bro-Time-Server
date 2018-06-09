@@ -28,7 +28,7 @@ module.exports = {
 			});
 		} else {
 			call.message.reply("You do not have permission to use this command.").catch(() => {
-				call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+				call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 			});
 		}
 	}
