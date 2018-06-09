@@ -63,7 +63,7 @@ function listGames(message) {
 }
 
 function invite(game, channel, players, host) {
-	var messagecontent;
+	var messageContent;
 	const inviteEmbed = new RichEmbed()
 		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id))
 		.addField("Minimum Players", game.minPlayers, true)
@@ -72,27 +72,23 @@ function invite(game, channel, players, host) {
 		.setColor(0x00AE86);
 	if (channel.guild.roles.find("name", "Bro Time Games")) {
 		var allowedToPing = channel.guild.roles.find("name", "Bro Time Games").members.filter((m) => m.user.presence.status === "online").array();
-		if (allowedToPing.find((m) => m.id === host.id)) {
-			allowedToPing = allowedToPing.filter((m) => m.id !== host.id);
-		}
-		if (noPing.find((m) => m.id === host.id)) {
-			noPing = noPing.filter((m) => m.id !== host.id);
-		}
-		if (noPing.length > 0) {
-			allowedToPing = allowedToPing.filter((m) => !noPing.find(((a) => a === m)));
-		}
+		var hostIndex = allowedToPing.indexOf(host.id);
+		if (hostIndex > -1) allowedToPing.splice(hostIndex, 1);
+		hostIndex = noPing.indexOf(host.id);
+		if (hostIndex > -1) noPing.splice(hostIndex, 1);
+		if (noPing.length > 0) allowedToPing = allowedToPing.filter((m) => !noPing.includes(m));
 		if (allowedToPing.length > 0) {
 			allowedToPing = allowedToPing.slice(0, 3);
-			allowedToPing.forEach((noping) => {
-				noPing.push(noping);
+			allowedToPing.forEach((noPing) => {
+				noPing.push(noPing);
 			});
-			messagecontent = `Pinging online members in Bro Time Games role: ${allowedToPing.map((m) => m.toString()).join(", ")}`;
+			messageContent = `Pinging online members in Bro Time Games role: ${allowedToPing.map((m) => m.toString()).join(", ")}`;
 		} else {
-			messagecontent = "Nobody to ping!";
+			messageContent = "Nobody to ping!";
 		}
 	}
 	return new Promise((resolve, reject) => {
-		channel.send(messagecontent, { embed: inviteEmbed }).then((message) => {
+		channel.send(messageContent, { embed: inviteEmbed }).then((message) => {
 			message.react("404768960014450689").then(() => {
 				var collector = new ReactionCollector(message, (reaction, user) =>
 					reaction.emoji.id === "404768960014450689" &&
