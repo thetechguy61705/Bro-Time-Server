@@ -175,7 +175,7 @@ module.exports = {
 			params.readSeparator();
 			var name = params.readParameter();
 			if (name != null) {
-				var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
+				var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.includes(name));
 
 				if (command != null && checkAccess(command, message) && hasPermissions(command, message, client)) {
 					params.readSeparator();
