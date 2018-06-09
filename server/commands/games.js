@@ -136,11 +136,13 @@ function startGame(game, context) {
 
 	session = {
 		game: game,
+		ended: false,
 		context: context,
 		players: new Collection(),
 		endGame: () => {
 			clearTimeout(session.endTimer);
 			clearInterval(session.updateTimer);
+			session.ended = true;
 			session.game.end(session);
 		}
 	};
