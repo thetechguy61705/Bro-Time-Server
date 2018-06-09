@@ -26,11 +26,8 @@ module.exports = {
 				if (oldRole.guild.id === realGuild.id) {
 					if (oldRole.name !== "Multicolored" && newRole.name !== "Multicolored") {
 						var role = testGuild.roles.find("name", oldRole.name);
-						await role.setHoist(newRole.hoist);
-						await role.setMentionable(newRole.mentionable);
-						await role.setColor(newRole.hexColor);
-						await role.setPosition(newRole.position);
-						await role.setName(newRole.name);
+						role.edit({ name: newRole.name, color: newRole.hexColor, hoist: newRole.hoist, mentionable: newRole.mentionable })
+							.catch((err) => console.warn(err.stack));
 					}
 				}
 			});
