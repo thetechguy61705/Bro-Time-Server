@@ -79,8 +79,8 @@ function invite(game, channel, players, host) {
 		if (noPing.length > 0) allowedToPing = allowedToPing.filter((m) => !noPing.includes(m));
 		if (allowedToPing.length > 0) {
 			allowedToPing = allowedToPing.slice(0, 3);
-			allowedToPing.forEach((noPing) => {
-				noPing.push(noPing);
+			allowedToPing.forEach((noping) => {
+				noPing.push(noping);
 			});
 			messageContent = `Pinging online members in Bro Time Games role: ${allowedToPing.map((m) => m.toString()).join(", ")}`;
 		} else {
