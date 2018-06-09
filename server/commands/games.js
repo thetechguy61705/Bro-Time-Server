@@ -63,6 +63,7 @@ function listGames(message) {
 }
 
 function invite(game, channel, players, host) {
+	var messagecontent;
 	const inviteEmbed = new RichEmbed()
 		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id))
 		.addField("Minimum Players", game.minPlayers, true)
@@ -85,14 +86,13 @@ function invite(game, channel, players, host) {
 			allowedToPing.forEach((noping) => {
 				noPing.push(noping);
 			});
-			var messagecontent = `Pinging online members in Bro Time Games role: ${allowedToPing.map((m) => m.toString()).join(", ")}`;
-			channel.send(messagecontent);
+			messagecontent = `Pinging online members in Bro Time Games role: ${allowedToPing.map((m) => m.toString()).join(", ")}`;
 		} else {
-			channel.send("Nobody to ping!");
+			messagecontent = "Nobody to ping!";
 		}
 	}
 	return new Promise((resolve, reject) => {
-		channel.send({ embed: inviteEmbed }).then((message) => {
+		channel.send(messagecontent, { embed: inviteEmbed }).then((message) => {
 			message.react("404768960014450689").then(() => {
 				var collector = new ReactionCollector(message, (reaction, user) =>
 					reaction.emoji.id === "404768960014450689" &&
