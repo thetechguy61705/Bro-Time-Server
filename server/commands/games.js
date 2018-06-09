@@ -140,10 +140,12 @@ function startGame(game, context) {
 		context: context,
 		players: new Collection(),
 		endGame: () => {
-			clearTimeout(session.endTimer);
-			clearInterval(session.updateTimer);
-			session.ended = true;
-			session.game.end(session);
+			if (!session.ended) {
+				clearTimeout(session.endTimer);
+				clearInterval(session.updateTimer);
+				session.ended = true;
+				session.game.end(session);
+			}
 		}
 	};
 	if (context.message != null)
