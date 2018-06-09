@@ -13,15 +13,13 @@ module.exports = {
 			var pollOptions = call.params.readRaw().split(":").slice(1).join(":").split("|");
 			if (pollOptions[0] !== "") {
 				if (pollOptions.length <= 9 && pollOptions.length >= 2) {
-					pollOptions = pollOptions.map((pollOption, index) => {
-						return EMOJI_ARRAY[index] + " " + pollOption.trim();
-					});
+					pollOptions = pollOptions.map((pollOption, i) => EMOJI_ARRAY[i] + " " + pollOption.trim());
 					const POLL_EMBED = new Discord.RichEmbed()
 						.setTitle(pollTitle)
 						.setDescription(pollOptions.join("\n"))
 						.setColor(0x00AE86)
 						.setFooter(`${call.client.user.username} | Poll by ${call.message.author.tag}.`);
-					call.message.channel.send({ embed: POLL_EMBED }).then(async (poll) => {
+					call.message.channel.send({ embed: POLL_EMBED }).then((poll) => {
 						poll.reactMultiple(EMOJI_ARRAY.slice(0, pollOptions.length));
 					}).catch(() => {
 						call.message.reply("Something went wrong and I could not create the poll.").catch(() => {
