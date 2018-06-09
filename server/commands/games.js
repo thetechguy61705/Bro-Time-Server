@@ -74,6 +74,9 @@ function invite(game, channel, players, host) {
 		if (allowedToPing.find((m) => m.id === host.id)) {
 			allowedToPing = allowedToPing.filter((m) => m.id !== host.id);
 		}
+		if (noPing.find((m) => m.id === host.id)) {
+			noPing = noPing.filter((m) => m.id !== host.id);
+		}
 		if (noPing.length > 0) {
 			allowedToPing = allowedToPing.filter((m) => !noPing.find(((a) => a === m)));
 		}
