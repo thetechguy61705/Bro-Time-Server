@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const { RichEmbed } = require("discord.js");
 const EMOJI_ARRAY = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
 			if (pollOptions[0] !== "") {
 				if (pollOptions.length <= 9 && pollOptions.length >= 2) {
 					pollOptions = pollOptions.map((pollOption, i) => EMOJI_ARRAY[i] + " " + pollOption.trim());
-					const POLL_EMBED = new Discord.RichEmbed()
+					const POLL_EMBED = new RichEmbed()
 						.setTitle(pollTitle)
 						.setDescription(pollOptions.join("\n"))
 						.setColor(0x00AE86)
