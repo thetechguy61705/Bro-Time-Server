@@ -23,7 +23,7 @@ module.exports = {
 		const data = (call.message.guild || call.message.channel).data;
 		const prefix = data != null ? data.prefix : "help";
 		const param1 = (call.params.readRaw() !== "" && call.params.readRaw() != null) ? call.params.readRaw() : "";
-		const command = call.commands.loaded.find(cmd => (cmd.aliases || []).concat(cmd.id).includes(param1.toLowerCase()));
+		const command = call.commands.loaded.find((cmd) => (cmd.aliases || []).concat(cmd.id).includes(param1.toLowerCase()));
 		var helpEmbed = new Discord.RichEmbed()
 			.setColor(0x00AE86)
 			.setFooter(`Ran by ${call.message.author.username} (${call.message.author.id})`, call.message.author.displayAvatarURL);
