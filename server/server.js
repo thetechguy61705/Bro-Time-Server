@@ -1,11 +1,13 @@
 var errorHandler = require("app/errorHandler");
 var config = require("../config");
 var fs = require("fs");
-var discord = require("discord.js");
+var Discord = require("discord.js");
 var stdout = process.stdout;
 var loaders = [];
 var chatHandlers = [];
-var client = new discord.Client(config.CLIENT);
+var client = new Discord.Client(config.CLIENT);
+client.locked = false;
+client.lockedChannels = [];
 
 const LOAD_TIMEOUT = 60000;
 
