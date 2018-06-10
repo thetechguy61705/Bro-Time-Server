@@ -15,7 +15,7 @@ function addPartner(channel, embed, message) {
 module.exports = {
 	id: "addpartner",
 	description: "Adds a new partner in the #partners channel",
-	arguments: "(title) | (description) | (discord invite OR thumbnail url)",
+	paramsHelp: "(title) | (description) | (discord invite OR thumbnail url)",
 	requires: "Role: Community Manager Bro",
 	execute: (call) => {
 		if (call.message.member.roles.has("409153912558583818")) {

@@ -17,7 +17,7 @@ function isURL(str) {
 module.exports = {
 	id: "postgamenight",
 	description: "Posts the specified \"Gamenight\" in <#330920609435353090>.",
-	arguments: "... prompt",
+	paramsHelp: "... prompt",
 	requires: "Role: Game Night Host",
 	execute: async (call) => {
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {

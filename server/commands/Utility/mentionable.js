@@ -1,7 +1,8 @@
 module.exports = {
 	id: "mentionable",
 	aliases: ["mt", "mf", "togglementionable", "ment"],
-	arguments: "(role)",
+	description: "Toggle the mentionability of a role.",
+	paramsHelp: "(role)",
 	requires: "Moderator permissions",
 	execute: (call) => {
 		const MOD_ROLES = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"],

@@ -4,7 +4,7 @@ const EMOJI_ARRAY = ["◀", "▶"];
 module.exports = {
 	id: "members",
 	description: "Gets members from a role or from a guild.",
-	arguments: "[role]",
+	paramsHelp: "[role]",
 	execute: (call) => {
 		var memberEmbed = new Discord.RichEmbed().setColor("ORANGE");
 		var members;

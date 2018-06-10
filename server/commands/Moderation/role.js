@@ -16,7 +16,7 @@ fs.readdirSync(__dirname + "/../../actions/role").forEach((file) => {
 module.exports = {
 	id: "role",
 	description: "Gives the user the specified role(s) if the role is below the author's highest role.",
-	arguments: "(user/option) [role/roles]",
+	paramsHelp: "(user/option) [role/roles]",
 	requires: "Moderator permissions",
 	execute: (call) => {
 		if (Moderator(call.message.member)) {

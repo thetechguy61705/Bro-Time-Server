@@ -3,7 +3,7 @@ const FREE_ROLES = ["QOTD", "ANN", "GW", "MOVIES"];
 module.exports = {
 	id: "freerole",
 	description: "Gives the user the specified role if it is QOTD, ANN or GW.",
-	arguments: "(ANN/GW/QoTD/Movies)",
+	paramsHelp: "(ANN/GW/QoTD/Movies)",
 	execute: (call) => {
 		const INPUT = call.params.readRaw().trim();
 		if (FREE_ROLES.includes(INPUT.toUpperCase())) {

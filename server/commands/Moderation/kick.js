@@ -3,7 +3,7 @@ const Moderator = require("app/moderator");
 module.exports = {
 	id: "kick",
 	description: "Kicks specified user.",
-	arguments: "(user) [reason]",
+	paramsHelp: "(user) [reason]",
 	requires: "Moderator permissions",
 	execute: async (call) => {
 		const rawContent = call.params.readRaw(),

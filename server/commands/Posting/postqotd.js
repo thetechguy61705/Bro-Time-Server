@@ -1,7 +1,7 @@
 module.exports = {
 	id: "postqotd",
 	description: "Posts the specified \"Question of The Day\" in <#330920609435353090>.",
-	arguments: "(qotd)",
+	paramsHelp: "(qotd)",
 	requires: "Role: QoTD Host",
 	execute: (call) => {
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "QOTD Host").id)) {

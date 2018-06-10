@@ -4,7 +4,7 @@ const Moderator = require("app/moderator");
 module.exports = {
 	id: "warn",
 	description: "Sends the user a dm with the supplied reason.",
-	arguments: "(user) [reason]",
+	paramsHelp: "(user) [reason]",
 	requires: "Moderator permissions",
 	execute: async (call) => {
 		const rawContent = call.params.readRaw(),

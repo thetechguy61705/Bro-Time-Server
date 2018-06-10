@@ -3,7 +3,7 @@ const Moderator = require("app/moderator");
 module.exports = {
 	id: "softban",
 	description: "Bans specified user, purging the messages they sent in the last seven days, then unbans the user. Basically rendering this as a kick.",
-	arguments: "(user) [reason]",
+	paramsHelp: "(user) [reason]",
 	requires: "Moderator permissions",
 	execute: async (call) => {
 		const rawContent = call.params.readRaw(),
