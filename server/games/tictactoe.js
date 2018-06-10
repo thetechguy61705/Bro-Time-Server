@@ -1,6 +1,3 @@
-const E_A = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
-// EMOJI_ARRAY is too long, breaks line limit.
-
 module.exports = {
 	id: "tictactoe",
 	shortDescription: "Play tictactoe.",
@@ -12,6 +9,7 @@ module.exports = {
 	allowLateJoin: false,
 	load: () => {},
 	start: (session) => {
+		const E_A = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
 		const author = session.host;
 		const target = session.players.last();
 		var turn = [author, "❌"];
