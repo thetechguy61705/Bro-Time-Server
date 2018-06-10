@@ -82,7 +82,7 @@ function invite(game, channel, players, host) {
 			allowedToPing.forEach((noping) => {
 				noPing.push(noping);
 			});
-			messageContent = `Pinging online members in Bro Time Games role: ${allowedToPing.map((m) => m.toString()).join(", ")}`;
+			messageContent = `Pinging online members in Bro Time Games role: ${allowedToPing.map((m) => `<@${m}>`).join(", ")}`;
 		} else {
 			messageContent = "Nobody to ping!";
 		}
