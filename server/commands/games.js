@@ -202,6 +202,7 @@ module.exports = {
 	id: "game",
 	aliases: ["games", "play"],
 	description: "Starts a game.",
+	arguments: "[game]",
 	execute: (call) => {
 		var name = call.params.readParameter();
 		var found = false;
