@@ -72,9 +72,9 @@ function invite(game, channel, players, host) {
 		.setColor(0x00AE86);
 	if (channel.guild.roles.find("name", "Bro Time Games")) {
 		var allowedToPing = channel.guild.roles.find("name", "Bro Time Games").members.filter((m) => m.user.presence.status === "online").array();
-		var hostIndex = allowedToPing.indexOf(host.id);
+		var hostIndex = allowedToPing.indexOf(host);
 		if (hostIndex > -1) allowedToPing.splice(hostIndex, 1);
-		hostIndex = noPing.indexOf(host.id);
+		hostIndex = noPing.indexOf(host);
 		if (hostIndex > -1) noPing.splice(hostIndex, 1);
 		if (noPing.length > 0) allowedToPing = allowedToPing.filter((m) => !noPing.includes(m));
 		if (allowedToPing.length > 0) {
@@ -99,9 +99,8 @@ function invite(game, channel, players, host) {
 				collector.on("collect", (reaction) => {
 					if (!players.keyArray().includes(reaction.users.last().id)) {
 						var user = reaction.users.last();
-						if (noPing.find((m) => m.id === user.id)) {
-							noPing = noPing.filter((m) => m.id !== user.id);
-						}
+						hostIndex = noPing.indexOf(user);
+						if (hostIndex > -1) noPing.splice(hostIndex, 1);
 						players.set(user.id, user);
 						if (players.size >= game.maxPlayers - 1) {
 							collector.stop("ready");
