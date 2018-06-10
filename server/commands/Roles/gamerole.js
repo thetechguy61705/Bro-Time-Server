@@ -6,7 +6,7 @@ const GAMES = ["Roblox", "Minecraft", "Cuphead", "Fortnite", "Undertale", "Untur
 module.exports = {
 	id: "gamerole",
 	description: "Gives the user the specified role if it is a part of !info gameroles list.",
-	arguments: "(game role)",
+	paramsHelp: "(game role)",
 	execute: (call) => {
 		var rawinput = call.params.readRaw();
 		if (rawinput !== "") {

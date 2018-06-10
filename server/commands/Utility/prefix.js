@@ -3,7 +3,7 @@ const { RichEmbed } = require("discord.js");
 module.exports = {
 	id: "prefix",
 	description: "Changes the guild's prefix.",
-	arguments: "(new prefix)",
+	paramsHelp: "(new prefix)",
 	// This command requires the restrictions api. I'll take it out of testing then.
 	test: true,
 	execute: (call) => {

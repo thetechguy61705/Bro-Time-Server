@@ -5,7 +5,7 @@ module.exports = {
 	id: "giveaway",
 	aliases: ["g", "creategivaway"],
 	description: "Creates a giveaway in specified channel with specified amount of winners for the specified time.",
-	arguments: "(title): (time) (channel) (amount of winners)",
+	paramsHelp: "(title): (time) (channel) (amount of winners)",
 	requires: "Moderator permissions",
 	execute: (call) => {
 		const GIVEAWAY_PRIZE = call.params.readRaw().split(":")[0];

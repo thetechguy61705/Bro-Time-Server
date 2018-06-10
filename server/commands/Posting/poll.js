@@ -6,7 +6,7 @@ module.exports = {
 	aliases: ["makepoll", "createpoll", "p"],
 	description: "Sends a rich embed in the channel it was triggered with specified title and poll options" +
 		", then reacts to the rich embed correspondingly to the poll options.",
-	arguments: "(title): (option) | (option)",
+	paramsHelp: "(title): (option) | (option)",
 	execute: (call) => {
 		const pollTitle = call.params.readRaw().split(":")[0];
 		if (call.params.readRaw().split(":")[1] !== undefined) {

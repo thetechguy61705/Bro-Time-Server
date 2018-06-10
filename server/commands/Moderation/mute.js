@@ -4,7 +4,7 @@ const Moderator = require("app/moderator");
 module.exports = {
 	id: "mute",
 	description: "Gives the user the \"Muted\" role for the specified period of time. If no time is specified, it will not automatically remove the role.",
-	arguments: "(user) [time]",
+	paramsHelp: "(user) [time]",
 	requires: "Moderator permissions",
 	execute: (call) => {
 		const parameterOne = call.params.readParameter(), parameterTwo = call.params.readParameter();

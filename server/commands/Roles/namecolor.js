@@ -14,7 +14,7 @@ module.exports = {
 	id: "namecolor",
 	aliases: ["color"],
 	description: "Gives the user the specified role if it is a part of !info namecolors list.",
-	arguments: "(color role)",
+	paramsHelp: "(color role)",
 	requires: "Nothing/Bro Time Premium",
 	execute: (call) => {
 		const COLOR = call.params.readRaw().toLowerCase(),

@@ -2,7 +2,7 @@ module.exports = {
 	id: "transfer",
 	aliases: ["give"],
 	description: "Transfers Bro Bits from you to another user with a 90% exchange rate.",
-	arguments: "(user) (amount)",
+	paramsHelp: "(user) (amount)",
 	execute: async (call) => {
 		var param = call.params.readParameter();
 		param = (param != null) ? param.toLowerCase() : null;
