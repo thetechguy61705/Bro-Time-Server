@@ -39,7 +39,7 @@ module.exports = {
 			helpEmbed.setTitle("Information").setDescription(`Prefix: \`${prefix}\`\nUptime: ${call.client.uptime.expandPretty()}\n` +
 				"[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server)");
 			for (var [category, commands] of Object.entries(commandHelp)) {
-				helpEmbed.addField(category, commands.join("\n"));
+				helpEmbed.addField(category, commands.join("\n"), true);
 			}
 		} else if (command != null) {
 			const { aliases, description, paramsHelp, requires, id } = command;
