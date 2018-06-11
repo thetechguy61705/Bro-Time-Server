@@ -42,13 +42,13 @@ module.exports = {
 				helpEmbed.addField(category, commands.join("\n"));
 			}
 		} else if (command != null) {
-			const { aliases, description, paramsHelp, requires, id } = command;
+			const { aliases, description, paramsHelp, requires, id, file } = command;
 			helpEmbed.setTitle(`${prefix}${id}`).setDescription(`Purpose: ${(description || "None")}` +
 				`\nUsage: \`${prefix}${id} ${(paramsHelp || "")}\`` +
 				`\nRequires: \`${(requires || "None")}\`` +
 				`\nAliases: \`${(aliases || ["None"]).join("`, `")}\`` +
 				`\nCategory: \`${command.category}\`` +
-				`\n\n[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server/tree/master/server/commands/${(command.category !== "Other") ? command.category + "/" : ""}${id})`);
+				`\n\n[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server/tree/master/server/commands/${(command.category !== "Other") ? command.category + "/" : ""}${file})`);
 		} else {
 			call.message.reply("Invalid command name. Please run `!help (command)` or just `!help`").catch(() => {
 				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`)
