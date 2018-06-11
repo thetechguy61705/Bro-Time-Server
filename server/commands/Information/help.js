@@ -7,7 +7,7 @@ function add(command, help, prefix) {
 		array = [];
 		help[category] = array;
 	}
-	if (command.arguments != null) {
+	if (command.paramsHelp != null) {
 		array.push(`\`${prefix}${command.id} ${command.paramsHelp}\``);
 	} else {
 		array.push(`\`${prefix}${command.id}\``);
