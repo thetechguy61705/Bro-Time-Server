@@ -4,6 +4,6 @@ module.exports={id:"gamble",aliases:["bet"],description:"Allows you to either lo
 /*
 Please take note that this file is compiled as a joke.
 
-Success rate: 40%
-Random result changing multiplier: 60% - 140%
+Success rate (of gaining money): 40%
+Input multiplying rate (when gaining money): 60% - 140%
 */
