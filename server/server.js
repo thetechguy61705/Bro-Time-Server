@@ -148,6 +148,14 @@ client.on("ready", () => {
 		}));
 	});
 	Promise.all(loading).then(() => {
+		for (var handler of chatHandlers) {
+			try {
+				if (handler.load != null) handler.load(client);
+			} catch (exc) {
+				console.warn("Failed to load chat message:");
+				console.warn(exc.stack);
+			}
+		}
 		client.on("message", (message) => {
 			for (var handler of chatHandlers) {
 				try {
