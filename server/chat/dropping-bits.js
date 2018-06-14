@@ -50,7 +50,9 @@ module.exports = {
 						rewardMsg.delete(4000);
 						msg.delete();
 					}).catch(() => {});
-				}).catch(() => {});
+				}).catch((exc) => {
+					console.warn(exc.stack);
+				});
 			}).catch(() => {
 				msg.delete();
 				this.currentTimer = this.getRate("WAIT_RATES");
