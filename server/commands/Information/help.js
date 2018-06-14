@@ -30,11 +30,11 @@ module.exports = {
 		var commandHelp = {};
 
 		if (param1 === "") {
-			call.commands.loaded.array().sort((a, b) => {
-				return a.id.localeCompare(b.id);
-			}).forEach((command) => {
-				add(command, commandHelp, prefix);
-			});
+			var sortedCommands = call.commands.loaded.array().sort((a, b) => a.id.localeCompare(b.id));
+
+			for (var sortedCmd of sortedCommands) {
+				add(sortedCmd, commandHelp, prefix);
+			}
 
 			helpEmbed.setTitle("Information").setDescription(`Prefix: \`${prefix}\`\nUptime: ${call.client.uptime.expandPretty()}\n` +
 				"[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server)");

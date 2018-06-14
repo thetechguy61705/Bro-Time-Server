@@ -79,9 +79,7 @@ function invite(game, channel, players, host) {
 		if (noPing.length > 0) allowedToPing = allowedToPing.filter((m) => !noPing.includes(m));
 		if (allowedToPing.length > 0) {
 			allowedToPing = allowedToPing.slice(0, 3);
-			allowedToPing.forEach((noping) => {
-				noPing.push(noping);
-			});
+			for (var noping of allowedToPing) noPing.push(noping);
 			messageContent = `Pinging online members in Bro Time Games role: ${allowedToPing.map((m) => `<@${m}>`).join(", ")}`;
 		} else {
 			messageContent = "Nobody to ping!";
@@ -177,10 +175,10 @@ fs.readdirSync(__dirname + "/../games").forEach((file) => {
 		new Promise((resolve, reject) => {
 			try {
 				var game = require("../games/" + match[1]);
-				DEFAULTS.forEach((entry) => {
+				for (var entry of DEFAULTS) {
 					if (typeof game[entry.key] !== typeof entry.value)
 						game[entry.key] = entry.value;
-				});
+				}
 				resolve(game);
 			} catch (exc) {
 				reject(exc);
@@ -224,12 +222,12 @@ module.exports = {
 			listGames(call.message);
 	},
 	dispatchInput: (input) => {
-		sessions.forEach((session) => {
+		for (var session of sessions) {
 			if ((input.channel == null || input.channel == session.context.channel) &&
 				(!session.game.requiresInvite || session.host.id === input.user.id || session.players.has(input.user.id))) {
 				if (session.game.input(input, session))
 					session.restartEndTimer();
 			}
-		});
+		}
 	}
 };

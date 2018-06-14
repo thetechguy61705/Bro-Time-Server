@@ -3,11 +3,10 @@ const COLOR_ROLES = ["Black", "White", "Red", "BrightRed", "Orange", "Bronze", "
 	"Cyan", "Purple", "Indigo", "DarkViolet", "Magenta", "HotPink", "Pink", "Invisible", "Multicolored"];
 
 function removeColorRoles(roles, user) {
-	COLOR_ROLES.forEach((color) => {
-		if (user.roles.find("name", color)) {
+	for (var color of COLOR_ROLES) {
+		if (user.roles.find("name", color))
 			user.removeRole(roles.find("name", color)).catch(() => {});
-		}
-	});
+	}
 }
 
 module.exports = {
