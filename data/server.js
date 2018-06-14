@@ -70,6 +70,7 @@ class BotAccess extends DataAccess {
 			                                   WHERE Server_Id = $1`, [this.server.id])).rows[0].prefix;
 			client.release();
 		}
+		return true;
 	}
 
 	async setPrefix(newPrefix) {
@@ -81,11 +82,13 @@ class BotAccess extends DataAccess {
 		                            SET Prefix = $2
 		                            WHERE Server_Id = $1`, [this.server.id, newPrefix]);
 		this.prefix = newPrefix;
+		return true;
 	}
 }
 
 class WalletAccess {
 	constructor(userId = null) {
+		this.TRANSFER_RATE = WalletAccess.TRANSFER_RATE;
 		this._userId = userId;
 	}
 
@@ -98,12 +101,15 @@ class WalletAccess {
 
 	async change(amount) {
 		await pool.query("SELECT discord.WalletChange($2, $1) FOR UPDATE", [this._userId, amount]);
+		return true;
 	}
 
 	async transfer(amount, toUserId = null) {
 		await pool.query("SELECT discord.WalletTransfer($3, $1, $2) FOR UPDATE", [this._userId, toUserId, amount]);
+		return true;
 	}
 }
+WalletAccess.TRANSFER_RATE = .20;
 
 module.exports = {
 	BotAccess: BotAccess,
