@@ -49,7 +49,9 @@ module.exports = {
 					collected.first().reply("You collected " + bitsDropped + " Bro Bits!").then((rewardMsg) => {
 						rewardMsg.delete(4000);
 						msg.delete();
-					}).catch(() => {});
+					}).catch((exc) => {
+						console.warn(exc.stack);
+					});
 				}).catch((exc) => {
 					console.warn(exc.stack);
 				});
