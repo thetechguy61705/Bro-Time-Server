@@ -28,7 +28,7 @@ module.exports = {
 										.setColor(0x00AE86)
 										.setFooter(`${call.client.user.username} | Giveaway by ${call.message.author.tag}.`);
 									GIVEAWAY_CHANNEL.send("🎉 **GIVEAWAY** 🎉", { embed: giveawayEmbed }).then((msg) => {
-										call.client.channels.get("437091372538003456")
+										call.client.channels.get("457235449417826305")
 											.send(`${msg.channel.id} ${msg.id} ${Date.now() + giveawayTime} ${winners} ${call.message.author.id} ${GIVEAWAY_PRIZE}`)
 											.then((databaseMesage) => {
 												msg.react("🎉");
