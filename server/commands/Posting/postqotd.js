@@ -17,12 +17,12 @@ module.exports = {
 				});
 			} else {
 				call.message.reply("You did not supply the question to post. Please try again.").catch(() => {
-					call.message.author.send(`You attempted to run the \`postqotd\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+					call.message.author.send(`You attempted to run the \`postqotd\` command in ${call.message.channel}, but I can not chat there.`);
 				});
 			}
 		} else {
 			call.message.reply("Invalid permissions: requires role: `QOTD Host`").catch(() => {
-				call.message.author.send(`You attempted to run the \`postqotd\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+				call.message.author.send(`You attempted to run the \`postqotd\` command in ${call.message.channel}, but I can not chat there.`);
 			});
 		}
 	}

@@ -32,11 +32,11 @@ module.exports = {
 				};
 				session.endGame();
 			}).catch(() => {
-				session.context.channel.send("Someone did not respond with a valid option within 60 seconds.").catch(() => {});
+				session.context.channel.send("Someone did not respond with a valid option within 60 seconds.");
 				session.endGame();
 			});
 		}).catch(() => {
-			session.context.channel.send("I could not send a dm message to one or more of the participating players.").catch(() => {});
+			session.context.channel.send("I could not send a dm message to one or more of the participating players.");
 			session.endGame();
 		});
 	},
@@ -44,7 +44,7 @@ module.exports = {
 	end: (session) => {
 		if (session.rps != null) {
 			session.context.channel.send(`${session.rps.firstChoice.author} chose \`${session.rps.firstChoice.content.toUpperCase()}\`, ` +
-				`${session.rps.lastChoice.author} chose \`${session.rps.lastChoice.content.toUpperCase()}\`. ${session.rps.winner}`).catch(() => {});
+				`${session.rps.lastChoice.author} chose \`${session.rps.lastChoice.content.toUpperCase()}\`. ${session.rps.winner}`);
 		}
 	},
 };

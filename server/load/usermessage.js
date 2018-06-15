@@ -14,7 +14,7 @@ module.exports = {
 						member.guild.roles.find("name", "White")
 					];
 					if (!member.user.bot) {
-						member.addRoles(roles).catch(() => {});
+						member.addRoles(roles);
 						const welcomeMessage = new Discord.RichEmbed()
 							.setTitle("Welcome")
 							.setColor("#FFA500")
@@ -28,8 +28,8 @@ module.exports = {
 									member.user.send(data.toString("utf8"));
 								}
 							});
-						}).catch(() => {});
-					} else member.addRole(member.guild.roles.find("name", "Bots")).catch(() => {});
+						});
+					} else member.addRole(member.guild.roles.find("name", "Bots"));
 				}
 			}
 		});
@@ -43,7 +43,7 @@ module.exports = {
 							.setTitle("Goodbye")
 							.setColor("#0000ff")
 							.setDescription(`Sad to see you leave ${member.user}.`);
-						hangoutChannel.send({ embed: goodbyeMessage }).catch(() => {});
+						hangoutChannel.send({ embed: goodbyeMessage });
 					}
 				}
 			}

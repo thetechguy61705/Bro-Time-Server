@@ -81,7 +81,7 @@ class Queue {
 				} else {
 					console.log("Can't find ticket.");
 				}
-			}).catch(() => {});
+			});
 		}, () => {
 			console.log("Can't play!");
 		});
@@ -92,7 +92,7 @@ class Queue {
 			this.release(message.member.guild).then(() => {
 				if (accepted)
 					message.channel.send("Stopped playing music.");
-			}).catch(() => {});
+			});
 		}, (exc) => {
 			console.warn(exc.stack);
 			message.channel.send("Unable to stop playing music (try again shortly).");

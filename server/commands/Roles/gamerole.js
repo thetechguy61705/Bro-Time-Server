@@ -18,32 +18,32 @@ module.exports = {
 				if (call.message.member.roles.has(GAME_ROLE.id)) {
 					call.message.member.removeRole(GAME_ROLE).then(() => {
 						call.message.channel.send(`Since you already had the \`${GAME}\` game role, it has been removed from you.`).catch(() => {
-							call.message.author.send(`Since you already had the \`${GAME}\` gamerole, it has been removed from you.`).catch(() => {});
+							call.message.author.send(`Since you already had the \`${GAME}\` gamerole, it has been removed from you.`);
 						});
 					}).catch(() => {
 						call.message.channel.send(`Unable to remove the \`${GAME}\` game role.`).catch(() => {
-							call.message.author.send(`Unable to remove the \`${GAME}\` game role from you.`).catch(() => {});
+							call.message.author.send(`Unable to remove the \`${GAME}\` game role from you.`);
 						});
 					});
 				} else {
 					call.message.member.addRole(GAME_ROLE).then(() => {
 						call.message.channel.send(`Successfully given you the \`${GAME}\` game role.`).catch(() => {
-							call.message.author.send(`Successfully given you the \`${GAME}\` game role.`).catch(() => {});
+							call.message.author.send(`Successfully given you the \`${GAME}\` game role.`);
 						});
 					}).catch(() => {
 						call.message.channel.send(`Unable to give you the \`${GAME}\` game role.`).catch(() => {
-							call.message.author.send(`Unable to give you the \`${GAME}\` game role.`).catch(() => {});
+							call.message.author.send(`Unable to give you the \`${GAME}\` game role.`);
 						});
 					});
 				}
 			} else {
 				call.message.channel.send("Invalid game option. Game options can be found in `!info gameroles list`.").catch(() => {
-					call.message.author.send(`You attempted to use the \`gamerole\` command in ${call.message.channel}, but I do not have permission to chat there.`).catch(() => {});
+					call.message.author.send(`You attempted to use the \`gamerole\` command in ${call.message.channel}, but I do not have permission to chat there.`);
 				});
 			}
 		} else {
 			call.message.reply("You must specify a gamerole!").catch(() => {
-				call.message.author.send(`You attempted to use the \`gamerole\` command in ${call.message.channel}, but I do not have permission to chat there.`).catch(() => {});
+				call.message.author.send(`You attempted to use the \`gamerole\` command in ${call.message.channel}, but I do not have permission to chat there.`);
 			});
 		}
 	}

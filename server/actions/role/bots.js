@@ -14,19 +14,18 @@ module.exports = {
 			}
 		}
 		if (rolesToChange.rolesToAdd.concat(rolesToChange.rolesToRemove).length !== 0) {
-			call.message.channel.send("Changing roles for all bots in this guild.")
-				.catch(() => call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {}));
+			call.message.channel.send("Changing roles for all bots in this guild.").catch(() => {
+				call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);
+			});
 			for (var member of call.message.guild.members.filter((member) => member.user.bot).array()) {
-				for (let role of rolesToChange.rolesToRemove) {
+				for (let role of rolesToChange.rolesToRemove)
 					member.removeRole(role);
-				}
-				for (let role of rolesToChange.rolesToAdd) {
+				for (let role of rolesToChange.rolesToAdd)
 					member.addRole(role);
-				}
 			}
 		} else {
 			call.message.reply("No valid roles were specified. Roles that are above your or my hierarchy can not be changed.").catch(() => {
-				call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+				call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);
 			});
 		}
 	}

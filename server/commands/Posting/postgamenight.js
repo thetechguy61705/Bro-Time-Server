@@ -22,8 +22,8 @@ module.exports = {
 	execute: async (call) => {
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {
 			var game = await call.requestInput(0, "What is the game you want to host on?", 60000);
-			if (!game) return call.message.channel.send("Canceled prompt because there was no resonse after one minute.").catch(function(){});
-			if (game.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.").catch(function(){});
+			if (!game) return call.message.channel.send("Canceled prompt because there was no resonse after one minute.");
+			if (game.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.");
 			var gamerole;
 			if (games.includes(game.message.content.toLowerCase())) {
 				gamerole = call.message.guild.roles.find((r)=> r.name.toLowerCase() === game.message.content.toLowerCase());
@@ -31,8 +31,8 @@ module.exports = {
 				gamerole = game.message.content;
 			}
 			var link = await call.requestInput(0, "What is the link of your game? If none respond with `none`.", 60000);
-			if (!link) return call.message.channel.send("Canceled prompt because there was no resonse after one minute.").catch(function(){});
-			if (link.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled Prompt.").catch(function(){});
+			if (!link) return call.message.channel.send("Canceled prompt because there was no resonse after one minute.");
+			if (link.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled Prompt.");
 			var islink = isURL(link.message.content);
 			if (islink || link.message.content.toLowerCase() == "none") {
 				var varlink;
@@ -42,8 +42,8 @@ module.exports = {
 					varlink = link.message.content;
 				}
 				var other = await call.requestInput(0, "Any other information? If none respond with `none`.", 60000);
-				if (!other) return call.message.channel.send("Canceled prompt because there was no resonse after one minute.").catch(function(){});
-				if (other.message.content.toLowerCase() == "cancel") return call.message.channel.send("**Canceled Prompt.**").catch(function(){});
+				if (!other) return call.message.channel.send("Canceled prompt because there was no resonse after one minute.");
+				if (other.message.content.toLowerCase() == "cancel") return call.message.channel.send("**Canceled Prompt.**");
 				let annchannel = call.message.guild.channels.find("name", "announcements");
 				if (games.includes(game.message.content.toLowerCase())) {
 					gamerole.setMentionable(true).then(() => {
@@ -51,37 +51,33 @@ module.exports = {
 							.then(function(){
 								gamerole.setMentionable(false).catch(function(){
 									call.message.author
-										.send(`Could not change the role mentionability of ${gamerole.name} back to normal. Please do this manually.`)
-										.catch(function(){});
+										.send(`Could not change the role mentionability of ${gamerole.name} back to normal. Please do this manually.`);
 								});
 							}).catch(function(){
-								call.message.author.send(`There was an error while sending a message in ${annchannel}.`).catch(function(){});
+								call.message.author.send(`There was an error while sending a message in ${annchannel}.`);
 							});
 					}).catch(() => {
 						call.message.channel.send("Something went wrong and I couldn't toggle the role mentionability.").catch(function(){
 							call.message.author
-								.send(`You attempted to run the \`postgamenight\` command in ${call.message.channel}, but I can not chat there.`)
-								.catch(function(){});
+								.send(`You attempted to run the \`postgamenight\` command in ${call.message.channel}, but I can not chat there.`);
 						});
 					});
 				} else {
 					annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other.message.content}\`\n*Posted by ${call.message.author}*`)
 						.catch(function(){
-							call.message.author.send(`There was an error while sending a message in ${annchannel}.`).catch(function(){});
+							call.message.author.send(`There was an error while sending a message in ${annchannel}.`);
 						});
 				}
 			} else {
 				call.message.channel.send("Invalid link supplied.").catch(function(){
 					call.message.author
-						.send(`You attempted to run the \`postgamenight\` command in ${call.message.channel}, but I can not chat there`)
-						.catch(function(){});
+						.send(`You attempted to run the \`postgamenight\` command in ${call.message.channel}, but I can not chat there`);
 				});
 			}
 		} else {
 			call.message.channel.send("Error: missing role: `Game Night Host`").catch(function(){
 				call.message.author
-					.send(`You attempted to run the \`postgamenight\` command in ${call.message.channel}, but I can not chat there`)
-					.catch(function(){});
+					.send(`You attempted to run the \`postgamenight\` command in ${call.message.channel}, but I can not chat there`);
 			});
 		}
 	}

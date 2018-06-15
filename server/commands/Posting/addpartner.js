@@ -2,12 +2,12 @@ const Discord = require("discord.js");
 
 function addPartner(channel, embed, message) {
 	channel.send({embed: embed }).then(() => {
-		message.reply("Successfully sent message!").catch(function() {});
-		channel.send("-------------------------------------------------").catch(function() {});
+		message.reply("Successfully sent message!");
+		channel.send("-------------------------------------------------");
 	}).catch(() => {
 		message.reply("Couldn't send the partner message in the partners channel, make sure that you have a valid discord server invite or a valid thumbnail url!")
 			.catch(() => {
-				message.author.send(`You attempted to use the \`addpartner\` command in ${message.channel}, but I can not chat there.`).catch(function() {});
+				message.author.send(`You attempted to use the \`addpartner\` command in ${message.channel}, but I can not chat there.`);
 			});
 	});
 }
@@ -38,12 +38,12 @@ module.exports = {
 				});
 			} else {
 				call.message.reply("You did not provide the necessary parameters! `!addpartner (title) (description) (discord invite OR thumbnail url)`").catch(() => {
-					call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+					call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`);
 				});
 			}
 		} else {
 			call.message.reply("You do not have permission to use this command!\n`Requires: Community Manager Bro`").catch(() => {
-				call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`).catch(function() {});
+				call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`);
 			});
 		}
 	}

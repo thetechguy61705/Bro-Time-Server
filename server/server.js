@@ -171,7 +171,7 @@ client.on("ready", () => {
 
 		// eslint-disable-next-line no-console
 		console.log("Finished loading!");
-	}).catch(() => {});
+	});
 });
 
 client.login(config.TOKEN);

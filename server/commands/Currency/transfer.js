@@ -18,31 +18,31 @@ module.exports = {
 							call.getWallet(call.message.author.id).transfer(Math.round(AMOUNT), TARGET.user.id).then(() => {
 								call.message.reply(`You have successfully given ${AMOUNT} Bro Bits to ${TARGET.user.tag}.`).catch(() => {});
 							}).catch(() => {
-								call.message.reply("Something went wrong in the transaction and I could not give the Bro Bits.").catch(() => {});
+								call.message.reply("Something went wrong in the transaction and I could not give the Bro Bits.");
 							});
 						} else {
 							call.message.reply("This user has too much Bro Bits to recieve your transaction.").catch(() => {
-								call.message.reply(`You attempted to use the \`transfer\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+								call.message.reply(`You attempted to use the \`transfer\` command in ${call.message.channel}, but I can not chat there.`);
 							});
 						}
 					} else {
 						call.message.reply("You do not have enough Bro Bits to make this transaction.").catch(() => {
-							call.message.reply(`You attempted to use the \`transfer\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+							call.message.reply(`You attempted to use the \`transfer\` command in ${call.message.channel}, but I can not chat there.`);
 						});
 					}
 				} else {
 					call.message.reply("Please specify a amount above 0.").catch(() => {
-						call.message.reply(`You attempted to use the \`transfer\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+						call.message.reply(`You attempted to use the \`transfer\` command in ${call.message.channel}, but I can not chat there.`);
 					});
 				}
 			} else {
 				call.message.reply("Please specify a valid amount to give to this user.").catch(() => {
-					call.message.reply(`You attempted to use the \`transfer\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+					call.message.reply(`You attempted to use the \`transfer\` command in ${call.message.channel}, but I can not chat there.`);
 				});
 			}
 		} else {
 			call.message.reply("Please specify a valid user to transfer Bro Bits to.").catch(() => {
-				call.message.reply(`You attempted to use the \`transfer\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+				call.message.reply(`You attempted to use the \`transfer\` command in ${call.message.channel}, but I can not chat there.`);
 			});
 		}
 	}

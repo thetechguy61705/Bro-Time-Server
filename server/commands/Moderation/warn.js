@@ -23,35 +23,35 @@ module.exports = {
 								console.warn(err.stack);
 							}
 
-							call.message.channel.send(`***Successfully warned \`${target.user.tag}\`.***`).catch(() => {});
+							call.message.channel.send(`***Successfully warned \`${target.user.tag}\`.***`);
 							var warnEmbed = new Discord.RichEmbed().setAuthor(target.user.tag, target.user.displayAvatarURL).setDescription(reason.substr(1).slice(0, -1))
 								.setFooter(`Warned by ${call.message.author.tag} (${call.message.author.id})`)
 								.setColor("ORANGE")
 								.setTimestamp();
-							call.client.channels.get("436353363786072104").send({embed: warnEmbed}).catch(() => {});
+							call.client.channels.get("436353363786072104").send({embed: warnEmbed});
 						} else {
 							call.message.reply("Specified user is too high in this guild's hierarchy to be warned by you.").catch(() => {
-								call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+								call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`);
 							});
 						}
 					} else {
 						call.message.reply("You cannot warn a bot account.").catch(() => {
-							call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+							call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`);
 						});
 					}
 				} else {
 					call.message.reply("Please supply a valid user tag, mention, or id.").catch(() => {
-						call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+						call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`);
 					});
 				}
 			} else {
 				call.message.reply("Please supply a valid user tag, mention, or id.").catch(() => {
-					call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+					call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`);
 				});
 			}
 		} else {
 			call.message.reply("You do not have permissions to trigger this command.").catch(() => {
-				call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+				call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`);
 			});
 		}
 	}

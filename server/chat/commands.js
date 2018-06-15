@@ -185,7 +185,7 @@ module.exports = {
 					} else {
 						if (!client.lockedChannels.includes(message.channel.id)) {
 							client.lockedChannels.push(message.channel.id);
-							message.channel.send("The client is currently in lockdown and inaccessible by any user.").catch(() => {});
+							message.channel.send("The client is currently in lockdown and inaccessible by any user.");
 						}
 					}
 				}

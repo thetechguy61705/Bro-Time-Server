@@ -9,8 +9,7 @@ module.exports = {
 			var latency = msg.createdTimestamp - call.message.createdTimestamp;
 			msg.edit(`Pong! Latency: \`${latency} ms; ${latency.diagnostic()}\`. API latency: \`${delay} ms; ${delay.diagnostic()}\`!`);
 		}).catch(() => {
-			call.message.author.send(`You attempted to run the \`ping\` command in ${call.message.channel}, but I do not have permission to chat there.`)
-				.catch(function(){});
+			call.message.author.send(`You attempted to run the \`ping\` command in ${call.message.channel}, but I do not have permission to chat there.`);
 		});
 	}
 };

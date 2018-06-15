@@ -27,7 +27,7 @@ module.exports = {
 						greeting = responses[pattern](matches).substring(0, MAX_LENGTH);
 					} else {
 						client.lockedChannels.push(message.channel.id);
-						message.channel.send("The client is currently in lockdown and inaccessible by any user.").catch(() => {});
+						message.channel.send("The client is currently in lockdown and inaccessible by any user.");
 					}
 					break;
 				}

@@ -50,7 +50,7 @@ module.exports = {
 						connectFourEmbed.setFooter(`${(turn !== author.id) ? target.tag : author.tag}'s turn.`);
 						session.embed = connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map((row) => row.join(" ")).join("\n"));
 						connectFour.edit({ embed: connectFourEmbed })
-							.then((newConnectFour) => session.connectFour = newConnectFour).catch(() => {});
+							.then((newConnectFour) => session.connectFour = newConnectFour);
 						for (var [indexOfRow, row] of arrayToCollection(rows)) {
 							for (var [indexOfCoin, coin] of arrayToCollection(row)) {
 								if (coin !== "⚫" && coin === row[indexOfCoin + 1] &&
@@ -91,7 +91,7 @@ module.exports = {
 					}
 				}
 			});
-		}).catch(() => {});
+		});
 	},
 	input: (input, session) => {
 		return input.type === "reaction" && input.value.message === session.connectFour;

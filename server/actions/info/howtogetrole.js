@@ -43,13 +43,13 @@ module.exports = {
 							emojiNumber = (emojiNumber !== OBTAINABLE_ROLES.length - 1) ? emojiNumber + 1 : 0;
 						}
 						htgrEmbed = updateEmbed(htgrEmbed, call.message.guild, emojiNumber);
-						newMessage.edit({ embed: htgrEmbed }).catch(() => {});
+						newMessage.edit({ embed: htgrEmbed });
 					});
 					reactions.on("end", (_, reason) => newMessage.edit("Interactive command ended: " + reason));
-				}).catch(() => {});
+				});
 			} else if (parameter.toLowerCase() === "list") {
 				call.message.channel.send({ embed: new Discord.RichEmbed().setTitle("Obtainable Roles").setDescription("`" + OBTAINABLE_ROLES.join("`\n`") + "`").setColor(0x00AE86) }).catch(() => {
-					call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+					call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
 				});
 			} else if (parameter.toLowerCase() === "specify") {
 				var newParameter = call.params.readRaw();
@@ -59,7 +59,7 @@ module.exports = {
 						call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed, call.message.guild, specifiedHTGR) });
 					} else {
 						call.message.reply("Invalid obtainable role specified. Please try out `!info htgr list` and take one of those roles. Prompt cancelled.").catch(() => {
-							call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+							call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
 						});
 					}
 				} else {
@@ -69,10 +69,10 @@ module.exports = {
 							call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed, call.message.guild, specifiedHTGR) });
 						} else {
 							call.message.reply("Invalid obtainable role specified. Please try out `!info htgr list` and take one of those roles. Prompt cancelled.").catch(() => {
-								call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+								call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
 							});
 						}
-					}).catch(() => {});
+					});
 				}
 			} else if (parameter.toLowerCase() === "cancel") call.message.reply("Cancelled prompt."); else module.exports.run(call, actions, true);
 		} else module.exports.run(call, actions, true);

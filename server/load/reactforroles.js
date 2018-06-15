@@ -26,7 +26,7 @@ module.exports = {
 							client.channels.get("447205162436788235").send({ embed: newItemEmbed }).then((newItemMessage) => {
 								messages.set(newItemMessage.id, newItemMessage);
 								newItemMessage.react("404768960014450689");
-							}).catch(() => {});
+							});
 						}
 					}
 
@@ -43,8 +43,6 @@ module.exports = {
 							}
 						}
 					});
-				}).catch((err) => {
-					console.warn(err.stack);
 				});
 			}
 		}

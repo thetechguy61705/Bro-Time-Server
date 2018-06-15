@@ -24,10 +24,10 @@ module.exports = {
 				};
 				session.endGame();
 			}).catch(() => {
-				session.context.channel.send(`${session.host}, You did not respond with a valid option within 60 seconds.`).catch(() => {});
+				session.context.channel.send(`${session.host}, You did not respond with a valid option within 60 seconds.`);
 				session.endGame();
 			});
-		}).catch(() => {});
+		});
 	},
 	input: () => {},
 	end: (session) => {

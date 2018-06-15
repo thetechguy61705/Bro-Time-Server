@@ -57,25 +57,25 @@ module.exports = {
 							.setFooter(`Page ${page}/${totalPages}`);
 						if (content !== "") memberEmbed.setTitle(`Users in ${call.message.guild.roles.find((r) => r.name.toLowerCase().startsWith(content.toLowerCase())).name}`);
 						if (content === "") memberEmbed.setTitle("Users");
-						sentEmbed.edit({ embed: memberEmbed }).catch(() => {});
+						sentEmbed.edit({ embed: memberEmbed });
 					});
 					reactions.on("end", () => sentEmbed.edit("Interactive command ended: 2 minutes passed."));
 				}).catch(() => {
 					call.message.reply("There was an error while trying to send this embed.").catch(() => {
-						call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+						call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`);
 					});
 				});
 			} else {
 				memberEmbed.setDescription(members);
 				call.message.channel.send({ embed: memberEmbed }).catch(() => {
 					call.message.reply("There was an error while trying to send this embed.").catch(() => {
-						call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+						call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`);
 					});
 				});
 			}
 		} else {
 			call.message.reply("Please specify a valid role, or supply no parameter for everyone in this server.").catch(() => {
-				call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+				call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`);
 			});
 		}
 	}

@@ -114,8 +114,8 @@ function invite(game, channel, players, host) {
 					if (reason !== "ready")
 						reject();
 				});
-			}).catch(() => { });
-		}).catch(() => { });
+			});
+		});
 	});
 }
 

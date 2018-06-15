@@ -18,42 +18,42 @@ module.exports = {
 						if (muteTime != null) {
 							if (muteTime >= 10000) {
 								target.addRole(call.message.guild.roles.find("name", "Muted")).then(() => {
-									call.message.channel.send(`***Successfully muted \`${target.user.tag}\` for ${ms(muteTime, { long: true })}.***`).catch(() => {});
+									call.message.channel.send(`***Successfully muted \`${target.user.tag}\` for ${ms(muteTime, { long: true })}.***`);
 									call.client.channels.get("436714650835484707").send(`${target.user.id} ${Date.now() + muteTime}`).then((msg) => {
 										call.client.setTimeout(() => {
-											target.removeRole(call.message.guild.roles.find("name", "Muted")).catch(() => {});
-											msg.delete().catch(() => {});
+											target.removeRole(call.message.guild.roles.find("name", "Muted"));
+											msg.delete();
 										}, muteTime);
-									}).catch(() => {});
+									});
 								}).catch(() => {
-									call.message.channel.send(`Failed to mute \`${target.user.tag}\`.`).catch(() => {});
+									call.message.channel.send(`Failed to mute \`${target.user.tag}\`.`);
 								});
-							} else call.message.reply("The time to mute the user must be at least 10 seconds.").catch(() => {});
+							} else call.message.reply("The time to mute the user must be at least 10 seconds.");
 						} else {
 							target.addRole(call.message.guild.roles.find("name", "Muted")).then(() => {
-								call.message.channel.send(`***Successfully muted \`${target.user.tag}\`.***`).catch(() => {});
+								call.message.channel.send(`***Successfully muted \`${target.user.tag}\`.***`);
 							}).catch(() => {
-								call.message.channel.send(`Failed to mute \`${target.user.tag}\`.`).catch(() => {});
+								call.message.channel.send(`Failed to mute \`${target.user.tag}\`.`);
 							});
 						}
 					} else {
 						call.message.reply("That user is already muted.").catch(() => {
-							call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+							call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`);
 						});
 					}
 				} else {
 					call.message.reply("That user is too far up in this guild's hierarchy to be muted by you.").catch(() => {
-						call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+						call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`);
 					});
 				}
 			} else {
 				call.message.reply("Please specify a valid user.").catch(() => {
-					call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+					call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`);
 				});
 			}
 		} else {
 			call.message.reply("You do not have permissions to trigger this command.").catch(() => {
-				call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+				call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`);
 			});
 		}
 	}

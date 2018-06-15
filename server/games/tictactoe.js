@@ -41,7 +41,7 @@ module.exports = {
 								} else if (E_A.every((value) => value === "❌" || value === "⭕")) {
 									session.endGame();
 								}
-							}).catch(() => {});
+							});
 					}
 					reaction.remove(reaction.users.last());
 				});

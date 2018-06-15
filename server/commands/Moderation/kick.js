@@ -22,28 +22,28 @@ module.exports = {
 						}
 
 						target.kick(`Kicked by ${call.message.author.tag} for ${reason}`).then(() => {
-							call.message.channel.send(`***Successfully kicked \`${target.user.tag}\`.***`).catch(() => {});
+							call.message.channel.send(`***Successfully kicked \`${target.user.tag}\`.***`);
 						}).catch(() => {
-							call.message.channel.send(`Failed to kick \`${target.user.tag}\`.`).catch(() => {});
+							call.message.channel.send(`Failed to kick \`${target.user.tag}\`.`);
 						});
 					} else {
 						call.message.reply("I do not have permission to kick this user.").catch(() => {
-							call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+							call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`);
 						});
 					}
 				} else {
 					call.message.reply("That user is too far up in this guild's hierarchy to be kicked by you.").catch(() => {
-						call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+						call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`);
 					});
 				}
 			} else {
 				call.message.reply("Please mention or supply the id of a valid user.").catch(() => {
-					call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+					call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`);
 				});
 			}
 		} else {
 			call.message.reply("You do not have permissions to trigger this command.").catch(() => {
-				call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+				call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`);
 			});
 		}
 	}

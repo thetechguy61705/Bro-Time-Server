@@ -60,7 +60,7 @@ function pickWinner(client, message, authorName, giveawayWinners, prize) {
 		}, (exc) => {
 			handleError(message, exc);
 		});
-	}).catch(() => {});
+	});
 }
 
 function reloadGiveaways(channel, client) {
@@ -86,15 +86,15 @@ function reloadGiveaways(channel, client) {
 					if (giveawayEnd > 0) {
 						entryPromise.then((message) => {
 							acceptEntry(client, message, giveawayEnd, giveawayAuthor, giveawayWinners, giveawayPrize);
-						}).catch(() => {});
+						});
 					} else {
 						entryPromise.then((message) => {
 							pickWinner(client, message, giveawayAuthor, giveawayWinners, giveawayPrize);
-						}).catch(() => {});
+						});
 					}
 				}
 			}
-		}).catch(() => {});
+		});
 	}
 }
 

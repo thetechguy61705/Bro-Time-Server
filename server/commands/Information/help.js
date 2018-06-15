@@ -51,13 +51,12 @@ module.exports = {
 				`\n\n[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server/tree/master/server/commands/${(command.category !== "Other") ? command.category + "/" : ""}${file})`);
 		} else {
 			call.message.reply("Invalid command name. Please run `!help (command)` or just `!help`").catch(() => {
-				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`)
-					.catch(() => {});
+				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`);
 			});
 		}
 		if (helpEmbed.description != null) {
 			call.message.channel.send({ embed: helpEmbed }).catch(() => {
-				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`).catch(() => {});
+				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`);
 			});
 		}
 	}
