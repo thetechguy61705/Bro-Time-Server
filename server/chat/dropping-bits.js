@@ -61,7 +61,7 @@ module.exports = {
 				this.currentTimer = this.getRate("WAIT_RATES");
 			});
 		}).catch((exc) => {
-			console.log(exc.stack);
+			console.warn(exc.stack);
 		});
 	},
 	exec: function (message, client) {

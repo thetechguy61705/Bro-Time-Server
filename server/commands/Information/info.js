@@ -24,7 +24,7 @@ module.exports = {
 			(ACTION || actions.get("default")).run(call, actions, PARAMETER);
 		} catch(exc) {
 			console.warn("Info action failed:");
-			console.warn(err.stack);
+			console.warn(exc.stack);
 		}
 	}
 };

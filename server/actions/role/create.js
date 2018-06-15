@@ -21,7 +21,7 @@ module.exports = {
 				call.message.guild.createRole({ name: name, color: hexTag, hoist: hoist[0] }).then((role) => {
 					call.message
 						.reply(`Successfully created the role \`${role.name}\` with \`${role.hoist}\` hoist and \`${(role.hexColor !== "#0000000") ? role.hexColor : "no"}\` color.`)
-							.catch(() => {});
+						.catch(() => {});
 				}).catch(() => {
 					call.message.reply("There was an error upon attempting to make that role.").catch(() => {
 						call.message.author.send(`You attempted to run the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});

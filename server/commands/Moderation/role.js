@@ -26,7 +26,7 @@ module.exports = {
 				(ACTION || actions.get("default")).run(call, actions, PARAMETER);
 			} catch(exc) {
 				console.warn("Role action failed:");
-				console.warn(err.stack);
+				console.warn(exc.stack);
 			}
 		} else {
 			call.message.reply("You do not have permission to use this command.").catch(() => {
