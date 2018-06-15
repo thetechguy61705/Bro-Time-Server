@@ -18,6 +18,7 @@ class Call {
 		this.message = message;
 		this.client = client;
 		this.params = params;
+		this.TRANSFER_RATE = 0.8;
 	}
 
 	requestInput(settings = 0, prompt = null, timeout = 180000) {
