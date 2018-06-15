@@ -63,3 +63,4 @@ typings/
 
 *.project
 package-lock.json
+config.js
