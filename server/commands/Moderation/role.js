@@ -22,10 +22,12 @@ module.exports = {
 		if (Moderator(call.message.member)) {
 			const PARAMETER = (call.params.readParameter() || "").toLowerCase(),
 				ACTION = actions.find((a) => a.id === PARAMETER || (a.aliases || []).includes(PARAMETER));
-			(ACTION || actions.get("default")).run(call, actions, PARAMETER).catch((err) => {
+			try {
+				(ACTION || actions.get("default")).run(call, actions, PARAMETER);
+			} catch(exc) {
 				console.warn("Role action failed:");
 				console.warn(err.stack);
-			});
+			}
 		} else {
 			call.message.reply("You do not have permission to use this command.").catch(() => {
 				call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);

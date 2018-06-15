@@ -20,6 +20,11 @@ module.exports = {
 	execute: (call) => {
 		const PARAMETER = (call.params.readParameter() || "").toLowerCase(),
 			ACTION = actions.find((a) => a.id === PARAMETER || (a.aliases || []).includes(PARAMETER));
-		(ACTION || actions.get("default")).run(call, actions, PARAMETER);
+		try {
+			(ACTION || actions.get("default")).run(call, actions, PARAMETER);
+		} catch(exc) {
+			console.warn("Info action failed:");
+			console.warn(err.stack);
+		}
 	}
 };
