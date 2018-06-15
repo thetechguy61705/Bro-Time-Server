@@ -11,25 +11,24 @@ module.exports = {
 	WAIT_RATES: [120000, 180000, 90000, 30000, 150000, 90000, 120000, 300000, 180000, 200000],
 	RATES: [3, 4, 5, 5, 5, 5, 6, 6, 6, 7],
 
-	typingInHangout: 0,
 	isAwaitingDrop: false,
 	currentTimer: 1000,
 
 	load: function (client) {
 		client.on("typingStart", (channel) => {
-			if (channel.id === "433831764105101332") {
-				this.typingInHangout++;
-				if (this.typingInHangout >= 2 && this.isAwaitingDrop && this.currentTimer > 0) {
-					this.dropBits(channel);
-					this.isAwaitingDrop = false;
-					this.currentTimer = 0;
-				}
+			if (channel.id === "433831764105101332" && this.isAwaitingDrop && this.currentTimer > 0 && channel._typing.size >= 2) {
+				this.dropBits(channel);
+				this.isAwaitingDrop = false;
+				this.currentTimer = 0;
 			}
 		});
 
 		client.on("typingStop", (channel) => {
-			if (channel.id === "433831764105101332") this.typingInHangout--;
-			if (!channel.typing) this.typingInHangout = 0;
+			if (channel.id === "433831764105101332" && this.isAwaitingDrop && this.currentTimer > 0 && channel._typing.size >= 2) {
+				this.dropBits(channel);
+				this.isAwaitingDrop = false;
+				this.currentTimer = 0;
+			}
 		});
 	},
 	getRate: function (rateType = "TRIGGERS") {
