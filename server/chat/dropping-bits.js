@@ -1,4 +1,4 @@
-const Premium = require("app/premium");
+const isPremium = require("app/premium");
 var { WalletAccess } = require("./../../data/server");
 var { RichEmbed } = require("discord.js");
 
@@ -45,21 +45,24 @@ module.exports = {
 		}).then((msg) => {
 			msg.channel.awaitMessages((m) => m.content.toLowerCase() === randomCommand, { maxMatches: 1, time: 30000, errors: ["time"] }).then((collected) => {
 				this.currentTimer = this.getRate("WAIT_RATES");
-				getWallet(collected.first().author.id).change(bitsDropped + (Premium(collected.first().author.id)) ? 5 : 0).then(() => {
-					collected.first().reply("You collected " + bitsDropped + " Bro Bits!").then((rewardMsg) => {
-						rewardMsg.delete(4000);
-						msg.delete();
-					}).catch((exc) => {
+				bitsDropped += (isPremium(collected.first().member) ? 5 : 0);
+				getWallet(collected.first().author.id).change(bitsDropped).then(() => {
+					collected.first().reply("You collected " + bitsDropped + " Bro Bits!").catch((exc) => {
 						console.warn(exc.stack);
 					});
+					msg.delete();
 				}).catch((exc) => {
 					console.warn(exc.stack);
+					msg.delete();
 				});
-			}).catch(() => {
+			}).catch((exc) => {
+				console.warn(exc.stack);
 				msg.delete();
 				this.currentTimer = this.getRate("WAIT_RATES");
 			});
-		}).catch(() => {});
+		}).catch((exc) => {
+			console.log(exc.stack);
+		});
 	},
 	exec: function (message, client) {
 		if (message.channel.id === "433831764105101332" && !this.isAwaitingDrop && this.currentTimer > 0) {
