@@ -10,6 +10,8 @@ module.exports = {
 		target = (target != null) ? target : call.message.member;
 		call.getWallet(target.id).getTotal().then((total) => {
 			call.message.channel.send(target.user.tag + " has " + total + " Bro Bits.").catch(() => {});
+		}).catch(() => {
+			call.message.channel.send("Failed to retrieve " + target.user.tag + "'s balance.").catch(() => {});
 		});
 	}
 };

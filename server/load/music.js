@@ -139,7 +139,7 @@ class Queue {
 	}
 }
 
-fs.readdirSync(__dirname + "/../music").forEach((file) => {
+for (let file of fs.readdirSync(__dirname + "/../music")) {
 	var match = file.match(/^(.*)\.js$/);
 	if (match != null) {
 		new Promise((resolve, reject) => {
@@ -155,7 +155,8 @@ fs.readdirSync(__dirname + "/../music").forEach((file) => {
 			console.warn(exc.stack);
 		});
 	}
-});
+}
+
 module.exports = {
 	id: "music",
 	exec: (client) => {

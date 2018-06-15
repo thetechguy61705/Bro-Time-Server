@@ -2,14 +2,15 @@ const Discord = require("discord.js");
 const fs = require("fs");
 var actions = new Discord.Collection();
 
-fs.readdirSync(__dirname + "/../../actions/info").forEach((file) => {
+for (let file of fs.readdirSync(__dirname + "/../../actions/info")) {
 	try {
 		const ACTION = require("../../actions/info/" + file);
 		actions.set(ACTION.id, ACTION);
-	} catch(err) {
-		console.log(err);
+	} catch(exc) {
+		console.warn("Error loading info action " + file + ":");
+		console.warn(exc.stack);
 	}
-});
+}
 
 module.exports = {
 	id: "info",

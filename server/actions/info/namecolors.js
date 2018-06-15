@@ -40,7 +40,7 @@ module.exports = {
 						newMessage.edit({ embed: colorEmbed }).catch(() => {});
 						reactions.on("end", (_, reason) => newMessage.edit("Interactive command ended: " + reason));
 					});
-				});
+				}).catch(() => {});
 			} else if (parameter.toLowerCase() === "list") {
 				call.message.channel.send({ embed: new Discord.RichEmbed().setTitle("Color Roles").setDescription("`" + NAME_COLORS.join("`\n`") + "`").setColor(0x00AE86) }).catch(() => {
 					call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
@@ -66,7 +66,7 @@ module.exports = {
 								call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 							});
 						}
-					});
+					}).catch(() => {});
 				}
 			} else if (parameter.toLowerCase() === "cancel") call.message.reply("Cancelled prompt."); else module.exports.run(call, actions, true);
 		} else module.exports.run(call, actions, true);

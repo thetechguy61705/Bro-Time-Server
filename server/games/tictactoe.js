@@ -22,11 +22,11 @@ module.exports = {
 				session.collector = reactions;
 				reactions.on("collect", (reaction) => {
 					if (reaction.users.last().id === turn[0].id) {
-						E_A.forEach((emoji) => {
+						for (let emoji of E_A) {
 							if (emoji === reaction.emoji.name) {
 								E_A.splice(E_A.indexOf(emoji), 1, turn[1]);
 							}
-						});
+						}
 
 						turn = (turn[0].id === target.id) ? [author, "❌"] : [target, "⭕"];
 

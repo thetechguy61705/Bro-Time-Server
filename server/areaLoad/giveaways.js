@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 var { Guild, RichEmbed } = require("discord.js");
 var util = require("util");
 
@@ -69,7 +70,7 @@ function reloadGiveaways(channel, client) {
 		channel.fetchMessages({ limit: 100 }).then((messagesFetched) => {
 			console.log("messages fetched");
 			var giveawayChannel, giveawayID, giveawayEnd, giveawayWinners, giveawayAuthor, giveawayPrize, args, entryPromise;
-			messagesFetched.forEach((creator) => {
+			for (let creator of messagesFetched.array()) {
 				console.log("checking message");
 				if (canHost(creator.author)) {
 					console.log("is creator!");
@@ -92,7 +93,7 @@ function reloadGiveaways(channel, client) {
 						}).catch(() => {});
 					}
 				}
-			});
+			}
 		}).catch(() => {});
 	}
 }

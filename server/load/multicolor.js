@@ -1,7 +1,7 @@
 module.exports = {
 	id: "multicolor",
 	exec: (client) => {
-		client.guilds.forEach((guild) => {
+		for (let guild of client.guilds.array()) {
 			if (client.user.id === "393532251398209536") {
 				var brotime = client.guilds.get("330913265573953536");
 				var multiColorRole = guild.roles.find("name", "Multicolored");
@@ -23,6 +23,6 @@ module.exports = {
 					}, 3600000);
 				}
 			}
-		});
+		}
 	}
 };

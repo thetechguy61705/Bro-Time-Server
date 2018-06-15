@@ -10,6 +10,6 @@ module.exports = {
 					module.exports.run(call, actions);
 				}
 			} else call.message.channel.send("Cancelled prompt.").catch(() => {});
-		});
+		}).catch(() => {});
 	}
 };

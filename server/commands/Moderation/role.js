@@ -3,15 +3,15 @@ const fs = require("fs");
 const Moderator = require("app/moderator");
 var actions = new Discord.Collection();
 
-fs.readdirSync(__dirname + "/../../actions/role").forEach((file) => {
+for (let file of fs.readdirSync(__dirname + "/../../actions/role")) {
 	try {
 		const ACTION = require("../../actions/role/" + file);
 		actions.set(ACTION.id, ACTION);
 	} catch(err) {
-		console.log("Role action failed to load:");
+		console.warn("Error loading info action " + file + ":");
 		console.warn(err.stack);
 	}
-});
+}
 
 module.exports = {
 	id: "role",
@@ -23,7 +23,7 @@ module.exports = {
 			const PARAMETER = (call.params.readParameter() || "").toLowerCase(),
 				ACTION = actions.find((a) => a.id === PARAMETER || (a.aliases || []).includes(PARAMETER));
 			(ACTION || actions.get("default")).run(call, actions, PARAMETER).catch((err) => {
-				console.log("Role action failed:");
+				console.warn("Role action failed:");
 				console.warn(err.stack);
 			});
 		} else {

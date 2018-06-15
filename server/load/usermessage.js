@@ -25,7 +25,7 @@ module.exports = {
 								if (err) {
 									throw err;
 								} else {
-									member.user.send(data.toString("utf8")).catch(() => {});
+									member.user.send(data.toString("utf8"));
 								}
 							});
 						}).catch(() => {});

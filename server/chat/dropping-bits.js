@@ -43,22 +43,16 @@ module.exports = {
 			.setDescription("Say " + randomCommand + " to collect them!")
 			.setColor(0x00AE86)
 		}).then((msg) => {
-			console.log(1);
 			msg.channel.awaitMessages((m) => m.content.toLowerCase() === randomCommand, { maxMatches: 1, time: 30000, errors: ["time"] }).then((collected) => {
 				this.currentTimer = this.getRate("WAIT_RATES");
-				console.log(2);
 				getWallet(collected.first().author.id).change(bitsDropped + (Premium(collected.first().author.id)) ? 5 : 0).then(() => {
-					console.log(3);
 					collected.first().reply("You collected " + bitsDropped + " Bro Bits!").then((rewardMsg) => {
 						rewardMsg.delete(4000);
-						console.log(4);
 						msg.delete();
 					}).catch((exc) => {
-						console.log(5);
 						console.warn(exc.stack);
 					});
 				}).catch((exc) => {
-					console.log(6);
 					console.warn(exc.stack);
 				});
 			}).catch(() => {

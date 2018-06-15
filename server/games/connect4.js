@@ -1,10 +1,18 @@
-const Discord = require("discord.js");
+const { RichEmbed, Collection} = require("discord.js");
 const EMOJI_ARRAY = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣"];
 
 function getRow(rows, num) {
 	for (var numberLoop = 1; numberLoop !== rows.length; numberLoop++)
 		if (rows[numberLoop][num] !== "⚫")
 			return numberLoop;
+}
+
+function arrayToCollection(arr) {
+	var newColl = new Collection();
+	for (let i = 0; i < arr.length; i++) {
+		newColl.set(i, arr[i]);
+	}
+	return newColl;
 }
 
 module.exports = {
@@ -21,7 +29,7 @@ module.exports = {
 		const author = session.host, target = session.players.last();
 		var rows = [EMOJI_ARRAY, ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
 				["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"]],
-			connectFourEmbed = new Discord.RichEmbed().setColor(0x00AE86).setTitle("Connect Four").setFooter(`${author.tag}'s turn.`);
+			connectFourEmbed = new RichEmbed().setColor(0x00AE86).setTitle("Connect Four").setFooter(`${author.tag}'s turn.`);
 		connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map((row) => row.join(" ")).join("\n"));
 		session.context.channel.send({ embed: connectFourEmbed }).then(async (connectFour) => {
 			await connectFour.reactMultiple(EMOJI_ARRAY);
@@ -43,8 +51,8 @@ module.exports = {
 						session.embed = connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map((row) => row.join(" ")).join("\n"));
 						connectFour.edit({ embed: connectFourEmbed })
 							.then((newConnectFour) => session.connectFour = newConnectFour).catch(() => {});
-						rows.forEach((row, indexOfRow) => {
-							row.forEach((coin, indexOfCoin) => {
+						for (var [indexOfRow, row] of arrayToCollection(rows)) {
+							for (var [indexOfCoin, coin] of arrayToCollection(row)) {
 								if (coin !== "⚫" && coin === row[indexOfCoin + 1] &&
 									row[indexOfCoin + 1] === row[indexOfCoin + 2] &&
 									row[indexOfCoin + 2] === row[indexOfCoin + 3]) {
@@ -75,8 +83,8 @@ module.exports = {
 										session.endGame();
 									}
 								}
-							});
-						});
+							}
+						}
 
 						if (rows.slice(1).map((row) => row.every((coin) => coin !== "⚫")).every((row) => row === true))
 							session.endGame();

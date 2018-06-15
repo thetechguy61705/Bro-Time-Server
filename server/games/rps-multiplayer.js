@@ -14,14 +14,14 @@ module.exports = {
 			OPCHOICES = ["paper", "scissors", "rock"];
 		var waiting = [],
 			messageWaiting = [];
-		PLAYERS.forEach(async (player) => {
+		for (let player of PLAYERS) {
 			messageWaiting.push(player.send("Choose one of the following options: `rock`, `paper` or `scissors`."));
-		});
+		}
 		Promise.all(messageWaiting).then((messages) => {
-			messages.forEach((msg) => {
+			for (let msg of messages.array()) {
 				const FILTER = (m) => CHOICES.includes(m.content.toLowerCase());
 				waiting.push(msg.channel.awaitMessages(FILTER, { maxMatches: 1, time: 60000, errors: ["time"] }));
-			});
+			}
 			Promise.all(waiting).then((results) => {
 				session.rps = {
 					winner: (CHOICES.indexOf(results[0].first().content.toLowerCase()) === OPCHOICES.indexOf(results[1].first().content.toLowerCase())) ?

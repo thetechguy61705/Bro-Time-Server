@@ -19,10 +19,10 @@ function loadChannel(channel, client) {
 		return load(channel, client);
 }
 
-fs.readdirSync(__dirname + "/../areaLoad").forEach((file) => {
+for (let file of fs.readdirSync(__dirname + "/../areaLoad")) {
 	if (file.endsWith(".js"))
 		areaLoaders.push(require("../areaLoad/" + file));
-});
+}
 
 module.exports = {
 	id: "areas",

@@ -106,14 +106,14 @@ function checkAccess(command, message) {
 }
 
 try {
-	fs.readdirSync(COMMANDS).forEach((name) => {
+	for (let name of fs.readdirSync(COMMANDS)) {
 		try {
 			let file = path.join(COMMANDS, name);
 			let stats = fs.statSync(file);
 			if (stats.isDirectory()) {
-				fs.readdirSync(file).forEach((subname) => {
+				for (let subname of fs.readdirSync(file)) {
 					loadModule(path.join(file, subname), name);
-				});
+				}
 			} else {
 				loadModule(file);
 			}
@@ -121,7 +121,7 @@ try {
 			console.warn(`Failed to load file ${name}:`);
 			console.warn(exc.stack);
 		}
-	});
+	}
 } catch (exc) {
 	console.warn("Failed to load commands:");
 	console.warn(exc.stack);

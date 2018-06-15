@@ -169,7 +169,7 @@ function startGame(game, context) {
 	});
 }
 
-fs.readdirSync(__dirname + "/../games").forEach((file) => {
+for (let file of fs.readdirSync(__dirname + "/../games")) {
 	var match = file.match(/^(.*)\.js$/);
 	if (match != null) {
 		new Promise((resolve, reject) => {
@@ -190,7 +190,7 @@ fs.readdirSync(__dirname + "/../games").forEach((file) => {
 			console.warn(exc.stack);
 		});
 	}
-});
+}
 
 module.exports = {
 	Input: Input,
