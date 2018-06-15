@@ -9,7 +9,7 @@ function getWallet(userId = null) {
 module.exports = {
 	TRIGGERS: ["pick", "grab", "take", "steal", "mine", "snatch", "pull", "select", "choose", "get"],
 	WAIT_RATES: [120000, 180000, 90000, 30000, 150000, 90000, 120000, 300000, 180000, 200000],
-	RATES: [7, 13, 13, 13, 13, 18, 22, 22, 25, 29],
+	RATES: [3, 4, 5, 5, 5, 5, 6, 6, 6, 7],
 
 	typingInHangout: 0,
 	isAwaitingDrop: false,
@@ -65,7 +65,7 @@ module.exports = {
 		});
 	},
 	exec: function (message, client) {
-		if (message.channel.id === "433831764105101332" && !this.isAwaitingDrop && this.currentTimer > 0) {
+		if (!client.locked && message.channel.id === "433831764105101332" && !this.isAwaitingDrop && this.currentTimer > 0) {
 			client.setTimeout(() => {
 				this.isAwaitingDrop = true;
 			}, this.currentTimer);
