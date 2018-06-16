@@ -197,7 +197,7 @@ module.exports = {
 	loaded: modules,
 
 	id: "game",
-	aliases: ["games", "play"],
+	aliases: ["games"],
 	description: "Starts a game.",
 	paramsHelp: "[game]",
 	execute: (call) => {
