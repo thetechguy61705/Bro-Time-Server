@@ -1,6 +1,14 @@
 var menu = require("app/menu").menu;
 var random = require("random-letters");
 const Discord = require("discord.js");
+function titleCase(str) {
+	str = str.toLowerCase();
+	str = str.split(" ");
+	for (var i = 0; i < str.length; i++) {
+		str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+	}
+	return str.join(" ");
+}
 module.exports = {
 	id: "order",
 	description: "Orders food",
@@ -26,7 +34,7 @@ module.exports = {
 							var orderEmbed = new Discord.RichEmbed()
 								.setColor("RED")
 								.addField("Order ID", id)
-								.addField("Order", foods.map((m) => `\`${m}\``).join("\n"))
+								.addField("Order", foods.map((m) => `\`${titleCase(m)}\``).join("\n"))
 								.addField("Customer", call.message.author.tag)
 								.addField("Ordered From", orderedFromString)
 								.addField("Status", "Awaiting Cook");
