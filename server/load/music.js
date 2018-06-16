@@ -13,8 +13,55 @@ const VOTE_TIMEOUT = 60000;
 const VOTE_REQUIRED = 0.30;
 const MUSIC_CHANNELS = ["music", "songs"];
 
-class Queue {
-	static isDj(member) {
+class Queue extends Array {
+	constructor(music, connection) {
+		super();
+		this.music = music;
+		this.connection = connection;
+		this.isPlaying = false;
+		this.paused = false;
+	}
+
+	play(stream) {
+		if (this.length === 0)
+			this.begin(stream);
+		this.push(stream);
+		this.isPlaying = true;
+		if (this.paused)
+			this.resume();
+	}
+
+	stop() {
+		this.isPlaying = false;
+		this.length = 0;
+		this.dispatcher.end("Finished playing.");
+	}
+
+	pause() {
+		this.paused = true;
+		this.diaptcher.pause();
+	}
+
+	resume() {
+		this.dispatcher.resume();
+		this.paused = false;
+	}
+
+	begin(first) {
+		this.dispatcher = this.connection.playStream(first);
+		this.dispatcher.on("end", () => {
+			if (this.length > 0) {
+				this.shift();
+				this.begin(this[0]);
+			} else if (!this.dispatcher.destroyed) {
+				this.music.release();
+			}
+		});
+	}
+}
+
+class Music {
+	static isDJ(member) {
 		const premiumRoles = ["330919872630358026", "402175094312665098", "436013049808420866", "436013613568884736", "DJ"];
 		return ((member.roles.some((role) => premiumRoles.includes(role.name) || premiumRoles.includes(role.id)))
 			|| (member.voiceChannel != null && member.voiceChannel.members.filter((member) => !member.user.bot).size === 1)) ? true : false;
@@ -22,7 +69,7 @@ class Queue {
 
 	static request(message, prompt) {
 		var result;
-		if (Queue.isDJ(message.member)) {
+		if (Music.isDJ(message.member)) {
 			result = Promise.resolve(true);
 		} else {
 			var voiceChannel = message.member.voiceChannel;
@@ -42,6 +89,9 @@ class Queue {
 		var ticket;
 		for (var source of sources) {
 			ticket = await source.getTicket(query, tokens.get(source.id));
+			Object.defineProperty(ticket, "load", {
+				value: source.load.bind(source, ticket)
+			});
 			if (ticket != null)
 				break;
 		}
@@ -51,7 +101,7 @@ class Queue {
 			for (var source of sources) {
 				source.search(query, tokens.get(source.id));
 			} */
-		} else if (!Queue.isAcceptable(ticket, source, false, channel)) {
+		} else if (!Music.isAcceptable(ticket, source, false, channel)) {
 			ticket = null;
 		}
 		return ticket;
@@ -68,31 +118,39 @@ class Queue {
 	}
 
 	constructor(client) {
-		this.isDj = Queue.isDj;
+		this.isDJ = Music.isDJ;
 		this.players = new Collection();
 		this.client = client;
 	}
 
 	play(query, message) {
 		this.reserve(message.member).then(() => {
-			Queue.getTicket(message.client, message.channel, query).then((ticket) => {
-				if (ticket != null) {
-					console.log("Playing:", ticket.video_url);
-				} else {
-					console.log("Can't find ticket.");
-				}
-			});
-		}, () => {
-			console.log("Can't play!");
+			var queue = this.players.get(message.guild.id);
+			if (query != null) {
+				Music.getTicket(message.client, message.channel, query).then((ticket) => {
+					// todo: Tell the user about it.
+					if (ticket != null) {
+						queue.play(ticket.load());
+					} else {
+						console.log("Can't find ticket.");
+					}
+				});
+			} else if (queue.paused) {
+				queue.resume();
+			}
+		}, (exc) => {
+			message.reply(exc.message);
+			console.warn(exc.stack);
 		});
 	}
 
 	stop(message) {
-		Queue.request(message, "Stop playing music?").then((accepted) => {
-			this.release(message.member.guild).then(() => {
-				if (accepted)
+		Music.request(message, "Stop playing music?").then((accepted) => {
+			if (accepted) {
+				this.release(message.member.guild).then(() => {
 					message.channel.send("Stopped playing music.");
-			});
+				});
+			}
 		}, (exc) => {
 			console.warn(exc.stack);
 			message.channel.send("Unable to stop playing music (try again shortly).");
@@ -110,9 +168,9 @@ class Queue {
 	reserve(member) {
 		return new Promise((resolve, reject) => {
 			if (!this.players.has(member.guild.id)) {
-				if (member.voiceChannel != null && Queue.isMusicChannel(member.voiceChannel)) {
+				if (member.voiceChannel != null && Music.isMusicChannel(member.voiceChannel)) {
 					member.voiceChannel.join().then((connection) => {
-						this.players.set(member.voiceChannel.guild.id, connection);
+						this.players.set(member.voiceChannel.guild.id, new Queue(this, connection));
 						resolve(true);
 					}).catch(reject);
 				} else {
@@ -127,7 +185,9 @@ class Queue {
 	release(guild) {
 		return new Promise((resolve) => {
 			if (this.players.has(guild.id)) {
-				this.players.get(guild.id).channel.leave();
+				var queue = this.players.get(guild.id);
+				queue.stop();
+				queue.connection.channel.leave();
 				this.players.delete(guild.id);
 			}
 			resolve();
@@ -135,12 +195,11 @@ class Queue {
 	}
 
 	pause() {
-
 	}
 }
 
 for (let file of fs.readdirSync(__dirname + "/../music")) {
-	var match = file.match(/^(.*)\.js$/);
+	let match = file.match(/^(.*)\.js$/);
 	if (match != null) {
 		new Promise((resolve, reject) => {
 			try {
@@ -162,7 +221,7 @@ module.exports = {
 	exec: (client) => {
 		for (var [source, key] of Object.entries(TOKENS_MAPPING))
 			tokens.set(source, config[key]);
-		client.music = new Queue();
+		client.music = new Music();
 
 		/* client.on("message", (message) => {
 			if (message.content.startsWith("play")) {

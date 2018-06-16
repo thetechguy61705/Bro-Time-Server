@@ -35,6 +35,8 @@
     "ffmpeg-binaries": "^3.2.2-3",
     "miniget": "^1.2.0",
     "ms": "^2.1.1",
+    "node-opus": "^0.2.7",
+    "opusscript": "0.0.6",
     "pg": "^7.4.3",
     "ytdl-core": "^0.20.4"
   },
