@@ -8,7 +8,7 @@ for (let file of fs.readdirSync(__dirname + "/../../actions/role")) {
 		const ACTION = require("../../actions/role/" + file);
 		actions.set(ACTION.id, ACTION);
 	} catch(err) {
-		console.warn("Error loading info action " + file + ":");
+		console.warn("Error loading role action " + file + ":");
 		console.warn(err.stack);
 	}
 }
