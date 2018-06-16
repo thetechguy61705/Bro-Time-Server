@@ -35,7 +35,7 @@ class Queue extends Array {
 		this.isPlaying = false;
 		this.length = 0;
 		if (this.dispatcher != null)
-		this.dispatcher.end("Finished playing.");
+			this.dispatcher.end("Finished playing.");
 	}
 
 	pause() {
@@ -87,7 +87,8 @@ class Music {
 		return MUSIC_CHANNELS.some((keyword) => { return name.startsWith(keyword) || name.endsWith(keyword); });
 	}
 
-	static async getTicket(client, channel, query, requestInput) {
+	static async getTicket(client, channel, query) {
+		// requestInput
 		var ticket;
 		for (var source of sources) {
 			ticket = await source.getTicket(query, tokens.get(source.id));
