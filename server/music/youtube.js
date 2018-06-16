@@ -12,23 +12,26 @@ module.exports = {
 
 	getTicket(query, key) {
 		return new Promise((resolve) => {
-			ytdl.getInfo(query, this, (err, info) => {
-				if (err == null) {
-					miniget(`https://www.googleapis.com/youtube/v3/videos?id=${info.video_id}&part=contentDetails&key=${key}`, (err, res, body) => {
-						if (err) {
-							console.warn(err.stack);
-							resolve(null);
-						} else {
-							var rating = JSON.parse(body).items[0].contentDetails.contentRating;
-							info.mature = rating != null && rating.ytRating === "ytAgeRestricted";
-							resolve(info);
-						}
-					});
-				} else {
-					console.warn(err.stack);
-					resolve(null);
-				}
-			});
+			try {
+				ytdl.getInfo(query, this, (err, info) => {
+					if (err == null) {
+						miniget(`https://www.googleapis.com/youtube/v3/videos?id=${info.video_id}&part=contentDetails&key=${key}`, (err, res, body) => {
+							if (err) {
+								throw err;
+							} else {
+								var rating = JSON.parse(body).items[0].contentDetails.contentRating;
+								info.mature = rating != null && rating.ytRating === "ytAgeRestricted";
+								resolve(info);
+							}
+						});
+					} else {
+						throw err;
+					}
+				});
+			} catch (err) {
+				// Not sure how to properly handle these errors. Need ideas.
+				resolve(null);
+			}
 		});
 	},
 
@@ -43,7 +46,10 @@ module.exports = {
 	},
 
 	load(ticket) {
-		return ytdl.downloadFromInfo(ticket, this);
+		var stream = ytdl.downloadFromInfo(ticket, this);
+		Object.defineProperty(stream, "title", { value: ticket.title });
+		Object.defineProperty(stream, "author", { value: ticket.author.name });
+		return stream;
 	},
 
 	search(query, key) {

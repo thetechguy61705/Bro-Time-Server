@@ -22,9 +22,9 @@ class Queue extends Array {
 		this.paused = false;
 	}
 
-	play(stream) {
+	play(stream, channel) {
 		if (this.length === 0)
-			this.begin(stream);
+			this.begin(stream, channel);
 		this.push(stream);
 		this.isPlaying = true;
 		if (this.paused)
@@ -34,6 +34,7 @@ class Queue extends Array {
 	stop() {
 		this.isPlaying = false;
 		this.length = 0;
+		if (this.dispatcher != null)
 		this.dispatcher.end("Finished playing.");
 	}
 
@@ -47,12 +48,13 @@ class Queue extends Array {
 		this.paused = false;
 	}
 
-	begin(first) {
-		this.dispatcher = this.connection.playStream(first);
+	begin(stream, channel) {
+		channel.send(`Now playing ${stream.title} by ${stream.author}!`);
+		this.dispatcher = this.connection.playStream(stream);
 		this.dispatcher.on("end", () => {
 			if (this.length > 0) {
 				this.shift();
-				this.begin(this[0]);
+				this.begin(this[0], channel);
 			} else if (!this.dispatcher.destroyed) {
 				this.music.release();
 			}
@@ -85,18 +87,25 @@ class Music {
 		return MUSIC_CHANNELS.some((keyword) => { return name.startsWith(keyword) || name.endsWith(keyword); });
 	}
 
-	static async getTicket(client, channel, query) {
+	static async getTicket(client, channel, query, requestInput) {
 		var ticket;
 		for (var source of sources) {
 			ticket = await source.getTicket(query, tokens.get(source.id));
-			Object.defineProperty(ticket, "load", {
-				value: source.load.bind(source, ticket)
-			});
-			if (ticket != null)
+			if (ticket != null) {
+				Object.defineProperty(ticket, "load", {
+					value: source.load.bind(source, ticket)
+				});
 				break;
+			}
 		}
 		if (ticket == null) {
 			console.log("search required...");
+			ticket = null;
+			// gather searches.
+			// sort by weight.
+			// take top results.
+			// Request input (until the user provides a valid index).
+			// Return getTicket with the new query.
 			/* var searches = [];
 			for (var source of sources) {
 				source.search(query, tokens.get(source.id));
@@ -123,38 +132,39 @@ class Music {
 		this.client = client;
 	}
 
-	play(query, message) {
-		this.reserve(message.member).then(() => {
-			var queue = this.players.get(message.guild.id);
+	play(query, call) {
+		this.reserve(call.message.member).then(() => {
+			var queue = this.players.get(call.message.guild.id);
 			if (query != null) {
-				Music.getTicket(message.client, message.channel, query).then((ticket) => {
-					// todo: Tell the user about it.
+				Music.getTicket(call.message.client, call.message.channel, query, call.requestInput).then((ticket) => {
 					if (ticket != null) {
-						queue.play(ticket.load());
+						queue.play(ticket.load(), call.message.channel);
 					} else {
-						console.log("Can't find ticket.");
+						call.message.channel.send("Can't find music for the query!");
 					}
 				});
 			} else if (queue.paused) {
 				queue.resume();
 			}
 		}, (exc) => {
-			message.reply(exc.message);
+			call.message.channel.send(exc.message);
 			console.warn(exc.stack);
 		});
 	}
 
-	stop(message) {
-		Music.request(message, "Stop playing music?").then((accepted) => {
-			if (accepted) {
-				this.release(message.member.guild).then(() => {
-					message.channel.send("Stopped playing music.");
-				});
-			}
-		}, (exc) => {
-			console.warn(exc.stack);
-			message.channel.send("Unable to stop playing music (try again shortly).");
-		});
+	stop(call) {
+		if (call.client.voiceConnections.has(call.message.member.guild.id)) {
+			Music.request(call.message, "Stop playing music?").then((accepted) => {
+				if (accepted) {
+					this.release(call.message.member.guild).then(() => {
+						call.message.channel.send("Stopped playing music.");
+					});
+				}
+			}, (exc) => {
+				console.warn(exc.stack);
+				call.message.channel.send("Unable to stop playing music (try again shortly).");
+			});
+		}
 	}
 
 	skip() {
@@ -222,13 +232,5 @@ module.exports = {
 		for (var [source, key] of Object.entries(TOKENS_MAPPING))
 			tokens.set(source, config[key]);
 		client.music = new Music();
-
-		/* client.on("message", (message) => {
-			if (message.content.startsWith("play")) {
-				client.music.play(message.content.substring(5), message);
-			} else if (message.content.startsWith("stop")) {
-				client.music.stop(message);
-			}
-		}); */
 	}
 };
