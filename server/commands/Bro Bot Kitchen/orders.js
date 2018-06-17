@@ -14,8 +14,8 @@ module.exports = {
 				filteredOrders = orders.filter((m) => m && m.embeds && m.embeds[0] && m.embeds[0].fields[4].value.startsWith("Claimed"));
 			}
 			if (filteredOrders.first()) {
-				var messageContent = filteredOrders.map((m) => `\`${m.embeds[0].fields[0].value}\``).join("\n\n");
-				call.message.reply(`\nOrders:\n\n${messageContent}`);
+				var messageContent = filteredOrders.map((m) => `\`${m.embeds[0].fields[0].value}\``).join(",");
+				call.message.reply(`Orders: ${messageContent}`);
 			} else {
 				call.message.reply("There are no orders with this status.").catch(() => {
 					call.message.author.send(`You attempted to use the \`orders\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});

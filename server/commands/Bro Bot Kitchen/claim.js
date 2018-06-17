@@ -26,6 +26,7 @@ module.exports = {
 								call.message.reply("Successfully claimed this order.").catch(() => {
 									call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 								});
+								call.message.author.send("Your claimed order:", { embed: orderEmbed }).catch(() => {});
 								var userToMessage = call.client.users.find((m) => m.tag === filteredOrder.embeds[0].fields[2].value);
 								if(userToMessage) {
 									userToMessage.send("Your order has been claimed!").catch(() => {
