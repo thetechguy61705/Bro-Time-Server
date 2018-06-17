@@ -13,6 +13,7 @@ const TOKENS_MAPPING = {
 const VOTE_TIMEOUT = 60000;
 const VOTE_REQUIRED = 0.30;
 const MUSIC_CHANNELS = ["music", "songs"];
+const ABANDONED_TIMEOUT = 30000;
 
 class Queue extends Array {
 	constructor(music, guild) {
@@ -38,14 +39,23 @@ class Queue extends Array {
 			this.dispatcher.end("Skipping song.");
 	}
 
-	pause() {
+	isPaused() {
+		var paused = true;
 		if (this.dispatcher != null)
-			this.diaptcher.pause();
+			paused = this.dispatcher.paused;
+		return paused;
 	}
 
-	resume() {
-		if (this.dispatcher != null)
-			this.dispatcher.resume();
+	pause() {
+		if (this.dispatcher != null) {
+			if (this.dispatcher.paused) {
+				setTimeout(this.timer);
+				this.dispatcher.resume();
+			} else {
+				this.timer = this.connection.client.setTimeout(this.stop.bind(this), ABANDONED_TIMEOUT);
+				this.dispatcher.pause();
+			}
+		}
 	}
 
 	begin(stream, call) {
@@ -54,6 +64,8 @@ class Queue extends Array {
 			errorHandler(this.dispatcher);
 			this.dispatcher.on("end", () => {
 				this.shift();
+				if (this.timer != null)
+					setTimeout(this.timer);
 				if (this.length > 0) {
 					this.begin(this[0], call);
 				} else {
@@ -62,7 +74,9 @@ class Queue extends Array {
 					call.message.channel.send("Stopped playing music.");
 				}
 			});
-			call.message.channel.send(`Now playing ${stream.title} by ${stream.author}!`);
+			this.dispatcher.once("start", () => {
+				call.message.channel.send(`Now playing ${stream.title} by ${stream.author}!`);
+			});
 		} else if (call.message.member.voiceChannel != null && Music.isMusicChannel(call.message.member.voiceChannel)) {
 			call.message.member.voiceChannel.join().then((connection) => {
 				this.connection = connection;
@@ -222,5 +236,17 @@ module.exports = {
 		for (var [source, key] of Object.entries(TOKENS_MAPPING))
 			tokens.set(source, config[key]);
 		client.music = new Music();
+		client.on("voiceStateUpdate", (oldMember, newMember) => {
+			var queue;
+			if (newMember.voiceChannel == null) {
+				queue = client.music.players.find((queue) => { return queue.connection != null && queue.connection.channel === oldMember.voiceChannel; });
+				if (queue != null && !queue.isPaused() && queue.connection.channel.members.every((member) => { return member.user.bot; }))
+					queue.pause();
+			} else if (oldMember.voiceChannel == null) {
+				queue = client.music.players.find((queue) => { return queue.connection != null && queue.connection.channel === newMember.voiceChannel; });
+				if (queue != null && queue.isPaused() && queue.connection.channel.members.every((member) => { return member.user.bot || member === newMember; }))
+					queue.pause();
+			}
+		});
 	}
 };
