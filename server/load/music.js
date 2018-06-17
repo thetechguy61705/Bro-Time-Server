@@ -24,8 +24,6 @@ class Queue extends Array {
 	}
 
 	play(stream, call) {
-		console.log("play");
-		console.log(this.length);
 		if (this.length === 0)
 			this.begin(stream, call);
 		this.push(stream);
@@ -55,7 +53,6 @@ class Queue extends Array {
 			errorHandler(this.dispatcher);
 			this.dispatcher.on("end", () => {
 				this.shift();
-				console.log("Remaining: " + this.length);
 				if (this.length > 0) {
 					this.begin(this[0], call);
 				} else {
@@ -151,12 +148,12 @@ class Music {
 	}
 
 	play(query, call) {
+		var queue = this.players.has(call.message.guild.id) ?
+			this.players.get(call.message.guild.id) :
+			new Queue(this, call.message.guild);
 		if (query != null) {
 			Music.getTicket(call.message.client, call.message.channel, query, call.requestInput).then((ticket) => {
 				if (ticket != null) {
-					var queue = this.players.has(call.message.guild.id) ?
-						this.players.get(call.message.guild.id) :
-						new Queue(this, call.message.guild);
 					queue.play(ticket.load(), call);
 				} else {
 					call.message.channel.send("Can't find music for the query!");
