@@ -24,11 +24,11 @@ module.exports = {
 					if(foods.length < 4) {
 						var noMenu = [];
 						for (let food of foods) {
-							if(!MENU.includes(food.toLowerCase())) {
+							if(!MENU.find((item) => item.toLowerCase() === food.toLowerCase())) {
 								noMenu.push(food.toLowerCase());
 							}
 						}
-						if(noMenu.length === 0) {
+						if (noMenu.length === 0) {
 							var id = random(3).toUpperCase(),
 								ordersChannel = call.client.channels.get("399290151932526593"),
 								orderedFromString = `${call.message.channel.toString()} (${call.message.channel.id}) in ${call.message.channel.guild.name} (${call.message.channel.guild.id})`;
