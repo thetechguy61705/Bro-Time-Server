@@ -1,5 +1,6 @@
-var isWorker = require("app/workers");
 const Discord = require("discord.js");
+var isWorker = require("app/workers");
+
 module.exports = {
 	id: "claim",
 	description: "Claims an order",
@@ -7,9 +8,9 @@ module.exports = {
 	execute: (call) => {
 		var code = call.params.readParameter();
 		if (code != null) {
-			var ordersChannel = call.client.channels.get("399290151932526593");
-			var kitchenServer = ordersChannel.guild;
-			var member = kitchenServer.members.get(call.message.author.id);
+			var ordersChannel = call.client.channels.get("399290151932526593"),
+			    kitchenServer = ordersChannel.guild,
+			    member = kitchenServer.members.get(call.message.author.id);
 			if(member != null && isWorker(member)) {
 				ordersChannel.fetchMessages({ limit: 100 }).then((orders) => {
 					var filteredOrder = orders.find((m) => m.embeds[0] && m.embeds[0].fields[0].value === code.toUpperCase());
@@ -22,13 +23,11 @@ module.exports = {
 								.addField("Customer", filteredOrder.embeds[0].fields[2].value)
 								.addField("Ordered From", filteredOrder.embeds[0].fields[3].value)
 								.addField("Status", `Claimed (${call.message.author.tag})`);
-							filteredOrder.edit(orderEmbed).then(() => {
-								call.message.reply("Successfully claimed this order.").catch(() => {
-									call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-								});
+							filteredOrder.edit({ embed: orderEmbed }).then(() => {
+								call.message.reply("Successfully claimed this order.").catch(() => {});
 								call.message.author.send("Your claimed order:", { embed: orderEmbed }).catch(() => {});
 								var userToMessage = call.client.users.find((m) => m.tag === filteredOrder.embeds[0].fields[2].value);
-								if(userToMessage) {
+								if (userToMessage != null) {
 									userToMessage.send("Your order has been claimed!").catch(() => {
 										call.message.reply("Couldn't DM this user, but I claimed the order anyways").catch(() => {
 											call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
