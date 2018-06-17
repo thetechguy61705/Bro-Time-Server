@@ -4,7 +4,7 @@ module.exports = {
 	execute: (call) => {
 		var ordersChannel = call.client.channels.get("399290151932526593");
 		ordersChannel.fetchMessages({ limit: 100 }).then((orders) => {
-			var filteredOrder = orders.find((m) => m && m.embeds && m.embeds[0] && m.embeds[0].fields[2].value === call.message.author.tag);
+			var filteredOrder = orders.find((m) => m.embeds[0] && m.embeds[0].fields[2].value === call.message.author.tag);
 			if (filteredOrder) {
 				if (!filteredOrder.embeds[0].fields[4].value.startsWith("Claimed")) {
 					filteredOrder.delete().then(() => {
