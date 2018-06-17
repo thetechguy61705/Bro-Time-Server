@@ -4,18 +4,20 @@ module.exports = {
 	id: "orders",
 	description: "Lists unclaimed orders",
 	execute: (call) => {
+		var kitchenServer = call.client.guilds.get("398948242790023168"),
+			member = kitchenServer.members.get(call.message.author.id);
 		if(member != null && isWorker(member)) {
-			var kitchenServer = call.client.guilds.get("398948242790023168"),
-				member = kitchenServer.members.get(call.message.author.id);
 			var ordersToFilter = orders;
 			var filteredOrders;
-			if (call.params.readRaw() !== "" || call.params.readRaw() != null) {
+			if (call.params.readRaw()) {
 				filteredOrders = ordersToFilter.filter((m) => m.status === call.params.readRaw().toLowerCase());
+			} else {
+				filteredOrders = ordersToFilter;
 			}
 			if (call.params.readRaw().toLowerCase() === "claimed") {
 				filteredOrders = ordersToFilter.filter((m) => m.status.startsWith("Claimed"));
 			}
-			if (filteredOrders.first() != null) {
+			if (filteredOrders[0] != null) {
 				var messageContent = filteredOrders.map((m) => `\`${m.id}\``).join(",");
 				call.message.reply(`Orders: ${messageContent}`);
 			} else {

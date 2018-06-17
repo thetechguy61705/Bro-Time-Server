@@ -14,7 +14,7 @@ module.exports = {
 				var filteredOrder = orders.find((o) => o.id === code.toUpperCase());
 				if (filteredOrder != null) {
 					var userToMessage = call.client.users.find((m) => m.tag === filteredOrder.customer);
-					filteredOrder.delete().then(() => {
+					filteredOrder.msg.delete().then(() => {
 						orders.splice(orders.indexOf(filteredOrder), 1);
 						call.message.reply("Successfully cancelled this order.").catch(() => {});
 						if (userToMessage != null) {
