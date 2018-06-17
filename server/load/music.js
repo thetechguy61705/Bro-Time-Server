@@ -1,3 +1,4 @@
+var errorHandler = require("app/errorHandler");
 var config = require("../../config");
 var { Collection } = require("discord.js");
 var fs = require("fs");
@@ -59,6 +60,7 @@ class Queue extends Array {
 				this.music.release();
 			}
 		});
+		errorHandler(this.dispatcher);
 	}
 }
 
