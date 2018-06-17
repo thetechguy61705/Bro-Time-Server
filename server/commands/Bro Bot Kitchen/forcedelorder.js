@@ -1,5 +1,4 @@
 var worker = require("app/workers");
-
 module.exports = {
 	id: "forcedelorder",
 	description: "Deletes someone else's order",
@@ -17,7 +16,7 @@ module.exports = {
 					if (filteredOrder) {
 						var userToMessage = call.client.users.find((m) => m.tag === filteredOrder.embeds[0].fields[2].value);
 						filteredOrder.delete().then(() => {
-							call.message.reply("Successfully cancelled this order").catch(() => {
+							call.message.reply("Successfully cancelled this order.").catch(() => {
 								call.message.author.send(`You attempted to use the \`forcedelorder\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 							});
 							if(userToMessage) {
