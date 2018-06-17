@@ -5,15 +5,15 @@ module.exports = {
 		var ordersChannel = call.client.channels.get("399290151932526593");
 		ordersChannel.fetchMessages({ limit: 100 }).then((orders) => {
 			var filteredOrders;
-			if (call.params.readRaw()) {
-				filteredOrders = orders.filter((m) => m && m.embeds && m.embeds[0] && m.embeds[0].fields[4].value.toLowerCase() === call.params.readRaw().toLowerCase());
+			if (call.params.readRaw() !== "" || call.params.readRaw() != null) {
+				filteredOrders = orders.filter((m) => m.embeds[0] != null && m.embeds[0].fields[4].value.toLowerCase() === call.params.readRaw().toLowerCase());
 			} else {
-				filteredOrders = orders.filter((m) => m && m.embeds && m.embeds[0]);
+				filteredOrders = orders.filter((m) => m.embeds[0] != null);
 			}
 			if (call.params.readRaw().toLowerCase() === "claimed") {
-				filteredOrders = orders.filter((m) => m && m.embeds && m.embeds[0] && m.embeds[0].fields[4].value.startsWith("Claimed"));
+				filteredOrders = orders.filter((m) => m.embeds[0] != null && m.embeds[0].fields[4].value.startsWith("Claimed"));
 			}
-			if (filteredOrders.first()) {
+			if (filteredOrders.first() != null) {
 				var messageContent = filteredOrders.map((m) => `\`${m.embeds[0].fields[0].value}\``).join(",");
 				call.message.reply(`Orders: ${messageContent}`);
 			} else {
