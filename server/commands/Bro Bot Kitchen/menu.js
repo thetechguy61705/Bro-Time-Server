@@ -1,10 +1,10 @@
 const Discord = require("discord.js");
 var menu = require("app/menu").menu;
 function titleCase(str) {
-	str = str.toLowerCase();
+	str = str.toUpperCase();
 	str = str.split(" ");
 	for (var i = 0; i < str.length; i++) {
-		str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+		str[i] = str[i].charAt(0) + str[i].slice(1);
 	}
 	return str.join(" ");
 }
