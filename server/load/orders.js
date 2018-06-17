@@ -12,7 +12,8 @@ module.exports = {
 					order: order.embeds[0].fields[1].value,
 					customer: order.embeds[0].fields[2].value,
 					orderedFrom: order.embeds[0].fields[3].value,
-					status: order.embeds[0].fields[4].value
+					status: order.embeds[0].fields[4].value,
+					links: order.embeds[0].fields[5].value || "None",
 				});
 			}
 		});

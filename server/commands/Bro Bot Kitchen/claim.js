@@ -16,11 +16,10 @@ module.exports = {
 					if (!filteredOrder.status.startsWith("Claimed")) {
 						var orderEmbed = new Discord.RichEmbed()
 							.setColor("RED")
-							.addField("Order ID", filteredOrder.embeds[0].fields[0].value)
-							.addField("Order", filteredOrder.embeds[0].fields[1].value)
-							.addField("Customer", filteredOrder.embeds[0].fields[2].value)
-							.addField("Ordered From", filteredOrder.embeds[0].fields[3].value)
-							.addField("Status", `Claimed (${call.message.author.tag})`);
+							.addField("Order ID", filteredOrder.id)
+							.addField("Order", filteredOrder.order)
+							.addField("Customer", filteredOrder.customer)
+							.addField("Ordered From", filteredOrder.orderedFrom);
 						filteredOrder.msg.edit({ embed: orderEmbed }).then(() => {
 							orders.push({
 								msg: filteredOrder.msg,
@@ -28,12 +27,13 @@ module.exports = {
 								order: filteredOrder.order,
 								customer: filteredOrder.customer,
 								orderedFrom: filteredOrder.orderedFrom,
-								status: `Claimed (${call.message.author.tag})`
+								status: `Claimed (${call.message.author.tag})`,
+								links: "None",
 							});
 							orders.splice(orders.indexOf(filteredOrder), 1);
 							call.message.reply("Successfully claimed this order.").catch(() => {});
 							call.message.author.send("Your claimed order:", { embed: orderEmbed }).catch(() => {});
-							var userToMessage = call.client.users.find((m) => m.tag === filteredOrder.embeds[0].fields[2].value);
+							var userToMessage = call.client.users.find((m) => m.tag === filteredOrder.customer);
 							if (userToMessage != null) {
 								userToMessage.send("Your order has been claimed!").catch(() => {
 									call.message.reply("Couldn't DM this user, but I claimed the order anyways").catch(() => {

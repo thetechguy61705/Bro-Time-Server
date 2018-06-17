@@ -36,7 +36,8 @@ module.exports = {
 							.addField("Order", foods.map((m) => "`" + titleCase(m) + "`").join("\n"))
 							.addField("Customer", call.message.author.tag)
 							.addField("Ordered From", orderedFromString)
-							.addField("Status", "Awaiting Cook");
+							.addField("Status", "Awaiting Cook")
+							.addField("Links", "None");
 						ordersChannel.send({ embed: orderEmbed }).then((newMsg) => {
 							orders.push({
 								msg: newMsg,
@@ -44,7 +45,8 @@ module.exports = {
 								order: foods.map((m) => "`" + titleCase(m) + "`").join("\n"),
 								customer: call.message.author.tag,
 								orderedFrom: orderedFromString,
-								status: "Awaiting Cook"
+								status: "Awaiting Cook",
+								links: "None",
 							});
 							call.message.reply("Your order has been sent!").catch(() => {});
 						}).catch(() => {
