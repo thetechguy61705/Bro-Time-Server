@@ -1,4 +1,4 @@
-var worker = require("app/workers");
+var isWorker = require("app/workers");
 const Discord = require("discord.js");
 module.exports = {
 	id: "claim",
@@ -6,14 +6,14 @@ module.exports = {
 	paramsHelp: "(order id)",
 	execute: (call) => {
 		var code = call.params.readParameter();
-		if(code) {
+		if (code != null) {
 			var ordersChannel = call.client.channels.get("399290151932526593");
 			var kitchenServer = ordersChannel.guild;
 			var member = kitchenServer.members.get(call.message.author.id);
-			if(member && worker(member)) {
+			if(member != null && isWorker(member)) {
 				ordersChannel.fetchMessages({ limit: 100 }).then((orders) => {
-					var filteredOrder = orders.find((m) => m && m.embeds && m.embeds[0] && m.embeds[0].fields[0].value === code.toUpperCase());
-					if (filteredOrder) {
+					var filteredOrder = orders.find((m) => m.embeds[0] && m.embeds[0].fields[0].value === code.toUpperCase());
+					if (filteredOrder != null) {
 						if (!filteredOrder.embeds[0].fields[4].value.startsWith("Claimed")) {
 							var orderEmbed = new Discord.RichEmbed()
 								.setColor("RED")
