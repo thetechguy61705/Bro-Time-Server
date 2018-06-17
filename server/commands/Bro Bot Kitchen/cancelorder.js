@@ -8,7 +8,7 @@ module.exports = {
 		if (filteredOrder != null) {
 			if (filteredOrder.status === "Awaiting Cook") {
 				filteredOrder.msg.delete().then(() => {
-					orders.orders.splice(orders.indexOf(filteredOrder), 1);
+					orders.splice(orders.indexOf(filteredOrder), 1);
 					call.message.reply("Successfully cancelled your order").catch(() => {
 						call.message.author.send(`You attempted to use the \`cancelorder\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 					});

@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 var isWorker = require("app/workers");
-
+var orders = require("../../load/orders.js").orders;
 module.exports = {
 	id: "claim",
 	description: "Claims an order",
@@ -8,54 +8,56 @@ module.exports = {
 	execute: (call) => {
 		var code = call.params.readParameter();
 		if (code != null) {
-			var ordersChannel = call.client.channels.get("399290151932526593"),
-				kitchenServer = ordersChannel.guild,
+			var kitchenServer = call.client.guilds.get("398948242790023168"),
 				member = kitchenServer.members.get(call.message.author.id);
 			if(member != null && isWorker(member)) {
-				ordersChannel.fetchMessages({ limit: 100 }).then((orders) => {
-					var filteredOrder = orders.find((m) => m.embeds[0] && m.embeds[0].fields[0].value === code.toUpperCase());
-					if (filteredOrder != null) {
-						if (!filteredOrder.embeds[0].fields[4].value.startsWith("Claimed")) {
-							var orderEmbed = new Discord.RichEmbed()
-								.setColor("RED")
-								.addField("Order ID", filteredOrder.embeds[0].fields[0].value)
-								.addField("Order", filteredOrder.embeds[0].fields[1].value)
-								.addField("Customer", filteredOrder.embeds[0].fields[2].value)
-								.addField("Ordered From", filteredOrder.embeds[0].fields[3].value)
-								.addField("Status", `Claimed (${call.message.author.tag})`);
-							filteredOrder.edit({ embed: orderEmbed }).then(() => {
-								call.message.reply("Successfully claimed this order.").catch(() => {});
-								call.message.author.send("Your claimed order:", { embed: orderEmbed }).catch(() => {});
-								var userToMessage = call.client.users.find((m) => m.tag === filteredOrder.embeds[0].fields[2].value);
-								if (userToMessage != null) {
-									userToMessage.send("Your order has been claimed!").catch(() => {
-										call.message.reply("Couldn't DM this user, but I claimed the order anyways").catch(() => {
-											call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-										});
-									});
-								} else {
-									call.message.reply("Couldn't find the user to message, but I claimed the order anyways.");
-								}
-							}).catch(() => {
-								call.message.reply("Couldn't claim this order, please try again").catch(() => {
-									call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-								});
+				var filteredOrder = orders.find((o) => o.id === code.toUpperCase());
+				if (filteredOrder != null) {
+					if (!filteredOrder.status.startsWith("Claimed")) {
+						var orderEmbed = new Discord.RichEmbed()
+							.setColor("RED")
+							.addField("Order ID", filteredOrder.embeds[0].fields[0].value)
+							.addField("Order", filteredOrder.embeds[0].fields[1].value)
+							.addField("Customer", filteredOrder.embeds[0].fields[2].value)
+							.addField("Ordered From", filteredOrder.embeds[0].fields[3].value)
+							.addField("Status", `Claimed (${call.message.author.tag})`);
+						filteredOrder.msg.edit({ embed: orderEmbed }).then(() => {
+							orders.push({
+								msg: filteredOrder.msg,
+								id: filteredOrder.id,
+								order: filteredOrder.order,
+								customer: filteredOrder.customer,
+								orderedFrom: filteredOrder.orderedFrom,
+								status: `Claimed (${call.message.author.tag})`
 							});
-						} else {
-							call.message.reply("This order is already claimed, so you cannot re-claim it!").catch(() => {
+							orders.splice(orders.indexOf(filteredOrder), 1);
+							call.message.reply("Successfully claimed this order.").catch(() => {});
+							call.message.author.send("Your claimed order:", { embed: orderEmbed }).catch(() => {});
+							var userToMessage = call.client.users.find((m) => m.tag === filteredOrder.embeds[0].fields[2].value);
+							if (userToMessage != null) {
+								userToMessage.send("Your order has been claimed!").catch(() => {
+									call.message.reply("Couldn't DM this user, but I claimed the order anyways").catch(() => {
+										call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+									});
+								});
+							} else {
+								call.message.reply("Couldn't find the user to message, but I claimed the order anyways.");
+							}
+						}).catch(() => {
+							call.message.reply("Couldn't claim this order, please try again").catch(() => {
 								call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 							});
-						}
+						});
 					} else {
-						call.message.reply("Not a valid order ID!").catch(() => {
+						call.message.reply("This order is already claimed, so you cannot re-claim it!").catch(() => {
 							call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 						});
 					}
-				}).catch(() => {
-					call.message.reply("Couldn't fetch current orders").catch(() => {
+				} else {
+					call.message.reply("Not a valid order ID!").catch(() => {
 						call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 					});
-				});
+				}
 			} else {
 				call.message.reply("You do not have permission to use this command!").catch(() => {
 					call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});

@@ -1,6 +1,4 @@
 var { getMenu } = require("app/menu");
-
-
 module.exports = {
 	id: "menu",
 	description: "Sends you the menu",
