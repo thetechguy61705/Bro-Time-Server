@@ -1,11 +1,12 @@
-const Discord = require("discord.js");
-var menu = require("app/menu");
+var menu = require("app/menu").menuEmbed;
+
 
 module.exports = {
 	id: "menu",
 	description: "Sends you the menu",
 	execute: (call) => {
-		call.message.channel.send(menu(call.message.author)).catch(() => {
+		menu.setFooter(`Max: 3 | Ran by ${call.message.author.tag}`);
+		call.message.channel.send(menu).catch(() => {
 			call.message.author.send(`You attempted to use the \`menu\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 		});
 	}
