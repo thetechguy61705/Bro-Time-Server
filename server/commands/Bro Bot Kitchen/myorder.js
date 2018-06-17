@@ -7,10 +7,12 @@ module.exports = {
 		ordersChannel.fetchMessages({ limit: 100 }).then((orders) => {
 			var filteredOrder = orders.find((m) => m && m.embeds && m.embeds[0] && m.embeds[0].fields[2].value === call.message.author.tag);
 			if (filteredOrder) {
+				var status = filteredOrder.embeds[0].fields[4].value;
+				if(status.startsWith("Claimed")) status = "Claimed";
 				var orderEmbed = new Discord.RichEmbed()
 					.setColor("RED")
 					.addField("Order", filteredOrder.embeds[0].fields[1].value)
-					.addField("Status", filteredOrder.embeds[0].fields[4].value)
+					.addField("Status", status)
 					.setFooter(`Ran by ${call.message.author.tag}`);
 				call.message.channel.send(orderEmbed).catch(() => {
 					call.message.author.send(`You attempted to use the \`myorder\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});

@@ -6,7 +6,7 @@ module.exports = {
 		ordersChannel.fetchMessages({ limit: 100 }).then((orders) => {
 			var filteredOrder = orders.find((m) => m && m.embeds && m.embeds[0] && m.embeds[0].fields[2].value === call.message.author.tag);
 			if (filteredOrder) {
-				if (filteredOrder.embeds[0].fields[4].value !== "Claimed") {
+				if (!filteredOrder.embeds[0].fields[4].value.startsWith("Claimed")) {
 					filteredOrder.delete().then(() => {
 						call.message.reply("Successfully cancelled your order").catch(() => {
 							call.message.author.send(`You attempted to use the \`cancelorder\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});

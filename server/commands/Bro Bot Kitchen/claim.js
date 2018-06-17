@@ -14,21 +14,21 @@ module.exports = {
 				ordersChannel.fetchMessages({ limit: 100 }).then((orders) => {
 					var filteredOrder = orders.find((m) => m && m.embeds && m.embeds[0] && m.embeds[0].fields[0].value === code.toUpperCase());
 					if (filteredOrder) {
-						if (filteredOrder.embeds[0].fields[4].value !== "Claimed") {
+						if (!filteredOrder.embeds[0].fields[4].value.startsWith("Claimed")) {
 							var orderEmbed = new Discord.RichEmbed()
 								.setColor("RED")
 								.addField("Order ID", filteredOrder.embeds[0].fields[0].value)
 								.addField("Order", filteredOrder.embeds[0].fields[1].value)
 								.addField("Customer", filteredOrder.embeds[0].fields[2].value)
 								.addField("Ordered From", filteredOrder.embeds[0].fields[3].value)
-								.addField("Status", "Claimed");
+								.addField("Status", `Claimed (${call.message.author.tag})`);
 							filteredOrder.edit(orderEmbed).then(() => {
 								call.message.reply("Successfully claimed this order.").catch(() => {
 									call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 								});
 								var userToMessage = call.client.users.find((m) => m.tag === filteredOrder.embeds[0].fields[2].value);
 								if(userToMessage) {
-									userToMessage.send(`Your order has been claimed by ${call.message.author.tag}!`).catch(() => {
+									userToMessage.send("Your order has been claimed!").catch(() => {
 										call.message.reply("Couldn't DM this user, but I claimed the order anyways").catch(() => {
 											call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 										});
