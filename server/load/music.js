@@ -15,21 +15,21 @@ const VOTE_REQUIRED = 0.30;
 const MUSIC_CHANNELS = ["music", "songs"];
 
 class Queue extends Array {
-	constructor(music, connection) {
+	constructor(music, guild) {
 		super();
 		this.music = music;
-		this.connection = connection;
 		this.isPlaying = false;
 		this.paused = false;
+		music.players.set(guild.id, this);
 	}
 
-	play(stream, channel) {
+	play(stream, call) {
+		console.log("play");
+		console.log(this.length);
 		if (this.length === 0)
-			this.begin(stream, channel);
+			this.begin(stream, call);
 		this.push(stream);
 		this.isPlaying = true;
-		if (this.paused)
-			this.resume();
 	}
 
 	stop() {
@@ -49,18 +49,33 @@ class Queue extends Array {
 		this.paused = false;
 	}
 
-	begin(stream, channel) {
-		channel.send(`Now playing ${stream.title} by ${stream.author}!`);
-		this.dispatcher = this.connection.playStream(stream);
-		this.dispatcher.on("end", () => {
-			if (this.length > 0) {
+	begin(stream, call) {
+		if (this.connection != null) {
+			this.dispatcher = this.connection.playStream(stream);
+			errorHandler(this.dispatcher);
+			this.dispatcher.on("end", () => {
 				this.shift();
-				this.begin(this[0], channel);
-			} else if (!this.dispatcher.destroyed) {
-				this.music.release();
-			}
-		});
-		errorHandler(this.dispatcher);
+				console.log("Remaining: " + this.length);
+				if (this.length > 0) {
+					this.begin(this[0], call);
+				} else {
+					this.music.players.delete(this.connection.channel.guild.id);
+					this.connection.channel.leave();
+					call.message.channel.send("Stopped playing music.");
+				}
+			});
+			call.message.channel.send(`Now playing ${stream.title} by ${stream.author}!`);
+		} else if (call.message.member.voiceChannel != null && Music.isMusicChannel(call.message.member.voiceChannel)) {
+			call.message.member.voiceChannel.join().then((connection) => {
+				this.connection = connection;
+				this.begin(stream, call);
+			}, (exc) => {
+				call.message.channel.send(exc.message);
+				console.warn(exc.stack);
+			});
+		} else {
+			call.message.channel.send("The member is not in a voice channel.");
+		}
 	}
 }
 
@@ -136,32 +151,31 @@ class Music {
 	}
 
 	play(query, call) {
-		this.reserve(call.message.member).then(() => {
-			var queue = this.players.get(call.message.guild.id);
-			if (query != null) {
-				Music.getTicket(call.message.client, call.message.channel, query, call.requestInput).then((ticket) => {
-					if (ticket != null) {
-						queue.play(ticket.load(), call.message.channel);
-					} else {
-						call.message.channel.send("Can't find music for the query!");
-					}
-				});
-			} else if (queue.paused) {
-				queue.resume();
-			}
-		}, (exc) => {
-			call.message.channel.send(exc.message);
-			console.warn(exc.stack);
-		});
+		if (query != null) {
+			Music.getTicket(call.message.client, call.message.channel, query, call.requestInput).then((ticket) => {
+				if (ticket != null) {
+					var queue = this.players.has(call.message.guild.id) ?
+						this.players.get(call.message.guild.id) :
+						new Queue(this, call.message.guild);
+					queue.play(ticket.load(), call);
+				} else {
+					call.message.channel.send("Can't find music for the query!");
+				}
+			});
+		} else if (queue.paused) {
+			queue.resume();
+		}
 	}
 
 	stop(call) {
-		if (call.client.voiceConnections.has(call.message.member.guild.id)) {
+		if (call.client.voiceConnections.has(call.message.guild.id)) {
 			Music.request(call.message, "Stop playing music?").then((accepted) => {
 				if (accepted) {
-					this.release(call.message.member.guild).then(() => {
-						call.message.channel.send("Stopped playing music.");
-					});
+					if (this.players.has(call.message.guild.id)) {
+						this.players.get(call.message.guild.id).stop();
+					} else {
+						call.client.voiceConnections.first().channel.leave();
+					}
 				}
 			}, (exc) => {
 				console.warn(exc.stack);
@@ -171,40 +185,9 @@ class Music {
 	}
 
 	skip() {
-
 	}
 
 	repeat() {
-
-	}
-
-	reserve(member) {
-		return new Promise((resolve, reject) => {
-			if (!this.players.has(member.guild.id)) {
-				if (member.voiceChannel != null && Music.isMusicChannel(member.voiceChannel)) {
-					member.voiceChannel.join().then((connection) => {
-						this.players.set(member.voiceChannel.guild.id, new Queue(this, connection));
-						resolve(true);
-					}).catch(reject);
-				} else {
-					reject(new Error("The member is not in a voice channel."));
-				}
-			} else {
-				resolve(true);
-			}
-		});
-	}
-
-	release(guild) {
-		return new Promise((resolve) => {
-			if (this.players.has(guild.id)) {
-				var queue = this.players.get(guild.id);
-				queue.stop();
-				queue.connection.channel.leave();
-				this.players.delete(guild.id);
-			}
-			resolve();
-		});
 	}
 
 	pause() {
