@@ -1,10 +1,10 @@
-var orders = require("./orders.js");
+var orders = require(".././load/orders.js");
 
 module.exports = {
 	id: "cancelorder",
 	description: "Cancels your current order",
 	execute: (call) => {
-		var filteredOrder = require(".../load/orders.js").orders.find((o) => o.customer === call.message.author.id);
+		var filteredOrder = orders.orders.find((o) => o.customer === call.message.author.id);
 		if (filteredOrder != null) {
 			if (!filteredOrder.embeds[0].fields[4].value.startsWith("Claimed")) {
 				filteredOrder.msg.delete().then(() => {

@@ -9,8 +9,8 @@ module.exports = {
 		var code = call.params.readParameter();
 		if (code != null) {
 			var ordersChannel = call.client.channels.get("399290151932526593"),
-			    kitchenServer = ordersChannel.guild,
-			    member = kitchenServer.members.get(call.message.author.id);
+				kitchenServer = ordersChannel.guild,
+				member = kitchenServer.members.get(call.message.author.id);
 			if(member != null && isWorker(member)) {
 				ordersChannel.fetchMessages({ limit: 100 }).then((orders) => {
 					var filteredOrder = orders.find((m) => m.embeds[0] && m.embeds[0].fields[0].value === code.toUpperCase());
