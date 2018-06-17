@@ -6,7 +6,7 @@ module.exports = {
 	run: (call) => {
 		var muteTime = call.params.readParameter();
 		muteTime = ms((muteTime != null) ? muteTime : " ");
-		if (muteTime != null && muteTime > 0 && muteTime < 100000) {
+		if (muteTime != null && muteTime > 0 && muteTime < 604800000) {
 			var target = call.params.readParameter();
 			target = (target != null) ? call.message.guild.members.find((m) => target.includes(m.id) || m.user.tag.startsWith(target)) : target;
 			if (target != null) {
