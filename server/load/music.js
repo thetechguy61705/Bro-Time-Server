@@ -18,8 +18,6 @@ class Queue extends Array {
 	constructor(music, guild) {
 		super();
 		this.music = music;
-		this.isPlaying = false;
-		this.paused = false;
 		music.players.set(guild.id, this);
 	}
 
@@ -27,24 +25,27 @@ class Queue extends Array {
 		if (this.length === 0)
 			this.begin(stream, call);
 		this.push(stream);
-		this.isPlaying = true;
 	}
 
 	stop() {
-		this.isPlaying = false;
 		this.length = 0;
 		if (this.dispatcher != null)
 			this.dispatcher.end("Finished playing.");
 	}
 
+	skip() {
+		if (this.dispatcher != null)
+			this.dispatcher.end("Skipping song.");
+	}
+
 	pause() {
-		this.paused = true;
-		this.diaptcher.pause();
+		if (this.dispatcher != null)
+			this.diaptcher.pause();
 	}
 
 	resume() {
-		this.dispatcher.resume();
-		this.paused = false;
+		if (this.dispatcher != null)
+			this.dispatcher.resume();
 	}
 
 	begin(stream, call) {
@@ -168,11 +169,8 @@ class Music {
 		if (call.client.voiceConnections.has(call.message.guild.id)) {
 			Music.request(call.message, "Stop playing music?").then((accepted) => {
 				if (accepted) {
-					if (this.players.has(call.message.guild.id)) {
+					if (this.players.has(call.message.guild.id))
 						this.players.get(call.message.guild.id).stop();
-					} else {
-						call.client.voiceConnections.first().channel.leave();
-					}
 				}
 			}, (exc) => {
 				console.warn(exc.stack);
@@ -181,7 +179,16 @@ class Music {
 		}
 	}
 
-	skip() {
+	skip(call) {
+		if (this.players.has(call.message.guild.id)) {
+			Music.request(call.message, "Stop playing music?").then((accepted) => {
+				if (accepted)
+					this.players.get(call.message.guild.id).skip();
+			}, (exc) => {
+				console.warn(exc.stack);
+				call.message.channel.send("Unable to skip a song (try again shortly).");
+			});
+		}
 	}
 
 	repeat() {
