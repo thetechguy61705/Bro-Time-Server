@@ -1,14 +1,14 @@
-var orders = require(".././load/orders.js");
+var orders = require("../../load/orders.js").orders;
 
 module.exports = {
 	id: "cancelorder",
 	description: "Cancels your current order",
 	execute: (call) => {
-		var filteredOrder = orders.orders.find((o) => o.customer === call.message.author.id);
+		var filteredOrder = orders.find((o) => o.customer === call.message.author.tag);
 		if (filteredOrder != null) {
-			if (!filteredOrder.embeds[0].fields[4].value.startsWith("Claimed")) {
+			if (filteredOrder.status === "Awaiting Cook") {
 				filteredOrder.msg.delete().then(() => {
-					orders.orders.splice(orders.orders.indexOf(filteredOrder), 1);
+					orders.orders.splice(orders.indexOf(filteredOrder), 1);
 					call.message.reply("Successfully cancelled your order").catch(() => {
 						call.message.author.send(`You attempted to use the \`cancelorder\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
 					});
