@@ -46,10 +46,10 @@ class Queue extends Array {
 		return paused;
 	}
 
-	pause() {
+	toggle() {
 		if (this.dispatcher != null) {
 			if (this.dispatcher.paused) {
-				setTimeout(this.timer);
+				clearTimeout(this.timer);
 				this.dispatcher.resume();
 			} else {
 				this.timer = this.connection.client.setTimeout(this.stop.bind(this), ABANDONED_TIMEOUT);
@@ -65,7 +65,7 @@ class Queue extends Array {
 			this.dispatcher.on("end", () => {
 				this.shift();
 				if (this.timer != null)
-					setTimeout(this.timer);
+					clearTimeout(this.timer);
 				if (this.length > 0) {
 					this.begin(this[0], call);
 				} else {
@@ -103,10 +103,14 @@ class Music {
 		if (Music.isDJ(message.member)) {
 			result = Promise.resolve(true);
 		} else {
-			var voiceChannel = message.member.voiceChannel;
-			result = vote(VOTE_TIMEOUT, message.channel, Math.floor(voiceChannel.members.size*VOTE_REQUIRED),
-				(user) => { return voiceChannel.members.has(user.id); },
-				null, prompt, message.user);
+			var voiceChannel = message.client.voiceConnections.get(message.guild.id).channel;
+			if (voiceChannel.members.filter((member) => { return !member.user.bot; }).size() == 0) {
+				result = Promise.resolve(true);
+			} else {
+				result = vote(VOTE_TIMEOUT, message.channel, Math.floor(voiceChannel.members.size*VOTE_REQUIRED),
+					(user) => { return voiceChannel.members.has(user.id); },
+					null, prompt, message.user);
+			}
 		}
 		return result;
 	}
@@ -114,6 +118,10 @@ class Music {
 	static isMusicChannel(channel) {
 		var name = channel.name.toLowerCase();
 		return MUSIC_CHANNELS.some((keyword) => { return name.startsWith(keyword) || name.endsWith(keyword); });
+	}
+
+	static compareSearchResults() {
+		return 0;
 	}
 
 	static async getTicket(client, channel, query) {
@@ -130,16 +138,16 @@ class Music {
 		}
 		if (ticket == null) {
 			console.log("search required...");
-			ticket = null;
-			// gather searches.
-			// sort by weight.
-			// take top results.
+			/* ticket = null;
 			// Request input (until the user provides a valid index).
 			// Return getTicket with the new query.
-			/* var searches = [];
-			for (var source of sources) {
-				source.search(query, tokens.get(source.id));
-			} */
+			var searches = [];
+			// var prompt = new RichEmbed();
+			for (var source of sources)
+				Array.prototype.push.apply(searches, source.search(query, tokens.get(source.id)));
+			searches.sort(compareSearchResults);
+			searches.slice(0, 5);
+			// await requestInput(1, prompt); */
 		} else if (!Music.isAcceptable(ticket, source, false, channel)) {
 			ticket = null;
 		}
@@ -194,10 +202,11 @@ class Music {
 	}
 
 	skip(call) {
-		if (this.players.has(call.message.guild.id)) {
-			Music.request(call.message, "Stop playing music?").then((accepted) => {
+		var queue = this.players.get(call.message.guild.id);
+		if (queue != null) {
+			Music.request(call.message, "Skip the current song?").then((accepted) => {
 				if (accepted)
-					this.players.get(call.message.guild.id).skip();
+					queue.skip();
 			}, (exc) => {
 				console.warn(exc.stack);
 				call.message.channel.send("Unable to skip a song (try again shortly).");
@@ -205,10 +214,20 @@ class Music {
 		}
 	}
 
-	repeat() {
+	toggle(call) {
+		var queue = this.players.get(call.message.guild.id);
+		if (queue != null) {
+			Music.request(call.message, "Pause or resume playing?").then((accepted) => {
+				if (accepted)
+					queue.toggle();
+			}, (exc) => {
+				console.warn(exc.stack);
+				call.message.channel.send("Unable to toggle music (try again shortly).");
+			});
+		}
 	}
 
-	pause() {
+	repeat() {
 	}
 }
 
@@ -241,11 +260,11 @@ module.exports = {
 			if (newMember.voiceChannel == null) {
 				queue = client.music.players.find((queue) => { return queue.connection != null && queue.connection.channel === oldMember.voiceChannel; });
 				if (queue != null && !queue.isPaused() && queue.connection.channel.members.every((member) => { return member.user.bot; }))
-					queue.pause();
+					queue.toggle();
 			} else if (oldMember.voiceChannel == null) {
 				queue = client.music.players.find((queue) => { return queue.connection != null && queue.connection.channel === newMember.voiceChannel; });
 				if (queue != null && queue.isPaused() && queue.connection.channel.members.every((member) => { return member.user.bot || member === newMember; }))
-					queue.pause();
+					queue.toggle();
 			}
 		});
 	}
