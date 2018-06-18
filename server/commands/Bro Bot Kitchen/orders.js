@@ -10,7 +10,7 @@ module.exports = {
 			var ordersToFilter = orders;
 			var filteredOrders;
 			if (call.params.readRaw()) {
-				filteredOrders = ordersToFilter.filter((m) => m.status === call.params.readRaw().toLowerCase());
+				filteredOrders = ordersToFilter.filter((m) => m.status.toLowerCase().startsWith(call.params.readRaw().toLowerCase()));
 			} else {
 				filteredOrders = ordersToFilter;
 			}

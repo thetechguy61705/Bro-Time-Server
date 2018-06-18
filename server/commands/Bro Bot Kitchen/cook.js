@@ -1,6 +1,13 @@
 var isWorker = require("app/workers");
 const Discord = require("discord.js");
 var orders = require("../../load/orders.js").orders;
+function titleCase(str) {
+	var newString = "";
+	for (let i = 0; i < str.length; i++) {
+		newString += (i === 0 || str.charAt(i - 1) === " ") ? str.charAt(i).toUpperCase() : str.charAt(i).toLowerCase();
+	}
+	return newString;
+}
 module.exports = {
 	id: "cook",
 	description: "Cooks someone's order",
@@ -11,20 +18,25 @@ module.exports = {
 		if(member != null && isWorker(member)) {
 			if (call.message.content.split("|")[1] && call.message.content.split("|")[2]) {
 				var code = call.params.readParameter().trim();
-				var food = call.message.content.split("|")[1].trim();
-				var link = call.message.content.split("|")[2].trim();
+				var food = titleCase(call.message.content.split("|")[1].trim());
+				var link = call.message.content.split("|")[2].trim().toLowerCase();
 				if (code != null && food != null && link != null) {
 					var filteredOrder = orders.find((o) => o.id === code.toUpperCase());
 					if (filteredOrder != null) {
 						if(filteredOrder.status !== "Awaiting Cook") {
 							if(filteredOrder.status.includes(call.message.author.tag)) {
 								var foods = filteredOrder.order.replace(/`/gi, "").split("\n").map((m) => m.toLowerCase()).filter((m) => !filteredOrder.links.toLowerCase().includes(m.toLowerCase()));
-								if(foods.includes(food)) {
+								if(foods.includes(food.toLowerCase())) {
 									var links;
 									if(filteredOrder.links !== "None") {
 										links = filteredOrder.links + `\n${food} - ${link}`;
 									} else {
 										links = `${food} - ${link}`;
+									}
+									var status = "Cooking";
+									var justLinks = filteredOrder.links.split("\n");
+									if (foods.length === justLinks.length + 1) {
+										status = "Cooked";
 									}
 									var orderEmbed = new Discord.RichEmbed()
 										.setColor("RED")
@@ -32,7 +44,7 @@ module.exports = {
 										.addField("Order", filteredOrder.order)
 										.addField("Customer", filteredOrder.customer)
 										.addField("Ordered From", filteredOrder.orderedFrom)
-										.addField("Status", `Cooking (${call.message.author.tag})`)
+										.addField("Status", `${status} (${call.message.author.tag})`)
 										.addField("Links", links);
 									filteredOrder.msg.edit({ embed: orderEmbed }).then(() => {
 										orders.push({
@@ -41,7 +53,7 @@ module.exports = {
 											order: filteredOrder.order,
 											customer: filteredOrder.customer,
 											orderedFrom: filteredOrder.orderedFrom,
-											status: `Cooking (${call.message.author.tag})`,
+											status: `${status} (${call.message.author.tag})`,
 											links: links,
 										});
 										orders.splice(orders.indexOf(filteredOrder), 1);

@@ -13,6 +13,7 @@ module.exports = {
 			if(member != null && isWorker(member)) {
 				var filteredOrder = orders.find((o) => o.id === code.toUpperCase());
 				if (filteredOrder != null) {
+
 					if (!filteredOrder.status.startsWith("Claimed")) {
 						var orderEmbed = new Discord.RichEmbed()
 							.setColor("RED")
