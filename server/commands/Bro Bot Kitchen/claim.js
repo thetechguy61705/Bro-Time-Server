@@ -5,8 +5,11 @@ module.exports = {
 	id: "claim",
 	description: "Claims an order",
 	paramsHelp: "(order id)",
-	type: "kitchen",
 	execute: (call) => {
+		if (call.client.bbkLocked && !call.client.bbkLockedChannels.includes(call.message.channel.id)) {
+			call.client.bbkLockedChannels.push(call.message.channel.id);
+			return call.message.channel.send("Bro Bot Kitchen is currently in lockdown and inaccessible by any user.");
+		}
 		var code = call.params.readParameter();
 		if (code != null) {
 			var kitchenServer = call.client.guilds.get("398948242790023168"),

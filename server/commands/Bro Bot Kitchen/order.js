@@ -14,8 +14,11 @@ module.exports = {
 	id: "order",
 	description: "Orders food",
 	paramsHelp: "(item), [item2], [item3]",
-	type: "kitchen",
 	execute: (call) => {
+		if (call.client.bbkLocked && !call.client.bbkLockedChannels.includes(call.message.channel.id)) {
+			call.client.bbkLockedChannels.push(call.message.channel.id);
+			return call.message.channel.send("Bro Bot Kitchen is currently in lockdown and inaccessible by any user.");
+		}
 		var filteredOrder = orders.find((o) => o.customer === call.message.author.tag);
 		if (!filteredOrder) {
 			var foods = call.params.readRaw().split(",").map((val) => val.trim());

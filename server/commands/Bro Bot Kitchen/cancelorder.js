@@ -3,8 +3,11 @@ var orders = require("../../load/orders.js").orders;
 module.exports = {
 	id: "cancelorder",
 	description: "Cancels your current order",
-	type: "kitchen",
 	execute: (call) => {
+		if (call.client.bbkLocked && !call.client.bbkLockedChannels.includes(call.message.channel.id)) {
+			call.client.bbkLockedChannels.push(call.message.channel.id);
+			return call.message.channel.send("Bro Bot Kitchen is currently in lockdown and inaccessible by any user.");
+		}
 		var filteredOrder = orders.find((o) => o.customer === call.message.author.tag);
 		if (filteredOrder != null) {
 			if (filteredOrder.status === "Awaiting Cook") {
