@@ -1,5 +1,6 @@
 var isWorker = require("app/workers");
 var orders = require("../../load/orders.js").orders;
+const Discord = require("discord.js");
 module.exports = {
 	id: "deliver",
 	description: "Delivers food to customer",
@@ -15,9 +16,19 @@ module.exports = {
 				if (filteredOrder != null) {
 					if (filteredOrder.status.startsWith("Cooked")) {
 						if (filteredOrder.status.includes(call.message.author.tag)) {
+							var logsChannel = call.client.channels.get("458288216609652736");
 							var usertoSend = call.client.users.find((m) => m.tag === filteredOrder.customer);
 							if (usertoSend != null) {
 								usertoSend.send(`Your food was delivered by ${call.message.author.tag}:\n${filteredOrder.links}`).then(() => {
+									var orderEmbed = new Discord.RichEmbed()
+										.setColor("RED")
+										.addField("Order ID", filteredOrder.id)
+										.addField("Order", filteredOrder.order)
+										.addField("Customer", filteredOrder.customer)
+										.addField("Ordered From", filteredOrder.orderedFrom)
+										.addField("Status", `Delivered (${call.message.author.tag})`)
+										.addField("Links", filteredOrder.links);
+									logsChannel.send(orderEmbed).catch(() => {});
 									filteredOrder.msg.delete().catch(() => {
 										call.message.author.send("I couldn't delete this order from the #kitchen channel, please manually delete it before the next bot restart!").catch(() => {
 											call.message.author.send(`You attempted to use the \`deliver\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});

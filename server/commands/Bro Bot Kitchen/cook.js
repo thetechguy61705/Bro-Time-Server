@@ -35,8 +35,9 @@ module.exports = {
 										links = `${food} - ${link}`;
 									}
 									var status = "Cooking";
+									var justFoods = filteredOrder.order.split("\n");
 									var justLinks = filteredOrder.links.split("\n");
-									if (foods.length === justLinks.length + 1) {
+									if (justFoods.length <= justLinks.length + 1) {
 										status = "Cooked";
 									}
 									var orderEmbed = new Discord.RichEmbed()
