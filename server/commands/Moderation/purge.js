@@ -24,7 +24,7 @@ module.exports = {
 			messages = messages.filter(filter).first(amount);
 			var deleted = await channel.bulkDelete(messages);
 			return deleted.size;
-		}
+		};
 
 		if (isModerator(call.message.member)) {
 			const PARAMETER = (call.params.readParameter() || "").toLowerCase(),

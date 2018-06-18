@@ -11,7 +11,6 @@ module.exports = {
 	execute: async (call) => {
 		var userBalance = await call.getWallet(call.message.author.id).getTotal();
 		var param = (call.params.readParameter() || "."), amountToBet = Math.ceil(Number(param) || param.toNumber(964));
-		console.log(amountToBet)
 		if (amountToBet != null && !isNaN(amountToBet) && amountToBet > 0) {
 			if (amountToBet <= userBalance) {
 				var randomSuccess = Math.random() * 10;
