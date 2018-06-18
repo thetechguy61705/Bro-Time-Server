@@ -24,7 +24,7 @@ module.exports = {
 		if (parameter != null) {
 			if (parameter.toLowerCase() === "preview") {
 				var emojiNumber = 0;
-				var gameroleEmbed = updateEmbed(new Discord.RichEmbed(), call.message.guild, emojiNumber);
+				var gameroleEmbed = updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message.guild, emojiNumber);
 				call.message.channel.send({ embed: gameroleEmbed }).then(async (newMessage) => {
 					await newMessage.reactMultiple(EMOJI_ARRAY);
 					var filter = (reaction, user) => EMOJI_ARRAY.includes(reaction.emoji.name) && user.id === call.message.author.id;
@@ -42,7 +42,11 @@ module.exports = {
 					});
 				});
 			} else if (parameter.toLowerCase() === "list") {
-				call.message.channel.send({ embed: new Discord.RichEmbed().setTitle("Game Roles").setDescription("`" + GAMES.join("`\n`") + "`").setColor(0x00AE86) }).catch(() => {
+				call.message.channel.send({ embed: new Discord.RichEmbed()
+					.setTitle("Game Roles")
+					.setDescription("`" + GAMES.join("`\n`") + "`")
+					.setColor(0x00AE86)
+					.setDefaultFooter(call.message.author) }).catch(() => {
 					call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
 				});
 			} else if (parameter.toLowerCase() === "specify") {
@@ -50,7 +54,7 @@ module.exports = {
 				if (newParameter != null && newParameter != "") {
 					var specifiedGame = GAMES.map((game) => game.toLowerCase()).indexOf(newParameter.toLowerCase());
 					if (specifiedGame > -1) {
-						call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed, call.message.guild, specifiedGame) });
+						call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message.guild, specifiedGame) });
 					} else {
 						call.message.reply("Invalid game specified. Please try out `!info gameroles list` and take one of those games. Prompt cancelled.").catch(() => {
 							call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
@@ -60,7 +64,7 @@ module.exports = {
 					call.requestInput(0, "Please specify the game you would like to view.", 60000).then((result) => {
 						var specifiedGame = GAMES.map((game) => game.toLowerCase()).indexOf(result.message.content.toLowerCase());
 						if (specifiedGame > -1) {
-							call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed, call.message.guild, specifiedGame) });
+							call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message.guild, specifiedGame) });
 						} else {
 							call.message.reply("Invalid game specified. Please try out `!info gameroles list` and take one of those games. Prompt cancelled.").catch(() => {
 								call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});

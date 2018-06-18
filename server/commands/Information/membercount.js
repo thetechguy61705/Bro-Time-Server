@@ -12,7 +12,7 @@ module.exports = {
 			.addField("Online", online)
 			.addField("Humans", humans)
 			.addField("Bots", bots)
-			.setFooter(`Ran by ${call.message.author.tag}`)
+			.setDefaultFooter(call.message.author)
 			.setColor("BLUE");
 		call.message.channel.send({ embed: memberEmbed }).catch(() => {
 			call.message.author.send(`You attempted to use the \`membercount\` command in ${call.message.channel}, but I can not chat there.`)

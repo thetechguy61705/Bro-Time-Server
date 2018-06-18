@@ -68,7 +68,8 @@ function invite(game, channel, players, host) {
 		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id))
 		.addField("Minimum Players", game.minPlayers, true)
 		.addField("Maximum Players", game.maxPlayers, true)
-		.setTitle(`Invite to ${game.id}`)
+		.setTitle(`Invite to ${game.id}`		)
+		.setDefaultFooter(host)
 		.setColor(0x00AE86);
 	if (channel.guild.roles.find("name", "Bro Time Games")) {
 		var allowedToPing = channel.guild.roles.find("name", "Bro Time Games").members.filter((m) => m.user.presence.status === "online").array().map((m) => m.id);

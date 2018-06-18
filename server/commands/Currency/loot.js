@@ -1,3 +1,8 @@
+/*
+Number 1 - 10 for non-premium users, 1 - 20 for premium users.
+Use every 5 minutes.
+*/
+
 var premium = require("app/premium");
 
 module.exports = {

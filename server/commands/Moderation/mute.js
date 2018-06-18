@@ -11,7 +11,7 @@ module.exports = {
 		if (Moderator(call.message.member)) {
 			const target = call.message.guild.members.find((member) => (parameterOne || "").includes(member.user.id) ||
 				member.user.tag.toLowerCase().startsWith(parameterOne));
-			if (target !== null) {
+			if (target != null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					if (!target.roles.has(call.message.guild.roles.find("name", "Muted").id)) {
 						var muteTime = (parameterTwo != null) ? ms(parameterTwo) : null;

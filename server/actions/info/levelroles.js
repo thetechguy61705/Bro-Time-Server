@@ -7,11 +7,11 @@ const LEVEL_ROLES = ["Newbie Bro", "Junior Bro", "Cool Junior Bro", "OP Junior B
 ];
 const LEVELS = [ "0", "1", "5", "10", "11", "15", "20", "21", "25", "30", "31", "35", "40", "41", "45", "50", "51", "55", "60", "61" ];
 
-function updateEmbed(embed, guild, levelNumber) {
+function updateEmbed(embed, message, levelNumber) {
 	return embed
 		.setTitle(LEVEL_ROLES[levelNumber])
-		.setDescription("Members: `" + guild.roles.find("name", LEVEL_ROLES[levelNumber]).members.size + "`\nObtain: " + "`level: " + LEVELS[levelNumber] + "`")
-		.setColor(guild.roles.find("name", LEVEL_ROLES[levelNumber]).hexColor);
+		.setDescription("Members: `" + message.guild.roles.find("name", LEVEL_ROLES[levelNumber]).members.size + "`\nObtain: " + "`level: " + LEVELS[levelNumber] + "`")
+		.setColor(message.guild.roles.find("name", LEVEL_ROLES[levelNumber]).hexColor);
 }
 
 module.exports = {
@@ -25,7 +25,7 @@ module.exports = {
 		if (parameter != null) {
 			if (parameter.toLowerCase() === "preview") {
 				var emojiNumber = 0;
-				var levelEmbed = updateEmbed(new Discord.RichEmbed(), call.message.guild, emojiNumber);
+				var levelEmbed = updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message, emojiNumber);
 				call.message.channel.send({ embed: levelEmbed }).then(async (newMessage) => {
 					await newMessage.reactMultiple(EMOJI_ARRAY);
 					var filter = (reaction, user) => EMOJI_ARRAY.includes(reaction.emoji.name) && user.id === call.message.author.id;
@@ -37,13 +37,17 @@ module.exports = {
 						} else {
 							emojiNumber = (emojiNumber !== LEVEL_ROLES.length - 1) ? emojiNumber + 1 : 0;
 						}
-						levelEmbed = updateEmbed(levelEmbed, call.message.guild, emojiNumber);
+						levelEmbed = updateEmbed(levelEmbed, call.message, emojiNumber);
 						newMessage.edit({ embed: levelEmbed });
 						reactions.on("end", (_, reason) => newMessage.edit("Interactive command ended: " + reason));
 					});
 				});
 			} else if (parameter.toLowerCase() === "list") {
-				call.message.channel.send({ embed: new Discord.RichEmbed().setTitle("Level Roles").setDescription("`" + LEVEL_ROLES.join("`\n`") + "`").setColor(0x00AE86) }).catch(() => {
+				call.message.channel.send({ embed: new Discord.RichEmbed()
+					.setTitle("Level Roles")
+					.setDescription("`" + LEVEL_ROLES.join("`\n`") + "`")
+					.setColor(0x00AE86)
+					.setDefaultFooter(call.message.author) }).catch(() => {
 					call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
 				});
 			} else if (parameter.toLowerCase() === "specify") {
@@ -51,7 +55,7 @@ module.exports = {
 				if (newParameter != null && newParameter != "") {
 					var specifiedLevel = LEVEL_ROLES.map((level) => level.toLowerCase()).indexOf(newParameter.toLowerCase());
 					if (specifiedLevel > -1) {
-						call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed, call.message.guild, specifiedLevel) });
+						call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message, specifiedLevel) });
 					} else {
 						call.message.reply("Invalid level specified. Please try out `!info levelroles list` and take one of those levels. Prompt cancelled.").catch(() => {
 							call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
@@ -61,7 +65,7 @@ module.exports = {
 					call.requestInput(0, "Please specify the level you would like to view.", 60000).then((result) => {
 						var specifiedLevel = LEVEL_ROLES.map((level) => level.toLowerCase()).indexOf(result.message.content.toLowerCase());
 						if (specifiedLevel > -1) {
-							call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed, call.message.guild, specifiedLevel) });
+							call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message, specifiedLevel) });
 						} else {
 							call.message.reply("Invalid level specified. Please try out `!info levelroles list` and take one of those levels. Prompt cancelled.").catch(() => {
 								call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);

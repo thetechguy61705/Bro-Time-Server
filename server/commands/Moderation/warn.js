@@ -8,15 +8,15 @@ module.exports = {
 	requires: "Moderator permissions",
 	execute: async (call) => {
 		const rawContent = call.params.readRaw(),
-			parameterOne = call.params.readParameter(),
-			parameterTwo = call.params.readParameter();
+			parameterOne = (call.params.readParameter() || ""),
+			parameterTwo = (call.params.readParameter() || "");
 		if (Moderator(call.message.member)) {
-			const target = call.message.guild.members.find((member) => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
-			if (parameterOne != null) {
+			if (parameterOne != "") {
+				const target = call.message.guild.members.find((member) => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
 				if (target != null) {
 					if (!target.user.bot) {
 						if (target.highestRole.position < call.message.member.highestRole.position) {
-							var reason = (parameterTwo != null) ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
+							var reason = (parameterTwo !== "") ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
 							try {
 								await target.send(`You have been warned in the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}.`);
 							} catch(err) {

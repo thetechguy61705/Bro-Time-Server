@@ -26,7 +26,7 @@ module.exports = {
 		const command = call.commands.loaded.find((cmd) => (cmd.aliases || []).concat(cmd.id).includes(param1.toLowerCase()));
 		var helpEmbed = new Discord.RichEmbed()
 			.setColor(0x00AE86)
-			.setFooter(`Ran by ${call.message.author.username} (${call.message.author.id})`, call.message.author.displayAvatarURL);
+			.setDefaultFooter(call.message.author);
 		var commandHelp = {};
 
 		if (param1 === "") {
@@ -48,7 +48,8 @@ module.exports = {
 				`\nRequires: \`${(requires || "None")}\`` +
 				`\nAliases: \`${(aliases || ["None"]).join("`, `")}\`` +
 				`\nCategory: \`${command.category}\`` +
-				`\n\n[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server/tree/master/server/commands/${(command.category !== "Other") ? command.category + "/" : ""}${file})`);
+				`\n\n[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server/tree/master/server/commands/${(command.category !== "Other") ? command.category + "/" : ""}${file})`)
+				.setDefaultFooter(call.message.author);
 		} else {
 			call.message.reply("Invalid command name. Please run `!help (command)` or just `!help`").catch(() => {
 				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`);

@@ -7,13 +7,13 @@ module.exports = {
 	requires: "Moderator permissions",
 	execute: async (call) => {
 		const rawContent = call.params.readRaw(),
-			parameterOne = call.params.readParameter(),
-			parameterTwo = call.params.readParameter();
+			parameterOne = (call.params.readParameter() || ""),
+			parameterTwo = (call.params.readParameter() || "");
 		if (Moderator(call.message.member)) {
 			const target = call.message.guild.members.find((m) => parameterOne.includes(`${m.user.id}`));
 			if (target != null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
-					var reason = (parameterTwo != null) ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
+					var reason = (parameterTwo !== "") ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
 					if (target.bannable) {
 						try {
 							await target.send(`You have been softbanned/kicked from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);

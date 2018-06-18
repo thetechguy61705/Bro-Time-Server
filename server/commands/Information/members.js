@@ -32,7 +32,7 @@ module.exports = {
 					totalPages = (members.split("\n").length + (20 - (members.split("\n").length % 20)));
 					totalPages /= 20;
 				}
-				memberEmbed.setDescription(membersToSend.join("\n")).setFooter(`Page ${page}/${totalPages}`);
+				memberEmbed.setDescription(membersToSend.join("\n")).setFooter(`Page ${page}/${totalPages} -`).setDefaultFooter(call.message.author);
 				call.message.channel.send({ embed: memberEmbed }).then(async function(sentEmbed) {
 					await sentEmbed.reactMultiple(EMOJI_ARRAY);
 					const FILTER = (reaction, user) => EMOJI_ARRAY.includes(reaction.emoji.name) && user.id === call.message.author.id;
@@ -53,8 +53,11 @@ module.exports = {
 							}
 						}
 
-						memberEmbed = new Discord.RichEmbed().setDescription(membersToSend.join("\n")).setColor("ORANGE")
-							.setFooter(`Page ${page}/${totalPages}`);
+						memberEmbed = new Discord.RichEmbed()
+							.setDescription(membersToSend.join("\n"))
+							.setColor("ORANGE")
+							.setFooter(`Page ${page}/${totalPages} -`)
+							.setDefaultFooter(call.message.author);
 						if (content !== "") memberEmbed.setTitle(`Users in ${call.message.guild.roles.find((r) => r.name.toLowerCase().startsWith(content.toLowerCase())).name}`);
 						if (content === "") memberEmbed.setTitle("Users");
 						sentEmbed.edit({ embed: memberEmbed });
