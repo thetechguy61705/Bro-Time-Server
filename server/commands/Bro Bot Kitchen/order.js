@@ -18,6 +18,8 @@ module.exports = {
 		if (call.client.bbkLocked && !call.client.bbkLockedChannels.includes(call.message.channel.id)) {
 			call.client.bbkLockedChannels.push(call.message.channel.id);
 			return call.message.channel.send("Bro Bot Kitchen is currently in lockdown and inaccessible by any user.");
+		} else if (call.client.bbkLocked) {
+			return;
 		}
 		var filteredOrder = orders.find((o) => o.customer === call.message.author.tag);
 		if (!filteredOrder) {

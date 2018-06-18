@@ -8,6 +8,8 @@ module.exports = {
 		if (call.client.bbkLocked && !call.client.bbkLockedChannels.includes(call.message.channel.id)) {
 			call.client.bbkLockedChannels.push(call.message.channel.id);
 			return call.message.channel.send("Bro Bot Kitchen is currently in lockdown and inaccessible by any user.");
+		} else if (call.client.bbkLocked) {
+			return;
 		}
 		var kitchenServer = call.client.guilds.get("398948242790023168"),
 			member = kitchenServer.members.get(call.message.author.id);

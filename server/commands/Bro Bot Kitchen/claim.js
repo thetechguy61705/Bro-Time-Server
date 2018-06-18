@@ -9,6 +9,8 @@ module.exports = {
 		if (call.client.bbkLocked && !call.client.bbkLockedChannels.includes(call.message.channel.id)) {
 			call.client.bbkLockedChannels.push(call.message.channel.id);
 			return call.message.channel.send("Bro Bot Kitchen is currently in lockdown and inaccessible by any user.");
+		} else if (call.client.bbkLocked) {
+			return;
 		}
 		var code = call.params.readParameter();
 		if (code != null) {
