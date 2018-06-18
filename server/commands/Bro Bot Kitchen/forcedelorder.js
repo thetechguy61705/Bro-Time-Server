@@ -4,6 +4,7 @@ module.exports = {
 	id: "forcedelorder",
 	description: "Deletes someone else's order",
 	paramsHelp: "(order number) (reason)",
+	type: "kitchen",
 	execute: (call) => {
 		var kitchenServer = call.client.guilds.get("398948242790023168"),
 			member = kitchenServer.members.get(call.message.author.id);

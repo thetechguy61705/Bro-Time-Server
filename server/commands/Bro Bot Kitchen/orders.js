@@ -3,6 +3,8 @@ var isWorker = require("app/workers");
 module.exports = {
 	id: "orders",
 	description: "Lists unclaimed orders",
+	paramsHelp: "[status]",
+	type: "kitchen",
 	execute: (call) => {
 		var kitchenServer = call.client.guilds.get("398948242790023168"),
 			member = kitchenServer.members.get(call.message.author.id);

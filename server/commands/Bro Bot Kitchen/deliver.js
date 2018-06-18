@@ -4,6 +4,7 @@ module.exports = {
 	id: "deliver",
 	description: "Delivers food to customer",
 	paramsHelp: "(order id)",
+	type: "kitchen",
 	execute: (call) => {
 		var code = call.params.readParameter();
 		if (code != null) {

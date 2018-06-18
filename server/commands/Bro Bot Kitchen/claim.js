@@ -5,6 +5,7 @@ module.exports = {
 	id: "claim",
 	description: "Claims an order",
 	paramsHelp: "(order id)",
+	type: "kitchen",
 	execute: (call) => {
 		var code = call.params.readParameter();
 		if (code != null) {

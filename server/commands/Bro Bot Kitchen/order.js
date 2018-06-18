@@ -14,6 +14,7 @@ module.exports = {
 	id: "order",
 	description: "Orders food",
 	paramsHelp: "(item), [item2], [item3]",
+	type: "kitchen",
 	execute: (call) => {
 		var filteredOrder = orders.find((o) => o.customer === call.message.author.tag);
 		if (!filteredOrder) {

@@ -3,6 +3,7 @@ var orders = require("../../load/orders.js").orders;
 module.exports = {
 	id: "cancelorder",
 	description: "Cancels your current order",
+	type: "kitchen",
 	execute: (call) => {
 		var filteredOrder = orders.find((o) => o.customer === call.message.author.tag);
 		if (filteredOrder != null) {

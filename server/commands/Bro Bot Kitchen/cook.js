@@ -12,6 +12,7 @@ module.exports = {
 	id: "cook",
 	description: "Cooks someone's order",
 	paramsHelp: "(order number) | (food/drink) | (link)",
+	type: "kitchen",
 	execute: (call) => {
 		var kitchenServer = call.client.guilds.get("398948242790023168"),
 			member = kitchenServer.members.get(call.message.author.id);

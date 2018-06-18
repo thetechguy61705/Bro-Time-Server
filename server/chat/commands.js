@@ -179,14 +179,32 @@ module.exports = {
 				var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.includes(name));
 
 				if (command != null && checkAccess(command, message) && hasPermissions(command, message, client)) {
-					if (!client.locked || command.id === "lockdown") {
-						params.readSeparator();
-						command.execute(new Call(this, message, client, params));
-						used = true;
+					if (command.type !== "kitchen") {
+						if (!client.locked || command.id === "lockdown") {
+							params.readSeparator();
+							command.execute(new Call(this, message, client, params));
+							used = true;
+						} else {
+							if (!client.lockedChannels.includes(message.channel.id)) {
+								client.lockedChannels.push(message.channel.id);
+								message.channel.send("The client is currently in lockdown and inaccessible by any user.");
+							}
+						}
 					} else {
-						if (!client.lockedChannels.includes(message.channel.id)) {
-							client.lockedChannels.push(message.channel.id);
-							message.channel.send("The client is currently in lockdown and inaccessible by any user.");
+						if (!client.bbkLocked && !client.locked || !client.locked && command.id === "kitchenlockdown") {
+							params.readSeparator();
+							command.execute(new Call(this, message, client, params));
+							used = true;
+						} else if (client.locked) {
+							if (!client.lockedChannels.includes(message.channel.id)) {
+								client.lockedChannels.push(message.channel.id);
+								message.channel.send("The client is currently in lockdown and inaccessible by any user.");
+							}
+						} else {
+							if (!client.bbkLockedChannels.includes(message.channel.id)) {
+								client.bbkLockedChannels.push(message.channel.id);
+								message.channel.send("Bro Bot Kitchen is currently in lockdown and inaccessible by any user.");
+							}
 						}
 					}
 				}
