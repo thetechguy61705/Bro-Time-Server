@@ -49,7 +49,7 @@ module.exports = {
 				`\nAliases: \`${(aliases || ["None"]).join("`, `")}\`` +
 				`\nCategory: \`${command.category}\`` +
 				"\n\n[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server/tree/master/server/commands/" +
-					`${(command.category !== "Other") ? command.category.replace(new RegExp(" ", "g"), "%") + "/" : ""}${file})`)
+					`${(command.category !== "Other") ? command.category.replace(new RegExp(" ", "g"), "%20") + "/" : ""}${file}.js)`)
 				.setDefaultFooter(call.message.author);
 		} else {
 			call.message.reply("Invalid command name. Please run `!help (command)` or just `!help`").catch(() => {

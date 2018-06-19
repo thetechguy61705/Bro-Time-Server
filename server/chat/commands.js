@@ -13,8 +13,9 @@ const TESTING = process.env.NODE_ENV !== "production";
 const ACCESS = new Enum(["Public", "Private", "Server"], { ignoreCase: true });
 
 class Call {
-	constructor(commands, message, client, params) {
+	constructor(commands, command, message, client, params) {
 		this.commands = commands;
+		this.command = command;
 		this.message = message;
 		this.client = client;
 		this.params = params;
@@ -49,6 +50,13 @@ class Call {
 
 	getWallet(userId = null) {
 		return new WalletAccess(userId);
+	}
+
+	safeSend(content, message = this.message, reply = true) {
+		message.channel.send(content, { reply: reply ? message.author : null }).catch((exc) => {
+			message.author.send(`You attempted to use the \`${this.command.id}\` command in ${message.channel}, but I can not chat there.`);
+			console.warn(exc.stack);
+		});
 	}
 }
 
@@ -181,7 +189,7 @@ module.exports = {
 				if (command != null && checkAccess(command, message) && hasPermissions(command, message, client)) {
 					if (!client.locked || command.id === "lockdown") {
 						params.readSeparator();
-						command.execute(new Call(this, message, client, params));
+						command.execute(new Call(this, command, message, client, params));
 						used = true;
 					} else {
 						if (!client.lockedChannels.includes(message.channel.id)) {
