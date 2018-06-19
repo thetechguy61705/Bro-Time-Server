@@ -23,6 +23,7 @@ class Queue extends Array {
 	}
 
 	play(stream, call) {
+		call.message.channel.send(`Added ${stream.title} by ${stream.author} to the queue.`);
 		if (this.length === 0)
 			this.begin(stream, call);
 		this.push(stream);
