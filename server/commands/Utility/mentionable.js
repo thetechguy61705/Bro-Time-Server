@@ -1,3 +1,5 @@
+const isModerator = require("app/moderator");
+
 module.exports = {
 	id: "mentionable",
 	aliases: ["mt", "mf", "togglementionable", "ment"],
@@ -5,11 +7,10 @@ module.exports = {
 	paramsHelp: "(role)",
 	requires: "Moderator permissions",
 	execute: (call) => {
-		const MOD_ROLES = ["436013049808420866", "436013613568884736", "402175094312665098", "330919872630358026"],
-			DATA = (call.message.guild || call.message.channel).data,
+		const DATA = (call.message.guild || call.message.channel).data,
 			PREFIX = DATA != null ? DATA.prefix : "/",
 			ROLE = call.params.readRole();
-		if (call.message.member.roles.some((r) => MOD_ROLES.includes(r.id))) {
+		if (isModerator(call.message.member)) {
 			if (ROLE != null) {
 				const MENTION = (call.message.content.toLowerCase().startsWith(PREFIX + "mt")) ? true
 					: (call.message.content.toLowerCase().startsWith(PREFIX + "mf")) ? false : !ROLE.mentionable;
