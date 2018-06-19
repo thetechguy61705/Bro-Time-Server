@@ -206,7 +206,8 @@ module.exports = {
 		var used;
 		var request = this.getRequesting(message);
 		if (request != null) {
-			used = this.processRequest(request, message, client);
+			if (message.author != client.user)
+				used = this.processRequest(request, message, client);
 		} else {
 			used = this.processCommand(message, client);
 		}

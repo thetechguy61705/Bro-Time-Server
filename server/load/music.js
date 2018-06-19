@@ -125,7 +125,6 @@ class Music {
 	}
 
 	static async getTicket(client, channel, query, requestInput) {
-		// requestInput
 		var ticket;
 		for (var source of sources) {
 			ticket = await source.getTicket(query, tokens.get(source.id));
@@ -150,7 +149,7 @@ class Music {
 			if (results.length > 0) {
 				prompt.setTitle("Pick the closest match (by number):");
 				for (var [number, result] of results.entries())
-					display.push(`• ${number} - ${result.display.substring(0, 300)}`);
+					display.push(`• ${number + 1} - ${result.display.substring(0, 300)}`);
 				prompt.setDescription(display.join("\n"));
 
 				ticket = null;
@@ -159,7 +158,7 @@ class Music {
 					if (choice != null) {
 						choice = choice.params.readNumber();
 						if (choice != null) {
-							result = results[choice];
+							result = results[choice - 1];
 							if (result != null)
 								ticket = Music.getTicket(client, channel, result.query);
 					}
