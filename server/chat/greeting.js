@@ -19,7 +19,7 @@ module.exports = {
 		var content = message.content;
 		var matches;
 		var greeting;
-		for (var pattern of responses.keys()) {
+		for (var pattern of Object.keys(responses)) {
 			if (responses.hasOwnProperty(pattern)) {
 				matches = new RegExp(pattern, OPTIONS).exec(content);
 				if (matches != null) {
