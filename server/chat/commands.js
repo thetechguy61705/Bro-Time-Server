@@ -13,12 +13,12 @@ const TESTING = process.env.NODE_ENV !== "production";
 const ACCESS = new Enum(["Public", "Private", "Server"], { ignoreCase: true });
 
 class Call {
-	constructor(commands, command, message, client, params) {
+	constructor(commands, message, client, params, command) {
 		this.commands = commands;
-		this.command = command;
 		this.message = message;
 		this.client = client;
 		this.params = params;
+		this.command = command;
 		this.TRANSFER_RATE = 0.8;
 	}
 
@@ -189,7 +189,7 @@ module.exports = {
 				if (command != null && checkAccess(command, message) && hasPermissions(command, message, client)) {
 					if (!client.locked || command.id === "lockdown") {
 						params.readSeparator();
-						command.execute(new Call(this, command, message, client, params));
+						command.execute(new Call(this, message, client, params, command));
 						used = true;
 					} else {
 						if (!client.lockedChannels.includes(message.channel.id)) {
