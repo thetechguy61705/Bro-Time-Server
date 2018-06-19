@@ -8,7 +8,8 @@ var chatHandlers = [];
 var client = new Discord.Client(config.CLIENT);
 client.locked = false;
 client.lockedChannels = [];
-
+client.bbkLocked = false;
+client.bbkLockedChannels = [];
 const LOAD_TIMEOUT = 60000;
 
 require("enum").register();
