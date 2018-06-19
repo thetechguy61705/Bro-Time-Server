@@ -55,13 +55,16 @@ module.exports = {
 	search(query, key) {
 		return new Promise((resolve) => {
 			miniget(`https://www.googleapis.com/youtube/v3/search?type=video&q=${querystring.escape(query)}&maxResults=5&part=id,snippet&key=${key}`, (err, res, body) => {
-				if (err == null) {
-					resolve(JSON.parse(body).items.map((item) => { return {
-						display: item.title.substring(0, MAX_NAME_LENGTH + 1),
-						query: item.id.videoId
-					}; }));
-				} else {
+				if (err != null) {
+					console.warn(err.stack);
 					resolve([]);
+				} else {
+					resolve(JSON.parse(body).items.map((item) => {
+						return {
+							display: item.snippet.title,
+							query: item.id.videoId
+						};
+					}));
 				}
 			});
 		});

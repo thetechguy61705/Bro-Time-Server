@@ -1,6 +1,6 @@
 var errorHandler = require("app/errorHandler");
 var config = require("../../config");
-var { Collection } = require("discord.js");
+var { Collection, RichEmbed } = require("discord.js");
 var fs = require("fs");
 var sources = [];
 var tokens = new Collection();
@@ -124,7 +124,7 @@ class Music {
 		return 0;
 	}
 
-	static async getTicket(client, channel, query) {
+	static async getTicket(client, channel, query, requestInput) {
 		// requestInput
 		var ticket;
 		for (var source of sources) {
@@ -137,17 +137,35 @@ class Music {
 			}
 		}
 		if (ticket == null) {
-			console.log("search required...");
-			/* ticket = null;
-			// Request input (until the user provides a valid index).
-			// Return getTicket with the new query.
-			var searches = [];
-			// var prompt = new RichEmbed();
+			var results = [];
+			var prompt = new RichEmbed();
+			var display = [];
+			var choice;
+			var result;
 			for (var source of sources)
-				Array.prototype.push.apply(searches, source.search(query, tokens.get(source.id)));
-			searches.sort(compareSearchResults);
-			searches.slice(0, 5);
-			// await requestInput(1, prompt); */
+				Array.prototype.push.apply(results, await source.search(query, tokens.get(source.id)));
+			results.sort(Music.compareSearchResults);
+			results = results.slice(0, 5);
+
+			if (results.length > 0) {
+				prompt.setTitle("Pick the closest match (by number):");
+				for (var [number, result] of results.entries())
+					display.push(`• ${number} - ${result.display.substring(0, 300)}`);
+				prompt.setDescription(display.join("\n"));
+
+				ticket = null;
+				try {
+					choice = await requestInput(1, prompt);
+					if (choice != null) {
+						choice = choice.params.readNumber();
+						if (choice != null) {
+							result = results[choice];
+							if (result != null)
+								ticket = Music.getTicket(client, channel, result.query);
+					}
+					}
+				} finally {}
+			}
 		} else if (!Music.isAcceptable(ticket, source, false, channel)) {
 			ticket = null;
 		}
@@ -175,7 +193,7 @@ class Music {
 			this.players.get(call.message.guild.id) :
 			new Queue(this, call.message.guild);
 		if (query != null) {
-			Music.getTicket(call.message.client, call.message.channel, query, call.requestInput).then((ticket) => {
+			Music.getTicket(call.message.client, call.message.channel, query, call.requestInput.bind(call)).then((ticket) => {
 				if (ticket != null) {
 					queue.play(ticket.load(), call);
 				} else {
