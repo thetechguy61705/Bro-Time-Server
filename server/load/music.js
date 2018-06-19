@@ -142,14 +142,14 @@ class Music {
 			var display = [];
 			var choice;
 			var result;
-			for (var source of sources)
+			for (let source of sources)
 				Array.prototype.push.apply(results, await source.search(query, tokens.get(source.id)));
 			results.sort(Music.compareSearchResults);
 			results = results.slice(0, 5);
 
 			if (results.length > 0) {
 				prompt.setTitle("Pick the closest match (by number):");
-				for (var [number, result] of results.entries())
+				for (let [number, result] of results.entries())
 					display.push(`• ${number + 1} - ${result.display.substring(0, 300)}`);
 				prompt.setDescription(display.join("\n"));
 
@@ -162,8 +162,9 @@ class Music {
 							result = results[choice - 1];
 							if (result != null)
 								ticket = Music.getTicket(client, channel, result.query);
+						}
 					}
-					}
+				// eslint-disable-next-line no-empty
 				} finally {}
 			}
 		} else if (!Music.isAcceptable(ticket, source, false, channel)) {

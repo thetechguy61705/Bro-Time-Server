@@ -3,7 +3,6 @@ var miniget = require("miniget");
 var querystring = require("querystring");
 
 const MIN_RATING = 3;
-const MAX_NAME_LENGTH = 30;
 
 module.exports = {
 	id: "youtube",
