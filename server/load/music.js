@@ -177,10 +177,8 @@ class Music {
 		var playable = source.getPlayable(ticket);
 		if (playable == "mature" && !matureAllowed)
 			channel.send("Mature music is not allowed here.");
-		return playable === "good" ||
-			(playable !== "bad" &&
-			(matureAllowed || playable !== "mature") &&
-			playable !== "unknown");
+		// if (playable == "unknown")
+		return playable !== "bad" && (matureAllowed || playable !== "mature");
 	}
 
 	constructor(client) {
