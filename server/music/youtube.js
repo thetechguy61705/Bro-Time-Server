@@ -28,8 +28,9 @@ module.exports = {
 					}
 				});
 			} catch (err) {
-				// Not sure how to properly handle these errors. Need ideas.
 				resolve(null);
+				if (!err.message.startsWith("No video id found"))
+					console.warn(err.stack);
 			}
 		});
 	},
