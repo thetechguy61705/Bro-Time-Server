@@ -1,5 +1,6 @@
 var isWorker = require("app/workers");
 var orders = require("../../load/orders.js").orders;
+const Discord = require("discord.js");
 module.exports = {
 	id: "forcedelorder",
 	description: "Deletes someone else's order",
@@ -21,8 +22,20 @@ module.exports = {
 				if (filteredOrder != null) {
 					var userToMessage = call.client.users.find((m) => m.tag === filteredOrder.customer);
 					filteredOrder.msg.delete().then(() => {
+						var logsChannel = call.client.channels.get("458288216609652736");
+						var orderEmbed = new Discord.RichEmbed()
+							.setColor("RED")
+							.addField("Order ID", filteredOrder.id)
+							.addField("Order", filteredOrder.order)
+							.addField("Customer", filteredOrder.customer)
+							.addField("Ordered From", filteredOrder.orderedFrom)
+							.addField("Status", `Cancelled by ${call.message.author.tag} for ${reason}`)
+							.addField("Links", filteredOrder.links);
+						logsChannel.send(orderEmbed).catch(() => {});
 						orders.splice(orders.indexOf(filteredOrder), 1);
-						call.message.reply("Successfully cancelled this order.").catch(() => {});
+						call.message.reply("Successfully cancelled this order.").catch(() => {
+							call.message.author.send(`You attempted to use the \`forcedelorder\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
+						});
 						if (userToMessage != null) {
 							userToMessage.send(`Your order has been cancelled. Reason: \`${reason}\``).catch(() => {
 								call.message.reply("Couldn't DM this user, but I deleted the order anyways").catch(() => {
