@@ -679,12 +679,20 @@ function onMessage(message) {
 		(message.guild == null ||
 			message.channel.permissionsFor(message.guild.members.get(message.client.user.id)).has(Permissions.FLAGS.MANAGE_MESSAGES))) {
 		var content = message.content;
+		var identifier = message.content.replace(":", "");
 		var isInvalid = true;
 		for (var pos = 0; pos < content.length; pos++) {
 			if (isValid(content.codePointAt(pos))) {
 				isInvalid = false;
 				break;
 			}
+		}
+		if (isInvalid && message.guild != null) {
+			isInvalid = !message.guild.emojis.some((emoji) => {
+				return identifier == emoji.identifier &&
+					(!emoji.requiresColons ||
+						(content.startsWith(":") && content.endsWith(":")));
+			});
 		}
 		if (isInvalid)
 			isInvalid = !EMOTICONS.includes(content);
