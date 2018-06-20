@@ -1,5 +1,12 @@
 var { MENU } = require("app/menu");
-var random = require("random-letters");
+function randomLetters(num) {
+	var abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+	var random = "";
+	for (let i = 0; i < num; i++) {
+		random += abc[Math.floor(Math.random() * abc.length)];
+	}
+	return random;
+}
 const { RichEmbed } = require("discord.js");
 
 function titleCase(str) {
@@ -33,7 +40,7 @@ module.exports = {
 						}
 					}
 					if (noMenu.length === 0) {
-						var id = random(3).toUpperCase(),
+						var id = randomLetters(3).toUpperCase(),
 							ordersChannel = call.client.channels.get("399290151932526593"),
 							orderedFromString = `${call.message.channel.toString()} (${call.message.channel.id}) in ${call.message.channel.guild.name} (${call.message.channel.guild.id})`;
 						var orderEmbed = new RichEmbed()

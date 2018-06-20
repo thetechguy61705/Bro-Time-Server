@@ -39,7 +39,6 @@
     "node-opus": "^0.2.7",
     "opusscript": "0.0.6",
     "pg": "^7.4.3",
-    "random-letters": "^1.0.0-rc.1",
     "ytdl-core": "^0.20.4"
   },
   "devDependencies": {
