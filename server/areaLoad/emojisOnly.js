@@ -638,7 +638,7 @@ const RANGES = [
 	{ min: 0x1F9E7, max: 0x1F9FF }, // red envelope..nazar amulet
 	{ min: 0x1FA00, max: 0x1FA5F }, // <reserved-1FA00>..<reserved-1FA5F>
 	{ min: 0x1FA60, max: 0x1FA6D }, // XIANGQI RED GENERAL..XIANGQI BLACK SOLDIER
-	{ min: 0x1FA6E, max: 0x1FFFD } // <reserved-1FA6E>..<reserved-1FFFD>
+	{ min: 0x1FA6E, max: 0x1FFFD }, // <reserved-1FA6E>..<reserved-1FFFD>
 ];
 const EMOTICONS = [
 	":D"
