@@ -26,7 +26,9 @@ module.exports = {
 							.addField("Order ID", filteredOrder.id)
 							.addField("Order", filteredOrder.order)
 							.addField("Customer", filteredOrder.customer)
-							.addField("Ordered From", filteredOrder.orderedFrom);
+							.addField("Ordered From", filteredOrder.orderedFrom)
+							.addField("Status", `Claimed (${call.message.author.tag})`)
+							.addField("Links", "None");
 						filteredOrder.msg.edit({ embed: orderEmbed }).then(() => {
 							orders.push({
 								msg: filteredOrder.msg,
