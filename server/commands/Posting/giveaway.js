@@ -1,79 +1,74 @@
-const Discord = require("discord.js");
+/*
+Title cannot be > 256 characters because of Discord API limitations.
+Giveaways are not permitted to last longer than one month (31 days).
+*/
+
+const { RichEmbed } = require("discord.js");
 const ms = require("ms");
+const GIVEAWAY_EMOJI = {
+	name: "giveaway",
+	snowflake: "448305337234096130",
+	toString: () => {
+		return "<:giveaway:448305337234096130>";
+	}
+};
 
 module.exports = {
 	id: "giveaway",
 	aliases: ["g", "creategivaway"],
 	description: "Creates a giveaway in specified channel with specified amount of winners for the specified time.",
-	paramsHelp: "(title): (time) (channel) (amount of winners)",
+	paramsHelp: "(prize): (time) (channel) (amount of winners)",
 	requires: "Moderator permissions",
 	execute: (call) => {
-		const GIVEAWAY_PRIZE = call.params.readRaw().split(":")[0];
-		if (call.message.member.roles.has("394526142826020874")) {
-			if (call.params.readRaw().split(":")[1] !== undefined) {
-				var giveawayTime = call.params.readRaw().split(":").slice(1).join(":").split(" ").filter((arg) => arg !== "")[0];
-				if (ms(giveawayTime)) {
-					if (call.message.mentions.channels.first() !== undefined) {
-						giveawayTime = ms(giveawayTime);
-						if (giveawayTime > 0 && giveawayTime <= 604800000) {
-							var winners = call.params.readRaw().split(":").slice(1).join(":").split(" ").filter((arg) => arg !== "")[2];
-							if (!isNaN(parseInt(winners))) {
-								if (parseInt(winners) > 0 && parseInt(winners) < 20) {
-									winners = Math.round(parseInt(winners));
-									var winner;
-									const GIVEAWAY_CHANNEL = call.message.mentions.channels.first();
-									var giveawayEmbed = new Discord.RichEmbed()
-										.setTitle(GIVEAWAY_PRIZE)
-										.setDescription(`**React with 🎉 to enter**\nTime remaining: **${giveawayTime.expandPretty()}**`)
-										.setColor(0x00AE86)
-										.setFooter(`${call.client.user.username} | Giveaway by ${call.message.author.tag}.`);
-									GIVEAWAY_CHANNEL.send("🎉 **GIVEAWAY** 🎉", { embed: giveawayEmbed }).then((msg) => {
-										call.client.channels.get("457235449417826305")
-											.send(`${msg.channel.id} ${msg.id} ${Date.now() + giveawayTime} ${winners} ${call.message.author.id} ${GIVEAWAY_PRIZE}`)
-											.then((databaseMesage) => {
-												msg.react("🎉");
-												var editLoop = setInterval(function() {
-													giveawayTime -= 5000;
-													if (giveawayTime > 0) {
-														giveawayEmbed = new Discord.RichEmbed()
-															.setTitle(GIVEAWAY_PRIZE)
-															.setDescription(`**React with 🎉 to enter**\nTime remaining: **${giveawayTime.expandPretty()}**`)
-															.setColor(0x00AE86)
-															.setFooter(`${call.client.user.username} | Giveaway by ${call.message.author.tag}.`);
-														msg.edit("🎉 **GIVEAWAY** 🎉", { embed: giveawayEmbed });
-													} else {
-														msg.reactions.find((r) => r.emoji.name === "🎉").fetchUsers().then((users) => {
-															winner = users.filter((r) => r.id !== call.client.user.id && r.id !== call.message.author.id)
-																.random(winners);
-															if (winner.length === 0) winner = ["**Not enough users entered.**"];
-															giveawayEmbed = new Discord.RichEmbed()
-																.setTitle(GIVEAWAY_PRIZE)
-																.setDescription(`Winner(s): ${winner.join(", ")}`)
-																.setColor(0x00AE86)
-																.setFooter(`${call.client.user.username} | Giveaway by ${call.message.author.tag}.`);
-															msg.edit("🎉 **GIVEAWAY ENDED** 🎉", { embed: giveawayEmbed }).then(() => {
-																databaseMesage.delete();
-																if (winner[0] !== "**Not enough users entered.**") {
-																	msg.channel.send(`${winner.join(", ")} won **${GIVEAWAY_PRIZE}**!`);
-																}
-															});
-															clearInterval(editLoop);
-														});
-													}
-												}, 5000);
-											}).catch(() => {
-												call.message.reply("There was an error sending the giveaway in that channel.").catch(() => {
-													call.message.author
-														.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`);
-												});
-											});
-									});
-								} else call.safeSend("Please mention a valid amount of winners. Example: `!giveaway title: 10m #giveaways 3`.");
-							} else call.safeSend("Please specify a valid amount of winners. Example: `!giveaway title: 10m #giveaways 3`.");
-						} else call.safeSend("Please make the giveaway time greater than 10 seconds and less than 7 days. Example: `!giveaway title: 10m #giveaways 3`.");
-					} else call.safeSend("Please mention a valid giveaway channel. Example: `!giveaway title: 10m #giveaways 3`.");
-				} else call.safeSend("Please specify a valid giveaway time. Example: `!giveaway title: 10m #giveaways 3`.");
-			} else call.safeSend("Please specify a valid giveaway title. Example: `!giveaway title: 10m #giveaways 3`.");
-		} else call.safeSend("You do not have permissions to use this command. Requires `Role: Giveaways`");
+		if (call.message.member.roles.find("name", "Giveaways") != null) {
+			var rawContent = call.params.readRaw(),
+				title = rawContent.split(":")[0];
+			call.params.offset(title.length + 2);
+			var time = ms(call.params.readParameter() || "."),
+				param = call.params.readParameter(),
+				channel = call.message.guild.channels.find((c) => c.type === "text" && ((param || "").includes(c.id) || c.name.toLowerCase().startsWith(param))),
+				amountOfWinners = (call.params.readNumber() || 1);
+			if (title.length <= 256) {
+				if (time != null && time > 5000 && time < 2678400000) {
+					if (channel != null && channel.type === "text") {
+						var giveawayEmbed = new RichEmbed()
+							.setTitle(title)
+							.setDescription(`**React with ${GIVEAWAY_EMOJI} to enter**\nTime remaining: **${time.expandPretty()}**`)
+							.setColor(0x00AE86)
+							.setFooter(call.client.user.username + "| " + amountOfWinners + " winner(s)" + " |")
+							.setDefaultFooter(call.message.author);
+						channel.send("🎉 **GIVEAWAY** 🎉", { embed: giveawayEmbed }).then(async (msg) => {
+							var areaLoadMessage = await call.client.channels.get("457235449417826305")
+								.send(`${msg.channel.id} ${msg.id} ${Date.now() + time} ${amountOfWinners} ${call.message.author.id} ${title}`);
+							msg.react(GIVEAWAY_EMOJI.snowflake);
+							var updateLoop = call.client.setInterval(async () => {
+								if (time <= 0) {
+									var users = await msg.reactions.get(GIVEAWAY_EMOJI.name + ":" + GIVEAWAY_EMOJI.snowflake).fetchUsers(msg.guild.memberCount);
+									users = users.filter((user) => !user.bot && user.id/* !== call.message.author.id*/);
+									var winners = users.random(amountOfWinners);
+									if (!(winners instanceof Array)) winners = (winners != null) ? [winners] : [];
+									else winners = winners.filter((winner) => winner != null);
+
+									if (winners.length > 0) {
+										msg.channel.send(`${winners.join(", ")} won **${title}**!`);
+										giveawayEmbed.setDescription(`Winner(s): ${winners.join(", ")}.`);
+									} else {
+										msg.channel.send("Giveaway ended, not enough people entered. :(");
+										giveawayEmbed.setDescription("Giveaway ended, not enough people entered. :(");
+									}
+									areaLoadMessage.delete();
+									call.client.clearInterval(updateLoop);
+								}
+								msg.edit("🎉 **GIVEAWAY** 🎉", { embed: giveawayEmbed });
+								time -= 5000;
+								giveawayEmbed.setDescription(`**React with ${GIVEAWAY_EMOJI} to enter**\nTime remaining: **${time.expandPretty()}**`);
+							}, 5000);
+						}).catch(() => {
+							call.safeSend("I failed to send the giveaway to the given channel. Please try again.");
+						});
+					} else call.safeSend("Please specify a valid channel to host the giveaway in. You must be able to see this channel. Example: `!giveaway title: 10m #giveaways 3.`");
+				} else call.safeSend("Please specify a valid amount of time greater than 5 seconds and less than 31 days. Example: `!giveaway title: 10m #giveaways 3.`");
+			} else call.safeSend("The amount of characters in the title cannot be greater than 240. Example: `!giveaway title: 10m #giveaways 3.`");
+		} else call.safeSend("You cannot run this command unless you have the `Giveaways` role.");
 	}
 };
