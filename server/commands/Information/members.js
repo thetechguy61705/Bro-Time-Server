@@ -58,8 +58,7 @@ module.exports = {
 							.setColor("ORANGE")
 							.setFooter(`Page ${page}/${totalPages} -`)
 							.setDefaultFooter(call.message.author);
-						if (content !== "") memberEmbed.setTitle(`Users in ${call.message.guild.roles.find((r) => r.name.toLowerCase().startsWith(content.toLowerCase())).name}`);
-						if (content === "") memberEmbed.setTitle("Users");
+						memberEmbed.setTitle((content !== "") ? `Users in ${call.message.guild.roles.find((r) => r.name.toLowerCase().startsWith(content.toLowerCase())).name}` : "Users");
 						sentEmbed.edit({ embed: memberEmbed });
 					});
 					reactions.on("end", () => sentEmbed.edit("Interactive command ended: 2 minutes passed."));
