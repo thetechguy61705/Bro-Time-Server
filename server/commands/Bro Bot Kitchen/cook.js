@@ -66,45 +66,14 @@ module.exports = {
 										orders.splice(orders.indexOf(filteredOrder), 1);
 										call.message.reply("Successfully cooked this item.").catch(() => {});
 									}).catch(() => {
-										call.message.reply("Couldn't cook this food, please try again").catch(() => {
-											call.message.author.send(`You attempted to use the \`cook\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-										});
+										call.safeSend("Couldn't cook this food, please try again");
 									});
-								} else {
-									call.message.reply("Not a valid food/drink to cook, or was already cooked").catch(() => {
-										call.message.author.send(`You attempted to use the \`cook\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-									});
-								}
-							} else {
-								call.message.reply("You can only cook orders claimed by you!").catch(() => {
-									call.message.author.send(`You attempted to use the \`cook\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-								});
-							}
-						} else {
-							call.message.reply("You must claim orders before you can cook them!").catch(() => {
-								call.message.author.send(`You attempted to use the \`cook\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-							});
-						}
-					} else {
-						call.message.reply("Not a valid order ID!").catch(() => {
-							call.message.author.send(`You attempted to use the \`cook\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-						});
-					}
-				} else {
-					call.message.reply("You didn't supply the correct parameters! Usage: `!cook (order number) | (food/drink) | (link)`").catch(() => {
-						call.message.author.send(`You attempted to use the \`cook\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-					});
-				}
-			} else {
-				call.message.reply("You didn't supply the correct parameters! Usage: `!cook (order number) | (food/drink) | (link)`").catch(() => {
-					call.message.author.send(`You attempted to use the \`cook\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-				});
-			}
-		} else {
-			call.message.reply("You don't have permission to use this command!").catch(() => {
-				call.message.author.send(`You attempted to use the \`cook\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-			});
-		}
-
+								} else call.safeSend("Not a valid food/drink to cook, or was already cooked");
+							} else call.safeSend("You can only cook orders claimed by you!");
+						} else call.safeSend("You must claim orders before you can cook them!");
+					} else call.safeSend("Not a valid order ID!");
+				} else call.safeSend("You didn't supply the correct parameters! Usage: `!cook (order number) | (food/drink) | (link)`");
+			} else call.safeSend("You didn't supply the correct parameters! Usage: `!cook (order number) | (food/drink) | (link)`");
+		} else call.safeSend("You don't have permission to use this command!");
 	}
 };

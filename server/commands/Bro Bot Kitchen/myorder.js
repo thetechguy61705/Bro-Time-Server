@@ -19,13 +19,7 @@ module.exports = {
 				.addField("Order", filteredOrder.order)
 				.addField("Status", status)
 				.setFooter(`Ran by ${call.message.author.tag}`, call.message.author.displayAvatarURL);
-			call.message.channel.send({ embed: orderEmbed }).catch(() => {
-				call.message.author.send(`You attempted to use the \`myorder\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-			});
-		} else {
-			call.message.reply("❌ You do not have a current order! Run !order (item) to order something!").catch(() => {
-				call.message.author.send(`You attempted to use the \`myorder\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-			});
-		}
+			call.safeSend({ embed: orderEmbed }, call.message, false);
+		} else call.safeSend("❌ You do not have a current order! Run !order (item) to order something!");
 	}
 };

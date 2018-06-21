@@ -38,33 +38,16 @@ module.exports = {
 						});
 						if (userToMessage != null) {
 							userToMessage.send(`Your order has been cancelled. Reason: \`${reason}\``).catch(() => {
-								call.message.reply("Couldn't DM this user, but I deleted the order anyways").catch(() => {
-									call.message.author.send(`You attempted to use the \`forcedelorder\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-								});
+								call.safeSend("Couldn't DM this user, but I deleted the order anyways");
 							});
 						} else {
 							call.message.reply("Couldn't find the user to message, but I deleted the order anyways.");
 						}
 					}).catch(() => {
-						call.message.reply("Couldn't cancel this order, please try again").catch(() => {
-							call.message.author.send(`You attempted to use the \`forcedelorder\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-						});
+						call.safeSend("Couldn't cancel this order, please try again");
 					});
-				} else {
-					call.message.reply("Not a valid order ID!").catch(() => {
-						call.message.author.send(`You attempted to use the \`forcedelorder\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-					});
-				}
-			} else {
-				call.message.reply("You didn't supply the correct parameters! Usage: `!forcedelorder (order number) (reason)`").catch(() => {
-					call.message.author.send(`You attempted to use the \`forcedelorder\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-				});
-			}
-		} else {
-			call.message.reply("You don't have permission to use this command!").catch(() => {
-				call.message.author.send(`You attempted to use the \`forcedelorder\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-			});
-		}
-
+				} else call.safeSend("Not a valid order ID!");
+			} else call.safeSend("You didn't supply the correct parameters! Usage: `!forcedelorder (order number) (reason)`");
+		} else call.safeSend("You don't have permission to use this command!");
 	}
 };

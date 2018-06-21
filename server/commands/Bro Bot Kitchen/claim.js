@@ -45,37 +45,17 @@ module.exports = {
 							var userToMessage = call.client.users.find((m) => m.tag === filteredOrder.customer);
 							if (userToMessage != null) {
 								userToMessage.send("Your order has been claimed!").catch(() => {
-									call.message.reply("Couldn't DM this user, but I claimed the order anyways").catch(() => {
-										call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-									});
+									call.safeSend("Couldn't DM this user, but I claimed the order anyways");
 								});
 							} else {
 								call.message.reply("Couldn't find the user to message, but I claimed the order anyways.");
 							}
 						}).catch(() => {
-							call.message.reply("Couldn't claim this order, please try again").catch(() => {
-								call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-							});
+							call.safeSend("Couldn't claim this order, please try again");
 						});
-					} else {
-						call.message.reply("This order is already claimed, so you cannot re-claim it!").catch(() => {
-							call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-						});
-					}
-				} else {
-					call.message.reply("Not a valid order ID!").catch(() => {
-						call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-					});
-				}
-			} else {
-				call.message.reply("You do not have permission to use this command!").catch(() => {
-					call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-				});
-			}
-		} else {
-			call.message.reply("You did not supply the correct parameters! Usage: `!claim (order id)`").catch(() => {
-				call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-			});
-		}
+					} else call.safeSend("This order is already claimed, so you cannot re-claim it!");
+				} else call.safeSend("Not a valid order ID!");
+			} else call.safeSend("You do not have permission to use this command!");
+		} else call.safeSend("You did not supply the correct parameters! Usage: `!claim (order id)`");
 	}
 };

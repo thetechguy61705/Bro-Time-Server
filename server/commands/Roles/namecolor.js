@@ -20,18 +20,12 @@ module.exports = {
 		if (ROLE != null && COLOR_ROLES.includes(ROLE.name)) {
 			removeColorRoles(call.message.guild.roles, call.message.member);
 			call.message.member.addRole(ROLE).then(() => {
-				call.message.channel.send(`Successfully given you the \`${ROLE.name}\` color role!`).catch(() => {
+				call.message.reply(`Successfully given you the \`${ROLE.name}\` color role!`).catch(() => {
 					call.message.author.send(`Successfully given you the \`${ROLE.name}\` color role, note that I can not chat in ${call.message.channel}.`);
 				});
 			}).catch(() => {
-				call.message.channel.send("There was an error while giving you the color role. Please try again.").catch(() => {
-					call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`);
-				});
+				call.safeSend("There was an error while giving you the color role. Please try again.");
 			});
-		} else {
-			call.message.channel.send("Please specify a valid color role. Color role options can be found in `!info namecolors list`.").catch(() => {
-				call.message.author.send(`You attempted to use the \`namecolor\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+		} else call.safeSend("Please specify a valid color role. Color role options can be found in `!info namecolors list`.");
 	}
 };

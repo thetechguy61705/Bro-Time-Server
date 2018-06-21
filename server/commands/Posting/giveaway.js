@@ -68,41 +68,12 @@ module.exports = {
 												});
 											});
 									});
-								} else {
-									call.message.reply("Please mention a valid amount of winners. Example: `!giveaway title: 10m #giveaways 3`.").catch(() => {
-										call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`);
-									});
-								}
-							} else {
-								call.message.reply("Please specify a valid amount of winners. Example: `!giveaway title: 10m #giveaways 3`.")
-									.catch(() => {
-										call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`);
-									});
-							}
-						} else {
-							call.message.reply("Please make the giveaway time greater than 10 seconds and less than 7 days. Example: `!giveaway title: 10m #giveaways 3`.").catch(() => {
-								call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`);
-							});
-						}
-					} else {
-						call.message.reply("Please mention a valid giveaway channel. Example: `!giveaway title: 10m #giveaways 3`.").catch(() => {
-							call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`);
-						});
-					}
-				} else {
-					call.message.reply("Please specify a valid giveaway time. Example: `!giveaway title: 10m #giveaways 3`.").catch(() => {
-						call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`);
-					});
-				}
-			} else {
-				call.message.reply("Please specify a valid giveaway title. Example: `!giveaway title: 10m #giveaways 3`.").catch(() => {
-					call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`);
-				});
-			}
-		} else {
-			call.message.reply("You do not have permissions to use this command. Requires `Role: Giveaways`").catch(() => {
-				call.message.author.send(`You attempted to use the \`giveaway\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+								} else call.safeSend("Please mention a valid amount of winners. Example: `!giveaway title: 10m #giveaways 3`.");
+							} else call.safeSend("Please specify a valid amount of winners. Example: `!giveaway title: 10m #giveaways 3`.");
+						} else call.safeSend("Please make the giveaway time greater than 10 seconds and less than 7 days. Example: `!giveaway title: 10m #giveaways 3`.");
+					} else call.safeSend("Please mention a valid giveaway channel. Example: `!giveaway title: 10m #giveaways 3`.");
+				} else call.safeSend("Please specify a valid giveaway time. Example: `!giveaway title: 10m #giveaways 3`.");
+			} else call.safeSend("Please specify a valid giveaway title. Example: `!giveaway title: 10m #giveaways 3`.");
+		} else call.safeSend("You do not have permissions to use this command. Requires `Role: Giveaways`");
 	}
 };

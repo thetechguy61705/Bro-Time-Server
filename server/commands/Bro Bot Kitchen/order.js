@@ -16,7 +16,9 @@ function titleCase(str) {
 	}
 	return newString;
 }
+
 var orders = require("../../load/orders.js").orders;
+
 module.exports = {
 	id: "order",
 	description: "Orders food",
@@ -63,31 +65,11 @@ module.exports = {
 							});
 							call.message.reply("Your order has been sent!").catch(() => {});
 						}).catch(() => {
-							call.message.reply("Couldn't deliver your order, please try again.").catch(() => {
-								call.message.author.send(`You attempted to use the \`order\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-							});
+							call.safeSend("Couldn't deliver your order, please try again.")
 						});
-					} else {
-						call.message.reply(`\nThese item(s) that you ordered are not on the menu:\n\n${noMenu.map((m) => `\`${m}\``).join("\n\n")}\n\nTherefore, your order has been cancelled.`)
-							.catch(() => {
-								call.message.author.send(`You attempted to use the \`order\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-							});
-					}
-				} else {
-					call.message.reply("You have exceeded the order limit of 3! Order cancelled.").catch(() => {
-						call.message.author.send(`You attempted to use the \`order\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-					});
-				}
-			} else {
-				call.message.reply("You must order at least one thing!").catch(() => {
-					call.message.author.send(`You attempted to use the \`order\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-				});
-			}
-		} else {
-			call.message.reply("You already send an order! To cancel it, use `!cancelorder`").catch(() => {
-				call.message.author.send(`You attempted to use the \`order\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-			});
-		}
+					} else call.safeSend(`\nThese item(s) that you ordered are not on the menu:\n\n${noMenu.map((m) => `\`${m}\``).join("\n\n")}\n\nTherefore, your order has been cancelled.`);
+				} else call.safeSend("You have exceeded the order limit of 3! Order cancelled.");
+			} else call.safeSend("You must order at least one thing!");
+		} else call.safeSend("You already send an order! To cancel it, use `!cancelorder`");
 	}
-
 };

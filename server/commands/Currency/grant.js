@@ -19,20 +19,8 @@ module.exports = {
 					}).catch(() => {
 						call.message.channel.send(`Failed to change ${TARGET.user.tag}'s balance by ${AMOUNT}`);
 					});
-				} else {
-					call.message.reply("You did not specify a valid amount to give to the user.").catch(() => {
-						call.message.author.send(`You attempted to use the \`grant\` command in ${call.message.channel}, but I can not chat there.`);
-					});
-				}
-			} else {
-				call.message.reply("You did not specify a valid user.").catch(() => {
-					call.message.author.send(`You attempted to use the \`grant\` command in ${call.message.channel}, but I can not chat there.`);
-				});
-			}
-		} else {
-			call.message.reply("You do not have permissions to use this command.").catch(() => {
-				call.message.author.send(`You attempted to use the \`grant\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+				} else call.safeSend("You did not specify a valid amount to give to the user.");
+			} else call.safeSend("You did not specify a valid user.");
+		} else call.safeSend("You do not have permissions to use this command.");
 	}
 };

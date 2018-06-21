@@ -52,14 +52,10 @@ module.exports = {
 					`${(command.category !== "Other") ? command.category.replace(new RegExp(" ", "g"), "%20") + "/" : ""}${file}.js)`)
 				.setDefaultFooter(call.message.author);
 		} else {
-			call.message.reply("Invalid command name. Please run `!help (command)` or just `!help`").catch(() => {
-				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`);
-			});
+			call.safeSend("Invalid command name. Please run `!help (command)` or just `!help`");
 		}
 		if (helpEmbed.description != null) {
-			call.message.channel.send({ embed: helpEmbed }).catch(() => {
-				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`);
-			});
+			call.safeSend({ embed: helpEmbed }, call.message, false);
 		}
 	}
 };

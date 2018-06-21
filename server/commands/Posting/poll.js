@@ -22,29 +22,10 @@ module.exports = {
 					call.message.channel.send({ embed: POLL_EMBED }).then((poll) => {
 						poll.reactMultiple(EMOJI_ARRAY.slice(0, pollOptions.length));
 					}).catch(() => {
-						call.message.reply("Something went wrong and I could not create the poll.").catch(() => {
-							call.message.author
-								.send(`You attempted to use the \`poll\` command in ${call.message.channel}, but I can not chat there.`);
-						});
+						call.safeSend("Something went wrong and I could not create the poll.");
 					});
-				} else {
-					call.message.reply("Please specify at least 2 and at most 9 poll options. Example: `!poll title: option 1 | option 2 | option 3`.")
-						.catch(() => {
-							call.message.author
-								.send(`You attempted to use the \`poll\` command in ${call.message.channel}, but I can not chat there.`);
-						});
-				}
-			} else {
-				call.message.reply("Please specify valid poll options. Example: `!poll title: option 1 | option 2 | option 3`.").catch(() => {
-					call.message.author
-						.send(`You attempted to use the \`poll\` command in ${call.message.channel}, but I can not chat there.`);
-				});
-			}
-		} else {
-			call.message.reply("Please specify a valid poll title. Example: `!poll title: option 1 | option 2 | option 3`.").catch(() => {
-				call.message.author
-					.send(`You attempted to use the \`poll\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+				} else call.safeSend("Please specify at least 2 and at most 9 poll options. Example: `!poll title: option 1 | option 2 | option 3`.");
+			} else call.safeSend("Please specify valid poll options. Example: `!poll title: option 1 | option 2 | option 3`.");
+		} else call.safeSend("Please specify a valid poll title. Example: `!poll title: option 1 | option 2 | option 3`.");
 	}
 };

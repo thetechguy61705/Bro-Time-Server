@@ -13,17 +13,9 @@ module.exports = {
 					ANN_CHANNEL.send(`${QOTD_ROLE}: **${QOTD}**\n*Posted by ${call.message.author}*`);
 					QOTD_ROLE.setMentionable(false);
 				}).catch(() => {
-					call.message.channel.send("Something went wrong and I couldn't send the QoTD");
+					call.safeSend("Something went wrong and I couldn't send the QoTD");
 				});
-			} else {
-				call.message.reply("You did not supply the question to post. Please try again.").catch(() => {
-					call.message.author.send(`You attempted to run the \`postqotd\` command in ${call.message.channel}, but I can not chat there.`);
-				});
-			}
-		} else {
-			call.message.reply("Invalid permissions: requires role: `QOTD Host`").catch(() => {
-				call.message.author.send(`You attempted to run the \`postqotd\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+			} else call.safeSend("You did not supply the question to post. Please try again.");
+		} else call.safeSend("Invalid permissions: requires role: `QOTD Host`");
 	}
 };

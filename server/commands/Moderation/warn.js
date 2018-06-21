@@ -29,30 +29,10 @@ module.exports = {
 								.setColor("ORANGE")
 								.setTimestamp();
 							call.client.channels.get("436353363786072104").send({embed: warnEmbed});
-						} else {
-							call.message.reply("Specified user is too high in this guild's hierarchy to be warned by you.").catch(() => {
-								call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`);
-							});
-						}
-					} else {
-						call.message.reply("You cannot warn a bot account.").catch(() => {
-							call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`);
-						});
-					}
-				} else {
-					call.message.reply("Please supply a valid user tag, mention, or id.").catch(() => {
-						call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`);
-					});
-				}
-			} else {
-				call.message.reply("Please supply a valid user tag, mention, or id.").catch(() => {
-					call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`);
-				});
-			}
-		} else {
-			call.message.reply("You do not have permissions to trigger this command.").catch(() => {
-				call.message.author.send(`You attempted to use the \`warn\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+						} else call.safeSend("Specified user is too high in this guild's hierarchy to be warned by you.");
+					} else call.safeSend("You cannot warn a bot account.");
+				} else call.safeSend("Please supply a valid user tag, mention, or id.");
+			} else call.safeSend("Please supply a valid user tag, mention, or id.");
+		} else call.safeSend("You do not have permissions to trigger this command.");
 	}
 };

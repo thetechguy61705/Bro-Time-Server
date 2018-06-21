@@ -64,22 +64,12 @@ module.exports = {
 					});
 					reactions.on("end", () => sentEmbed.edit("Interactive command ended: 2 minutes passed."));
 				}).catch(() => {
-					call.message.reply("There was an error while trying to send this embed.").catch(() => {
-						call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`);
-					});
+					call.safeSend("There was an error while trying to send this embed.");
 				});
 			} else {
 				memberEmbed.setDescription(members);
-				call.message.channel.send({ embed: memberEmbed }).catch(() => {
-					call.message.reply("There was an error while trying to send this embed.").catch(() => {
-						call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`);
-					});
-				});
+				call.safeSend(({ embed: memberEmbed }, call.message, false);
 			}
-		} else {
-			call.message.reply("Please specify a valid role, or supply no parameter for everyone in this server.").catch(() => {
-				call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+		} else call.safeSend("Please specify a valid role, or supply no parameter for everyone in this server.");
 	}
 };

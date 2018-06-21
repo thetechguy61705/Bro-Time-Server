@@ -27,15 +27,7 @@ module.exports = {
 			if (filteredOrders[0] != null) {
 				var messageContent = filteredOrders.map((m) => `\`${m.id}\``).join(",");
 				call.message.reply(`Orders: ${messageContent}`);
-			} else {
-				call.message.reply("There are no orders with this status.").catch(() => {
-					call.message.author.send(`You attempted to use the \`orders\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-				});
-			}
-		} else {
-			call.message.reply("You don't have permission to use this command!").catch(() => {
-				call.message.author.send(`You attempted to use the \`orders\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-			});
-		}
+			} else call.safeSend("There are no orders with this status.");
+		} else call.safeSend("You don't have permission to use this command!");
 	}
 };

@@ -33,15 +33,7 @@ module.exports = {
 						});
 					});
 				}
-			} else {
-				call.message.reply("You do not have enough money to bet this amount.").catch(() => {
-					call.message.author.send(`You attempted to use the \`gamble\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-				});
-			}
-		} else {
-			call.message.reply("Please specify a valid amount to bet.").catch(() => {
-				call.message.author.send(`You attempted to use the \`gamble\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-			});
-		}
+			} else call.safeSend("You do not have enough money to bet this amount.");
+		} else call.safeSend("Please specify a valid amount to bet.");
 	}
 };

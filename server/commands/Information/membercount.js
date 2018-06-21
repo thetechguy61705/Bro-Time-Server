@@ -14,9 +14,6 @@ module.exports = {
 			.addField("Bots", bots)
 			.setDefaultFooter(call.message.author)
 			.setColor("BLUE");
-		call.message.channel.send({ embed: memberEmbed }).catch(() => {
-			call.message.author.send(`You attempted to use the \`membercount\` command in ${call.message.channel}, but I can not chat there.`)
-				.catch(() => {});
-		});
+		call.safeSend({ embed: memberEmbed }, call.message, false);
 	}
 };

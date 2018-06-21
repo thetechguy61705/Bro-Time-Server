@@ -9,8 +9,6 @@ module.exports = {
 		} else if (call.client.bbkLocked) {
 			return;
 		}
-		call.message.channel.send({ embed: getMenu(call.message.author) }).catch(() => {
-			call.message.author.send(`You attempted to use the \`menu\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-		});
+		call.safeSend({ embed: getMenu(call.message.author) }, call.message, false);
 	}
 };

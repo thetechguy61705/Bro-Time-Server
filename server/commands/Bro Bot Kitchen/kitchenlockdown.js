@@ -1,4 +1,5 @@
-var isKitchenAdmin = require("app/kitchenAdmins");
+const isKitchenAdmin = require("app/kitchenAdmins");
+
 module.exports = {
 	id: "kitchenlockdown",
 	description: "Locks down all kitchen commands",
@@ -10,6 +11,5 @@ module.exports = {
 			if (!call.client.locked) call.client.bbkLockedChannels.length = 0;
 			call.message.reply(`Bro Bot Kitchen is now ${(call.client.bbkLocked) ? "inaccessible" : "accessible"}.`);
 		}
-
 	}
 };

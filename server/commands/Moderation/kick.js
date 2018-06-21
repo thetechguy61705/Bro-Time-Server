@@ -26,25 +26,9 @@ module.exports = {
 						}).catch(() => {
 							call.message.channel.send(`Failed to kick \`${target.user.tag}\`.`);
 						});
-					} else {
-						call.message.reply("I do not have permission to kick this user.").catch(() => {
-							call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`);
-						});
-					}
-				} else {
-					call.message.reply("That user is too far up in this guild's hierarchy to be kicked by you.").catch(() => {
-						call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`);
-					});
-				}
-			} else {
-				call.message.reply("Please mention or supply the id of a valid user.").catch(() => {
-					call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`);
-				});
-			}
-		} else {
-			call.message.reply("You do not have permissions to trigger this command.").catch(() => {
-				call.message.author.send(`You attempted to use the \`kick\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+					} else call.safeSend("I do not have permission to kick this user.");
+				} else call.safeSend("That user is too far up in this guild's hierarchy to be kicked by you.");
+			} else call.safeSend("Please mention or supply the id of a valid user.");
+		} else call.safeSend("You do not have permissions to trigger this command.");
 	}
 };

@@ -36,15 +36,7 @@ module.exports = {
 					PARTNER_EMBED.setThumbnail(THUMBNAIL);
 					addPartner(PARTNER_CHANNEL, PARTNER_EMBED, call.message);
 				});
-			} else {
-				call.message.reply("You did not provide the necessary parameters! `!addpartner (title) (description) (discord invite OR thumbnail url)`").catch(() => {
-					call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`);
-				});
-			}
-		} else {
-			call.message.reply("You do not have permission to use this command!\n`Requires: Community Manager Bro`").catch(() => {
-				call.message.author.send(`You attempted to use the \`addpartner\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+			} else call.safeSend("You did not provide the necessary parameters! `!addpartner (title) (description) (discord invite OR thumbnail url)`");
+		} else call.safeSend("You do not have permission to use this command! `Requires: Community Manager Bro`");
 	}
 };

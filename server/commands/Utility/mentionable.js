@@ -17,19 +17,9 @@ module.exports = {
 				ROLE.setMentionable(MENTION).then(() => {
 					call.message.delete();
 				}).catch(() => {
-					call.message.reply(`There was an error changing the mentionability of the role \`${ROLE.name}\` to \`${MENTION}\`.`).catch(() => {
-						call.message.author.send(`You attempted to use the \`mt\` command in ${call.message.channel}, but I do not have permission to chat there.`);
-					});
+					call.safeSend(`There was an error changing the mentionability of the role \`${ROLE.name}\` to \`${MENTION}\`.`);
 				});
-			} else {
-				call.message.reply("Invalid role. Please try again.").catch(() => {
-					call.message.author.send(`You attempted to use the \`mt\` command in ${call.message.channel}, but I do not have permission to chat there.`);
-				});
-			}
-		} else {
-			call.message.reply("You do not have permission to use this command!").catch(() => {
-				call.message.author.send(`You attempted to use the \`mt\` command in ${call.message.channel}, but I do not have permission to chat there.`);
-			});
-		}
+			} else call.safeSend("Invalid role. Please try again.");
+		} else call.safeSend("You do not have permission to use this command!");
 	}
 };

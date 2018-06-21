@@ -35,46 +35,18 @@ module.exports = {
 										.addField("Links", filteredOrder.links);
 									logsChannel.send(orderEmbed).catch(() => {});
 									filteredOrder.msg.delete().catch(() => {
-										call.message.author.send("I couldn't delete this order from the #kitchen channel, please manually delete it before the next bot restart!").catch(() => {
-											call.message.author.send(`You attempted to use the \`deliver\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-										});
+										call.message.author.send("I couldn't delete this order from the #kitchen channel, please manually delete it before the next bot restart!");
 									});
 									orders.splice(orders.indexOf(filteredOrder), 1);
-									call.message.reply("Successfully delivered this order.").catch(() => {
-										call.message.author.send(`You attempted to use the \`deliver\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-									});
+									call.safeSend("Successfully delivered this order.");
 								}).catch(() => {
-									call.message.reply("Couldn't DM this user, please try again").catch(() => {
-										call.message.author.send(`You attempted to use the \`deliver\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-									});
+									call.safeSend("Couldn't DM this user, please try again");
 								});
-							} else {
-								call.message.reply("Couldn't find the user to message, but I delivered the order anyways.");
-							}
-						} else {
-							call.message.reply("You can only deliver orders that you have claimed!").catch(() => {
-								call.message.author.send(`You attempted to use the \`deliver\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-							});
-						}
-					} else {
-						call.message.reply("You did not cook all of the food yet! Please try again once you have finished making the food.").catch(() => {
-							call.message.author.send(`You attempted to use the \`claim\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-						});
-					}
-				} else {
-					call.message.reply("Not a valid order ID!").catch(() => {
-						call.message.author.send(`You attempted to use the \`deliver\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-					});
-				}
-			} else {
-				call.message.reply("You do not have permission to use this command!").catch(() => {
-					call.message.author.send(`You attempted to use the \`deliver\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-				});
-			}
-		} else {
-			call.message.reply("You did not supply the correct parameters! Usage: `!deliver (order id)`").catch(() => {
-				call.message.author.send(`You attempted to use the \`deliver\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-			});
-		}
+							} else call.message.reply("Couldn't find the user to message, but I delivered the order anyways.");
+						} else call.safeSend("You can only deliver orders that you have claimed!");
+					} else call.safeSend("You did not cook all of the food yet! Please try again once you have finished making the food.");
+				} else call.safeSend("Not a valid order ID!");
+			} else call.safeSend("You do not have permission to use this command!");
+		} else call.safeSend("You did not supply the correct parameters! Usage: `!deliver (order id)`");
 	}
 };

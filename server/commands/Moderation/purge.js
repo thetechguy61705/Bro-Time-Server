@@ -35,10 +35,6 @@ module.exports = {
 				console.warn("Purge action failed:");
 				console.warn(exc.stack);
 			}
-		} else {
-			call.message.reply("You do not have permission to use this command.").catch(() => {
-				call.message.author.send(`You attempted to use the \`purge\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+		} else call.safeSend("You do not have permission to use this command.");
 	}
 };
