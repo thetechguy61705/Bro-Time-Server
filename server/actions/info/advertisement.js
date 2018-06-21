@@ -10,9 +10,7 @@ module.exports = {
 			} else {
 				var advertisement = data.toString("utf8");
 				if ((call.params.readParameter() || "").toLowerCase() === "computer") advertisement = "```" + advertisement + "```";
-				call.message.channel.send(advertisement).catch(() => {
-					call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-				});
+				call.safeSend(advertisement);
 			}
 		});
 	}

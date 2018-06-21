@@ -56,9 +56,7 @@ module.exports = {
 					if (specifiedColor > -1) {
 						call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message, specifiedColor) });
 					} else {
-						call.message.reply("Invalid color role specified. Please try out `!info namecolors list` and take one of those color roles. Prompt cancelled.").catch(() => {
-							call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
-						});
+						call.safeSend("Invalid game specified. Please try out `!info namecolors list` and take one of those games. Prompt cancelled.");
 					}
 				} else {
 					call.requestInput(0, "Please specify the color role you would like to view.", 60000).then((result) => {
@@ -66,9 +64,7 @@ module.exports = {
 						if (specifiedColor > -1) {
 							call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message, specifiedColor) });
 						} else {
-							call.message.reply("Invalid color role specified. Please try out `!info namecolors list` and take one of those color roles. Prompt cancelled.").catch(() => {
-								call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
-							});
+							call.safeSend("Invalid game specified. Please try out `!info namecolors list` and take one of those games. Prompt cancelled.");
 						}
 					});
 				}

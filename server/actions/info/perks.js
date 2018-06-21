@@ -8,9 +8,7 @@ module.exports = {
 			if (err) {
 				console.error(err.stack);
 			} else {
-				call.message.channel.send(data.toString("utf8")).catch(() => {
-					call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
-				});
+				call.safeSend(data.toString("utf8"));
 			}
 		});
 	}

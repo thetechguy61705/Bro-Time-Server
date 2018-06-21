@@ -23,19 +23,13 @@ module.exports = {
 						.reply(`Successfully created the role \`${role.name}\` with \`${role.hoist}\` hoist and \`${(role.hexColor !== "#0000000") ? role.hexColor : "no"}\` color.`)
 						.catch(() => {});
 				}).catch(() => {
-					call.message.reply("There was an error upon attempting to make that role.").catch(() => {
-						call.message.author.send(`You attempted to run the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-					});
+					call.safeSend("There was an error upon attempting to make that role.");
 				});
 			} else {
-				call.message.reply("The role name given is either non-existant or has more than 100 characters.").catch(() => {
-					call.message.author.send(`You attempted to run the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-				});
+				call.safeSend("The role name given is either non-existant or has more than 100 characters.");
 			}
 		} else {
-			call.message.reply("Please specify the following params [optional] (required). `!role create [hexcolor: #XXXXXX] [hoist: true/false] (role name)`.").catch(() => {
-				call.message.author.send(`You attempted to run the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-			});
+			call.safeSend("Please specify the following params [optional] (required). `!role create [hexcolor: #XXXXXX] [hoist: true/false] (role name)`.");
 		}
 	}
 };

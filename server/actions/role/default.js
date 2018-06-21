@@ -21,22 +21,12 @@ module.exports = {
 			}
 
 			if (rolesToChange.rolesToAdd.concat(rolesToChange.rolesToRemove).length !== 0) {
-				call.message.channel.send("Changing roles for `" + target.user.tag + "`.").catch(() => {
-					call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);
-				});
+				call.message.channel.send("Changing roles for `" + target.user.tag + "`.");
 				for (let role of rolesToChange.rolesToRemove)
 					target.removeRole(role);
 				for (let role of rolesToChange.rolesToAdd)
 					target.addRole(role);
-			} else {
-				call.message.reply("No valid roles were specified. Roles that are above your or my hierarchy can not be changed.").catch(() => {
-					call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);
-				});
-			}
-		} else {
-			call.message.reply("Invalid parameter option. Parameter options: `" + actions.keyArray().join("`, `") + "`.").catch(() => {
-				call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+			} else call.safeSend("No valid roles were specified. Roles that are above your or my hierarchy can not be changed.");
+		} else call.safeSend("Invalid parameter option. Parameter options: `" + actions.keyArray().join("`, `") + "`.");
 	}
 };

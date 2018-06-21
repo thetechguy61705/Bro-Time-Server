@@ -14,15 +14,7 @@ module.exports = {
 							.catch(() => {});
 					});
 				});
-			} else {
-				call.message.reply("Please give a valid query to match.").catch(() => {
-					call.message.author.send(`You attempted to run the \`purge\` command in ${call.message.channel}, but I do not have permission to chat there.`);
-				});
-			}
-		} else {
-			call.message.reply("Invalid amount of messages to delete. Please specify a number above 0 and below 500.").catch(() => {
-				call.message.author.send(`You attempted to run the \`purge\` command in ${call.message.channel}, but I do not have permission to chat there.`);
-			});
-		}
+			} else call.safeSend("Please give a valid query to match.");
+		} else call.safeSend("Invalid amount of messages to delete. Please specify a number above 0 and below 500.");
 	}
 };

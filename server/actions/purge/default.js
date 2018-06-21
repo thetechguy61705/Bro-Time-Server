@@ -13,10 +13,6 @@ module.exports = {
 						.catch(() => {});
 				});
 			});
-		} else {
-			call.message.reply("Please specify a number above 0 and below or equal to 100 or a purge action from one of the following: `" +  actions.keyArray().join("`, `") + "`.").catch(() => {
-				call.message.author.send(`You attempted to run the \`purge\` command in ${call.message.channel}, but I do not have permission to chat there.`);
-			});
-		}
+		} else call.safeSend("Please specify a number above 0 and below or equal to 100 or a purge action from one of the following: `" +  actions.keyArray().join("`, `") + "`.");
 	}
 };

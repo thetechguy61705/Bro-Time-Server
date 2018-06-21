@@ -18,19 +18,9 @@ module.exports = {
 						response.message.reply("Cancelled prompt.").catch(() => {});
 					}
 				}).catch(() => {
-					call.message.reply("You did not reply within 30 seconds. Prompt cancelled.").catch(() => {
-						call.message.author.send(`You attempted to run the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-					});
+					call.safeSend("You did not reply within 30 seconds. Prompt cancelled.");
 				});
-			} else {
-				call.message.reply("The role specified is too high up in this guild's role hierarchy to be deleted by you.").catch(() => {
-					call.message.author.send(`You attempted to run the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-				});
-			}
-		} else {
-			call.message.reply("Could not find the role you specified.").catch(() => {
-				call.message.author.send(`You attempted to run the \`role\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-			});
-		}
+			} else call.safeSend("The role specified is too high up in this guild's role hierarchy to be deleted by you.");
+		} else call.safeSend("Could not find the role you specified.");
 	}
 };

@@ -57,9 +57,7 @@ module.exports = {
 					if (specifiedLevel > -1) {
 						call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message, specifiedLevel) });
 					} else {
-						call.message.reply("Invalid level specified. Please try out `!info levelroles list` and take one of those levels. Prompt cancelled.").catch(() => {
-							call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
-						});
+						call.safeSend("Invalid game specified. Please try out `!info levelroles list` and take one of those games. Prompt cancelled.");
 					}
 				} else {
 					call.requestInput(0, "Please specify the level you would like to view.", 60000).then((result) => {
@@ -67,9 +65,7 @@ module.exports = {
 						if (specifiedLevel > -1) {
 							call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message, specifiedLevel) });
 						} else {
-							call.message.reply("Invalid level specified. Please try out `!info levelroles list` and take one of those levels. Prompt cancelled.").catch(() => {
-								call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
-							});
+							call.safeSend("Invalid game specified. Please try out `!info levelroles list` and take one of those games. Prompt cancelled.");
 						}
 					});
 				}

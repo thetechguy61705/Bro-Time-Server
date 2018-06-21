@@ -9,7 +9,7 @@ module.exports = {
 				} else {
 					module.exports.run(call, actions);
 				}
-			} else call.message.channel.send("Cancelled prompt.");
+			} else call.safeSend("Cancelled prompt.");
 		});
 	}
 };
