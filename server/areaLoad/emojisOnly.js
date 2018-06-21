@@ -4,6 +4,7 @@ var listenersAdded = false;
 
 /* eslint-disable line-comment-position */
 const CHANNEL_NAME = "emoji-only";
+const WHITESPACE = /\s+/
 const SINGLES = [
 	0x2139, // information
 	0x2328, // keyboard
@@ -657,10 +658,13 @@ function removeChannel(channel) {
 
 function isValid(char) {
 	var result = false;
-	for (var codepoint of SINGLES) {
-		if (char === codepoint) {
-			result = true;
-			break;
+	result = WHITESPACE.test(char);
+	if (!result) {
+		for (var codepoint of SINGLES) {
+			if (char === codepoint) {
+				result = true;
+				break;
+			}
 		}
 	}
 	if (!result) {
@@ -671,6 +675,7 @@ function isValid(char) {
 			}
 		}
 	}
+	console.log(char, String.fromCodePoint(char), result);
 	return result;
 }
 
@@ -680,11 +685,10 @@ function onMessage(message) {
 			message.channel.permissionsFor(message.guild.members.get(message.client.user.id)).has(Permissions.FLAGS.MANAGE_MESSAGES))) {
 		var content = message.content;
 		var identifier = message.content.replace(":", "");
-		var isInvalid = true;
-		for (var pos = 0; pos < content.length; pos++) {
-			if (isValid(content.codePointAt(pos))) {
-				isInvalid = false;
-				break;
+		var isInvalid = false;
+		for (var char of Array.from(content)) {
+			if (!isValid(char.codePointAt(0))) {
+				isInvalid = true;
 			}
 		}
 		if (isInvalid && message.guild != null) {
