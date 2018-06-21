@@ -4,7 +4,7 @@ var listenersAdded = false;
 
 /* eslint-disable line-comment-position */
 const CHANNEL_NAME = "emoji-only";
-const WHITESPACE = /\s+/
+const WHITESPACE = /\s+/;
 const SINGLES = [
 	0x2139, // information
 	0x2328, // keyboard
@@ -675,7 +675,6 @@ function isValid(char) {
 			}
 		}
 	}
-	console.log(char, String.fromCodePoint(char), result);
 	return result;
 }
 
