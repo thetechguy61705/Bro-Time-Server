@@ -65,7 +65,7 @@ module.exports = {
 							});
 							call.message.reply("Your order has been sent!").catch(() => {});
 						}).catch(() => {
-							call.safeSend("Couldn't deliver your order, please try again.")
+							call.safeSend("Couldn't deliver your order, please try again.");
 						});
 					} else call.safeSend(`\nThese item(s) that you ordered are not on the menu:\n\n${noMenu.map((m) => `\`${m}\``).join("\n\n")}\n\nTherefore, your order has been cancelled.`);
 				} else call.safeSend("You have exceeded the order limit of 3! Order cancelled.");

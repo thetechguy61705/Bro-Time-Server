@@ -68,7 +68,7 @@ module.exports = {
 				});
 			} else {
 				memberEmbed.setDescription(members);
-				call.safeSend(({ embed: memberEmbed }, call.message, false);
+				call.safeSend({ embed: memberEmbed }, call.message, false);
 			}
 		} else call.safeSend("Please specify a valid role, or supply no parameter for everyone in this server.");
 	}
