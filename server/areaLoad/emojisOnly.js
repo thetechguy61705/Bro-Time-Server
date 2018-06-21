@@ -1,4 +1,4 @@
-var { Guild, TextChannel, Permissions } = require("discord.js");
+var { Guild, TextChannel } = require("discord.js");
 var channels = [];
 var listenersAdded = false;
 
@@ -678,10 +678,10 @@ function isValid(char) {
 	return result;
 }
 
-function onMessage(message) {
-	if (channels.includes(message.channel) &&
-		(message.guild == null ||
-			message.channel.permissionsFor(message.guild.members.get(message.client.user.id)).has(Permissions.FLAGS.MANAGE_MESSAGES))) {
+function onMessage(message, newMessage) {
+	if (newMessage != null)
+		message = newMessage;
+	if (channels.includes(message.channel) && message.deletable) {
 		var content = message.content;
 		var identifier = message.content.replace(":", "");
 		var isInvalid = false;
@@ -699,6 +699,8 @@ function onMessage(message) {
 		}
 		if (isInvalid)
 			isInvalid = !EMOTICONS.includes(content);
+		if (!isInvalid)
+			isInvalid = message.attachments.size > 0;
 		if (isInvalid)
 			message.delete();
 	}
@@ -711,6 +713,7 @@ module.exports = {
 			listenersAdded = true;
 			client.on("channelDelete", removeChannel);
 			client.on("message", onMessage);
+			client.on("messageUpdate", onMessage);
 		}
 		if (area instanceof Guild) {
 			for (var channel of area.channels.values())
