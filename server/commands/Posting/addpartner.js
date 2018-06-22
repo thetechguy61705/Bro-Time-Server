@@ -1,14 +1,11 @@
 const Discord = require("discord.js");
 
-function addPartner(channel, embed, message) {
-	channel.send({embed: embed }).then(() => {
-		message.reply("Successfully sent message!");
+function addPartner(channel, embed, call) {
+	channel.send({ embed: embed }).then(() => {
+		call.message.reply("Successfully sent message!");
 		channel.send("-------------------------------------------------");
 	}).catch(() => {
-		message.reply("Couldn't send the partner message in the partners channel, make sure that you have a valid discord server invite or a valid thumbnail url!")
-			.catch(() => {
-				message.author.send(`You attempted to use the \`addpartner\` command in ${message.channel}, but I can not chat there.`);
-			});
+		call.safeSend("Couldn't send the partner message in the partners channel, make sure that you have a valid discord server invite or a valid thumbnail url!");
 	});
 }
 
@@ -31,10 +28,10 @@ module.exports = {
 						.setDescription(DESCRIPTION);
 				call.client.fetchInvite(THUMBNAIL).then((invite) => {
 					PARTNER_EMBED.setThumbnail(invite.guild.iconURL);
-					addPartner(PARTNER_CHANNEL, PARTNER_EMBED, call.message);
+					addPartner(PARTNER_CHANNEL, PARTNER_EMBED, call);
 				}).catch(() => {
 					PARTNER_EMBED.setThumbnail(THUMBNAIL);
-					addPartner(PARTNER_CHANNEL, PARTNER_EMBED, call.message);
+					addPartner(PARTNER_CHANNEL, PARTNER_EMBED, call);
 				});
 			} else call.safeSend("You did not provide the necessary parameters! `!addpartner (title) (description) (discord invite OR thumbnail url)`");
 		} else call.safeSend("You do not have permission to use this command! `Requires: Community Manager Bro`");
