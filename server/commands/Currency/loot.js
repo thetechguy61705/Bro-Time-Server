@@ -18,6 +18,9 @@ module.exports = {
 				module.exports.rateLimit.push(call.message.author.id);
 				call.client.setTimeout(() => {
 					module.exports.rateLimit.splice(module.exports.rateLimit.indexOf(call.message.author.id), 1);
+					if (call.message.content.toLowerCase().endsWith("true" || " t")) {
+						call.message.author.send("You can loot Bro Bits again!");
+					}
 				}, 300000);
 			}).catch(() => {
 				call.safeSend("Failed to give you Bro Bits.");
