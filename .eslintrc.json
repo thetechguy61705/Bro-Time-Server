@@ -46,15 +46,15 @@
 			"always"
 		],
 		"arrow-parens": ["error", "always"],
-		"no-for-each/no-for-each": "warn",
-		"no-for-each/no-for-in": "warn",
-		"promise/no-return-wrap": "warn",
-		"promise/param-names": "warn",
+		"no-for-each/no-for-each": "error",
+		"no-for-each/no-for-in": "error",
+		"promise/no-return-wrap": "error",
+		"promise/param-names": "error",
 		"promise/catch-or-return": "off",
-		"promise/no-promise-in-callback": "warn",
-		"promise/no-callback-in-promise": "warn",
-		"promise/no-new-statics": "warn",
-		"promise/no-return-in-finally": "warn",
+		"promise/no-promise-in-callback": "error",
+		"promise/no-callback-in-promise": "error",
+		"promise/no-new-statics": "error",
+		"promise/no-return-in-finally": "error",
 		"no-console": ["warn", { "allow": ["warn", "error"] }]
 	}
 }
