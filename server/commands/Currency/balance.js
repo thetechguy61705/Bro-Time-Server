@@ -11,7 +11,7 @@ module.exports = {
 		call.getWallet(target.id).getTotal().then((total) => {
 			call.message.channel.send(target.user.tag + " has " + total + " Bro Bits.");
 		}).catch(() => {
-			call.message.channel.send("Failed to retrieve " + target.user.tag + "'s balance.");
+			call.safeSend("Failed to retrieve " + target.user.tag + "'s balance.");
 		});
 	}
 };

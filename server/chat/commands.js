@@ -52,8 +52,8 @@ class Call {
 		return new WalletAccess(userId);
 	}
 
-	safeSend(content, message = this.message, reply = true) {
-		message.channel.send(content, { reply: reply ? message.author : null }).catch((exc) => {
+	safeSend(content, message = this.message, options = { reply: this.message.author }) {
+		message.channel.send(content, options).catch((exc) => {
 			message.author.send(`You attempted to use the \`${this.command.id}\` command in ${message.channel}, but I can not chat there.`);
 			console.warn(exc.stack);
 		});

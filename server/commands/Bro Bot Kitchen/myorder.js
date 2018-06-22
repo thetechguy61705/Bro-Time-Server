@@ -19,7 +19,7 @@ module.exports = {
 				.addField("Order", filteredOrder.order)
 				.addField("Status", status)
 				.setFooter(`Ran by ${call.message.author.tag}`, call.message.author.displayAvatarURL);
-			call.safeSend({ embed: orderEmbed }, call.message, false);
+			call.safeSend(null, call.message, { embed: orderEmbed });
 		} else call.safeSend("❌ You do not have a current order! Run !order (item) to order something!");
 	}
 };

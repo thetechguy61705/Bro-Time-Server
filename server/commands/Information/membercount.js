@@ -14,6 +14,6 @@ module.exports = {
 			.addField("Bots", bots)
 			.setDefaultFooter(call.message.author)
 			.setColor("BLUE");
-		call.safeSend({ embed: memberEmbed }, call.message, false);
+		call.safeSend(null, call.message, { embed: memberEmbed });
 	}
 };

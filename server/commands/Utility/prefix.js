@@ -20,10 +20,6 @@ module.exports = {
 					call.message.channel.send("Unable to change the prefix!");
 				});
 			}
-		} else {
-			call.message.reply("You do not have permissions to trigger this command.").catch(() => {
-				call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+		} else call.safeSend("You do not have permissions to trigger this command.");
 	}
 };

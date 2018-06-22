@@ -9,6 +9,6 @@ module.exports = {
 		} else if (call.client.bbkLocked) {
 			return;
 		}
-		call.safeSend({ embed: getMenu(call.message.author) }, call.message, false);
+		call.safeSend(null, call.message, { embed: getMenu(call.message.author) });
 	}
 };

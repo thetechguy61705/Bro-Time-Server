@@ -20,7 +20,7 @@ module.exports = {
 					module.exports.rateLimit.splice(module.exports.rateLimit.indexOf(call.message.author.id), 1);
 				}, 300000);
 			}).catch(() => {
-				call.message.reply("Failed to give you Bro Bits.");
+				call.safeSend("Failed to give you Bro Bits.");
 			});
 		} else call.safeSend("You must wait 5 minutes from the last time you used the command.");
 	}

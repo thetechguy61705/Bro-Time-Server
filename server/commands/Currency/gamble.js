@@ -20,17 +20,13 @@ module.exports = {
 					call.getWallet(call.message.author.id).change(Math.round(amountToBet * randomMultiplier)).then(() => {
 						call.message.reply("You gained " + Math.round(amountToBet * randomMultiplier) + " Bro Bits. :D").catch(() => {});
 					}).catch(() => {
-						call.message.reply("Failed to change your balance. You did not gain/lose any Bro Bits.").catch(() => {
-							call.message.author.send(`You attempted to use the \`gamble\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-						});
+						call.safeSend("Failed to change your balance. You did not gain/lose any Bro Bits.");
 					});
 				} else {
 					call.getWallet(call.message.author.id).change(-amountToBet).then(() => {
 						call.message.reply("You lost " + amountToBet + " Bro Bits. D:");
 					}).catch(() => {
-						call.message.reply("Failed to change your balance. You did not gain/lose any Bro Bits.").catch(() => {
-							call.message.author.send(`You attempted to use the \`gamble\` command in ${call.message.channel}, but I can not chat there.`).catch(() => {});
-						});
+						call.safeSend("Failed to change your balance. You did not gain/lose any Bro Bits.");
 					});
 				}
 			} else call.safeSend("You do not have enough money to bet this amount.");
