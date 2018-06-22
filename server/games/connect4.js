@@ -20,6 +20,7 @@ module.exports = {
 	shortDescription: "Play connect 4.",
 	longDescription: "Play connect 4, a classic game with a 7x6 board where the goal is to get 4 coins in a row.",
 	instructions: "React with the emoji corresponding to the row you wish to place a coin in.",
+	betting: true,
 	minPlayers: 2,
 	maxPlayers: 2,
 	requiresInvite: true,
@@ -56,14 +57,14 @@ module.exports = {
 								if (coin !== "⚫" && coin === row[indexOfCoin + 1] &&
 									row[indexOfCoin + 1] === row[indexOfCoin + 2] &&
 									row[indexOfCoin + 2] === row[indexOfCoin + 3]) {
-									session.winner = coin;
+									session.winner = (coin === "🔴") ? author : target;
 									session.endGame();
 								}
 								if (rows[indexOfRow + 1] != null && rows[indexOfRow + 2] != null && rows[indexOfRow + 3] != null) {
 									if (coin !== "⚫" && coin === rows[indexOfRow + 1][indexOfCoin] &&
 										rows[indexOfRow + 1][indexOfCoin] === rows[indexOfRow + 2][indexOfCoin] &&
 										rows[indexOfRow + 2][indexOfCoin] === rows[indexOfRow + 3][indexOfCoin]) {
-										session.winner = coin;
+										session.winner = (coin === "🔴") ? author : target;
 										session.endGame();
 									}
 								}
@@ -71,7 +72,7 @@ module.exports = {
 									if (coin !== "⚫" && coin === rows[indexOfRow - 1][indexOfCoin + 1] &&
 										rows[indexOfRow - 1][indexOfCoin + 1] === rows[indexOfRow - 2][indexOfCoin + 2] &&
 										rows[indexOfRow - 2][indexOfCoin + 2] === rows[indexOfRow - 3][indexOfCoin + 3]) {
-										session.winner = coin;
+										session.winner = (coin === "🔴") ? author : target;
 										session.endGame();
 									}
 								}
@@ -79,7 +80,7 @@ module.exports = {
 									if (coin !== "⚫" && coin === rows[indexOfRow + 1][indexOfCoin + 1] &&
 										rows[indexOfRow + 1][indexOfCoin + 1] === rows[indexOfRow + 2][indexOfCoin + 2] &&
 										rows[indexOfRow + 2][indexOfCoin + 2] === rows[indexOfRow + 3][indexOfCoin + 3]) {
-										session.winner = coin;
+										session.winner = (coin === "🔴") ? author : target;
 										session.endGame();
 									}
 								}
