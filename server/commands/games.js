@@ -225,6 +225,7 @@ module.exports = {
 	execute: async (call) => {
 		var name = call.params.readParameter();
 		var bet = (call.client.user.id === "393532251398209536") ? (call.params.readNumber() || 0) : 0;
+		if (bet < 0) bet = 0;
 		var found = false;
 		if (games != null)
 			games = this;
