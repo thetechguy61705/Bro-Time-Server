@@ -8,6 +8,16 @@ function titleCase(str) {
 	}
 	return newString;
 }
+function isURL(str) {
+	var pattern = new RegExp("^(https?:\\/\\/)?"+
+	"((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|"+
+	"((\\d{1,3}\\.){3}\\d{1,3}))"+
+	"(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*"+
+	"(\\?[;&a-z\\d%_.~+=-]*)?"+
+	"(\\#[-a-z\\d_]*)?$", "i");
+	return pattern.test(str);
+	// credit to Tom Gullen https://stackoverflow.com/users/356635/tom-gullen from stackoverflow <3
+}
 module.exports = {
 	id: "cook",
 	description: "Cooks someone's order",
@@ -33,41 +43,43 @@ module.exports = {
 							if (filteredOrder.status.includes(call.message.author.tag)) {
 								var foods = filteredOrder.order.replace(/`/gi, "").split("\n").map((m) => m.toLowerCase()).filter((m) => !filteredOrder.links.toLowerCase().includes(m.toLowerCase()));
 								if (foods.includes(food.toLowerCase())) {
-									var links;
-									if (filteredOrder.links !== "None") {
-										links = filteredOrder.links + `\n${food} - ${link}`;
-									} else {
-										links = `${food} - ${link}`;
-									}
-									var status = "Cooking";
-									var justFoods = filteredOrder.order.split("\n");
-									var justLinks = filteredOrder.links.split("\n");
-									if (justFoods.length <= justLinks.length + 1) {
-										status = "Cooked";
-									}
-									var orderEmbed = new Discord.RichEmbed()
-										.setColor("RED")
-										.addField("Order ID", filteredOrder.id)
-										.addField("Order", filteredOrder.order)
-										.addField("Customer", filteredOrder.customer)
-										.addField("Ordered From", filteredOrder.orderedFrom)
-										.addField("Status", `${status} (${call.message.author.tag})`)
-										.addField("Links", links);
-									filteredOrder.msg.edit({ embed: orderEmbed }).then(() => {
-										orders.push({
-											msg: filteredOrder.msg,
-											id: filteredOrder.id,
-											order: filteredOrder.order,
-											customer: filteredOrder.customer,
-											orderedFrom: filteredOrder.orderedFrom,
-											status: `${status} (${call.message.author.tag})`,
-											links: links,
+									if (isURL(link)) {
+										var links;
+										if (filteredOrder.links !== "None") {
+											links = filteredOrder.links + `\n${food} - ${link}`;
+										} else {
+											links = `${food} - ${link}`;
+										}
+										var status = "Cooking";
+										var justFoods = filteredOrder.order.split("\n");
+										var justLinks = filteredOrder.links.split("\n");
+										if (justFoods.length <= justLinks.length + 1) {
+											status = "Cooked";
+										}
+										var orderEmbed = new Discord.RichEmbed()
+											.setColor("RED")
+											.addField("Order ID", filteredOrder.id)
+											.addField("Order", filteredOrder.order)
+											.addField("Customer", filteredOrder.customer)
+											.addField("Ordered From", filteredOrder.orderedFrom)
+											.addField("Status", `${status} (${call.message.author.tag})`)
+											.addField("Links", links);
+										filteredOrder.msg.edit({ embed: orderEmbed }).then(() => {
+											orders.push({
+												msg: filteredOrder.msg,
+												id: filteredOrder.id,
+												order: filteredOrder.order,
+												customer: filteredOrder.customer,
+												orderedFrom: filteredOrder.orderedFrom,
+												status: `${status} (${call.message.author.tag})`,
+												links: links,
+											});
+											orders.splice(orders.indexOf(filteredOrder), 1);
+											call.message.reply("Successfully cooked this item.").catch(() => {});
+										}).catch(() => {
+											call.safeSend("Couldn't cook this food, please try again");
 										});
-										orders.splice(orders.indexOf(filteredOrder), 1);
-										call.message.reply("Successfully cooked this item.").catch(() => {});
-									}).catch(() => {
-										call.safeSend("Couldn't cook this food, please try again");
-									});
+									} else call.safeSend("Not a valid link");
 								} else call.safeSend("Not a valid food/drink to cook, or was already cooked");
 							} else call.safeSend("You can only cook orders claimed by you!");
 						} else call.safeSend("You must claim orders before you can cook them!");

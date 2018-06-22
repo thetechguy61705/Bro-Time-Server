@@ -42,31 +42,33 @@ module.exports = {
 						}
 					}
 					if (noMenu.length === 0) {
-						var id = randomLetters(3),
-							ordersChannel = call.client.channels.get("399290151932526593"),
-							orderedFromString = `${call.message.channel.toString()} (${call.message.channel.id}) in ${call.message.channel.guild.name} (${call.message.channel.guild.id})`;
-						var orderEmbed = new RichEmbed()
-							.setColor("RED")
-							.addField("Order ID", id)
-							.addField("Order", foods.map((m) => "`" + titleCase(m) + "`").join("\n"))
-							.addField("Customer", call.message.author.tag)
-							.addField("Ordered From", orderedFromString)
-							.addField("Status", "Awaiting Cook")
-							.addField("Links", "None");
-						ordersChannel.send({ embed: orderEmbed }).then((newMsg) => {
-							orders.push({
-								msg: newMsg,
-								id: id,
-								order: foods.map((m) => "`" + titleCase(m) + "`").join("\n"),
-								customer: call.message.author.tag,
-								orderedFrom: orderedFromString,
-								status: "Awaiting Cook",
-								links: "None",
+						if (foods.find((val) => foods.filter((v) => v === val).length > 1) != null) {
+							var id = randomLetters(3),
+								ordersChannel = call.client.channels.get("399290151932526593"),
+								orderedFromString = `${call.message.channel.toString()} (${call.message.channel.id}) in ${call.message.channel.guild.name} (${call.message.channel.guild.id})`;
+							var orderEmbed = new RichEmbed()
+								.setColor("RED")
+								.addField("Order ID", id)
+								.addField("Order", foods.map((m) => "`" + titleCase(m) + "`").join("\n"))
+								.addField("Customer", call.message.author.tag)
+								.addField("Ordered From", orderedFromString)
+								.addField("Status", "Awaiting Cook")
+								.addField("Links", "None");
+							ordersChannel.send({ embed: orderEmbed }).then((newMsg) => {
+								orders.push({
+									msg: newMsg,
+									id: id,
+									order: foods.map((m) => "`" + titleCase(m) + "`").join("\n"),
+									customer: call.message.author.tag,
+									orderedFrom: orderedFromString,
+									status: "Awaiting Cook",
+									links: "None",
+								});
+								call.message.reply("Your order has been sent!").catch(() => {});
+							}).catch(() => {
+								call.safeSend("Couldn't deliver your order, please try again.");
 							});
-							call.message.reply("Your order has been sent!").catch(() => {});
-						}).catch(() => {
-							call.safeSend("Couldn't deliver your order, please try again.");
-						});
+						} else call.safeSend("You cannot order duplicate items!");
 					} else call.safeSend(`\nThese item(s) that you ordered are not on the menu:\n\n${noMenu.map((m) => `\`${m}\``).join("\n\n")}\n\nTherefore, your order has been cancelled.`);
 				} else call.safeSend("You have exceeded the order limit of 3! Order cancelled.");
 			} else call.safeSend("You must order at least one thing!");
