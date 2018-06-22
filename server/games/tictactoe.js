@@ -13,6 +13,7 @@ module.exports = {
 		const E_A = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
 		const author = session.host;
 		const target = session.players.last();
+		session.players.set(host.id, host);
 		var turn = [author, "❌"];
 		session.context.
 			channel.send(`${E_A[0]} | ${E_A[1]} | ${E_A[2]}\n———————\n${E_A[3]} | ${E_A[4]} | ${E_A[5]}\n———————\n${E_A[6]} | ${E_A[7]} | ${E_A[8]}\n\n${turn[0]}'s turn.`).then(async (msg) => {
