@@ -5,7 +5,7 @@ module.exports = {
 	aliases: ["ad"],
 	run: (call) => {
 		fs.readFile(__dirname + "/../../info/ad.md", (err, data) => {
-			if(err) {
+			if (err) {
 				throw err;
 			} else {
 				var advertisement = data.toString("utf8");

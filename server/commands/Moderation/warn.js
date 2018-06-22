@@ -19,7 +19,7 @@ module.exports = {
 							var reason = (parameterTwo !== "") ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
 							try {
 								await target.send(`You have been warned in the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}.`);
-							} catch(err) {
+							} catch (err) {
 								console.warn(err.stack);
 							}
 

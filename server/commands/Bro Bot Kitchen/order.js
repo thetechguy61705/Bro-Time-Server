@@ -33,11 +33,11 @@ module.exports = {
 		var filteredOrder = orders.find((o) => o.customer === call.message.author.tag);
 		if (!filteredOrder) {
 			var foods = call.params.readRaw().split(",").map((val) => val.trim());
-			if(foods[0] !== "") {
-				if(foods.length < 4) {
+			if (foods[0] !== "") {
+				if (foods.length < 4) {
 					var noMenu = [];
 					for (let food of foods) {
-						if(!MENU.find((item) => item.toLowerCase() === food.toLowerCase())) {
+						if (!MENU.find((item) => item.toLowerCase() === food.toLowerCase())) {
 							noMenu.push(food.toLowerCase());
 						}
 					}

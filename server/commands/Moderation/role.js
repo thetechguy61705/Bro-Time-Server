@@ -7,7 +7,7 @@ for (let file of fs.readdirSync(__dirname + "/../../actions/role")) {
 	try {
 		const ACTION = require("../../actions/role/" + file);
 		actions.set(ACTION.id, ACTION);
-	} catch(err) {
+	} catch (err) {
 		console.warn("Error loading role action " + file + ":");
 		console.warn(err.stack);
 	}
@@ -24,7 +24,7 @@ module.exports = {
 				ACTION = actions.find((a) => a.id === PARAMETER || (a.aliases || []).includes(PARAMETER));
 			try {
 				(ACTION || actions.get("default")).run(call, actions, PARAMETER);
-			} catch(exc) {
+			} catch (exc) {
 				console.warn("Role action failed:");
 				console.warn(exc.stack);
 			}

@@ -6,7 +6,7 @@ for (let file of fs.readdirSync(__dirname + "/../../actions/info")) {
 	try {
 		const ACTION = require("../../actions/info/" + file);
 		actions.set(ACTION.id, ACTION);
-	} catch(exc) {
+	} catch (exc) {
 		console.warn("Error loading info action " + file + ":");
 		console.warn(exc.stack);
 	}
@@ -22,7 +22,7 @@ module.exports = {
 			ACTION = actions.find((a) => a.id === PARAMETER || (a.aliases || []).includes(PARAMETER));
 		try {
 			(ACTION || actions.get("default")).run(call, actions, PARAMETER);
-		} catch(exc) {
+		} catch (exc) {
 			console.warn("Info action failed:");
 			console.warn(exc.stack);
 		}

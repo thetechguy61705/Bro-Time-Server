@@ -33,6 +33,9 @@
 		"no-trailing-spaces": [
 			"error"
 		],
+		"space-before-blocks": "error",
+		"keyword-spacing": "error",
+		"arrow-spacing": "error",
 		"comma-spacing": "error",
 		"quotes": [
 			"error",

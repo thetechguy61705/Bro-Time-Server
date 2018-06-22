@@ -14,7 +14,7 @@ module.exports = {
 		}
 		var kitchenServer = call.client.guilds.get("398948242790023168"),
 			member = kitchenServer.members.get(call.message.author.id);
-		if(member != null && isWorker(member)) {
+		if (member != null && isWorker(member)) {
 			var code = call.params.readParameter(),
 				reason = call.params.readParameter(true);
 			if (code != null && reason != null) {

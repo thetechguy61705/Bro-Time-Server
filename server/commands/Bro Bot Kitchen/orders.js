@@ -13,7 +13,7 @@ module.exports = {
 		}
 		var kitchenServer = call.client.guilds.get("398948242790023168"),
 			member = kitchenServer.members.get(call.message.author.id);
-		if(member != null && isWorker(member)) {
+		if (member != null && isWorker(member)) {
 			var ordersToFilter = orders;
 			var filteredOrders;
 			if (call.params.readRaw()) {

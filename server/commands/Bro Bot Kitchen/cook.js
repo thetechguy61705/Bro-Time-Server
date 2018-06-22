@@ -21,7 +21,7 @@ module.exports = {
 		}
 		var kitchenServer = call.client.guilds.get("398948242790023168"),
 			member = kitchenServer.members.get(call.message.author.id);
-		if(member != null && isWorker(member)) {
+		if (member != null && isWorker(member)) {
 			if (call.message.content.split("|")[1] && call.message.content.split("|")[2]) {
 				var code = call.params.readParameter().trim();
 				var food = titleCase(call.message.content.split("|")[1].trim());
@@ -29,12 +29,12 @@ module.exports = {
 				if (code != null && food != null && link != null) {
 					var filteredOrder = orders.find((o) => o.id === code.toUpperCase());
 					if (filteredOrder != null) {
-						if(filteredOrder.status !== "Awaiting Cook") {
-							if(filteredOrder.status.includes(call.message.author.tag)) {
+						if (filteredOrder.status !== "Awaiting Cook") {
+							if (filteredOrder.status.includes(call.message.author.tag)) {
 								var foods = filteredOrder.order.replace(/`/gi, "").split("\n").map((m) => m.toLowerCase()).filter((m) => !filteredOrder.links.toLowerCase().includes(m.toLowerCase()));
-								if(foods.includes(food.toLowerCase())) {
+								if (foods.includes(food.toLowerCase())) {
 									var links;
-									if(filteredOrder.links !== "None") {
+									if (filteredOrder.links !== "None") {
 										links = filteredOrder.links + `\n${food} - ${link}`;
 									} else {
 										links = `${food} - ${link}`;

@@ -17,7 +17,7 @@ module.exports = {
 					if (target.bannable) {
 						try {
 							await target.send(`You have been banned from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);
-						} catch(err) {
+						} catch (err) {
 							console.warn(err.stack);
 						}
 

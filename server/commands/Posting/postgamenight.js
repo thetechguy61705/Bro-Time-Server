@@ -26,7 +26,7 @@ module.exports = {
 			if (game.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.");
 			var gamerole;
 			if (games.includes(game.message.content.toLowerCase())) {
-				gamerole = call.message.guild.roles.find((r)=> r.name.toLowerCase() === game.message.content.toLowerCase());
+				gamerole = call.message.guild.roles.find((r) => r.name.toLowerCase() === game.message.content.toLowerCase());
 			} else {
 				gamerole = game.message.content;
 			}
@@ -48,34 +48,34 @@ module.exports = {
 				if (games.includes(game.message.content.toLowerCase())) {
 					gamerole.setMentionable(true).then(() => {
 						annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other.message.content}\`\n*Posted by ${call.message.author}*`)
-							.then(function(){
-								gamerole.setMentionable(false).catch(function(){
+							.then(function() {
+								gamerole.setMentionable(false).catch(function() {
 									call.message.author
 										.send(`Could not change the role mentionability of ${gamerole.name} back to normal. Please do this manually.`);
 								});
-							}).catch(function(){
+							}).catch(function() {
 								call.message.author.send(`There was an error while sending a message in ${annchannel}.`);
 							});
 					}).catch(() => {
-						call.message.channel.send("Something went wrong and I couldn't toggle the role mentionability.").catch(function(){
+						call.message.channel.send("Something went wrong and I couldn't toggle the role mentionability.").catch(function() {
 							call.message.author
 								.send(`You attempted to run the \`postgamenight\` command in ${call.message.channel}, but I can not chat there.`);
 						});
 					});
 				} else {
 					annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other.message.content}\`\n*Posted by ${call.message.author}*`)
-						.catch(function(){
+						.catch(function() {
 							call.message.author.send(`There was an error while sending a message in ${annchannel}.`);
 						});
 				}
 			} else {
-				call.message.channel.send("Invalid link supplied.").catch(function(){
+				call.message.channel.send("Invalid link supplied.").catch(function() {
 					call.message.author
 						.send(`You attempted to run the \`postgamenight\` command in ${call.message.channel}, but I can not chat there`);
 				});
 			}
 		} else {
-			call.message.channel.send("Error: missing role: `Game Night Host`").catch(function(){
+			call.message.channel.send("Error: missing role: `Game Night Host`").catch(function() {
 				call.message.author
 					.send(`You attempted to run the \`postgamenight\` command in ${call.message.channel}, but I can not chat there`);
 			});
