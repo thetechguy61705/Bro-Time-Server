@@ -18,7 +18,7 @@ module.exports = {
 				module.exports.rateLimit.push(call.message.author.id);
 				call.client.setTimeout(() => {
 					module.exports.rateLimit.splice(module.exports.rateLimit.indexOf(call.message.author.id), 1);
-					if (call.message.content.toLowerCase().endsWith("true" || " t")) {
+					if (call.message.content.toLowerCase().endsWith(" t") || call.message.content.toLowerCase().endsWith("true") || call.message.content.toLowerCase().endsWith("timer")) {
 						call.message.author.send("You can loot Bro Bits again!");
 					}
 				}, 300000);
