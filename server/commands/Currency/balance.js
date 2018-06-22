@@ -3,6 +3,7 @@ module.exports = {
 	description: "Returns a user's Bro Bit balance.",
 	paramsHelp: "[user]",
 	aliases: ["bal"],
+	access: "Server",
 	execute: (call) => {
 		var param = call.params.readParameter(true);
 		param = (param != null) ? param.toLowerCase() : null;

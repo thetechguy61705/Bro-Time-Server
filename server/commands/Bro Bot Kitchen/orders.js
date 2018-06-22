@@ -4,6 +4,7 @@ module.exports = {
 	id: "orders",
 	description: "Lists unclaimed orders",
 	paramsHelp: "[status]",
+	access: "Public",
 	execute: (call) => {
 		if (call.client.bbkLocked && !call.client.bbkLockedChannels.includes(call.message.channel.id)) {
 			call.client.bbkLockedChannels.push(call.message.channel.id);

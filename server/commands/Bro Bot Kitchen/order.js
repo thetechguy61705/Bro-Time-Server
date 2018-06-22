@@ -23,6 +23,7 @@ module.exports = {
 	id: "order",
 	description: "Orders food",
 	paramsHelp: "(item), [item2], [item3]",
+	access: "Public",
 	execute: (call) => {
 		if (call.client.bbkLocked && !call.client.bbkLockedChannels.includes(call.message.channel.id)) {
 			call.client.bbkLockedChannels.push(call.message.channel.id);

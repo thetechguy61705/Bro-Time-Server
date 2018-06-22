@@ -19,6 +19,7 @@ module.exports = {
 	aliases: ["?", "h"],
 	description: "Returns information and commands on the bot.",
 	paramsHelp: "[command]",
+	access: "Public",
 	execute: (call) => {
 		const data = (call.message.guild || call.message.channel).data;
 		const prefix = (data != null) ? data.prefix : "help";

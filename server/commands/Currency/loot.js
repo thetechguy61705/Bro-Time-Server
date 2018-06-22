@@ -9,6 +9,7 @@ module.exports = {
 	id: "loot",
 	description: "Gives you a random amount of Bro Bits.",
 	rateLimit: [],
+	access: "Public",
 	execute: (call) => {
 		if (module.exports.rateLimit.indexOf(call.message.author.id) === -1) {
 			var multiplier = (premium(call.message.member)) ? 20 : 10;

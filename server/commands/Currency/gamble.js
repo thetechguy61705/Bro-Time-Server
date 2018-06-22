@@ -8,6 +8,7 @@ module.exports = {
 	aliases: ["bet"],
 	description: "Allows you to either lose all the bet money, or gain some more money.",
 	paramsHelp: "(amount)",
+	access: "Public",
 	execute: async (call) => {
 		var userBalance = await call.getWallet(call.message.author.id).getTotal();
 		var param = (call.params.readParameter() || "."), amountToBet = Math.ceil(Number(param) || param.toNumber(964));

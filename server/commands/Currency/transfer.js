@@ -3,6 +3,7 @@ module.exports = {
 	aliases: ["give"],
 	description: "Transfers Bro Bits from you to another user with a 90% exchange rate.",
 	paramsHelp: "(user) (amount)",
+	access: "Server",
 	execute: async (call) => {
 		var param = call.params.readParameter();
 		param = (param != null) ? param.toLowerCase() : null;

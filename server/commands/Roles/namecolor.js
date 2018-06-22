@@ -15,6 +15,7 @@ module.exports = {
 	description: "Gives the user the specified role if it is a part of !info namecolors list.",
 	paramsHelp: "(color role)",
 	requires: "Nothing/Bro Time Premium",
+	access: "Server",
 	execute: (call) => {
 		const ROLE = call.params.readRole();
 		if (ROLE != null && COLOR_ROLES.includes(ROLE.name)) {

@@ -17,6 +17,7 @@ module.exports = {
 	aliases: ["information"],
 	description: "Returns information on the specified topic, if the topic is gameroles, ad, donate, namecolors, levelroles or howtogetrole.",
 	paramsHelp: "(option)",
+	access: "Public",
 	execute: (call) => {
 		const PARAMETER = (call.params.readParameter() || "").toLowerCase(),
 			ACTION = actions.find((a) => a.id === PARAMETER || (a.aliases || []).includes(PARAMETER));

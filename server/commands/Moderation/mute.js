@@ -6,6 +6,7 @@ module.exports = {
 	description: "Gives the user the \"Muted\" role for the specified period of time. If no time is specified, it will not automatically remove the role.",
 	paramsHelp: "(user) [time]",
 	requires: "Moderator permissions",
+	access: "Server",
 	execute: (call) => {
 		const parameterOne = call.params.readParameter(), parameterTwo = call.params.readParameter();
 		if (Moderator(call.message.member)) {

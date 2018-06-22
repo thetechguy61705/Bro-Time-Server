@@ -7,6 +7,7 @@ module.exports = {
 	description: "Sends a rich embed in the channel it was triggered with specified title and poll options" +
 		", then reacts to the rich embed correspondingly to the poll options.",
 	paramsHelp: "(title): (option) | (option)",
+	access: "Server",
 	execute: (call) => {
 		const pollTitle = call.params.readRaw().split(":")[0];
 		if (call.params.readRaw().split(":")[1] !== undefined) {

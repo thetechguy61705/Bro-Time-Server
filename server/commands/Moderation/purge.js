@@ -18,6 +18,7 @@ module.exports = {
 	description: "Deletes messages.",
 	paramsHelp: "(amount/option) [amount]",
 	requires: "Moderator permissions",
+	access: "Server",
 	execute: (call) => {
 		call.purgeMessages = async function(amount, channel = this.message.channel, filter = () => true) {
 			var messages = await channel.fetchMessages({ limit: 100 });

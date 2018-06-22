@@ -3,6 +3,7 @@ const Moderator = require("app/moderator");
 module.exports = {
 	id: "lockdown",
 	aliases: ["unlockdown"],
+	access: "Public",
 	execute: (call) => {
 		if (Moderator(call.message.member)) {
 			call.client.locked = !call.client.locked;

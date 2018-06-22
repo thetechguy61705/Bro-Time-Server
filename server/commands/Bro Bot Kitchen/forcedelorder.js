@@ -5,6 +5,7 @@ module.exports = {
 	id: "forcedelorder",
 	description: "Deletes someone else's order",
 	paramsHelp: "(order number) (reason)",
+	access: "Public",
 	execute: (call) => {
 		if (call.client.bbkLocked && !call.client.bbkLockedChannels.includes(call.message.channel.id)) {
 			call.client.bbkLockedChannels.push(call.message.channel.id);

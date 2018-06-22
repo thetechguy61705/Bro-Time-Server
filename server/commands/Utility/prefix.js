@@ -5,7 +5,7 @@ module.exports = {
 	id: "prefix",
 	description: "Changes the guild's prefix.",
 	paramsHelp: "(new prefix)",
-	// This command requires the restrictions api. I'll take it out of testing then.
+	access: "Server",
 	execute: (call) => {
 		if (isModerator(call.message.member)) {
 			var data = (call.message.guild || call.message.channel).data;

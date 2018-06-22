@@ -5,6 +5,7 @@ module.exports = {
 	description: "Kicks specified user.",
 	paramsHelp: "(user) [reason]",
 	requires: "Moderator permissions",
+	access: "Server",
 	execute: async (call) => {
 		const rawContent = call.params.readRaw(),
 			parameterOne = (call.params.readParameter() || ""),

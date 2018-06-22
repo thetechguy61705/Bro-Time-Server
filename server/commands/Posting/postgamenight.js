@@ -19,6 +19,7 @@ module.exports = {
 	description: "Posts the specified \"Gamenight\" in <#330920609435353090>.",
 	paramsHelp: "... prompt",
 	requires: "Role: Game Night Host",
+	access: "Server",
 	execute: async (call) => {
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {
 			var game = await call.requestInput(0, "What is the game you want to host on?", 60000);

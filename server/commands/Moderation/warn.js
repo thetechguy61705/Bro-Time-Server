@@ -6,6 +6,7 @@ module.exports = {
 	description: "Sends the user a dm with the supplied reason.",
 	paramsHelp: "(user) [reason]",
 	requires: "Moderator permissions",
+	access: "Server",
 	execute: async (call) => {
 		const rawContent = call.params.readRaw(),
 			parameterOne = (call.params.readParameter() || ""),

@@ -6,6 +6,7 @@ module.exports = {
 	description: "Toggle the mentionability of a role.",
 	paramsHelp: "(role)",
 	requires: "Moderator permissions",
+	access: "Server",
 	execute: (call) => {
 		const DATA = (call.message.guild || call.message.channel).data,
 			PREFIX = DATA != null ? DATA.prefix : "/",

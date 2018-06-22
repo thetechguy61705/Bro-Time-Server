@@ -2,6 +2,7 @@ var { getMenu } = require("app/menu");
 module.exports = {
 	id: "menu",
 	description: "Sends you the menu",
+	access: "Public",
 	execute: (call) => {
 		if (call.client.bbkLocked && !call.client.bbkLockedChannels.includes(call.message.channel.id)) {
 			call.client.bbkLockedChannels.push(call.message.channel.id);

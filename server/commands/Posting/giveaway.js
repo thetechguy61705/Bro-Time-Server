@@ -19,6 +19,7 @@ module.exports = {
 	description: "Creates a giveaway in specified channel with specified amount of winners for the specified time.",
 	paramsHelp: "(prize): (time) (channel) (amount of winners)",
 	requires: "Moderator permissions",
+	access: "Server",
 	execute: (call) => {
 		if (call.message.member.roles.find("name", "Giveaways") != null) {
 			var rawContent = call.params.readRaw(),

@@ -5,6 +5,7 @@ module.exports = {
 	id: "members",
 	description: "Gets members from a role or from a guild.",
 	paramsHelp: "[role]",
+	access: "Server",
 	execute: (call) => {
 		var memberEmbed = new Discord.RichEmbed().setColor("ORANGE");
 		var members;

@@ -14,6 +14,7 @@ module.exports = {
 	description: "Adds a new partner in the #partners channel",
 	paramsHelp: "(title) | (description) | (discord invite OR thumbnail url)",
 	requires: "Role: Community Manager Bro",
+	access: "Server",
 	execute: (call) => {
 		if (call.message.member.roles.has("409153912558583818")) {
 			if (call.params.readRaw()) {
