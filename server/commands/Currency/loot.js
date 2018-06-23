@@ -1,6 +1,6 @@
 /*
 Number 1 - 10 for non-premium users, 1 - 20 for premium users.
-Use every 5 minutes.
+Use every 10 minutes.
 */
 
 var premium = require("app/premium");
@@ -22,7 +22,7 @@ module.exports = {
 					if (call.message.content.toLowerCase().endsWith(" t") || call.message.content.toLowerCase().endsWith("true") || call.message.content.toLowerCase().endsWith("timer")) {
 						call.message.author.send("You can loot Bro Bits again!");
 					}
-				}, 300000);
+				}, 600000);
 			}).catch(() => {
 				call.safeSend("Failed to give you Bro Bits.");
 			});
