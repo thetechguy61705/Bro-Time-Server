@@ -12,7 +12,7 @@ module.exports = {
 	access: "Public",
 	execute: (call) => {
 		if (module.exports.rateLimit.indexOf(call.message.author.id) === -1) {
-			var multiplier = (premium(call.message.member)) ? 20 : 10;
+			var multiplier = (premium(call.message.author)) ? 20 : 10;
 			var randomBits = Math.ceil(Math.random() * multiplier);
 			call.getWallet(call.message.author.id).change(randomBits).then(() => {
 				call.message.reply("You looted " + randomBits + " Bro Bits!");
