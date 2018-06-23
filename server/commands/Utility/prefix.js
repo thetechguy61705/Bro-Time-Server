@@ -5,7 +5,7 @@ module.exports = {
 	id: "prefix",
 	description: "Changes the guild's prefix.",
 	paramsHelp: "(new prefix)",
-	access: "Server",
+	access: "Public",
 	execute: (call) => {
 		if (isModerator(call.message.member)) {
 			var data = (call.message.guild || call.message.channel).data;
@@ -19,7 +19,7 @@ module.exports = {
 				}, (exc) => {
 					console.warn("Unable to set prefix:");
 					console.warn(exc.stack);
-					call.message.channel.send("Unable to change the prefix!");
+					call.safeSend("Failed to set the prefix.")
 				});
 			}
 		} else call.safeSend("You do not have permissions to trigger this command.");
