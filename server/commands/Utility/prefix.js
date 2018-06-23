@@ -13,7 +13,9 @@ module.exports = {
 				data.setPrefix(call.params.readParameter(true)).then((newPrefix) => {
 					call.message.channel.send(new RichEmbed()
 						.setTitle("Prefix Changed")
-						.setDescription(`The prefix is now set to \`${newPrefix}\`!`));
+						.setDescription(`The prefix is now set to \`${newPrefix}\`!`))
+						.setDefaultFooter(call.message.author)
+						.setColor(0x00AE86);
 				}, (exc) => {
 					console.warn("Unable to set prefix:");
 					console.warn(exc.stack);

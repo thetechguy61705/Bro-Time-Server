@@ -8,6 +8,8 @@ module.exports = {
 		", then reacts to the rich embed correspondingly to the poll options.",
 	paramsHelp: "(title): (option) | (option)",
 	access: "Server",
+	botRequires: ["ADD_REACTIONS"],
+	botRequiresMessage: "To add the poll emojis.",
 	execute: (call) => {
 		const pollTitle = call.params.readRaw().split(":")[0];
 		if (call.params.readRaw().split(":")[1] !== undefined) {

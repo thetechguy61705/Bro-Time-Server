@@ -6,6 +6,8 @@ module.exports = {
 	description: "Gets members from a role or from a guild.",
 	paramsHelp: "[role]",
 	access: "Server",
+	botRequires: ["ADD_REACTIONS"],
+	botRequiresMessage: "To scroll through the member list.",
 	execute: (call) => {
 		var memberEmbed = new Discord.RichEmbed().setColor("ORANGE");
 		var members;

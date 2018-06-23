@@ -7,6 +7,8 @@ module.exports = {
 	paramsHelp: "(role)",
 	requires: "Moderator permissions",
 	access: "Server",
+	botRequires: ["MANAGE_ROLES"],
+	botRequiresMessage: "To change the mentionability of roles.",
 	execute: (call) => {
 		const DATA = (call.message.guild || call.message.channel).data,
 			PREFIX = DATA != null ? DATA.prefix : "/",

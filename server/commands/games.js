@@ -223,6 +223,8 @@ module.exports = {
 	description: "Starts a game.",
 	paramsHelp: "[game] [amount to bet]",
 	access: "Server",
+	botRequires: ["ADD_REACTIONS"],
+	botRequiresMessage: "To create a game invitation method.",
 	execute: async (call) => {
 		var name = call.params.readParameter();
 		var bet = (call.client.user.id === "393532251398209536") ? (call.params.readNumber() || 0) : 0;

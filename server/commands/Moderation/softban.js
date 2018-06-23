@@ -5,6 +5,8 @@ module.exports = {
 	description: "Bans specified user, purging the messages they sent in the last seven days, then unbans the user. Basically rendering this as a kick.",
 	paramsHelp: "(user) [reason]",
 	requires: "Moderator permissions",
+	botRequires: ["BAN_MEMBERS"],
+	botRequiresMessage: "To ban members and unban them.",
 	access: "Server",
 	execute: async (call) => {
 		const rawContent = call.params.readRaw(),

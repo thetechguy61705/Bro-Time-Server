@@ -25,7 +25,7 @@ module.exports = {
 			if (call.message.channel.type === "dm" && ["Private", "Public"].includes(cmd.access)) return true;
 			if (call.message.channel.type === "text" && ["Server", "Public", undefined].includes(cmd.access)) return true;
 			return false;
-		}
+		};
 		const data = (call.message.guild || call.message.channel).data;
 		const prefix = (data != null) ? data.prefix : "help";
 		const param1 = (call.params.readRaw() !== "" && call.params.readRaw() != null) ? call.params.readRaw() : "";
