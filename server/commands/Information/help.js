@@ -21,6 +21,11 @@ module.exports = {
 	paramsHelp: "[command]",
 	access: "Public",
 	execute: (call) => {
+		const commandFilter = (cmd) => {
+			if (call.message.channel.type === "dm" && ["Private", "Public"].includes(cmd.access)) return true;
+			if (call.message.channel.type === "text" && ["Server", "Public", undefined].includes(cmd.access)) return true;
+			return false;
+		}
 		const data = (call.message.guild || call.message.channel).data;
 		const prefix = (data != null) ? data.prefix : "help";
 		const param1 = (call.params.readRaw() !== "" && call.params.readRaw() != null) ? call.params.readRaw() : "";
@@ -34,7 +39,7 @@ module.exports = {
 			var sortedCommands = call.commands.loaded.array().sort((a, b) => a.id.localeCompare(b.id));
 
 			for (var sortedCmd of sortedCommands) {
-				add(sortedCmd, commandHelp, prefix);
+				if (commandFilter(sortedCmd)) add(sortedCmd, commandHelp, prefix);
 			}
 
 			helpEmbed.setTitle("Information").setDescription(`Prefix: \`${prefix}\`\nUptime: ${call.client.uptime.expandPretty()}\n` +

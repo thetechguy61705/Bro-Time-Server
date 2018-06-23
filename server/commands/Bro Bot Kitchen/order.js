@@ -23,7 +23,7 @@ module.exports = {
 	id: "order",
 	description: "Orders food",
 	paramsHelp: "(item), [item2], [item3]",
-	access: "Public",
+	access: "Server",
 	execute: (call) => {
 		if (call.client.bbkLocked && !call.client.bbkLockedChannels.includes(call.message.channel.id)) {
 			call.client.bbkLockedChannels.push(call.message.channel.id);
@@ -46,7 +46,7 @@ module.exports = {
 						if (foods.find((val) => foods.filter((v) => v === val).length > 1) == null) {
 							var id = randomLetters(3),
 								ordersChannel = call.client.channels.get("399290151932526593"),
-								orderedFromString = `${call.message.channel.toString()} (${call.message.channel.id}) in ${call.message.channel.guild.name} (${call.message.channel.guild.id})`;
+								orderedFromString = `${call.message.channel.toString()} (${call.message.channel.id}) in ${call.message.guild.name} (${call.message.guild.id})`;
 							var orderEmbed = new RichEmbed()
 								.setColor("RED")
 								.addField("Order ID", id)
