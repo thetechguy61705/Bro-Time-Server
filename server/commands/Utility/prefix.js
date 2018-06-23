@@ -19,7 +19,7 @@ module.exports = {
 				}, (exc) => {
 					console.warn("Unable to set prefix:");
 					console.warn(exc.stack);
-					call.safeSend("Failed to set the prefix.")
+					call.safeSend("Failed to set the prefix.");
 				});
 			}
 		} else call.safeSend("You do not have permissions to trigger this command.");
