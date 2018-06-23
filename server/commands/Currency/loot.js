@@ -26,6 +26,6 @@ module.exports = {
 			}).catch(() => {
 				call.safeSend("Failed to give you Bro Bits.");
 			});
-		} else call.safeSend("You must wait 5 minutes from the last time you used the command.");
+		} else call.safeSend("You must wait 10 minutes from the last time you used the command.");
 	}
 };
