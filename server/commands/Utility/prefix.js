@@ -15,7 +15,8 @@ module.exports = {
 						.setTitle("Prefix Changed")
 						.setDescription(`The prefix is now set to \`${newPrefix}\`!`)
 						.setDefaultFooter(call.message.author)
-						.setColor(0x00AE86);
+						.setColor(0x00AE86),
+					);
 				}, (exc) => {
 					console.warn("Unable to set prefix:");
 					console.warn(exc.stack);
