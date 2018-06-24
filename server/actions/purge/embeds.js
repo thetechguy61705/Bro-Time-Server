@@ -16,6 +16,6 @@ module.exports = {
 						.catch(() => {});
 				});
 			});
-		} else call.safeSend("Invalid amount of messages to delete. Please specify a number above 0 and below 500.");
+		} else call.safeSend("Invalid amount of messages to delete. Please specify a number above 0 and below 100.");
 	}
 };

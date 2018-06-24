@@ -1,5 +1,5 @@
 function guessNumber(session, correctNumber, timesGuessed) {
-	var filter = (m) => m.author.id === session.host.id && Number(m.content) && Number(m.content) > 0 && Number(m.content) <;
+	var filter = (m) => m.author.id === session.host.id && Number(m.content) && Number(m.content) > 0 && Number(m.content) <= 500;
 	session.context.channel.awaitMessages(filter, { maxMatches: 1, time: 60000, errors: ["time"] }).then((messageRecieved) => {
 		var guess = Number(messageRecieved.first().content);
 		if (guess === correctNumber) {
