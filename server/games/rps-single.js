@@ -3,7 +3,6 @@ module.exports = {
 	shortDescription: "Play rps against Bro Bot.",
 	longDescription: "Play rock-paper-scissors with Bro Bot, where the objective is to crush the opponent's chosen item.",
 	instructions: "State either rock, paper or scissors to fight the opponents choice.",
-	betting: true,
 	minPlayers: 1,
 	maxPlayers: 1,
 	requiresInvite: false,
@@ -29,7 +28,7 @@ module.exports = {
 					(BOT_CHOICE === rps.first().content.toLowerCase()) ? null : session.context.client.user;
 				session.endGame();
 			}).catch(() => {
-				session.context.channel.send(`${session.host}, You did not respond with a valid option within 60 seconds.`);
+				session.context.message.reply("You did not respond with a valid option within 60 seconds.");
 				session.endGame();
 			});
 		});
