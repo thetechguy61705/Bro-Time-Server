@@ -84,6 +84,7 @@ module.exports = {
 					} else {
 						awaiting = true;
 						reactions.next.then((reaction) => {
+							awaiting = false;
 							// do stuff here to blow stuff up cj.
 						});
 					}
