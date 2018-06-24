@@ -16,7 +16,9 @@ module.exports = {
 					if (userBalance >= AMOUNT) {
 						var targetBalance = await call.getWallet(TARGET.user.id).getTotal();
 						if ((targetBalance + AMOUNT) < 1000000000) {
-							call.getWallet(call.message.author.id).transfer(Math.round(AMOUNT), TARGET.user.id).then(() => {
+							call.getWallet(call.message.author.id).transfer(Math.round(AMOUNT), TARGET.user.id).then((d, e) => {
+								console.log(d);
+								console.log(e);
 								call.message.reply(`You have successfully given ${Math.ceil(AMOUNT * call.TRANSFER_RATE)} Bro Bits to ${TARGET.user.tag}.`).catch(() => {});
 							}).catch(() => {
 								call.message.reply("Something went wrong in the transaction and I could not give the Bro Bits.");
