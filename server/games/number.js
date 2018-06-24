@@ -37,7 +37,6 @@ module.exports = {
 	load: () => {},
 	start: (session) => {
 		var correctNumber = Math.ceil(Math.random() * 500) + 1;
-		console.log(correctNumber)
 		session.context.channel.send(`${session.host}, Guess a number between 1-500. You have 5 guesses and 1 minute.`).then(() => {
 			guessNumber(session, correctNumber, 1);
 		});
