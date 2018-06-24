@@ -35,7 +35,7 @@ module.exports = {
 		const customEmojis = ["eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "💣"]
 			.map((emoji) => (session.context.client.guilds.get("453694109819994114").emojis.find((e) => e.name === emoji) || emoji));
 		// Merges custom emojis with actual ones.
-		const E_A = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣", "🔟"].concat(customEmojis)
+		const E_A = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣", "🔟"].concat(customEmojis);
 		// This array is modified to change to the number to the users emoji (X or O)
 		const author = session.host;
 		const target = session.players.last();
@@ -83,7 +83,7 @@ module.exports = {
 						});
 					} else {
 						awaiting = true;
-						reactions.next.then((reaction) => {
+						reactions.next.then((/*reaction*/) => {
 							awaiting = false;
 							// do stuff here to blow stuff up cj.
 						});
