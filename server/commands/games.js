@@ -150,6 +150,7 @@ function startGame(game, context) {
 		ended: false,
 		context: context,
 		players: new Collection(),
+		getWallet: getWallet,
 		endGame: () => {
 			if (!session.ended) {
 				clearTimeout(session.endTimer);
