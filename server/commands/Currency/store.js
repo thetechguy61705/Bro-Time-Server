@@ -7,7 +7,8 @@ module.exports = {
 	execute: (call) => {
 		var storeEmbed = new Discord.RichEmbed()
 			.setTitle("Store")
-			.setColor("GREEN");
+			.setColor("GREEN")
+			.setFooter("soon:tm:");
 		for (let item of Object.values(store)) {
 			storeEmbed.addField(item.name, `Price: \`${item.price}\`\nDescription: \`${item.description}\``);
 		}
