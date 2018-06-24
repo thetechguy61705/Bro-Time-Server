@@ -46,6 +46,6 @@ module.exports = {
 	},
 	end: (session) => {
 		if (session.won) session.getWallet(session.host.id).change(20);
-		session.context.message.reply("Game ended: " + session.reason);
+		session.context.message.reply("Game ended: " + (session.reason || "time."));
 	},
 };
