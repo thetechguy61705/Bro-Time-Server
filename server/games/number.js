@@ -1,5 +1,5 @@
 function guessNumber(session, correctNumber, timesGuessed) {
-	var filter = (m) => m.author.id === session.host.id && Number(m.content);
+	var filter = (m) => m.author.id === session.host.id && Number(m.content) && Number(m.content) > 0 && Number(m.content) <;
 	session.context.channel.awaitMessages(filter, { maxMatches: 1, time: 60000, errors: ["time"] }).then((messageRecieved) => {
 		var guess = Number(messageRecieved.first().content);
 		if (guess === correctNumber) {
@@ -41,7 +41,7 @@ module.exports = {
 	start: (session) => {
 		session.least = 0;
 		session.most = 500;
-		var correctNumber = Math.ceil(Math.random() * 500) + 1;
+		var correctNumber = Math.ceil(Math.random() * 500);
 		session.context.channel.send("Guess a number between 1-500. You have 5 guesses and 1 minute. The number is at least 0 and at most 500.").then((msg) => {
 			session.msg = msg;
 			guessNumber(session, correctNumber, 1);
