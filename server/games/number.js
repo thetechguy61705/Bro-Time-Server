@@ -27,7 +27,7 @@ module.exports = {
 	id: "number",
 	aliases: ["guess"],
 	shortDescription: "Guess my number and win Bro Bits.",
-	longDescription: "Guess my number between 1-500 within 5 guesses and 1 minute and win 10 Bro Bits.",
+	longDescription: "Guess my number between 1-500 within 5 guesses and 1 minute and win 20 Bro Bits.",
 	instructions: "Type a number to guess.",
 	minPlayers: 1,
 	maxPlayers: 1,
