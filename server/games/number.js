@@ -8,10 +8,13 @@ function guessNumber(session, correctNumber, timesGuessed) {
 			session.endGame();
 		} else {
 			if (timesGuessed !== 5) {
-				session.context.message.reply("The number you guessed was "
-				+ ((guess < correctNumber) ? "less" : "greater") + ` than my number. Try again. Remaining guesses: \`${5 - timesGuessed}\``).then(() => {
-					guessNumber(session, correctNumber, timesGuessed + 1);
-				});
+				if (guess > session.least && guess < correctNumber) session.least = guess;
+				if (guess < session.most && guess > correctNumber) session.most = guess;
+				session.msg.edit(session.host + ", The number you guessed was " +
+					((guess < correctNumber) ? "less" : "greater") +
+					` than my number. Try again. Remaining guesses: \`${5 - timesGuessed}\`.` +
+					` The number is at least \`${session.least}\` and at most \`${session.most}\`.`).then(() => guessNumber(session, correctNumber, timesGuessed + 1));
+				messageRecieved.first().delete();
 			} else {
 				session.reason = `Out of guesses! The correct number was ${correctNumber}`;
 				session.endGame();
@@ -36,8 +39,11 @@ module.exports = {
 	allowLateJoin: false,
 	load: () => {},
 	start: (session) => {
+		session.least = 0;
+		session.most = 500;
 		var correctNumber = Math.ceil(Math.random() * 500) + 1;
-		session.context.channel.send(`${session.host}, Guess a number between 1-500. You have 5 guesses and 1 minute.`).then(() => {
+		session.context.channel.send("Guess a number between 1-500. You have 5 guesses and 1 minute. The number is at least 0 and at most 500.").then((msg) => {
+			session.msg = msg;
 			guessNumber(session, correctNumber, 1);
 		});
 	},
