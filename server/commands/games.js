@@ -158,11 +158,9 @@ function startGame(game, context) {
 				session.ended = true;
 				session.game.end(session);
 				if (session.game.betting && session.winner != null && session.game.bet > 0) {
-					for (let player of session.players.keyArray()) {
-						if (player != session.winner.id) {
+					for (let player of session.players.keyArray())
+						if (player != session.winner.id)
 							getWallet(player).transfer(session.game.bet, (session.winner.id != session.context.client.user.id) ? session.winner.id : null);
-						}
-					}
 				}
 			}
 		}
