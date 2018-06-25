@@ -125,7 +125,7 @@ class Music {
 		return 0;
 	}
 
-	static async getTicket(client, channel, query, requestInput) {
+	static async getTicket(client, channel, query, requestInput, caller) {
 		var ticket;
 		for (var source of sources) {
 			ticket = await source.getTicket(query, tokens.get(source.id));
@@ -148,10 +148,11 @@ class Music {
 			results = results.slice(0, 5);
 
 			if (results.length > 0) {
-				prompt.setTitle("Pick the closest match (by number):");
+				prompt.setTitle("Pick the closest match (by number):").setColor(0x00AE86);
+				// Eventually color should be changable for servers using the future settings command and the database.
 				for (let [number, result] of results.entries())
-					display.push(`• ${number + 1} - ${result.display.substring(0, 300)}`);
-				prompt.setDescription(display.join("\n"));
+					display.push(`• ${number + 1} - \`${result.display.substring(0, 300)}\``);
+				prompt.setDescription(display.join("\n")).setDefaultFooter(caller);
 
 				ticket = null;
 				try {
@@ -192,7 +193,7 @@ class Music {
 			this.players.get(call.message.guild.id) :
 			new Queue(this, call.message.guild);
 		if (query != null) {
-			Music.getTicket(call.message.client, call.message.channel, query, call.requestInput.bind(call)).then((ticket) => {
+			Music.getTicket(call.message.client, call.message.channel, query, call.requestInput.bind(call), call.message.author).then((ticket) => {
 				if (ticket != null) {
 					queue.play(ticket.load(), call);
 				} else {
