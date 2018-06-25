@@ -17,9 +17,7 @@ module.exports = {
 				var randomSuccess = ((Math.random() * 10) < 4) ? true : false;
 				var randomMultiplier = (Math.random() * 0.8) + 0.6;
 				if (randomSuccess) {
-					call.getWallet(call.message.author.id).change(Math.round(amountToBet * randomMultiplier)).then((d, e) => {
-						console.log(d);
-						console.log(e);
+					call.getWallet(call.message.author.id).change(Math.round(amountToBet * randomMultiplier)).then(() => {
 						call.message.reply("You gained " + Math.round(amountToBet * randomMultiplier) + " Bro Bits. :D").catch(() => {});
 					}).catch(() => {
 						call.safeSend("Failed to change your balance. You did not gain/lose any Bro Bits.");
