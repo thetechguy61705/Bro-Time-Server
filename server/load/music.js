@@ -151,7 +151,7 @@ class Music {
 				prompt.setTitle("Pick the closest match (by number):").setColor(0x00AE86);
 				// Eventually color should be changable for servers using the future settings command and the database.
 				for (let [number, result] of results.entries())
-					display.push(`• ${number + 1} - \`${result.display.substring(0, 300)}\``);
+					display.push(`${number + 1} - \`${result.display.substring(0, 300)}\``);
 				prompt.setDescription(display.join("\n")).setDefaultFooter(caller);
 
 				ticket = null;
