@@ -10,19 +10,9 @@ module.exports = {
 				target.removeRoles(rolesToRemove).then(() => {
 					call.message.channel.send("Removing all roles from `" + target.user.tag + "`.");
 				}).catch(() => {
-					call.message.reply("There was an error removing roles from that user.").catch(() => {
-						call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);
-					});
+					call.safeSend("There was an error removing roles from that user.");
 				});
-			} else {
-				call.message.reply("There are no roles that you can remove from this user.").catch(() => {
-					call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);
-				});
-			}
-		} else {
-			call.message.reply("Please specify a valid user.").catch(() => {
-				call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+			} else call.safeSend("There are no roles that you can remove from this user.");
+		} else call.safeSend("Please specify a valid user.");
 	}
 };

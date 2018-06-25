@@ -5,6 +5,9 @@ module.exports = {
 	id: "members",
 	description: "Gets members from a role or from a guild.",
 	paramsHelp: "[role]",
+	access: "Server",
+	botRequires: ["ADD_REACTIONS"],
+	botRequiresMessage: "To scroll through the member list.",
 	execute: (call) => {
 		var memberEmbed = new Discord.RichEmbed().setColor("ORANGE");
 		var members;
@@ -32,7 +35,7 @@ module.exports = {
 					totalPages = (members.split("\n").length + (20 - (members.split("\n").length % 20)));
 					totalPages /= 20;
 				}
-				memberEmbed.setDescription(membersToSend.join("\n")).setFooter(`Page ${page}/${totalPages}`);
+				memberEmbed.setDescription(membersToSend.join("\n")).setFooter(`Page ${page}/${totalPages} -`).setDefaultFooter(call.message.author);
 				call.message.channel.send({ embed: memberEmbed }).then(async function(sentEmbed) {
 					await sentEmbed.reactMultiple(EMOJI_ARRAY);
 					const FILTER = (reaction, user) => EMOJI_ARRAY.includes(reaction.emoji.name) && user.id === call.message.author.id;
@@ -53,30 +56,22 @@ module.exports = {
 							}
 						}
 
-						memberEmbed = new Discord.RichEmbed().setDescription(membersToSend.join("\n")).setColor("ORANGE")
-							.setFooter(`Page ${page}/${totalPages}`);
-						if (content !== "") memberEmbed.setTitle(`Users in ${call.message.guild.roles.find((r) => r.name.toLowerCase().startsWith(content.toLowerCase())).name}`);
-						if (content === "") memberEmbed.setTitle("Users");
+						memberEmbed = new Discord.RichEmbed()
+							.setDescription(membersToSend.join("\n"))
+							.setColor("ORANGE")
+							.setFooter(`Page ${page}/${totalPages} -`)
+							.setDefaultFooter(call.message.author);
+						memberEmbed.setTitle((content !== "") ? `Users in ${call.message.guild.roles.find((r) => r.name.toLowerCase().startsWith(content.toLowerCase())).name}` : "Users");
 						sentEmbed.edit({ embed: memberEmbed });
 					});
 					reactions.on("end", () => sentEmbed.edit("Interactive command ended: 2 minutes passed."));
 				}).catch(() => {
-					call.message.reply("There was an error while trying to send this embed.").catch(() => {
-						call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`);
-					});
+					call.safeSend("There was an error while trying to send this embed.");
 				});
 			} else {
 				memberEmbed.setDescription(members);
-				call.message.channel.send({ embed: memberEmbed }).catch(() => {
-					call.message.reply("There was an error while trying to send this embed.").catch(() => {
-						call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`);
-					});
-				});
+				call.safeSend(null, call.message, { embed: memberEmbed });
 			}
-		} else {
-			call.message.reply("Please specify a valid role, or supply no parameter for everyone in this server.").catch(() => {
-				call.message.author.send(`You attempted to run the \`members\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+		} else call.safeSend("Please specify a valid role, or supply no parameter for everyone in this server.");
 	}
 };

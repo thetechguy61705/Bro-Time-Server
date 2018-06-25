@@ -2,6 +2,7 @@ const { RichEmbed } = require("discord.js");
 module.exports = {
 	id: "membercount",
 	description: "Displays the current member count",
+	access: "Server",
 	execute: (call) => {
 		var members = call.message.guild.memberCount,
 			online = call.message.guild.members.filter((m) => m.presence.status !== "offline").size,
@@ -12,11 +13,8 @@ module.exports = {
 			.addField("Online", online)
 			.addField("Humans", humans)
 			.addField("Bots", bots)
-			.setFooter(`Ran by ${call.message.author.tag}`)
+			.setDefaultFooter(call.message.author)
 			.setColor("BLUE");
-		call.message.channel.send({ embed: memberEmbed }).catch(() => {
-			call.message.author.send(`You attempted to use the \`membercount\` command in ${call.message.channel}, but I can not chat there.`)
-				.catch(() => {});
-		});
+		call.safeSend(null, call.message, { embed: memberEmbed });
 	}
 };

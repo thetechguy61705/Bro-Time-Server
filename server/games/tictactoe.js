@@ -3,6 +3,7 @@ module.exports = {
 	shortDescription: "Play tictactoe.",
 	longDescription: "Play tictactoe, where the goal is to get 3 of your X / O in a row.",
 	instructions: "React with the emoji corresponding to the grid square you wish to put your X / O in.",
+	betting: true,
 	minPlayers: 2,
 	maxPlayers: 2,
 	requiresInvite: true,
@@ -12,6 +13,7 @@ module.exports = {
 		const E_A = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
 		const author = session.host;
 		const target = session.players.last();
+		session.players.set(session.host.id, session.host);
 		var turn = [author, "❌"];
 		session.context.
 			channel.send(`${E_A[0]} | ${E_A[1]} | ${E_A[2]}\n———————\n${E_A[3]} | ${E_A[4]} | ${E_A[5]}\n———————\n${E_A[6]} | ${E_A[7]} | ${E_A[8]}\n\n${turn[0]}'s turn.`).then(async (msg) => {
@@ -36,7 +38,7 @@ module.exports = {
 								if ((E_A[0] === E_A[1] && E_A[1] === E_A[2]) || (E_A[3] === E_A[4] && E_A[4] === E_A[5]) || (E_A[6] === E_A[7] && E_A[7] === E_A[8]) ||
 									(E_A[0] === E_A[3] && E_A[3] === E_A[6]) || (E_A[1] === E_A[4] && E_A[4] === E_A[7]) || (E_A[2] === E_A[5] && E_A[5] === E_A[8]) ||
 									(E_A[0] === E_A[4] && E_A[4] === E_A[8]) || (E_A[2] === E_A[4] && E_A[4] === E_A[6])) {
-									session.winner = (turn[1] === "❌") ? "⭕" : "❌";
+									session.winner = (turn[1] === "❌") ? target : author;
 									session.endGame();
 								} else if (E_A.every((value) => value === "❌" || value === "⭕")) {
 									session.endGame();

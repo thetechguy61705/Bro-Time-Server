@@ -1,5 +1,6 @@
+var errorHandler = require("app/errorHandler");
 var config = require("../../config");
-var { Collection } = require("discord.js");
+var { Collection, RichEmbed } = require("discord.js");
 var fs = require("fs");
 var sources = [];
 var tokens = new Collection();
@@ -12,51 +13,82 @@ const TOKENS_MAPPING = {
 const VOTE_TIMEOUT = 60000;
 const VOTE_REQUIRED = 0.30;
 const MUSIC_CHANNELS = ["music", "songs"];
+const ABANDONED_TIMEOUT = 30000;
 
 class Queue extends Array {
-	constructor(music, connection) {
+	constructor(music, guild) {
 		super();
 		this.music = music;
-		this.connection = connection;
-		this.isPlaying = false;
-		this.paused = false;
+		music.players.set(guild.id, this);
 	}
 
-	play(stream) {
+	play(stream, call) {
+		call.message.channel.send(`Added ${stream.title} by ${stream.author} to the queue.`);
 		if (this.length === 0)
-			this.begin(stream);
+			this.begin(stream, call);
 		this.push(stream);
-		this.isPlaying = true;
-		if (this.paused)
-			this.resume();
 	}
 
 	stop() {
-		this.isPlaying = false;
 		this.length = 0;
-		this.dispatcher.end("Finished playing.");
+		if (this.dispatcher != null)
+			this.dispatcher.end("Finished playing.");
 	}
 
-	pause() {
-		this.paused = true;
-		this.diaptcher.pause();
+	skip() {
+		if (this.dispatcher != null)
+			this.dispatcher.end("Skipping song.");
 	}
 
-	resume() {
-		this.dispatcher.resume();
-		this.paused = false;
+	isPaused() {
+		var paused = true;
+		if (this.dispatcher != null)
+			paused = this.dispatcher.paused;
+		return paused;
 	}
 
-	begin(first) {
-		this.dispatcher = this.connection.playStream(first);
-		this.dispatcher.on("end", () => {
-			if (this.length > 0) {
-				this.shift();
-				this.begin(this[0]);
-			} else if (!this.dispatcher.destroyed) {
-				this.music.release();
+	toggle() {
+		if (this.dispatcher != null) {
+			if (this.dispatcher.paused) {
+				clearTimeout(this.timer);
+				this.dispatcher.resume();
+			} else {
+				this.timer = this.connection.client.setTimeout(this.stop.bind(this), ABANDONED_TIMEOUT);
+				this.dispatcher.pause();
 			}
-		});
+		}
+	}
+
+	begin(stream, call) {
+		if (this.connection != null) {
+			this.dispatcher = this.connection.playStream(stream);
+			errorHandler(this.dispatcher);
+			this.dispatcher.on("end", () => {
+				this.shift();
+				if (this.timer != null)
+					clearTimeout(this.timer);
+				if (this.length > 0) {
+					this.begin(this[0], call);
+				} else {
+					this.music.players.delete(this.connection.channel.guild.id);
+					this.connection.channel.leave();
+					call.message.channel.send("Stopped playing music.");
+				}
+			});
+			this.dispatcher.once("start", () => {
+				call.message.channel.send(`Now playing ${stream.title} by ${stream.author}!`);
+			});
+		} else if (call.message.member.voiceChannel != null && Music.isMusicChannel(call.message.member.voiceChannel)) {
+			call.message.member.voiceChannel.join().then((connection) => {
+				this.connection = connection;
+				this.begin(stream, call);
+			}, (exc) => {
+				call.message.channel.send(exc.message);
+				console.warn(exc.stack);
+			});
+		} else {
+			call.message.channel.send("The member is not in a voice channel.");
+		}
 	}
 }
 
@@ -72,10 +104,14 @@ class Music {
 		if (Music.isDJ(message.member)) {
 			result = Promise.resolve(true);
 		} else {
-			var voiceChannel = message.member.voiceChannel;
-			result = vote(VOTE_TIMEOUT, message.channel, Math.floor(voiceChannel.members.size*VOTE_REQUIRED),
-				(user) => { return voiceChannel.members.has(user.id); },
-				null, prompt, message.user);
+			var voiceChannel = message.client.voiceConnections.get(message.guild.id).channel;
+			if (voiceChannel.members.filter((member) => { return !member.user.bot; }).size() == 0) {
+				result = Promise.resolve(true);
+			} else {
+				result = vote(VOTE_TIMEOUT, message.channel, Math.floor(voiceChannel.members.size*VOTE_REQUIRED),
+					(user) => { return voiceChannel.members.has(user.id); },
+					null, prompt, message.user);
+			}
 		}
 		return result;
 	}
@@ -85,22 +121,52 @@ class Music {
 		return MUSIC_CHANNELS.some((keyword) => { return name.startsWith(keyword) || name.endsWith(keyword); });
 	}
 
-	static async getTicket(client, channel, query) {
+	static compareSearchResults() {
+		return 0;
+	}
+
+	static async getTicket(client, channel, query, requestInput) {
 		var ticket;
 		for (var source of sources) {
 			ticket = await source.getTicket(query, tokens.get(source.id));
-			Object.defineProperty(ticket, "load", {
-				value: source.load.bind(source, ticket)
-			});
-			if (ticket != null)
+			if (ticket != null) {
+				Object.defineProperty(ticket, "load", {
+					value: source.load.bind(source, ticket)
+				});
 				break;
+			}
 		}
 		if (ticket == null) {
-			console.log("search required...");
-			/* var searches = [];
-			for (var source of sources) {
-				source.search(query, tokens.get(source.id));
-			} */
+			var results = [];
+			var prompt = new RichEmbed();
+			var display = [];
+			var choice;
+			var result;
+			for (let source of sources)
+				Array.prototype.push.apply(results, await source.search(query, tokens.get(source.id)));
+			results.sort(Music.compareSearchResults);
+			results = results.slice(0, 5);
+
+			if (results.length > 0) {
+				prompt.setTitle("Pick the closest match (by number):");
+				for (let [number, result] of results.entries())
+					display.push(`• ${number + 1} - ${result.display.substring(0, 300)}`);
+				prompt.setDescription(display.join("\n"));
+
+				ticket = null;
+				try {
+					choice = await requestInput(1, prompt);
+					if (choice != null) {
+						choice = choice.params.readNumber();
+						if (choice != null) {
+							result = results[choice - 1];
+							if (result != null)
+								ticket = Music.getTicket(client, channel, result.query);
+						}
+					}
+				// eslint-disable-next-line no-empty
+				} finally {}
+			}
 		} else if (!Music.isAcceptable(ticket, source, false, channel)) {
 			ticket = null;
 		}
@@ -111,10 +177,8 @@ class Music {
 		var playable = source.getPlayable(ticket);
 		if (playable == "mature" && !matureAllowed)
 			channel.send("Mature music is not allowed here.");
-		return playable === "good" ||
-			(playable !== "bad" &&
-			(matureAllowed || playable !== "mature") &&
-			playable !== "unknown");
+		// if (playable == "unknown")
+		return playable !== "bad" && (matureAllowed || playable !== "mature");
 	}
 
 	constructor(client) {
@@ -123,78 +187,64 @@ class Music {
 		this.client = client;
 	}
 
-	play(query, message) {
-		this.reserve(message.member).then(() => {
-			var queue = this.players.get(message.guild.id);
-			if (query != null) {
-				Music.getTicket(message.client, message.channel, query).then((ticket) => {
-					// todo: Tell the user about it.
-					if (ticket != null) {
-						queue.play(ticket.load());
-					} else {
-						console.log("Can't find ticket.");
-					}
-				});
-			} else if (queue.paused) {
-				queue.resume();
-			}
-		}, (exc) => {
-			message.reply(exc.message);
-			console.warn(exc.stack);
-		});
+	play(query, call) {
+		var queue = this.players.has(call.message.guild.id) ?
+			this.players.get(call.message.guild.id) :
+			new Queue(this, call.message.guild);
+		if (query != null) {
+			Music.getTicket(call.message.client, call.message.channel, query, call.requestInput.bind(call)).then((ticket) => {
+				if (ticket != null) {
+					queue.play(ticket.load(), call);
+				} else {
+					call.message.channel.send("Can't find music for the query!");
+				}
+			});
+		} else if (queue.paused) {
+			queue.resume();
+		}
 	}
 
-	stop(message) {
-		Music.request(message, "Stop playing music?").then((accepted) => {
-			if (accepted) {
-				this.release(message.member.guild).then(() => {
-					message.channel.send("Stopped playing music.");
-				});
-			}
-		}, (exc) => {
-			console.warn(exc.stack);
-			message.channel.send("Unable to stop playing music (try again shortly).");
-		});
+	stop(call) {
+		if (call.client.voiceConnections.has(call.message.guild.id)) {
+			Music.request(call.message, "Stop playing music?").then((accepted) => {
+				if (accepted) {
+					if (this.players.has(call.message.guild.id))
+						this.players.get(call.message.guild.id).stop();
+				}
+			}, (exc) => {
+				console.warn(exc.stack);
+				call.message.channel.send("Unable to stop playing music (try again shortly).");
+			});
+		}
 	}
 
-	skip() {
+	skip(call) {
+		var queue = this.players.get(call.message.guild.id);
+		if (queue != null) {
+			Music.request(call.message, "Skip the current song?").then((accepted) => {
+				if (accepted)
+					queue.skip();
+			}, (exc) => {
+				console.warn(exc.stack);
+				call.message.channel.send("Unable to skip a song (try again shortly).");
+			});
+		}
+	}
 
+	toggle(call) {
+		var queue = this.players.get(call.message.guild.id);
+		if (queue != null) {
+			Music.request(call.message, "Pause or resume playing?").then((accepted) => {
+				if (accepted)
+					queue.toggle();
+			}, (exc) => {
+				console.warn(exc.stack);
+				call.message.channel.send("Unable to toggle music (try again shortly).");
+			});
+		}
 	}
 
 	repeat() {
-
-	}
-
-	reserve(member) {
-		return new Promise((resolve, reject) => {
-			if (!this.players.has(member.guild.id)) {
-				if (member.voiceChannel != null && Music.isMusicChannel(member.voiceChannel)) {
-					member.voiceChannel.join().then((connection) => {
-						this.players.set(member.voiceChannel.guild.id, new Queue(this, connection));
-						resolve(true);
-					}).catch(reject);
-				} else {
-					reject(new Error("The member is not in a voice channel."));
-				}
-			} else {
-				resolve(true);
-			}
-		});
-	}
-
-	release(guild) {
-		return new Promise((resolve) => {
-			if (this.players.has(guild.id)) {
-				var queue = this.players.get(guild.id);
-				queue.stop();
-				queue.connection.channel.leave();
-				this.players.delete(guild.id);
-			}
-			resolve();
-		});
-	}
-
-	pause() {
 	}
 }
 
@@ -222,13 +272,17 @@ module.exports = {
 		for (var [source, key] of Object.entries(TOKENS_MAPPING))
 			tokens.set(source, config[key]);
 		client.music = new Music();
-
-		/* client.on("message", (message) => {
-			if (message.content.startsWith("play")) {
-				client.music.play(message.content.substring(5), message);
-			} else if (message.content.startsWith("stop")) {
-				client.music.stop(message);
+		client.on("voiceStateUpdate", (oldMember, newMember) => {
+			var queue;
+			if (newMember.voiceChannel == null) {
+				queue = client.music.players.find((queue) => { return queue.connection != null && queue.connection.channel === oldMember.voiceChannel; });
+				if (queue != null && !queue.isPaused() && queue.connection.channel.members.every((member) => { return member.user.bot; }))
+					queue.toggle();
+			} else if (oldMember.voiceChannel == null) {
+				queue = client.music.players.find((queue) => { return queue.connection != null && queue.connection.channel === newMember.voiceChannel; });
+				if (queue != null && queue.isPaused() && queue.connection.channel.members.every((member) => { return member.user.bot || member === newMember; }))
+					queue.toggle();
 			}
-		}); */
+		});
 	}
 };

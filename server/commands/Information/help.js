@@ -19,21 +19,27 @@ module.exports = {
 	aliases: ["?", "h"],
 	description: "Returns information and commands on the bot.",
 	paramsHelp: "[command]",
+	access: "Public",
 	execute: (call) => {
+		const commandFilter = (cmd) => {
+			if (call.message.channel.type === "dm" && ["Private", "Public"].includes(cmd.access)) return true;
+			if (call.message.channel.type === "text" && ["Server", "Public", undefined].includes(cmd.access)) return true;
+			return false;
+		};
 		const data = (call.message.guild || call.message.channel).data;
 		const prefix = (data != null) ? data.prefix : "help";
 		const param1 = (call.params.readRaw() !== "" && call.params.readRaw() != null) ? call.params.readRaw() : "";
 		const command = call.commands.loaded.find((cmd) => (cmd.aliases || []).concat(cmd.id).includes(param1.toLowerCase()));
 		var helpEmbed = new Discord.RichEmbed()
 			.setColor(0x00AE86)
-			.setFooter(`Ran by ${call.message.author.username} (${call.message.author.id})`, call.message.author.displayAvatarURL);
+			.setDefaultFooter(call.message.author);
 		var commandHelp = {};
 
 		if (param1 === "") {
 			var sortedCommands = call.commands.loaded.array().sort((a, b) => a.id.localeCompare(b.id));
 
 			for (var sortedCmd of sortedCommands) {
-				add(sortedCmd, commandHelp, prefix);
+				if (commandFilter(sortedCmd)) add(sortedCmd, commandHelp, prefix);
 			}
 
 			helpEmbed.setTitle("Information").setDescription(`Prefix: \`${prefix}\`\nUptime: ${call.client.uptime.expandPretty()}\n` +
@@ -48,16 +54,14 @@ module.exports = {
 				`\nRequires: \`${(requires || "None")}\`` +
 				`\nAliases: \`${(aliases || ["None"]).join("`, `")}\`` +
 				`\nCategory: \`${command.category}\`` +
-				`\n\n[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server/tree/master/server/commands/${(command.category !== "Other") ? command.category + "/" : ""}${file})`);
+				"\n\n[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server/tree/master/server/commands/" +
+					`${(command.category !== "Other") ? command.category.replace(new RegExp(" ", "g"), "%20") + "/" : ""}${file}.js)`)
+				.setDefaultFooter(call.message.author);
 		} else {
-			call.message.reply("Invalid command name. Please run `!help (command)` or just `!help`").catch(() => {
-				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak there.`);
-			});
+			call.safeSend("Invalid command name. Please run `!help (command)` or just `!help`");
 		}
 		if (helpEmbed.description != null) {
-			call.message.channel.send({ embed: helpEmbed }).catch(() => {
-				call.message.author.send(`You attempted to run the \`!help\` command in ${call.message.channel}, but I can not speak and/or send embeds there.`);
-			});
+			call.safeSend(null, call.message, { embed: helpEmbed });
 		}
 	}
 };

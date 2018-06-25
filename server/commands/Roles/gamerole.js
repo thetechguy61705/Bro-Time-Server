@@ -7,34 +7,31 @@ module.exports = {
 	id: "gamerole",
 	description: "Gives the user the specified role if it is a part of !info gameroles list.",
 	paramsHelp: "(game role)",
+	access: "Server",
 	execute: (call) => {
 		const GAME = call.params.readRole();
 		if (GAME != null && GAMES.includes(GAME.name)) {
 			if (call.message.member.roles.has(GAME.id)) {
 				call.message.member.removeRole(GAME).then(() => {
-					call.message.channel.send(`Since you already had the \`${GAME.name}\` game role, it has been removed from you.`).catch(() => {
+					call.message.reply(`Since you already had the \`${GAME.name}\` game role, it has been removed from you.`).catch(() => {
 						call.message.author.send(`Since you already had the \`${GAME.name}\` gamerole, it has been removed from you.`);
 					});
 				}).catch(() => {
-					call.message.channel.send(`Unable to remove the \`${GAME.name}\` game role.`).catch(() => {
+					call.message.reply(`Unable to remove the \`${GAME.name}\` game role.`).catch(() => {
 						call.message.author.send(`Unable to remove the \`${GAME.name}\` game role from you.`);
 					});
 				});
 			} else {
 				call.message.member.addRole(GAME).then(() => {
-					call.message.channel.send(`Successfully given you the \`${GAME.name}\` game role.`).catch(() => {
+					call.message.reply(`Successfully given you the \`${GAME.name}\` game role.`).catch(() => {
 						call.message.author.send(`Successfully given you the \`${GAME.name}\` game role.`);
 					});
 				}).catch(() => {
-					call.message.channel.send(`Unable to give you the \`${GAME.name}\` game role.`).catch(() => {
+					call.message.reply(`Unable to give you the \`${GAME.name}\` game role.`).catch(() => {
 						call.message.author.send(`Unable to give you the \`${GAME.name}\` game role.`);
 					});
 				});
 			}
-		} else {
-			call.message.channel.send("Invalid game option. Game options can be found in `!info gameroles list`.").catch(() => {
-				call.message.author.send(`You attempted to use the \`gamerole\` command in ${call.message.channel}, but I do not have permission to chat there.`);
-			});
-		}
+		} else call.safeSend("Invalid game option. Game options can be found in `!info gameroles list`.");
 	}
 };

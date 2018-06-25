@@ -15,24 +15,14 @@ module.exports = {
 				}
 			}
 			if (rolesToChange.rolesToAdd.concat(rolesToChange.rolesToRemove).length !== 0) {
-				call.message.channel.send("Changing roles for people not in the `" + target.name + "` role.").catch(() => {
-					call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);
-				});
+				call.message.channel.send("Changing roles for people not in the `" + target.name + "` role.");
 				for (var member of call.message.guild.members.filter((member) => !member.roles.has(target.id)).array()) {
 					for (let role of rolesToChange.rolesToRemove)
 						member.removeRole(role);
 					for (let role of rolesToChange.rolesToAdd)
 						member.addRole(role);
 				}
-			} else {
-				call.message.reply("No valid roles were specified. Roles that are above your or my hierarchy can not be changed.").catch(() => {
-					call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);
-				});
-			}
-		} else {
-			call.message.reply("Please specify a valid role.").catch(() => {
-				call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+			} else call.safeSend("No valid roles were specified. Roles that are above your or my hierarchy can not be changed.");
+		} else call.safeSend("Please specify a valid role.");
 	}
 };

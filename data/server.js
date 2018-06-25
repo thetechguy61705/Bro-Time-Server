@@ -11,7 +11,7 @@ try {
 		max: config.DB_CONNECTIONS,
 		connectionString: config.DB
 	}) : null;
-} catch(exc) {
+} catch (exc) {
 	console.warn("Unable to connect to the database.");
 	console.warn(exc.stack);
 }

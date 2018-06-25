@@ -6,7 +6,7 @@ module.exports = {
 	run: (call) => {
 		var muteTime = call.params.readParameter();
 		muteTime = ms((muteTime != null) ? muteTime : " ");
-		if (muteTime != null && muteTime > 0 && muteTime < 100000) {
+		if (muteTime != null && muteTime > 0 && muteTime < 604800000) {
 			var target = call.params.readParameter();
 			target = (target != null) ? call.message.guild.members.find((m) => target.includes(m.id) || m.user.tag.startsWith(target)) : target;
 			if (target != null) {
@@ -20,20 +20,8 @@ module.exports = {
 							if (newMember.roles.has(role.id)) newMember.removeRole(role).catch(() => {});
 						}, muteTime);
 					});
-				} else {
-					call.message.reply("Please specify a valid role to grant a user. Example `!mute for 10m @user role`.").catch(() => {
-						call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);
-					});
-				}
-			} else {
-				call.message.reply("Please specify a valid user to grant a role. Example `!mute for 10m @user role`.").catch(() => {
-					call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);
-				});
-			}
-		} else {
-			call.message.reply("Please specify a valid amount of time to grant this user this role. Example `!mute for 10m @user role`.").catch(() => {
-				call.message.author.send(`You attempted to use the \`role\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+				} else call.safeSend("Please specify a valid role to grant a user. Example `!mute for 10m @user role`.");
+			} else call.safeSend("Please specify a valid user to grant a role. Example `!mute for 10m @user role`.");
+		} else call.safeSend("Please specify a valid amount of time to grant this user this role. Example `!mute for 10m @user role`.");
 	}
 };

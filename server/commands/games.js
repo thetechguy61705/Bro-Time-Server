@@ -2,11 +2,15 @@ const Discord = require("discord.js");
 var fs = require("fs");
 var util = require("util");
 var { Collection, RichEmbed, ReactionCollector, Message } = require("discord.js");
-var { GameAccess } = require("./../../data/server");
+var { GameAccess, WalletAccess } = require("./../../data/server");
 var modules = new Collection();
 var sessions = [];
 var noPing = [];
 var games;
+
+function getWallet(userId = null) {
+	return new WalletAccess(userId);
+}
 
 const DEFAULTS = [
 	{ key: "autoStart", value: false },
@@ -17,7 +21,8 @@ const DEFAULTS = [
 	{ key: "inviteTime", value: 180000 },
 	{ key: "timeout", value: 180000 },
 	{ key: "updateInterval", value: 0 },
-	{ key: "multithreaded", value: false }
+	{ key: "multithreaded", value: false },
+	{ key: "betting", value: false }
 ];
 const INVITE = `%s
 
@@ -65,10 +70,11 @@ function listGames(message) {
 function invite(game, channel, players, host) {
 	var messageContent;
 	const inviteEmbed = new RichEmbed()
-		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id))
+		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id, (game.bet > 0) ? "\n**THIS GAME HAS A BET ON IT.**" : ""))
 		.addField("Minimum Players", game.minPlayers, true)
 		.addField("Maximum Players", game.maxPlayers, true)
-		.setTitle(`Invite to ${game.id}`)
+		.setTitle(`Invite to ${game.id}`		)
+		.setDefaultFooter(host)
 		.setColor(0x00AE86);
 	if (channel.guild.roles.find("name", "Bro Time Games")) {
 		var allowedToPing = channel.guild.roles.find("name", "Bro Time Games").members.filter((m) => m.user.presence.status === "online").array().map((m) => m.id);
@@ -94,19 +100,28 @@ function invite(game, channel, players, host) {
 					user.id !== host.id, {
 					time: game.inviteTime
 				});
-				collector.on("collect", (reaction) => {
-					if (!players.keyArray().includes(reaction.users.last().id)) {
-						var user = reaction.users.last();
-						hostIndex = noPing.indexOf(user.id);
-						if (hostIndex > -1) noPing.splice(hostIndex, 1);
-						players.set(user.id, user);
-						if (players.size >= game.maxPlayers - 1) {
-							collector.stop("ready");
-							resolve();
-						} else if (players.size == game.minPlayers - 1) {
-							if (!game.allowLateJoin)
+				var poorUsers = [];
+				collector.on("collect", async (reaction) => {
+					var user = reaction.users.last();
+					if (!players.has(user.id)) {
+						var userBalance = (channel.client.user.id === "393532251398209536") ? await getWallet(user.id).getTotal() : Infinity;
+						if (userBalance >= (game.bet || 0)) {
+							hostIndex = noPing.indexOf(user.id);
+							if (hostIndex > -1) noPing.splice(hostIndex, 1);
+							players.set(user.id, user);
+							if (players.size >= game.maxPlayers - 1) {
 								collector.stop("ready");
-							resolve();
+								resolve();
+							} else if (players.size == game.minPlayers - 1) {
+								if (!game.allowLateJoin)
+									collector.stop("ready");
+								resolve();
+							}
+						} else {
+							if (!poorUsers.includes(user.id)) {
+								channel.send("You do not have enough money to enter this game.", { reply: user });
+								poorUsers.push(user.id);
+							}
 						}
 					}
 				});
@@ -135,12 +150,20 @@ function startGame(game, context) {
 		ended: false,
 		context: context,
 		players: new Collection(),
+		getWallet: getWallet,
 		endGame: () => {
 			if (!session.ended) {
 				clearTimeout(session.endTimer);
 				clearInterval(session.updateTimer);
 				session.ended = true;
 				session.game.end(session);
+				if (session.game.betting && session.winner != null && session.game.bet > 0) {
+					for (let player of session.players.keyArray()) {
+						if (player != session.winner.id) {
+							getWallet(player).transfer(session.game.bet, (session.winner.id != session.context.client.user.id) ? session.winner.id : null);
+						}
+					}
+				}
 			}
 		}
 	};
@@ -199,9 +222,14 @@ module.exports = {
 	id: "game",
 	aliases: ["games"],
 	description: "Starts a game.",
-	paramsHelp: "[game]",
-	execute: (call) => {
+	paramsHelp: "[game] [amount to bet]",
+	access: "Server",
+	botRequires: ["ADD_REACTIONS"],
+	botRequiresMessage: "To create a game invitation method.",
+	execute: async (call) => {
 		var name = call.params.readParameter();
+		var bet = (call.client.user.id === "393532251398209536") ? (call.params.readNumber() || 0) : 0;
+		if (bet < 0) bet = 0;
 		var found = false;
 		if (games != null)
 			games = this;
@@ -210,12 +238,16 @@ module.exports = {
 			var game = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
 			if (game != null) {
 				found = true;
+				if (game.betting) game.bet = bet;
+				var userBalance = (call.client.user.id === "393532251398209536") ? await getWallet(call.message.author.id).getTotal() : Infinity;
 
-				if (!game.autostart) {
-					startGame(game, new Context(call.client, call.message));
-				} else {
-					call.message.channel.send(`The game ${name} can not be started manually.`);
-				}
+				if (userBalance >= bet) {
+					if (!game.autostart) {
+						startGame(game, new Context(call.client, call.message));
+					} else {
+						call.message.channel.send(`The game ${name} can not be started manually.`);
+					}
+				} else call.safeSend("You do not have enough money to make this bet.");
 			}
 		}
 		if (!found)

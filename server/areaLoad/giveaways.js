@@ -102,9 +102,7 @@ module.exports = {
 	id: "giveaways",
 	exec(area, client) {
 		if (area instanceof Guild) {
-			reloadGiveaways(area, client);
-		} else {
-			for (var channel of area.guilds.values())
+			for (var channel of area.channels.values())
 				reloadGiveaways(channel, client);
 		}
 	}

@@ -13,18 +13,19 @@ const TESTING = process.env.NODE_ENV !== "production";
 const ACCESS = new Enum(["Public", "Private", "Server"], { ignoreCase: true });
 
 class Call {
-	constructor(commands, message, client, params) {
+	constructor(commands, message, client, params, command) {
 		this.commands = commands;
 		this.message = message;
 		this.client = client;
 		this.params = params;
+		this.command = command;
 		this.TRANSFER_RATE = 0.8;
 	}
 
 	requestInput(settings = 0, prompt = null, timeout = 180000) {
 		settings = settings|this.commands.MULTISTEP_DEFAULTS;
 		if (prompt != null)
-			this.message.channel.send(prompt.toString());
+			this.message.channel.send(prompt);
 		return new Promise(((resolve, reject) => {
 			this.denyInput();
 			this.commands._requests.set(this.message.author.id, {
@@ -49,6 +50,13 @@ class Call {
 
 	getWallet(userId = null) {
 		return new WalletAccess(userId);
+	}
+
+	safeSend(content, message = this.message, options = { reply: this.message.author }) {
+		message.channel.send((content || options), (content != null) ? options : undefined).catch((exc) => {
+			message.author.send(`You attempted to use the \`${this.command.id}\` command in ${message.channel}, but I can not chat there.`);
+			console.warn(exc.stack);
+		});
 	}
 }
 
@@ -181,7 +189,7 @@ module.exports = {
 				if (command != null && checkAccess(command, message) && hasPermissions(command, message, client)) {
 					if (!client.locked || command.id === "lockdown") {
 						params.readSeparator();
-						command.execute(new Call(this, message, client, params));
+						command.execute(new Call(this, message, client, params, command));
 						used = true;
 					} else {
 						if (!client.lockedChannels.includes(message.channel.id)) {
@@ -198,7 +206,8 @@ module.exports = {
 		var used;
 		var request = this.getRequesting(message);
 		if (request != null) {
-			used = this.processRequest(request, message, client);
+			if (message.author != client.user)
+				used = this.processRequest(request, message, client);
 		} else {
 			used = this.processCommand(message, client);
 		}

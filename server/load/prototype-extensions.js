@@ -18,14 +18,25 @@ Number.prototype.diagnostic = function() {
 	return (this <= 0) ? "impossible" : (this < 200) ? "great" : (this < 350) ? "good" : (this < 500) ? "ok" : (this < 750) ? "bad" : (this < 1000) ? "terrible" : "worse than dial up";
 };
 
-Array.prototype.difference = function(arr) {
-	return this.filter((val) => { return arr.indexOf(val) < 0; });
+String.prototype.toNumber = function(num = 0) {
+	if (this == "all") {
+		return num;
+	} else if (this == "half") {
+		return num / 2;
+	} else if (this == "quarter")  {
+		return num / 4;
+	} else if (this == "eighth") {
+		return num / 8;
+	} else if (this == "sixteenth") {
+		return num / 16;
+	} else if (this.endsWith("%")) {
+		return num * Number(this.slice(0, -1)) / 100;
+	} else return NaN;
 };
 
-/*
-credits to Joshaven Potter from stackoverflow for the Array.difference() great prototype extension :D
-https://stackoverflow.com/users/121607/joshaven-potter
-*/
+Array.prototype.difference = function(arr) {
+	return this.filter((val) => !arr.includes(val));
+};
 
 Discord.Message.prototype.reactMultiple = async function(reactions) {
 	for (var reaction of reactions)
@@ -47,13 +58,17 @@ Discord.Client.prototype.requestPermissions = function(member, channel, permissi
 	if (!has)
 		channel.send(new Discord.RichEmbed()
 			.setTitle("Permissions Required")
-			.setDescription(`For ${member.nickname} to:\n` + (usage instanceof Array ?
+			.setDescription(`For ${member.displayName} to:\n` + (usage instanceof Array ?
 				usage.map((use) => "• " + use) :
 				"• " + usage))
 			.setFooter("Permissions: " + (permissions instanceof Discord.Permissions ?
 				permissions :
 				new Discord.Permissions(permissions)).list().join(", ")));
 	return has;
+};
+
+Discord.RichEmbed.prototype.setDefaultFooter = function(user) {
+	return this.setFooter((this.footer || { text: "" }).text + " " + "Ran by " + user.username + " (" + user.id + ")", user.displayAvatarURL);
 };
 
 module.exports.id = "prototypes";

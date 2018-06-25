@@ -30,7 +30,7 @@ module.exports = {
 		if (parameter != null) {
 			if (parameter.toLowerCase() === "preview") {
 				var emojiNumber = 0;
-				var htgrEmbed = updateEmbed(new Discord.RichEmbed(), call.message.guild, emojiNumber);
+				var htgrEmbed = updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message.guild, emojiNumber);
 				call.message.channel.send({ embed: htgrEmbed }).then(async (newMessage) => {
 					await newMessage.reactMultiple(EMOJI_ARRAY);
 					var filter = (reaction, user) => EMOJI_ARRAY.includes(reaction.emoji.name) && user.id === call.message.author.id;
@@ -48,7 +48,11 @@ module.exports = {
 					reactions.on("end", (_, reason) => newMessage.edit("Interactive command ended: " + reason));
 				});
 			} else if (parameter.toLowerCase() === "list") {
-				call.message.channel.send({ embed: new Discord.RichEmbed().setTitle("Obtainable Roles").setDescription("`" + OBTAINABLE_ROLES.join("`\n`") + "`").setColor(0x00AE86) }).catch(() => {
+				call.message.channel.send({ embed: new Discord.RichEmbed()
+					.setTitle("Obtainable Roles")
+					.setDescription("`" + OBTAINABLE_ROLES.join("`\n`") + "`")
+					.setColor(0x00AE86)
+					.setDefaultFooter(call.message.author) }).catch(() => {
 					call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
 				});
 			} else if (parameter.toLowerCase() === "specify") {
@@ -56,21 +60,17 @@ module.exports = {
 				if (newParameter != null && newParameter != "") {
 					var specifiedHTGR = OBTAINABLE_ROLES.map((role) => role.toLowerCase()).indexOf(newParameter.toLowerCase());
 					if (specifiedHTGR > -1) {
-						call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed, call.message.guild, specifiedHTGR) });
+						call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message.guild, specifiedHTGR) });
 					} else {
-						call.message.reply("Invalid obtainable role specified. Please try out `!info htgr list` and take one of those roles. Prompt cancelled.").catch(() => {
-							call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
-						});
+						call.safeSend("Invalid game specified. Please try out `!info htgr list` and take one of those games. Prompt cancelled.");
 					}
 				} else {
 					call.requestInput(0, "Please specify the obtainable role you would like to view.", 60000).then((result) => {
 						var specifiedHTGR = OBTAINABLE_ROLES.map((role) => role.toLowerCase()).indexOf(result.message.content.toLowerCase());
 						if (specifiedHTGR > -1) {
-							call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed, call.message.guild, specifiedHTGR) });
+							call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message.guild, specifiedHTGR) });
 						} else {
-							call.message.reply("Invalid obtainable role specified. Please try out `!info htgr list` and take one of those roles. Prompt cancelled.").catch(() => {
-								call.message.author.send(`You attempted to use the \`info\` command in ${call.message.channel}, but I can not chat there.`);
-							});
+							call.safeSend("Invalid game specified. Please try out `!info htgr list` and take one of those games. Prompt cancelled.");
 						}
 					});
 				}

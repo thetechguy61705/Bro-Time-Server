@@ -6,12 +6,14 @@ module.exports = {
 	description: "Gives the user the \"Muted\" role for the specified period of time. If no time is specified, it will not automatically remove the role.",
 	paramsHelp: "(user) [time]",
 	requires: "Moderator permissions",
+	botRequires: ["MANAGE_ROLES"],
+	access: "Server",
 	execute: (call) => {
 		const parameterOne = call.params.readParameter(), parameterTwo = call.params.readParameter();
 		if (Moderator(call.message.member)) {
 			const target = call.message.guild.members.find((member) => (parameterOne || "").includes(member.user.id) ||
 				member.user.tag.toLowerCase().startsWith(parameterOne));
-			if (target !== null) {
+			if (target != null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					if (!target.roles.has(call.message.guild.roles.find("name", "Muted").id)) {
 						var muteTime = (parameterTwo != null) ? ms(parameterTwo) : null;
@@ -36,25 +38,9 @@ module.exports = {
 								call.message.channel.send(`Failed to mute \`${target.user.tag}\`.`);
 							});
 						}
-					} else {
-						call.message.reply("That user is already muted.").catch(() => {
-							call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`);
-						});
-					}
-				} else {
-					call.message.reply("That user is too far up in this guild's hierarchy to be muted by you.").catch(() => {
-						call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`);
-					});
-				}
-			} else {
-				call.message.reply("Please specify a valid user.").catch(() => {
-					call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`);
-				});
-			}
-		} else {
-			call.message.reply("You do not have permissions to trigger this command.").catch(() => {
-				call.message.author.send(`You attempted to use the \`mute\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+					} else call.safeSend("That user is already muted.");
+				} else call.safeSend("That user is too far up in this guild's hierarchy to be muted by you.");
+			} else call.safeSend("Please specify a valid user.");
+		} else call.safeSend("You do not have permissions to trigger this command.");
 	}
 };
