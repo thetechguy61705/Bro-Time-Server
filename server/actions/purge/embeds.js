@@ -2,8 +2,7 @@ module.exports = {
 	id: "embeds",
 	aliases: ["embed"],
 	run: (call) => {
-		var parameter = call.params.readParameter();
-		var amountToPurge = Number((parameter != null) ? parameter : undefined);
+		var amountToPurge = call.params.readNumber() || NaN;
 		if (!isNaN(amountToPurge) && amountToPurge > 0 && amountToPurge <= 100) {
 			call.message.delete().then(() => {
 				call.purgeMessages(amountToPurge, call.message.channel, (msg) => msg.embeds.filter((e) => e.type === "rich").length > 0).then((amountPurged) => {

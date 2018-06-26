@@ -2,8 +2,7 @@ module.exports = {
 	id: "images",
 	aliases: ["image"],
 	run: (call) => {
-		var parameter = call.params.readParameter();
-		var amountToPurge = Number((parameter != null) ? parameter : undefined);
+		var amountToPurge = call.params.readNumber() || NaN;
 		if (!isNaN(amountToPurge) && amountToPurge > 0 && amountToPurge <= 100) {
 			call.message.delete().then(() => {
 				call.purgeMessages(amountToPurge, call.message.channel, (msg) => msg.attatchments.find((att) => att.width != null) != null).then((amountPurged) => {

@@ -2,8 +2,7 @@ module.exports = {
 	id: "startswith",
 	aliases: ["starts"],
 	run: (call) => {
-		var parameter = call.params.readParameter();
-		var amountToPurge = Number((parameter != null) ? parameter : undefined),
+		var amountToPurge = call.params.readNumber() || NaN,
 			query = call.params.readParameter(true);
 		if (!isNaN(amountToPurge) && amountToPurge > 0 && amountToPurge <= 100) {
 			if (query != null) {

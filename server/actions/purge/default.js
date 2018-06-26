@@ -1,7 +1,7 @@
 module.exports = {
 	id: "default",
 	run: (call, actions, parameter) => {
-		var amountToPurge = Number((parameter !== "") ? parameter : undefined),
+		var amountToPurge = call.params.readNumber() || NaN,
 			user = call.params.readParameter();
 		user = (user != null) ? call.message.guild.members.find((member) => user.includes(member.id) || member.user.tag.toLowerCase().startsWith(user.toLowerCase())) : null;
 		var filter = (user != null) ? (msg) => msg.author.id === user.id : () => true;
