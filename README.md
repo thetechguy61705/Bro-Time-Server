@@ -5,7 +5,6 @@
   </p>
   <br />
   <p>
-    </div>
 # Build Status
 
 [![Build Status](https://travis-ci.org/Bro-Time/Bro-Time-Server.svg?branch=master)](https://travis-ci.org/Bro-Time/Bro-Time-Server)    
