@@ -6,7 +6,7 @@
   <br />
   <p>
     </div>
-    
+#Build Status
 [![Build Status](https://travis-ci.org/Bro-Time/Bro-Time-Server.svg?branch=master)](https://travis-ci.org/Bro-Time/Bro-Time-Server) 
     <a href="https://discord.gg/rjM8wdZ"><img src="https://discordapp.com/api/guilds/330913265573953536/embed.png" alt="Discord server" /></a>
 
