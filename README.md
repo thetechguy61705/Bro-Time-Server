@@ -1,7 +1,7 @@
 <div align="center">
   <br />
   <p>
-    <a href="https://discord.gg/rjM8wdZ"><img src="https://cdn.discordapp.com/icons/330913265573953536/613c02fcdf7b9aed5f02e5689799188e.jpg" width="200" alt="Bro Time" /></a>
+    <a href="https://discord.gg/rjM8wdZ"><img src="https://cdn.discordapp.com/attachments/453694329421168640/461711651926966283/image.jpg" width="200" alt="Bro Time" /></a>
   </p>
   <br />
   <p>
