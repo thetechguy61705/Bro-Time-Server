@@ -40,7 +40,10 @@ module.exports = {
 						if (filteredOrder != null) {
 							if (filteredOrder.status !== "Awaiting Cook") {
 								if (filteredOrder.status.includes(call.message.author.tag)) {
-									var foods = filteredOrder.order.replace(/`/gi, "").split("\n").map((m) => m.toLowerCase()).filter((m) => !filteredOrder.links.toLowerCase().includes(m.toLowerCase()));
+									var foods = filteredOrder.order.replace(/`/gi, "")
+										.split("\n")
+										.map((m) => m.toLowerCase())
+										.filter((m) => !filteredOrder.links.toLowerCase().includes(m.toLowerCase()));
 									if (foods.includes(food.toLowerCase())) {
 										if (isURL(link)) {
 											var links;
