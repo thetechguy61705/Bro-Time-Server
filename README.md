@@ -1,7 +1,7 @@
 <div align="center">
   <br />
   <p>
-    <img style="-webkit-user-select: none;" src="https://cdn.discordapp.com/attachments/453694329421168640/461713077797257216/brotimelogo.png">
+    <img style="width:200px;height:200px;" src="https://cdn.discordapp.com/attachments/453694329421168640/461713077797257216/brotimelogo.png">
   </p>
   <br />
   <p>
