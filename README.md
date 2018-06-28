@@ -1,7 +1,7 @@
 <div align="center">
   <br />
   <p>
-    <img style="width:200px;height:200px;" src="https://cdn.discordapp.com/attachments/453694329421168640/461713077797257216/brotimelogo.png">
+    <a href="https://discord.gg/rjM8wdZ"><img src="https://cdn.discordapp.com/attachments/453694329421168640/461713077797257216/brotimelogo.png" width="200" alt="Bro Time" /></a>
   </p>
   <br />
   <p>
@@ -13,6 +13,3 @@
 
 ## About
 The server implementation for the Discord Bro Time community (https://discord.gg/rjM8wdZ).
-
- 
-
