@@ -1,4 +1,7 @@
-var { MENU } = require("app/menu");
+const { MENU } = require("app/menu");
+const { RichEmbed } = require("discord.js");
+const { orders } = require("../../load/orders.js");
+
 function randomLetters(num) {
 	var abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 	var random = "";
@@ -7,7 +10,7 @@ function randomLetters(num) {
 	}
 	return random;
 }
-const { RichEmbed } = require("discord.js");
+
 
 function titleCase(str) {
 	var newString = "";
@@ -16,8 +19,6 @@ function titleCase(str) {
 	}
 	return newString;
 }
-
-var orders = require("../../load/orders.js").orders;
 
 module.exports = {
 	id: "order",

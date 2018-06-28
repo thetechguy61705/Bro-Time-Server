@@ -1,6 +1,7 @@
-const Discord = require("discord.js");
-var isWorker = require("app/workers");
-var orders = require("../../load/orders.js").orders;
+const { RichEmbed } = require("discord.js");
+const isWorker = require("app/workers");
+const { addOrder, delOrder, orders } = require("../../load/orders.js");
+
 module.exports = {
 	id: "claim",
 	description: "Claims an order",
@@ -20,9 +21,8 @@ module.exports = {
 			if (member != null && isWorker(member)) {
 				var filteredOrder = orders.find((o) => o.id === code.toUpperCase());
 				if (filteredOrder != null) {
-
 					if (!filteredOrder.status.startsWith("Claimed")) {
-						var orderEmbed = new Discord.RichEmbed()
+						var orderEmbed = new RichEmbed()
 							.setColor("RED")
 							.addField("Order ID", filteredOrder.id)
 							.addField("Order", filteredOrder.order)
@@ -31,16 +31,8 @@ module.exports = {
 							.addField("Status", `Claimed (${call.message.author.tag})`)
 							.addField("Links", "None");
 						filteredOrder.msg.edit({ embed: orderEmbed }).then(() => {
-							orders.push({
-								msg: filteredOrder.msg,
-								id: filteredOrder.id,
-								order: filteredOrder.order,
-								customer: filteredOrder.customer,
-								orderedFrom: filteredOrder.orderedFrom,
-								status: `Claimed (${call.message.author.tag})`,
-								links: "None",
-							});
-							orders.splice(orders.indexOf(filteredOrder), 1);
+							addOrder(filteredOrder, call.message.author.tag);
+							delOrder(filteredOrder);
 							call.message.reply("Successfully claimed this order.").catch(() => {});
 							call.message.author.send("Your claimed order:", { embed: orderEmbed }).catch(() => {});
 							var userToMessage = call.client.users.find((m) => m.tag === filteredOrder.customer);

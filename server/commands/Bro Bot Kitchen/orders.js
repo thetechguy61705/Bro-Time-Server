@@ -1,5 +1,6 @@
-var orders = require("../../load/orders.js").orders;
-var isWorker = require("app/workers");
+const { orders } = require("../../load/orders.js");
+const isWorker = require("app/workers");
+
 module.exports = {
 	id: "orders",
 	description: "Lists unclaimed orders",

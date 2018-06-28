@@ -1,6 +1,7 @@
-var isWorker = require("app/workers");
-var orders = require("../../load/orders.js").orders;
-const Discord = require("discord.js");
+const isWorker = require("app/workers");
+const { delOrder, orders } = require("../../load/orders.js");
+const { RichEmbed } = require("discord.js");
+
 module.exports = {
 	id: "deliver",
 	description: "Delivers food to customer",
@@ -26,7 +27,7 @@ module.exports = {
 							var usertoSend = call.client.users.find((m) => m.tag === filteredOrder.customer);
 							if (usertoSend != null) {
 								usertoSend.send(`Your food was delivered by ${call.message.author.tag}:\n${filteredOrder.links}`).then(() => {
-									var orderEmbed = new Discord.RichEmbed()
+									var orderEmbed = new RichEmbed()
 										.setColor("RED")
 										.addField("Order ID", filteredOrder.id)
 										.addField("Order", filteredOrder.order)
@@ -34,11 +35,11 @@ module.exports = {
 										.addField("Ordered From", filteredOrder.orderedFrom)
 										.addField("Status", `Delivered (${call.message.author.tag})`)
 										.addField("Links", filteredOrder.links);
-									logsChannel.send(orderEmbed).catch(() => {});
+									logsChannel.send({ embed: orderEmbed }).catch(() => {});
 									filteredOrder.msg.delete().catch(() => {
 										call.message.author.send("I couldn't delete this order from the #kitchen channel, please manually delete it before the next bot restart!");
 									});
-									orders.splice(orders.indexOf(filteredOrder), 1);
+									delOrder(filteredOrder);
 									call.safeSend("Successfully delivered this order.");
 								}).catch(() => {
 									call.safeSend("Couldn't DM this user, please try again");

@@ -1,6 +1,7 @@
-var isWorker = require("app/workers");
-const Discord = require("discord.js");
-var orders = require("../../load/orders.js").orders;
+const isWorker = require("app/workers");
+const { RichEmbed } = require("discord.js");
+const { addOrder, delOrder, orders } = require("../../load/orders.js");
+
 function titleCase(str) {
 	var newString = "";
 	for (let i = 0; i < str.length; i++) {
@@ -8,6 +9,7 @@ function titleCase(str) {
 	}
 	return newString;
 }
+
 function isURL(str) {
 	var pattern = new RegExp("^(https?:\\/\\/)?"+
 	"((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|"+
@@ -18,6 +20,7 @@ function isURL(str) {
 	return pattern.test(str);
 	// credit to Tom Gullen https://stackoverflow.com/users/356635/tom-gullen from stackoverflow <3
 }
+
 module.exports = {
 	id: "cook",
 	description: "Cooks someone's order",
@@ -57,7 +60,7 @@ module.exports = {
 										if (justFoods.length <= justLinks.length + 1) {
 											status = "Cooked";
 										}
-										var orderEmbed = new Discord.RichEmbed()
+										var orderEmbed = new RichEmbed()
 											.setColor("RED")
 											.addField("Order ID", filteredOrder.id)
 											.addField("Order", filteredOrder.order)
@@ -66,16 +69,8 @@ module.exports = {
 											.addField("Status", `${status} (${call.message.author.tag})`)
 											.addField("Links", links);
 										filteredOrder.msg.edit({ embed: orderEmbed }).then(() => {
-											orders.push({
-												msg: filteredOrder.msg,
-												id: filteredOrder.id,
-												order: filteredOrder.order,
-												customer: filteredOrder.customer,
-												orderedFrom: filteredOrder.orderedFrom,
-												status: `${status} (${call.message.author.tag})`,
-												links: links,
-											});
-											orders.splice(orders.indexOf(filteredOrder), 1);
+											addOrder(filteredOrder);
+											delOrder(filteredOrder);
 											call.message.reply("Successfully cooked this item.").catch(() => {});
 										}).catch(() => {
 											call.safeSend("Couldn't cook this food, please try again");

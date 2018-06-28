@@ -1,5 +1,6 @@
-const Discord = require("discord.js");
-var orders = require("../../load/orders.js").orders;
+const { RichEmbed } = require("discord.js");
+const { orders } = require("../../load/orders.js");
+
 module.exports = {
 	id: "myorder",
 	description: "Sends your current order and its status",
@@ -15,7 +16,7 @@ module.exports = {
 		if (filteredOrder != null) {
 			var status = filteredOrder.status;
 			if (status.startsWith("Claimed")) status = "Claimed";
-			var orderEmbed = new Discord.RichEmbed()
+			var orderEmbed = new RichEmbed()
 				.setColor("RED")
 				.addField("Order", filteredOrder.order)
 				.addField("Status", status)
