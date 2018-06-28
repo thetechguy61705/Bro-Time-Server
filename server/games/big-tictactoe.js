@@ -51,12 +51,9 @@ module.exports = {
 			reactions.on("collect", (reaction) => {
 				if (reaction.users.last().id === turn[0].id && !awaiting) {
 					if (reaction.emoji.name !== "💣") {
-						for (let emoji of E_A) {
-							if (emoji === reaction.emoji.name || emoji.id === reaction.emoji.id) {
-								E_A.splice(E_A.indexOf(emoji), 1, turn[1]);
-								// Changes the index of the number they select to their emoji (X or O)
-							}
-						}
+						var emoji = E_A.find((em) => em === reaction.emoji.name || em === reaction.emoji.id);
+						E_A.splice(E_A.indexOf(emoji), 1, turn[1]);
+						// Changes the index of the number they select to their emoji (X or O)
 
 						turn = (turn[0].id === target.id) ? [author, "❌"] : [target, "⭕"];
 

@@ -24,11 +24,9 @@ module.exports = {
 				session.collector = reactions;
 				reactions.on("collect", (reaction) => {
 					if (reaction.users.last().id === turn[0].id) {
-						for (let emoji of E_A) {
-							if (emoji === reaction.emoji.name) {
-								E_A.splice(E_A.indexOf(emoji), 1, turn[1]);
-							}
-						}
+						var emoji = E_A.find((em) => em === reaction.emoji.name);
+						E_A.splice(E_A.indexOf(emoji), 1, turn[1]);
+						// Changes the index of the number they select to their emoji (X or O)
 
 						turn = (turn[0].id === target.id) ? [author, "❌"] : [target, "⭕"];
 

@@ -114,6 +114,19 @@ function checkAccess(command, message) {
 	return result;
 }
 
+function checkClient(command, message) {
+	var result = false;
+	var type = (command.userType != null) ? command.userType.toLowerCase() : "both";
+	if (type === "user" && !message.author.bot) {
+		result = true;
+	} else if (type === "bot" && message.author.bot) {
+		result = true;
+	} else if (type === "both") {
+		result = true;
+	}
+	return result;
+}
+
 try {
 	for (let name of fs.readdirSync(COMMANDS)) {
 		try {
@@ -186,7 +199,7 @@ module.exports = {
 			if (name != null) {
 				var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.includes(name));
 
-				if (command != null && checkAccess(command, message) && hasPermissions(command, message, client)) {
+				if (command != null && checkAccess(command, message) && checkClient(command, message) && hasPermissions(command, message, client)) {
 					if (!client.locked || command.id === "lockdown") {
 						params.readSeparator();
 						command.execute(new Call(this, message, client, params, command));

@@ -55,40 +55,41 @@ module.exports = {
 							.then((newConnectFour) => session.connectFour = newConnectFour);
 						for (var [indexOfRow, row] of arrayToCollection(rows)) {
 							for (var [indexOfCoin, coin] of arrayToCollection(row)) {
+								var done = false;
 								if (coin !== "⚫" && coin === row[indexOfCoin + 1] &&
 									row[indexOfCoin + 1] === row[indexOfCoin + 2] &&
 									row[indexOfCoin + 2] === row[indexOfCoin + 3]) {
-									session.winner = (coin === "🔴") ? author : target;
-									session.endGame();
+									done = true;
 								}
 								if (rows[indexOfRow + 1] != null && rows[indexOfRow + 2] != null && rows[indexOfRow + 3] != null) {
 									if (coin !== "⚫" && coin === rows[indexOfRow + 1][indexOfCoin] &&
 										rows[indexOfRow + 1][indexOfCoin] === rows[indexOfRow + 2][indexOfCoin] &&
 										rows[indexOfRow + 2][indexOfCoin] === rows[indexOfRow + 3][indexOfCoin]) {
-										session.winner = (coin === "🔴") ? author : target;
-										session.endGame();
+										done = true;
 									}
 								}
 								if (rows[indexOfRow - 1] != null && rows[indexOfRow - 2] != null && rows[indexOfRow - 3] != null) {
 									if (coin !== "⚫" && coin === rows[indexOfRow - 1][indexOfCoin + 1] &&
 										rows[indexOfRow - 1][indexOfCoin + 1] === rows[indexOfRow - 2][indexOfCoin + 2] &&
 										rows[indexOfRow - 2][indexOfCoin + 2] === rows[indexOfRow - 3][indexOfCoin + 3]) {
-										session.winner = (coin === "🔴") ? author : target;
-										session.endGame();
+										done = true;
 									}
 								}
 								if (rows[indexOfRow + 1] != null && rows[indexOfRow + 2] != null && rows[indexOfRow + 3] != null) {
 									if (coin !== "⚫" && coin === rows[indexOfRow + 1][indexOfCoin + 1] &&
 										rows[indexOfRow + 1][indexOfCoin + 1] === rows[indexOfRow + 2][indexOfCoin + 2] &&
 										rows[indexOfRow + 2][indexOfCoin + 2] === rows[indexOfRow + 3][indexOfCoin + 3]) {
-										session.winner = (coin === "🔴") ? author : target;
-										session.endGame();
+										done = true;
 									}
+								}
+								if (done) {
+									session.winner = (coin === "🔴") ? author : target;
+									session.endGame();
 								}
 							}
 						}
 
-						if (rows.slice(1).map((row) => row.every((coin) => coin !== "⚫")).every((row) => row === true))
+						if (rows.slice(1).every((row) => row.every((coin) => coin !== "⚫")))
 							session.endGame();
 					}
 				}
@@ -102,7 +103,7 @@ module.exports = {
 		const result = (session.winner == null) ?
 			"No one won. It was a draw." :
 			`${session.winner} won the game!`;
-		session.connectFour.edit("Interactive command ended: " + result, { embed: session.embed.setFooter(result) });
+		session.connectFour.edit("Interactive command ended: " + result, { embed: session.embed.setFooter((session.winner || { tag: "No one"}).tag + " won the game.") });
 		session.connectFour.channel.send(result);
 		session.collector.stop("game ended");
 	}
