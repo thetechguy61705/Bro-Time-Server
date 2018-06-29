@@ -642,8 +642,7 @@ const RANGES = [
 	{ min: 0x1FA6E, max: 0x1FFFD }, // <reserved-1FA6E>..<reserved-1FFFD>
 ];
 const EMOTICONS = [
-	":D",
-	" " // Temporary fix for spaces to be permitted.
+	":D"
 ];
 /* eslint-enable line-comment-position */
 
