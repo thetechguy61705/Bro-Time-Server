@@ -5,6 +5,9 @@ module.exports = {
 	description: "Bans specified user.",
 	paramsHelp: "(user) [reason]",
 	requires: "Moderator permissions",
+	botRequires: ["BAN_MEMBERS"],
+	botRequiresMessage: "To ban members.",
+	access: "Server",
 	execute: async (call) => {
 		const rawContent = call.params.readRaw(),
 			parameterOne = (call.params.readParameter() || ""),

@@ -52,8 +52,8 @@ class Call {
 		return new WalletAccess(userId);
 	}
 
-	safeSend(content, message = this.message, reply = true) {
-		message.channel.send(content, { reply: reply ? message.author : null }).catch((exc) => {
+	safeSend(content, message = this.message, options = { reply: this.message.author }) {
+		message.channel.send((content || options), (content != null) ? options : undefined).catch((exc) => {
 			message.author.send(`You attempted to use the \`${this.command.id}\` command in ${message.channel}, but I can not chat there.`);
 			console.warn(exc.stack);
 		});
@@ -110,6 +110,19 @@ function checkAccess(command, message) {
 		result = message.guild == null;
 	} else {
 		result = message.guild != null;
+	}
+	return result;
+}
+
+function checkClient(command, message) {
+	var result = false;
+	var type = (command.userType != null) ? command.userType.toLowerCase() : "both";
+	if (type === "user" && !message.author.bot) {
+		result = true;
+	} else if (type === "bot" && message.author.bot) {
+		result = true;
+	} else if (type === "both") {
+		result = true;
 	}
 	return result;
 }
@@ -186,7 +199,7 @@ module.exports = {
 			if (name != null) {
 				var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.includes(name));
 
-				if (command != null && checkAccess(command, message) && hasPermissions(command, message, client)) {
+				if (command != null && checkAccess(command, message) && checkClient(command, message) && hasPermissions(command, message, client)) {
 					if (!client.locked || command.id === "lockdown") {
 						params.readSeparator();
 						command.execute(new Call(this, message, client, params, command));

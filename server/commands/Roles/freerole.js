@@ -4,6 +4,7 @@ module.exports = {
 	id: "freerole",
 	description: "Gives the user the specified role if it is QOTD, ANN or GW.",
 	paramsHelp: "(ANN/GW/QoTD/Movies)",
+	access: "Server",
 	execute: (call) => {
 		const FREE_ROLE = call.params.readRole();
 		if (FREE_ROLE != null && FREE_ROLES.includes(FREE_ROLE.name.toUpperCase())) {

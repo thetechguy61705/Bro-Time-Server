@@ -3,6 +3,7 @@ module.exports = {
 	description: "Posts the specified \"Question of The Day\" in <#330920609435353090>.",
 	paramsHelp: "(qotd)",
 	requires: "Role: QoTD Host",
+	access: "Server",
 	execute: (call) => {
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "QOTD Host").id)) {
 			const ANN_CHANNEL = call.message.guild.channels.find("name", "announcements"),

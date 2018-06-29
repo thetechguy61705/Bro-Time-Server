@@ -2,8 +2,7 @@ module.exports = {
 	id: "startswith",
 	aliases: ["starts"],
 	run: (call) => {
-		var parameter = call.params.readParameter();
-		var amountToPurge = Number((parameter != null) ? parameter : undefined),
+		var amountToPurge = call.params.readNumber() || NaN,
 			query = call.params.readParameter(true);
 		if (!isNaN(amountToPurge) && amountToPurge > 0 && amountToPurge <= 100) {
 			if (query != null) {
@@ -15,6 +14,6 @@ module.exports = {
 					});
 				});
 			} else call.safeSend("Please give a valid query to match.");
-		} else call.safeSend("Invalid amount of messages to delete. Please specify a number above 0 and below 500.");
+		} else call.safeSend("Invalid amount of messages to delete. Please specify a number above 0 and below 100.");
 	}
 };

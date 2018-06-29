@@ -2,8 +2,7 @@ module.exports = {
 	id: "mentions",
 	aliases: ["mention"],
 	run: (call) => {
-		var parameter = call.params.readParameter();
-		var amountToPurge = Number((parameter != null) ? parameter : undefined);
+		var amountToPurge = call.params.readNumber() || NaN;
 		if (!isNaN(amountToPurge) && amountToPurge > 0 && amountToPurge <= 100) {
 			call.message.delete().then(() => {
 				call.purgeMessages(amountToPurge, call.message.channel, (msg) => msg.mentions.users.size > 0).then((amountPurged) => {
@@ -12,6 +11,6 @@ module.exports = {
 						.catch(() => {});
 				});
 			});
-		} else call.safeSend("Invalid amount of messages to delete. Please specify a number above 0 and below 500.");
+		} else call.safeSend("Invalid amount of messages to delete. Please specify a number above 0 and below 100.");
 	}
 };

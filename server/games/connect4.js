@@ -20,6 +20,7 @@ module.exports = {
 	shortDescription: "Play connect 4.",
 	longDescription: "Play connect 4, a classic game with a 7x6 board where the goal is to get 4 coins in a row.",
 	instructions: "React with the emoji corresponding to the row you wish to place a coin in.",
+	betting: true,
 	minPlayers: 2,
 	maxPlayers: 2,
 	requiresInvite: true,
@@ -27,6 +28,7 @@ module.exports = {
 	load: () => {},
 	start: (session) => {
 		const author = session.host, target = session.players.last();
+		session.players.set(author.id, author);
 		var rows = [EMOJI_ARRAY, ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
 				["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"]],
 			connectFourEmbed = new RichEmbed().setColor(0x00AE86).setTitle("Connect Four").setFooter(`${author.tag}'s turn.`);
@@ -53,40 +55,41 @@ module.exports = {
 							.then((newConnectFour) => session.connectFour = newConnectFour);
 						for (var [indexOfRow, row] of arrayToCollection(rows)) {
 							for (var [indexOfCoin, coin] of arrayToCollection(row)) {
+								var done = false;
 								if (coin !== "⚫" && coin === row[indexOfCoin + 1] &&
 									row[indexOfCoin + 1] === row[indexOfCoin + 2] &&
 									row[indexOfCoin + 2] === row[indexOfCoin + 3]) {
-									session.winner = coin;
-									session.endGame();
+									done = true;
 								}
 								if (rows[indexOfRow + 1] != null && rows[indexOfRow + 2] != null && rows[indexOfRow + 3] != null) {
 									if (coin !== "⚫" && coin === rows[indexOfRow + 1][indexOfCoin] &&
 										rows[indexOfRow + 1][indexOfCoin] === rows[indexOfRow + 2][indexOfCoin] &&
 										rows[indexOfRow + 2][indexOfCoin] === rows[indexOfRow + 3][indexOfCoin]) {
-										session.winner = coin;
-										session.endGame();
+										done = true;
 									}
 								}
 								if (rows[indexOfRow - 1] != null && rows[indexOfRow - 2] != null && rows[indexOfRow - 3] != null) {
 									if (coin !== "⚫" && coin === rows[indexOfRow - 1][indexOfCoin + 1] &&
 										rows[indexOfRow - 1][indexOfCoin + 1] === rows[indexOfRow - 2][indexOfCoin + 2] &&
 										rows[indexOfRow - 2][indexOfCoin + 2] === rows[indexOfRow - 3][indexOfCoin + 3]) {
-										session.winner = coin;
-										session.endGame();
+										done = true;
 									}
 								}
 								if (rows[indexOfRow + 1] != null && rows[indexOfRow + 2] != null && rows[indexOfRow + 3] != null) {
 									if (coin !== "⚫" && coin === rows[indexOfRow + 1][indexOfCoin + 1] &&
 										rows[indexOfRow + 1][indexOfCoin + 1] === rows[indexOfRow + 2][indexOfCoin + 2] &&
 										rows[indexOfRow + 2][indexOfCoin + 2] === rows[indexOfRow + 3][indexOfCoin + 3]) {
-										session.winner = coin;
-										session.endGame();
+										done = true;
 									}
+								}
+								if (done) {
+									session.winner = (coin === "🔴") ? author : target;
+									session.endGame();
 								}
 							}
 						}
 
-						if (rows.slice(1).map((row) => row.every((coin) => coin !== "⚫")).every((row) => row === true))
+						if (rows.slice(1).every((row) => row.every((coin) => coin !== "⚫")))
 							session.endGame();
 					}
 				}
@@ -100,7 +103,7 @@ module.exports = {
 		const result = (session.winner == null) ?
 			"No one won. It was a draw." :
 			`${session.winner} won the game!`;
-		session.connectFour.edit("Interactive command ended: " + result, { embed: session.embed.setFooter(result) });
+		session.connectFour.edit("Interactive command ended: " + result, { embed: session.embed.setFooter((session.winner || { tag: "No one"}).tag + " won the game.") });
 		session.connectFour.channel.send(result);
 		session.collector.stop("game ended");
 	}

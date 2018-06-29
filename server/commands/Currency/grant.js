@@ -5,6 +5,7 @@ module.exports = {
 	description: "Force give/take away Bro Bits to/from a user.",
 	paramsHelp: "(user) (amount)",
 	requires: "Role: Co-Owner Bro, Owner Bro",
+	access: "Server",
 	execute: (call) => {
 		if (GRANTERS.includes(call.message.author.id)) {
 			var param = call.params.readParameter();

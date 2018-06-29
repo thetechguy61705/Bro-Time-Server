@@ -6,6 +6,7 @@ module.exports = {
 	description: "Sends the user a dm with the supplied reason.",
 	paramsHelp: "(user) [reason]",
 	requires: "Moderator permissions",
+	access: "Server",
 	execute: async (call) => {
 		const rawContent = call.params.readRaw(),
 			parameterOne = (call.params.readParameter() || ""),
@@ -28,7 +29,7 @@ module.exports = {
 								.setFooter(`Warned by ${call.message.author.tag} (${call.message.author.id})`)
 								.setColor("ORANGE")
 								.setTimestamp();
-							call.client.channels.get("436353363786072104").send({embed: warnEmbed});
+							call.client.channels.get("436353363786072104").send({ embed: warnEmbed });
 						} else call.safeSend("Specified user is too high in this guild's hierarchy to be warned by you.");
 					} else call.safeSend("You cannot warn a bot account.");
 				} else call.safeSend("Please supply a valid user tag, mention, or id.");

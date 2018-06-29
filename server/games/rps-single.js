@@ -9,6 +9,8 @@ module.exports = {
 	allowLateJoin: false,
 	load: () => {},
 	start: (session) => {
+		session.players.set(session.host.id, session.host);
+		session.players.set(session.context.client.user.id, session.context.client.user);
 		const CHOICES = ["rock", "paper", "scissors"],
 			OPCHOICES = ["paper", "scissors", "rock"],
 			FILTER = (m) => m.author.id === session.host.id && CHOICES.includes(m.content.toLowerCase());
@@ -22,9 +24,11 @@ module.exports = {
 					botChoice: BOT_CHOICE.toUpperCase(),
 					playerChoice: rps.first().content.toUpperCase()
 				};
+				session.winner = (CHOICES.indexOf(BOT_CHOICE) === OPCHOICES.indexOf(rps.first().content.toLowerCase())) ? session.host :
+					(BOT_CHOICE === rps.first().content.toLowerCase()) ? null : session.context.client.user;
 				session.endGame();
 			}).catch(() => {
-				session.context.channel.send(`${session.host}, You did not respond with a valid option within 60 seconds.`);
+				session.context.message.reply("You did not respond with a valid option within 60 seconds.");
 				session.endGame();
 			});
 		});

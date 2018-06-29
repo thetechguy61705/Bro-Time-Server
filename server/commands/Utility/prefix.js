@@ -5,25 +5,27 @@ module.exports = {
 	id: "prefix",
 	description: "Changes the guild's prefix.",
 	paramsHelp: "(new prefix)",
-	// This command requires the restrictions api. I'll take it out of testing then.
+	access: "Public",
 	execute: (call) => {
-		if (isModerator(call.message.member)) {
+		if (isModerator(call.message.author)) {
 			var data = (call.message.guild || call.message.channel).data;
+			var newPrefix = call.params.readParameter(true);
 			if (data != null) {
-				data.setPrefix(call.params.readParameter(true)).then((newPrefix) => {
-					call.message.channel.send(new RichEmbed()
-						.setTitle("Prefix Changed")
-						.setDescription(`The prefix is now set to \`${newPrefix}\`!`));
-				}, (exc) => {
-					console.warn("Unable to set prefix:");
-					console.warn(exc.stack);
-					call.message.channel.send("Unable to change the prefix!");
-				});
+				if (newPrefix != null && newPrefix.length <= 5) {
+					data.setPrefix(newPrefix).then(() => {
+						call.message.channel.send(new RichEmbed()
+							.setTitle("Prefix Changed")
+							.setDescription(`The prefix is now set to \`${newPrefix}\`!`)
+							.setDefaultFooter(call.message.author)
+							.setColor(0x00AE86),
+						);
+					}, (exc) => {
+						console.warn("Unable to set prefix:");
+						console.warn(exc.stack);
+						call.safeSend("Failed to set the prefix.");
+					});
+				} else call.safeSend("Invalid prefix. The prefix must be at least one character and at most five.");
 			}
-		} else {
-			call.message.reply("You do not have permissions to trigger this command.").catch(() => {
-				call.message.author.send(`You attempted to use the \`ban\` command in ${call.message.channel}, but I can not chat there.`);
-			});
-		}
+		} else call.safeSend("You do not have permissions to trigger this command.");
 	}
 };

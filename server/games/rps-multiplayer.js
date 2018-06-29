@@ -3,6 +3,7 @@ module.exports = {
 	shortDescription: "Play rps against a player.",
 	longDescription: "Play rock-paper-scissors with a player, where the objective is to crush the opponent's chosen item.",
 	instructions: "State either rock, paper or scissors to fight the opponents choice.",
+	betting: true,
 	minPlayers: 2,
 	maxPlayers: 2,
 	requiresInvite: true,
@@ -30,6 +31,8 @@ module.exports = {
 					firstChoice: results[0].first(),
 					lastChoice: results[1].first()
 				};
+				session.winner = (CHOICES.indexOf(results[0].first().content.toLowerCase()) === OPCHOICES.indexOf(results[1].first().content.toLowerCase())) ?
+					results[1].first().author : (results[1].first().content.toLowerCase() === results[0].first().content.toLowerCase()) ? null : results[0].first().author;
 				session.endGame();
 			}).catch(() => {
 				session.context.channel.send("Someone did not respond with a valid option within 60 seconds.");

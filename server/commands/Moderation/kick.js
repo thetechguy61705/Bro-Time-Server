@@ -5,6 +5,9 @@ module.exports = {
 	description: "Kicks specified user.",
 	paramsHelp: "(user) [reason]",
 	requires: "Moderator permissions",
+	botRequires: ["KICK_MEMBERS"],
+	botRequiresMessage: "To kick members.",
+	access: "Server",
 	execute: async (call) => {
 		const rawContent = call.params.readRaw(),
 			parameterOne = (call.params.readParameter() || ""),

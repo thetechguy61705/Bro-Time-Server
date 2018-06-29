@@ -19,6 +19,7 @@ module.exports = {
 	description: "Creates a giveaway in specified channel with specified amount of winners for the specified time.",
 	paramsHelp: "(prize): (time) (channel) (amount of winners)",
 	requires: "Moderator permissions",
+	access: "Server",
 	execute: (call) => {
 		if (call.message.member.roles.find("name", "Giveaways") != null) {
 			var rawContent = call.params.readRaw(),
@@ -44,7 +45,7 @@ module.exports = {
 							var updateLoop = call.client.setInterval(async () => {
 								if (time <= 0) {
 									var users = await msg.reactions.get(GIVEAWAY_EMOJI.name + ":" + GIVEAWAY_EMOJI.snowflake).fetchUsers(msg.guild.memberCount);
-									users = users.filter((user) => !user.bot && user.id/* !== call.message.author.id*/);
+									users = users.filter((user) => !user.bot && user.id !== call.message.author.id);
 									var winners = users.random(amountOfWinners);
 									if (!(winners instanceof Array)) winners = (winners != null) ? [winners] : [];
 									else winners = winners.filter((winner) => winner != null);

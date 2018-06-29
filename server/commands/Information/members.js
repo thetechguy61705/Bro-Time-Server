@@ -5,6 +5,9 @@ module.exports = {
 	id: "members",
 	description: "Gets members from a role or from a guild.",
 	paramsHelp: "[role]",
+	access: "Server",
+	botRequires: ["ADD_REACTIONS"],
+	botRequiresMessage: "To scroll through the member list.",
 	execute: (call) => {
 		var memberEmbed = new Discord.RichEmbed().setColor("ORANGE");
 		var members;
@@ -67,7 +70,7 @@ module.exports = {
 				});
 			} else {
 				memberEmbed.setDescription(members);
-				call.safeSend({ embed: memberEmbed }, call.message, false);
+				call.safeSend(null, call.message, { embed: memberEmbed });
 			}
 		} else call.safeSend("Please specify a valid role, or supply no parameter for everyone in this server.");
 	}

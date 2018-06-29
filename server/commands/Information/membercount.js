@@ -2,6 +2,7 @@ const { RichEmbed } = require("discord.js");
 module.exports = {
 	id: "membercount",
 	description: "Displays the current member count",
+	access: "Server",
 	execute: (call) => {
 		var members = call.message.guild.memberCount,
 			online = call.message.guild.members.filter((m) => m.presence.status !== "offline").size,
@@ -14,6 +15,6 @@ module.exports = {
 			.addField("Bots", bots)
 			.setDefaultFooter(call.message.author)
 			.setColor("BLUE");
-		call.safeSend({ embed: memberEmbed }, call.message, false);
+		call.safeSend(null, call.message, { embed: memberEmbed });
 	}
 };
