@@ -12,7 +12,7 @@ module.exports = {
 			games.dispatchInput(new games.Input("member", member, member.user));
 		});
 		client.on("walletChange", (user, _, newBalance) => {
-			games.dispatchBalance(user, newBalance);
+			games.dispatchBalances(user, newBalance);
 		});
 	}
 };
