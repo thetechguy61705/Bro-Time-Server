@@ -20,6 +20,8 @@ module.exports = {
 	paramsHelp: "(prize): (time) (channel) (amount of winners)",
 	requires: "Moderator permissions",
 	access: "Server",
+	botRequires: ["ADD_REACTIONS"],
+	botRequiresMessage: "To add the poll emojis.",
 	execute: (call) => {
 		if (call.message.member.roles.find("name", "Giveaways") != null) {
 			var rawContent = call.params.readRaw(),

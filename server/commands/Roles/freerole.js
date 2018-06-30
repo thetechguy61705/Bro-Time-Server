@@ -5,6 +5,8 @@ module.exports = {
 	description: "Gives the user the specified role if it is QOTD, ANN or GW.",
 	paramsHelp: "(ANN/GW/QoTD/Movies)",
 	access: "Server",
+	botRequires: ["MANAGE_ROLES"],
+	botRequiresMessage: "To give freeroles.",
 	execute: (call) => {
 		const FREE_ROLE = call.params.readRole();
 		if (FREE_ROLE != null && FREE_ROLES.includes(FREE_ROLE.name.toUpperCase())) {

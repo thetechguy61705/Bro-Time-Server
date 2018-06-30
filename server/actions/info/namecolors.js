@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const EMOJI_ARRAY = ["◀", "▶"];
-const NAME_COLORS = ["Black", "White", "Red", "BrightRed", "Orange", "Bronze", "Gold", "HotBrown",
+const NAME_COLORS = [
+	"Black", "White", "Red", "BrightRed", "Orange", "Bronze", "Gold", "HotBrown",
 	"Salmon", "Yellow", "Green", "DarkGreen", "LimeGreen", "LightGreen", "Blue", "GrayBlue",
 	"Cyan", "Purple", "Indigo", "DarkViolet", "Magenta", "HotPink", "Pink", "Invisible", "Multicolored"
 ];

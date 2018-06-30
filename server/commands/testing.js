@@ -1,6 +1,5 @@
 module.exports = {
 	id: "test",
-	execute: (call) => {
-		call.safeSend("hello");
-	}
+	test: true,
+	execute: (call) => { call.safeSend("Recieved your test."); }
 };

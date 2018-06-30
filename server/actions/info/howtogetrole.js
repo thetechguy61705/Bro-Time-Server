@@ -3,7 +3,8 @@ const EMOJI_ARRAY = ["◀", "▶"];
 const OBTAINABLE_ROLES = ["Story Teller", "Dolphin", "Meme Master", "Inviter", "Pro Inviter", "Cuber", "Artist", "Partner",
 	"Contributor", "Supporter", "Bug Smasher"
 ];
-const DESCRIPTIONS = ["Get part of your story on the starboard.",
+const DESCRIPTIONS = [
+	"Get part of your story on the starboard.",
 	"Tell cj your knowledge about dolphin’s dark deeds and he shall decide if you are worthy of the role.",
 	"Get one of your memes on the starboard.",
 	"Invite 5 people to this server", "Invite 10 people to this server", "Be able to solve a 3x3 Rubik’s cube in less than 2 minutes.",

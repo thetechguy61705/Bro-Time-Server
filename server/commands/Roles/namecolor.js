@@ -16,6 +16,8 @@ module.exports = {
 	paramsHelp: "(color role)",
 	requires: "Nothing/Bro Time Premium",
 	access: "Server",
+	botRequires: ["MANAGE_ROLES"],
+	botRequiresMessage: "To give name colors.",
 	execute: (call) => {
 		const ROLE = call.params.readRole();
 		if (ROLE != null && COLOR_ROLES.includes(ROLE.name)) {

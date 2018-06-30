@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const EMOJI_ARRAY = ["◀", "▶"];
-const LEVEL_ROLES = ["Newbie Bro", "Junior Bro", "Cool Junior Bro", "OP Junior Bro", "Bro", "Cool Bro",
+const LEVEL_ROLES = [
+	"Newbie Bro", "Junior Bro", "Cool Junior Bro", "OP Junior Bro", "Bro", "Cool Bro",
 	"OP Bro", "Senior Bro", "Cool Senior Bro", "OP Senior Bro", "Epic Bro", "Cool Epic Bro", "OP Epic Bro",
 	"Legendary Bro", "Cool Legendary Bro", "OP Legendary Bro", "Elite Bro", "Cool Elite Bro", "OP Elite Bro",
 	"True Bro"

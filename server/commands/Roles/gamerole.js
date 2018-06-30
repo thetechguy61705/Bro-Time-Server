@@ -8,6 +8,8 @@ module.exports = {
 	description: "Gives the user the specified role if it is a part of !info gameroles list.",
 	paramsHelp: "(game role)",
 	access: "Server",
+	botRequires: ["MANAGE_ROLES"],
+	botRequiresMessage: "To give gameroles.",
 	execute: (call) => {
 		const GAME = call.params.readRole();
 		if (GAME != null && GAMES.includes(GAME.name)) {
