@@ -1,4 +1,3 @@
-var { client } = require("../server/server");
 var config = require("../config");
 var { Guild } = require("discord.js");
 const { Pool } = require("pg");
@@ -91,6 +90,7 @@ class WalletAccess {
 	constructor(userId = null) {
 		this.TRANSFER_RATE = WalletAccess.TRANSFER_RATE;
 		this._userId = userId;
+		this.client = require("../server/server").client;
 	}
 
 	async getTotal() {
@@ -103,7 +103,7 @@ class WalletAccess {
 	async change(amount) {
 		await pool.query("SELECT discord.WalletChange($2, $1) FOR UPDATE", [this._userId, amount]);
 		this.getTotal().then((newTotal) => {
-			client.emit("walletChange", this._userId, amount, newTotal);
+			this.client.emit("walletChange", this._userId, amount, newTotal);
 		});
 		return true;
 	}
@@ -111,10 +111,10 @@ class WalletAccess {
 	async transfer(amount, toUserId = null) {
 		await pool.query("SELECT discord.WalletTransfer($3, $1, $2) FOR UPDATE", [this._userId, toUserId, amount]);
 		this.getTotal().then((newTotal) => {
-			client.emit("walletChange", this._userId, -amount, newTotal);
+			this.client.emit("walletChange", this._userId, -amount, newTotal);
 		});
 		new WalletAccess(toUserId).getTotal().then((newTotal) => {
-			client.emit("walletChange", toUserId, amount - amount * this.TRANSFER_RATE, newTotal);
+			this.client.emit("walletChange", toUserId, amount - amount * this.TRANSFER_RATE, newTotal);
 		});
 		return true;
 	}
