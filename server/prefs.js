@@ -19,6 +19,10 @@ module.exports = {
 		type: "bigint[]",
 		default: []
 	},
+	mods: {
+		type: "bigInt[]",
+		default: []
+	}
 	disabledCmdsGlobal: [
 		{ type: "varchar[]", default: [] },
 		{ type: "bigint[]", default: [] }

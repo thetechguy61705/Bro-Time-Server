@@ -5,7 +5,7 @@ module.exports = {
 	id: "prefix",
 	description: "Changes the guild's prefix.",
 	paramsHelp: "(new prefix)",
-	access: "Public",
+	access: "Server",
 	execute: (call) => {
 		if (isModerator(call.message.author)) {
 			var data = (call.message.guild || call.message.channel).data;
