@@ -40,6 +40,7 @@
     "node-opus": "^0.2.7",
     "opusscript": "0.0.6",
     "pg": "^7.4.3",
+    "uuid": "^3.3.2",
     "ytdl-core": "^0.20.4"
   },
   "devDependencies": {

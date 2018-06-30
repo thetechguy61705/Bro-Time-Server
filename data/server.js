@@ -1,3 +1,4 @@
+var { client } = require("../server/server");
 var config = require("../config");
 var { Guild } = require("discord.js");
 const { Pool } = require("pg");
@@ -101,11 +102,20 @@ class WalletAccess {
 
 	async change(amount) {
 		await pool.query("SELECT discord.WalletChange($2, $1) FOR UPDATE", [this._userId, amount]);
+		this.getTotal().then((newTotal) => {
+			client.emit("walletChange", this._userId, amount, newTotal);
+		});
 		return true;
 	}
 
 	async transfer(amount, toUserId = null) {
 		await pool.query("SELECT discord.WalletTransfer($3, $1, $2) FOR UPDATE", [this._userId, toUserId, amount]);
+		this.getTotal().then((newTotal) => {
+			client.emit("walletChange", this._userId, -amount, newTotal);
+		});
+		new WalletAccess(toUserId).getTotal().then((newTotal) => {
+			client.emit("walletChange", toUserId, amount - amount * this.TRANSFER_RATE, newTotal);
+		});
 		return true;
 	}
 }

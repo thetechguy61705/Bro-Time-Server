@@ -180,3 +180,7 @@ client.login(config.TOKEN);
 process.on("SIGTERM", async () => {
 	await client.destroy();
 });
+
+module.exports = {
+	client: client
+};

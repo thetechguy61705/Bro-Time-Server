@@ -1,7 +1,9 @@
 const Discord = require("discord.js");
-var fs = require("fs");
-var util = require("util");
-var { Collection, RichEmbed, ReactionCollector, Message } = require("discord.js");
+const uuid = require("uuid/v1");
+const fs = require("fs");
+const util = require("util");
+const { Collection, RichEmbed, ReactionCollector, Message } = require("discord.js");
+
 var { GameAccess, WalletAccess } = require("./../../data/server");
 var modules = new Collection();
 var sessions = [];
@@ -146,6 +148,7 @@ function startGame(game, context) {
 	})];
 
 	session = {
+		id: uuid(),
 		game: game,
 		ended: false,
 		context: context,
@@ -153,9 +156,11 @@ function startGame(game, context) {
 		getWallet: getWallet,
 		endGame: () => {
 			if (!session.ended) {
+				sessions.splice(sessions.indexOf(sessions.find((s) => s.id === session.id)), 1);
 				clearTimeout(session.endTimer);
 				clearInterval(session.updateTimer);
 				session.ended = true;
+				if (session.tooPoor) session.context.channel.send("This game was cancelled because a user playing it became too poor to meet the bet required on this gmae.");
 				session.game.end(session);
 				if (session.game.betting && session.winner != null && session.game.bet > 0) {
 					for (let player of session.players.keyArray())
@@ -252,11 +257,19 @@ module.exports = {
 			listGames(call.message);
 	},
 	dispatchInput: (input) => {
-		for (var session of sessions) {
+		for (let session of sessions) {
 			if ((input.channel == null || input.channel == session.context.channel) &&
 				(!session.game.requiresInvite || session.host.id === input.user.id || session.players.has(input.user.id))) {
 				if (session.game.input(input, session))
 					session.restartEndTimer();
+			}
+		}
+	},
+	dispatchBalances: (userId, newBalance) => {
+		for (let session of sessions) {
+			if (session.game.betting && session.game.bet > 0 && session.players.has(userId || require("../../server").client.user.id) && session.game.bet > newBalance) {
+				session.tooPoor = true;
+				session.endGame();
 			}
 		}
 	}

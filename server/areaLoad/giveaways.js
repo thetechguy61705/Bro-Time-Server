@@ -68,6 +68,7 @@ function reloadGiveaways(channel, client) {
 	if (channel.id === "457235449417826305") {
 		console.log("giveaway channel found");
 		channel.fetchMessages({ limit: 100 }).then((messagesFetched) => {
+			messagesFetched = messagesFetched.filter((msg) => msg.editable);
 			console.log("messages fetched");
 			var giveawayChannel, giveawayID, giveawayEnd, giveawayWinners, giveawayAuthor, giveawayPrize, args, entryPromise;
 			for (let creator of messagesFetched.array()) {
@@ -101,9 +102,11 @@ function reloadGiveaways(channel, client) {
 module.exports = {
 	id: "giveaways",
 	exec(area, client) {
-		if (area instanceof Guild) {
-			for (var channel of area.channels.values())
-				reloadGiveaways(channel, client);
-		}
+		if (client.channels.has("457235449417826305")) {
+			if (area instanceof Guild) {
+				for (var channel of area.channels.values())
+					reloadGiveaways(channel, client);
+			}
+		} else console.warn("Client does not have access to giveaway areaload channel therefore giveaways hosted on this client will not last through restarts");
 	}
 };

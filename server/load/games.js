@@ -11,5 +11,8 @@ module.exports = {
 		client.on("guildMemberAdd", (member) => {
 			games.dispatchInput(new games.Input("member", member, member.user));
 		});
+		client.on("walletChange", (user, _, newBalance) => {
+			games.dispatchBalance(user, newBalance);
+		});
 	}
 };
