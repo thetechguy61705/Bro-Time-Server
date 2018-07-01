@@ -49,7 +49,7 @@ class Call {
 	}
 
 	getWallet(userId = null) {
-		return new WalletAccess(userId, this.client);
+		return new WalletAccess(userId);
 	}
 
 	safeSend(content, message = this.message, options = { reply: this.message.author }) {
