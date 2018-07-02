@@ -15,11 +15,13 @@ module.exports = {
 			var failed;
 			try {
 				if (call.message.channel.type === "text") {
-					target = call.message.guild.members.find((member) => (param || "").includes(member.id) || member.user.tag.toLowerCase().startsWith(param)) || await call.client.fetchUser(param);
+					target = call.message.guild.members.find((member) => (param || "").includes(member.id) || member.user.tag.toLowerCase().startsWith(param)) ||
+						await call.client.fetchUser(param || "nothing");
 				} else {
-					target = await call.client.fetchUser(param);
+					target = await call.client.fetchUser(param || "nothing");
 				}
 			} catch (exc) {
+				console.warn(exc.stack);
 				failed = exc.message;
 			}
 			var amount = call.params.readNumber();

@@ -13,9 +13,10 @@ module.exports = {
 		var failed = false;
 		try {
 			if (call.message.channel.type === "text") {
-				target = call.message.guild.members.find((member) => (param || "").includes(member.id) || member.user.tag.toLowerCase().startsWith(param)) || await call.client.fetchUser(param);
+				target = call.message.guild.members.find((member) => (param || "").includes(member.id) || member.user.tag.toLowerCase().startsWith(param)) ||
+					await call.client.fetchUser(param || call.message.author.id);
 			} else {
-				target = await call.client.fetchUser(param);
+				target = await call.client.fetchUser(param || call.message.author.id);
 			}
 		} catch (exc) {
 			failed = exc.message;
