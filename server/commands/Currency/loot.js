@@ -18,7 +18,9 @@ const FAILURE_MESSAGES = [
 	"You saw a dead meme and could go no further with your day.",
 	"A Roblox ODer invited you to a date and snatched your Bro Bits while you were laughing.",
 	"You nearly died from dehydration, but bought some water using the Bro Bits you collected to survive.",
-	"You dropped all your Bro Bits that you collected from laughing at how lifeless the person who wrote all these failure messages must be."
+	"You dropped all your Bro Bits that you collected from laughing at how lifeless the person who wrote all these failure messages must be.",
+	"Shedletsky killspawned you in SFOH.",
+	"Minecraft."
 ];
 const COOLDOWN_TIME = 600000;
 // 10 minutes.

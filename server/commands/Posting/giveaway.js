@@ -49,7 +49,7 @@ module.exports = {
 									var users = await msg.reactions.get(GIVEAWAY_EMOJI.name + ":" + GIVEAWAY_EMOJI.snowflake).fetchUsers(msg.guild.memberCount);
 									users = users.filter((user) => !user.bot && user.id !== call.message.author.id);
 									var winners = users.random(amountOfWinners);
-									if (!(winners instanceof Array)) winners = (winners != null) ? [winners] : [];
+									if (!Array.isArray(winners)) winners = (winners != null) ? [winners] : [];
 									else winners = winners.filter((winner) => winner != null);
 
 									if (winners.length > 0) {

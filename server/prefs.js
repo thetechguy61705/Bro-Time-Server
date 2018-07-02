@@ -23,6 +23,14 @@ module.exports = {
 		type: "bigInt[]",
 		default: []
 	},
+	filtered: {
+		type: "varchar[]",
+		default: []
+	},
+	muteRole: {
+		type: "bigint",
+		default: 133
+	},
 	disabledCmdsGlobal: [
 		{ type: "varchar[]", default: [] },
 		{ type: "bigint[]", default: [] }
