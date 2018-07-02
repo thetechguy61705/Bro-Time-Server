@@ -10,16 +10,23 @@ module.exports = {
 		var param = call.params.readParameter(true);
 		param = (param != null) ? param.toLowerCase() : null;
 		var target;
-		if (call.message.channel.type === "text") {
-			target = call.message.guild.members.find((member) => (param || "").includes(member.id) || member.user.tag.toLowerCase().startsWith(param)) || await call.client.fetchUser(param);
-		} else {
-			target = await call.client.fetchUser(param);
+		var failed = false;
+		try {
+			if (call.message.channel.type === "text") {
+				target = call.message.guild.members.find((member) => (param || "").includes(member.id) || member.user.tag.toLowerCase().startsWith(param)) || await call.client.fetchUser(param);
+			} else {
+				target = await call.client.fetchUser(param);
+			}
+		} catch (exc) {
+			failed = exc.message;
 		}
-		target = (target != null) ? ((target instanceof GuildMember) ? target.user : target) : call.message.author;
-		call.getWallet(target.id).getTotal().then((total) => {
-			call.message.channel.send(target.tag + " has " + total + " Bro Bits.");
-		}).catch(() => {
-			call.safeSend("Failed to retrieve " + target.tag + "'s balance.");
-		});
+		if (!failed) {
+			target = (target != null) ? ((target instanceof GuildMember) ? target.user : target) : call.message.author;
+			call.getWallet(target.id).getTotal().then((total) => {
+				call.message.channel.send(target.tag + " has " + total + " Bro Bits.");
+			}).catch(() => {
+				call.safeSend("Failed to retrieve " + target.tag + "'s balance.");
+			});
+		} else call.safeSend("Error: `" + failed.replace(/snowflake/gi, "id") + "` If this error persists please notify a developer.");
 	}
 };

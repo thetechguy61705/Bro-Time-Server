@@ -12,7 +12,7 @@ module.exports = {
 	userType: "User",
 	execute: async (call) => {
 		var userBalance = await call.getWallet(call.message.author.id).getTotal();
-		var param = (call.params.readParameter() || "."), amountToBet = Math.ceil(Number(param) || param.toNumber(userBalance));
+		var param = call.params.readNumber(), amountToBet = Math.ceil(param || param.toNumber(userBalance));
 		if (amountToBet != null && !isNaN(amountToBet) && amountToBet > 0) {
 			if (amountToBet <= userBalance) {
 				var randomSuccess = ((Math.random() * 10) < 4) ? true : false;

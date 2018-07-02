@@ -11,14 +11,19 @@ module.exports = {
 		var param = call.params.readParameter();
 		param = (param != null) ? param.toLowerCase() : null;
 		var target;
-		if (call.message.channel.type === "text") {
-			target = call.message.guild.members.find((member) => (param || "").includes(member.user.id) || param.startsWith(member.user.tag.toLowerCase())) || await call.client.fetchUser(param);
-		} else {
-			target = await call.client.fetchUser(param);
+		var failed = false;
+		try {
+			if (call.message.channel.type === "text") {
+				target = call.message.guild.members.find((member) => (param || "").includes(member.id) || member.user.tag.toLowerCase().startsWith(param)) || await call.client.fetchUser(param);
+			} else {
+				target = await call.client.fetchUser(param);
+			}
+		} catch (exc) {
+			failed = exc.message;
 		}
 		var amount = Number(call.params.readParameter());
 		target = (target instanceof GuildMember) ? target : target;
-		if (target != null) {
+		if (target != null && !failed) {
 			if (amount != null && !isNaN(amount)) {
 				if (amount >= 1) {
 					var userBalance = await call.getWallet(call.message.author.id).getTotal();

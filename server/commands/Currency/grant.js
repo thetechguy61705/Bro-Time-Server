@@ -12,14 +12,19 @@ module.exports = {
 			var param = call.params.readParameter();
 			param = (param != null) ? param.toLowerCase() : "";
 			var target;
-			if (call.message.channel.type === "text") {
-				target = call.message.guild.members.find((member) => param.includes(member.id) || param === member.user.tag.toLowerCase()) || await call.client.fetchUser(param);
-			} else {
-				target = await call.client.fetchUser(param);
+			var failed;
+			try {
+				if (call.message.channel.type === "text") {
+					target = call.message.guild.members.find((member) => (param || "").includes(member.id) || member.user.tag.toLowerCase().startsWith(param)) || await call.client.fetchUser(param);
+				} else {
+					target = await call.client.fetchUser(param);
+				}
+			} catch (exc) {
+				failed = exc.message;
 			}
-			var amount = Number(call.params.readParameter());
+			var amount = call.params.readNumber();
 			if (target instanceof GuildMember) target = target.user;
-			if (target != null) {
+			if (target != null && !failed) {
 				if (amount != null && !isNaN(amount)) {
 					call.getWallet(target.id).change(amount).then(() => {
 						call.message.channel.send(`Changed ${target.tag}'s balance by ${amount}`);
