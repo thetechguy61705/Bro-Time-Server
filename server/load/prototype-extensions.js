@@ -34,6 +34,10 @@ String.prototype.toNumber = function(num = 0) {
 	} else return NaN;
 };
 
+String.prototype.toBoolean = function() {
+	return (this == "true") ? true : (this == "false") ? false : null;
+};
+
 Array.prototype.difference = function(arr) {
 	return this.filter((val) => !arr.includes(val));
 };

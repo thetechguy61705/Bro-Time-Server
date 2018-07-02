@@ -9,7 +9,7 @@ module.exports = {
 			hexTag = (!hexTag) ? null : args[0];
 			var hoist = args[(hexTag == null) ? 0 : 1];
 			if (["true", "false"].includes(hoist)) {
-				hoist = (hoist === "true") ? [true, "set"] : [false, "set"];
+				hoist = [hoist.toBoolean(), "set"];
 			} else {
 				hoist = [false, "auto"];
 			}
