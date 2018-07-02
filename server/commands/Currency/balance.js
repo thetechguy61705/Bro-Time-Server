@@ -19,15 +19,13 @@ module.exports = {
 				target = await call.client.fetchUser(param || call.message.author.id);
 			}
 		} catch (exc) {
-			failed = exc.message;
+			console.warn(exc.stack);
 		}
-		if (!failed) {
-			target = (target != null) ? ((target instanceof GuildMember) ? target.user : target) : call.message.author;
-			call.getWallet(target.id).getTotal().then((total) => {
-				call.message.channel.send(target.tag + " has " + total + " Bro Bits.");
-			}).catch(() => {
-				call.safeSend("Failed to retrieve " + target.tag + "'s balance.");
-			});
-		} else call.safeSend("Error: `" + failed.replace(/snowflake/gi, "id") + "` If this error persists please notify a developer.");
+		target = (target != null) ? ((target instanceof GuildMember) ? target.user : target) : call.message.author;
+		call.getWallet(target.id).getTotal().then((total) => {
+			call.message.channel.send(target.tag + " has " + total + " Bro Bits.");
+		}).catch(() => {
+			call.safeSend("Failed to retrieve " + target.tag + "'s balance.");
+		});
 	}
 };
