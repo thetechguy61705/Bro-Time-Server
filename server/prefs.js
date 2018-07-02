@@ -22,7 +22,7 @@ module.exports = {
 	mods: {
 		type: "bigInt[]",
 		default: []
-	}
+	},
 	disabledCmdsGlobal: [
 		{ type: "varchar[]", default: [] },
 		{ type: "bigint[]", default: [] }
