@@ -6,14 +6,18 @@ module.exports = {
 	description: "Force give/take away Bro Bits to/from a user.",
 	paramsHelp: "(user) (amount)",
 	requires: "Role: Co-Owner Bro, Owner Bro",
-	access: "Server",
+	access: "Public",
 	execute: async (call) => {
 		if (GRANTERS.includes(call.message.author.id)) {
 			var param = call.params.readParameter();
 			param = (param != null) ? param.toLowerCase() : "";
-			var target = call.message.guild.members.find((member) => param.includes(member.id) || param === member.user.tag.toLowerCase()) ||
-				await call.client.fetchUser(param),
-				amount = Number(call.params.readParameter());
+			var target;
+			if (call.message.channel.type === "text") {
+				target = call.message.guild.members.find((member) => param.includes(member.id) || param === member.user.tag.toLowerCase()) || await call.client.fetchUser(param);
+			} else {
+				target = await call.client.fetchUser(param);
+			}
+			var amount = Number(call.params.readParameter());
 			if (target instanceof GuildMember) target = target.user;
 			if (target != null) {
 				if (amount != null && !isNaN(amount)) {

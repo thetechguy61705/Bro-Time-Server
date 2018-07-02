@@ -1,24 +1,32 @@
+const { GuildMember } = require("discord.js");
+
 module.exports = {
 	id: "transfer",
 	aliases: ["give"],
 	description: "Transfers Bro Bits from you to another user with a 90% exchange rate.",
 	paramsHelp: "(user) (amount)",
-	access: "Server",
+	access: "Public",
 	userType: "User",
 	execute: async (call) => {
 		var param = call.params.readParameter();
 		param = (param != null) ? param.toLowerCase() : null;
-		const TARGET = call.message.guild.members.find((member) => (param || "").includes(member.user.id) || param.startsWith(member.user.tag.toLowerCase())),
-			AMOUNT = Number(call.params.readParameter());
-		if (TARGET != null) {
-			if (AMOUNT != null && !isNaN(AMOUNT)) {
-				if (AMOUNT >= 1) {
+		var target;
+		if (call.message.channel.type === "text") {
+			target = call.message.guild.members.find((member) => (param || "").includes(member.user.id) || param.startsWith(member.user.tag.toLowerCase())) || await call.client.fetchUser(param);
+		} else {
+			target = await call.client.fetchUser(param);
+		}
+		var amount = Number(call.params.readParameter());
+		target = (target instanceof GuildMember) ? target : target;
+		if (target != null) {
+			if (amount != null && !isNaN(amount)) {
+				if (amount >= 1) {
 					var userBalance = await call.getWallet(call.message.author.id).getTotal();
-					if (userBalance >= AMOUNT) {
-						var targetBalance = await call.getWallet(TARGET.user.id).getTotal();
-						if ((targetBalance + AMOUNT) < 1000000000) {
-							call.getWallet(call.message.author.id).transfer(Math.round(AMOUNT), TARGET.user.id).then(() => {
-								call.message.reply(`You have successfully given ${Math.ceil(AMOUNT * call.TRANSFER_RATE)} Bro Bits to ${TARGET.user.tag}.`).catch(() => {});
+					if (userBalance >= amount) {
+						var targetBalance = await call.getWallet(target.id).getTotal();
+						if ((targetBalance + amount) < 1000000000) {
+							call.getWallet(call.message.author.id).transfer(Math.round(amount), target.id).then(() => {
+								call.message.reply(`You have successfully given ${Math.ceil(amount * call.TRANSFER_RATE)} Bro Bits to ${target.tag}.`).catch(() => {});
 							}).catch(() => {
 								call.message.reply("Something went wrong in the transaction and I could not give the Bro Bits.");
 							});
