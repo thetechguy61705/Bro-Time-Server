@@ -12,11 +12,12 @@ module.exports = {
 		var memberEmbed = new Discord.RichEmbed().setColor("ORANGE");
 		var members;
 		var content = call.params.readRaw();
-		if (call.message.guild.roles.find((r) => r.name.toLowerCase().startsWith(content.toLowerCase()))) {
+		var role = call.params.readRole();
+		if (role) {
 			if (content !== "") {
-				members = call.message.guild.roles.find((r) => r.name.toLowerCase().startsWith(content.toLowerCase())).members.map((m) => m.user.tag).sort()
+				members = role.members.map((m) => m.user.tag).sort()
 					.map((u) => call.client.users.find((r) => r.tag === u).toString()).join("\n");
-				memberEmbed.setTitle(`Users in ${call.message.guild.roles.find((r) => r.name.toLowerCase().startsWith(content.toLowerCase())).name}`);
+				memberEmbed.setTitle(`Users in ${role.name}`);
 			} else {
 				members = call.message.guild.members.map((m) => m.user.tag).sort()
 					.map((u) => call.client.users.find((r) => r.tag === u).toString()).join("\n");
@@ -61,7 +62,7 @@ module.exports = {
 							.setColor("ORANGE")
 							.setFooter(`Page ${page}/${totalPages} -`)
 							.setDefaultFooter(call.message.author);
-						memberEmbed.setTitle((content !== "") ? `Users in ${call.message.guild.roles.find((r) => r.name.toLowerCase().startsWith(content.toLowerCase())).name}` : "Users");
+						memberEmbed.setTitle((content !== "") ? `Users in ${role.name}` : "Users");
 						sentEmbed.edit({ embed: memberEmbed });
 					});
 					reactions.on("end", () => sentEmbed.edit("Interactive command ended: 2 minutes passed."));
