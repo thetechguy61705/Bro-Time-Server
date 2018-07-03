@@ -15,7 +15,7 @@ module.exports = {
 				.setDescription(roles + (roles.length === 2045 ? "..." : ""))
 				.setColor(0x00AE86);
 			if (roles.length === 2045) rolesEmbed.setFooter("Not all roles that this user obtains are included in this list because of rich embed description limitations.");
-			rolesEmbed.setDefaultFooter(message.author);
+			rolesEmbed.setDefaultFooter(call.message.author);
 			call.safeSend(null, call.message, { embed: rolesEmbed });
 		} else call.safeSend("You did not specify a valid user.");
 	}
