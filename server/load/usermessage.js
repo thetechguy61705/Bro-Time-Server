@@ -43,7 +43,7 @@ module.exports = {
 						const goodbyeMessage = new Discord.RichEmbed()
 							.setTitle("Goodbye")
 							.setColor("#0000ff")
-							.setDescription(`Sad to see you leave ${member.user}.`);
+							.setDescription(`Sad to see you leave ${member.user.tag}.`);
 						hangoutChannel.send({ embed: goodbyeMessage });
 					}
 				}
