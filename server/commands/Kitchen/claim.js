@@ -25,7 +25,7 @@ module.exports = {
 								.addField("Ordered From", filteredOrder.orderedFrom)
 								.addField("Status", `Claimed (${call.message.author.tag})`)
 								.addField("Links", "None");
-							filteredOrder.msg.edit({ embed: orderEmbed }).then(() => {
+							filteredOrder.msg.edit(orderEmbed).then(() => {
 								addOrder(filteredOrder, call.message.author.tag);
 								delOrder(filteredOrder);
 								call.message.reply("Successfully claimed this order.").catch(() => {});
