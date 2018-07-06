@@ -22,7 +22,7 @@ module.exports = {
 					SPLIT_ARGS = call.params.readRaw().split("|").map((arg) => arg.trim()),
 					TITLE = SPLIT_ARGS[0],
 					DESCRIPTION = SPLIT_ARGS[1],
-					THUMBNAIL = SPLIT_ARGS[2]
+					THUMBNAIL = SPLIT_ARGS[2];
 				var partnerEmbed = new Discord.RichEmbed()
 						.setTitle(TITLE)
 						.setColor("#FFA500")
