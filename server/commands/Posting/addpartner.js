@@ -22,17 +22,17 @@ module.exports = {
 					SPLIT_ARGS = call.params.readRaw().split("|").map((arg) => arg.trim()),
 					TITLE = SPLIT_ARGS[0],
 					DESCRIPTION = SPLIT_ARGS[1],
-					THUMBNAIL = SPLIT_ARGS[2],
-					PARTNER_EMBED = new Discord.RichEmbed()
+					THUMBNAIL = SPLIT_ARGS[2]
+				var partnerEmbed = new Discord.RichEmbed()
 						.setTitle(TITLE)
 						.setColor("#FFA500")
 						.setDescription(DESCRIPTION);
 				call.client.fetchInvite(THUMBNAIL).then((invite) => {
-					PARTNER_EMBED.setThumbnail(invite.guild.iconURL);
-					addPartner(PARTNER_CHANNEL, PARTNER_EMBED, call);
+					partnerEmbed.setThumbnail(invite.guild.iconURL);
+					addPartner(PARTNER_CHANNEL, partnerEmbed, call);
 				}).catch(() => {
-					PARTNER_EMBED.setThumbnail(THUMBNAIL);
-					addPartner(PARTNER_CHANNEL, PARTNER_EMBED, call);
+					partnerEmbed.setThumbnail(THUMBNAIL);
+					addPartner(PARTNER_CHANNEL, partnerEmbed, call);
 				});
 			} else call.safeSend("You did not provide the necessary parameters! `!addpartner (title) (description) (discord invite OR thumbnail url)`");
 		} else call.safeSend("You do not have permission to use this command! `Requires: Community Manager Bro`");
