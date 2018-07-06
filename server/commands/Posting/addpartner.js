@@ -28,7 +28,7 @@ module.exports = {
 					.setColor("#FFA500")
 					.setDescription(DESCRIPTION);
 				call.client.fetchInvite(THUMBNAIL).then((invite) => {
-					partnerEmbed.setThumbnail(invite.guild.iconURL);
+					partnerEmbed.setThumbnail(invite.guild.icon);
 					addPartner(PARTNER_CHANNEL, partnerEmbed, call);
 				}).catch(() => {
 					partnerEmbed.setThumbnail(THUMBNAIL);
