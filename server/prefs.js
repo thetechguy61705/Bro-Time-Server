@@ -27,9 +27,13 @@ module.exports = {
 		type: "varchar[]",
 		default: []
 	},
+	inviteFilter: {
+		type: "boolean",
+		default: false
+	}
 	muteRole: {
 		type: "bigint",
-		default: 133
+		default: 123
 	},
 	disabledCmdsGlobal: [
 		{ type: "varchar[]", default: [] },

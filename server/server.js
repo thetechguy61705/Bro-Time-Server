@@ -1,16 +1,19 @@
+const Discord = require("discord.js");
+const fs = require("fs");
+const BRO_TIME_GUILDS = ["330913265573953536", "453694109819994114", "463408396872187904", "398948242790023168"];
+const LOAD_TIMEOUT = 60000;
+
 var errorHandler = require("app/errorHandler");
 var config = require("../config");
-var fs = require("fs");
-var Discord = require("discord.js");
 var stdout = process.stdout;
 var loaders = [];
 var chatHandlers = [];
 var client = new Discord.Client(config.CLIENT);
+
 client.locked = false;
 client.lockedChannels = [];
 client.bbkLocked = false;
 client.bbkLockedChannels = [];
-const LOAD_TIMEOUT = 60000;
 
 require("enum").register();
 
@@ -182,5 +185,6 @@ process.on("SIGTERM", async () => {
 });
 
 module.exports = {
-	client: client
+	client: client,
+	guilds: BRO_TIME_GUILDS
 };

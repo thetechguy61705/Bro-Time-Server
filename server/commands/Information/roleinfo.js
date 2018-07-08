@@ -15,6 +15,7 @@ module.exports = {
 				.addField("Name", role.name, true)
 				.addField("Mention", role.toString(), true)
 				.addField("ID", role.id, true)
+				.addField("Members", role.members.size.toString(), true)
 				.addField("Created At", role.createdAt.toString().substring(0, 15), true)
 				.addField("Position", role.position.toString(), true)
 				.addField("Automation", role.managed.toString(), true)
