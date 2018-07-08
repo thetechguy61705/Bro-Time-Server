@@ -30,7 +30,7 @@ module.exports = {
 	inviteFilter: {
 		type: "boolean",
 		default: false
-	}
+	},
 	muteRole: {
 		type: "bigint",
 		default: 123

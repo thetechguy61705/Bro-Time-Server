@@ -11,7 +11,6 @@ module.exports = {
 	},
 	exec: async function(message, newMessage) {
 		const GUILDS = require("../server").guilds;
-		console.log(GUILDS)
 
 		if (newMessage instanceof Message)
 			message = newMessage;
