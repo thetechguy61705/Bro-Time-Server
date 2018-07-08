@@ -15,7 +15,7 @@ module.exports = {
 		var param = call.params.readNumber(), amountToBet = Math.ceil(param || param.toNumber(userBalance));
 		if (amountToBet != null && !isNaN(amountToBet) && amountToBet > 0) {
 			if (amountToBet <= userBalance) {
-				var randomSuccess = ((Math.random() * 10) < 4) ? true : false;
+				var randomSuccess = (Math.random() * 10) < 4;
 				var randomMultiplier = (Math.random() * 0.8) + 0.6;
 				if (randomSuccess) {
 					call.getWallet(call.message.author.id).change(Math.round(amountToBet * randomMultiplier)).then(() => {
