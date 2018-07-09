@@ -34,6 +34,7 @@ module.exports = {
 				rolesEmbed.setTitle(title)
 					.setDescription(roles.slice(rolesLength, rolesLength + 20))
 					.setFooter(`Page ${currentPage}/${totalPages} -`)
+					.setColor(0x00AE86)
 					.setDefaultFooter(call.message.author);
 				call.message.channel.send({ embed: rolesEmbed }).then(async (msg) => {
 					await msg.reactMultiple(EMOJI_ARRAY);
