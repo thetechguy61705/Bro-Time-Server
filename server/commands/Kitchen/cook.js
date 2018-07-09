@@ -67,7 +67,7 @@ module.exports = {
 												.addField("Status", `${status} (${call.message.author.tag})`)
 												.addField("Links", links);
 											filteredOrder.msg.edit({ embed: orderEmbed }).then(() => {
-												addOrder(filteredOrder);
+												addOrder(filteredOrder.msg, filteredOrder.id, filteredOrder.order, filteredOrder.customer, filteredOrder.orderedFrom, `${status} (${call.message.author.tag})`, links);
 												delOrder(filteredOrder);
 												call.message.reply("Successfully cooked this item.").catch(() => {});
 											}).catch(() => {

@@ -1,19 +1,19 @@
 module.exports = {
 	id: "orders",
 	orders: [],
-	addOrder: function (order, tag) {
-		this.orders.push({
-			msg: order.msg,
-			id: order.id,
-			order: order.order,
-			customer: order.customer,
-			orderedFrom: order.orderedFrom,
-			status: `Claimed (${tag})`,
-			links: "None",
+	addOrder: function (msg, id, order, customer, orderedFrom, status, links) {
+		module.exports.orders.push({
+			msg: msg,
+			id: id,
+			order: order,
+			customer: customer,
+			orderedFrom: orderedFrom,
+			status: status,
+			links: links,
 		});
 	},
 	delOrder: function (order) {
-		this.orders.splice(this.orders.indexOf(order), 1);
+		module.exports.orders.splice(module.exports.orders.indexOf(order), 1);
 	},
 	exec: (client) => {
 		var ordersChannel = client.channels.get("399290151932526593");
