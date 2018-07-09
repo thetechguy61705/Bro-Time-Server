@@ -52,11 +52,11 @@ module.exports = {
 											} else {
 												links = `${food} - ${link}`;
 											}
-											var status = "Cooking";
+											var status = `Cooking (${call.message.author.tag})`;
 											var justFoods = filteredOrder.order.split("\n");
 											var justLinks = filteredOrder.links.split("\n");
 											if (justFoods.length <= justLinks.length + 1) {
-												status = "Cooked";
+												status = `Cooked (${call.message.author.tag})`;
 											}
 											var orderEmbed = new RichEmbed()
 												.setColor("RED")
@@ -64,10 +64,10 @@ module.exports = {
 												.addField("Order", filteredOrder.order)
 												.addField("Customer", filteredOrder.customer)
 												.addField("Ordered From", filteredOrder.orderedFrom)
-												.addField("Status", `${status} (${call.message.author.tag})`)
+												.addField("Status", status)
 												.addField("Links", links);
 											filteredOrder.msg.edit({ embed: orderEmbed }).then(() => {
-												addOrder(filteredOrder.msg, filteredOrder.id, filteredOrder.order, filteredOrder.customer, filteredOrder.orderedFrom, `${status} (${call.message.author.tag})`, links);
+												addOrder(filteredOrder.msg, filteredOrder.id, filteredOrder.order, filteredOrder.customer, filteredOrder.orderedFrom, status, links);
 												delOrder(filteredOrder);
 												call.message.reply("Successfully cooked this item.").catch(() => {});
 											}).catch(() => {
