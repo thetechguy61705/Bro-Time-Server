@@ -45,13 +45,13 @@ module.exports = {
 						await reaction.remove(call.message.author);
 						if (reaction.emoji.name === "◀") {
 							if (page !== 1) {
-								page -= 1;
+								page--;
 								membersLength -= 20;
 								membersToSend = members.split("\n").slice(membersLength, membersLength+20);
 							}
 						} else {
 							if (page !== totalPages) {
-								page += 1;
+								page++;
 								membersLength += 20;
 								membersToSend = members.split("\n").slice(membersLength, membersLength+20);
 							}

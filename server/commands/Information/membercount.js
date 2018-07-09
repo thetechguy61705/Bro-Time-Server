@@ -4,18 +4,24 @@ module.exports = {
 	id: "membercount",
 	description: "Displays the current member count",
 	access: "Server",
-	execute: (call) => {
-		var members = call.message.guild.memberCount,
-			online = call.message.guild.members.filter((m) => m.presence.status !== "offline").size,
-			humans = call.message.guild.members.filter((m) => !m.user.bot).size,
-			bots = members - humans;
+	execute: function (call) {
+		var members = this.members(call.message.guild);
 		var memberEmbed = new RichEmbed()
-			.addField("Members", members)
-			.addField("Online", online)
-			.addField("Humans", humans)
-			.addField("Bots", bots)
+			.addField("Members", members.count)
+			.addField("Online", members.online)
+			.addField("Humans", members.humans)
+			.addField("Bots", members.bots)
 			.setDefaultFooter(call.message.author)
 			.setColor("BLUE");
 		call.safeSend(null, call.message, { embed: memberEmbed });
+	},
+	members: function (guild) {
+		var memberObj = {
+			count: guild.memberCount,
+			online: guild.members.filter((m) => m.presence.status !== "offline").size,
+			humans: guild.members.filter((m) => !m.user.bot).size,
+			bots: guild.members.filter((m) => m.user.bot).size
+		};
+		return memberObj;
 	}
 };
