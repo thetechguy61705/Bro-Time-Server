@@ -47,6 +47,8 @@ Discord.Message.prototype.reactMultiple = async function(reactions) {
 		await this.react(reaction);
 };
 
+Discord.Message.prototype.deleted = false;
+
 Discord.Permissions.prototype.list = function(checkAdmin = true) {
 	var list = [];
 	var containing = this.serialize(checkAdmin);
