@@ -22,10 +22,12 @@ class Call {
 		this.TRANSFER_RATE = 0.8;
 	}
 
-	requestInput(settings = 0, prompt = null, timeout = 180000) {
+	requestInput(settings = 0, prompt = null, timeout = 180000, accepts = null) {
 		settings = settings|this.commands.MULTISTEP_DEFAULTS;
 		if (prompt != null)
 			this.message.channel.send(prompt);
+		if (accepts == null)
+			accepts = () => true;
 		return new Promise(((resolve, reject) => {
 			this.denyInput();
 			this.commands._requests.set(this.message.author.id, {
@@ -34,7 +36,8 @@ class Call {
 				settings: settings,
 				author: this.message.author.id,
 				channel: this.message.channel.id,
-				timeout: this.client.setTimeout(() => this.denyInput(), timeout)
+				timeout: this.client.setTimeout(() => this.denyInput(), timeout),
+				accepts: accepts instanceof RegExp ? (message) => { return accepts.test(message.content); } : accepts
 			});
 		}).bind(this));
 	}
@@ -158,7 +161,7 @@ module.exports = {
 
 	loaded: modules,
 	getRequesting: function(message) {
-		var requests = this._requests.filter((request) => request.channel === message.channel.id);
+		var requests = this._requests.filter((request) => request.channel === message.channel.id && request.accepts(message));
 		var request;
 		if (requests.has(message.author.id)) {
 			request = requests.get(message.author.id);
