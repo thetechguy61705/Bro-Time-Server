@@ -31,6 +31,6 @@ module.exports = {
 					});
 				});
 			}
-		} else call.safeSend("Please specify a valid freerole option. Freeroles: `" + FREE_ROLE.join("`, `") + "`.");
+		} else call.safeSend("Please specify a valid freerole option. Freeroles: `" + FREE_ROLES.join("`, `") + "`.");
 	}
 };

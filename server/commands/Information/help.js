@@ -42,8 +42,11 @@ module.exports = {
 				if (commandFilter(sortedCmd)) add(sortedCmd, commandHelp, prefix);
 			}
 
-			helpEmbed.setTitle("Information").setDescription(`Prefix: \`${prefix}\`\nUptime: ${call.client.uptime.expandPretty()}\n` +
-				"[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server)");
+			helpEmbed.setTitle("Information")
+				.setDescription(`Prefix: \`${prefix}\`\n` +
+					`Uptime: ${call.client.uptime.expandPretty()}\n` +
+					`Shard: \`${call.client.shard.id}\`\n` +
+					"[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server)");
 			for (var [category, commands] of Object.entries(commandHelp)) {
 				helpEmbed.addField(category, commands.join("\n"));
 			}

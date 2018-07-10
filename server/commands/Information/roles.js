@@ -6,6 +6,8 @@ module.exports = {
 	aliases: ["userroles"],
 	description: "Displays the specified user's or the guild's roles.",
 	paramsHelp: "[user]",
+	botRequires: ["ADD_REACTIONS"],
+	botRequiresMessage: "To add reactions for role scrolling.",
 	access: "Server",
 	execute: (call) => {
 		var all = !call.params.readRaw();
