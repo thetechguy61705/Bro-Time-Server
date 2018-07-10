@@ -12,7 +12,7 @@ module.exports = {
 		var member = call.params.readMember();
 		if (member != null || all) {
 			var rolesEmbed = new RichEmbed();
-			var roles = (all ? call.message.guild : member)._sortedRoles.array().reverse().map((role) => `${role} (${role.members.size})`);
+			var roles = (all ? call.message.guild : member).roles.array().sort((a, b) => b.position - a.position).map((role) => `${role} (${role.members.size})`);
 			var title = all ? "This guild's roles." : member.user.tag + "'s roles.";
 			if (roles.length <= 20) {
 				rolesEmbed.setTitle(title)

@@ -5,7 +5,7 @@ module.exports = {
 		var amountToPurge = call.params.readNumber() || NaN;
 		if (!isNaN(amountToPurge) && amountToPurge > 0 && amountToPurge <= 100) {
 			call.message.delete().then(() => {
-				call.purgeMessages(amountToPurge, call.message.channel, (msg) => msg.attatchments.find((att) => att.width != null) != null).then((amountPurged) => {
+				call.purgeMessages(amountToPurge, call.message.channel, (msg) => msg.attatchments && msg.attachments.find((att) => att.width != null) != null).then((amountPurged) => {
 					call.message.reply("Deleted " +
 						amountPurged +
 						" message" +
