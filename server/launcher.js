@@ -5,9 +5,9 @@ const manager = new ShardingManager(__dirname + "/server.js", { token: config.TO
 
 var loaders = [];
 
-for (let file of fs.readdirSync(__dirname + "/load")) {
+for (let file of fs.readdirSync(__dirname + "/shard-loading")) {
 	if (file.endsWith(".js")) {
-		loaders.push(require("./load/" + file));
+		loaders.push(require("./shard-loading/" + file));
 	}
 }
 
