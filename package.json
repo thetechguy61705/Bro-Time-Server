@@ -51,6 +51,7 @@
     "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-no-for-each": "github:ethanlaj/eslint-plugin-no-for-each",
     "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-typescript": "^0.12.0",
     "mocha": "^4.1.0",
     "typescript-eslint-parser": "^16.0.1"
   }
