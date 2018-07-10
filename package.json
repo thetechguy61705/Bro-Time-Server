@@ -10,7 +10,7 @@
     "start": "node -r ts-node/register server/launcher.js",
     "debug": "node -r ts-node/register --inspect-brk server/server.js",
     "test": "eslint . && eslint test/. --env mocha && mocha --require ts-node/register",
-    "fix": "eslint . --fix && eslint test/. --env mocha --require ts-node/register --fix"
+    "fix": "eslint . --fix && eslint test/. --env mocha --fix"
   },
   "repository": {
     "type": "git",
