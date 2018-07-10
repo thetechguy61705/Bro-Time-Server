@@ -11,26 +11,26 @@ module.exports = {
 	botRequires: ["MANAGE_ROLES"],
 	botRequiresMessage: "To give gameroles.",
 	execute: (call) => {
-		const GAME = call.params.readRole();
-		if (GAME != null && GAMES.includes(GAME.name)) {
-			if (call.message.member.roles.has(GAME.id)) {
-				call.message.member.removeRole(GAME).then(() => {
-					call.message.reply(`Since you already had the \`${GAME.name}\` game role, it has been removed from you.`).catch(() => {
-						call.message.author.send(`Since you already had the \`${GAME.name}\` gamerole, it has been removed from you.`);
+		var game = call.params.readRole();
+		if (game != null && GAMES.includes(game.name)) {
+			if (call.message.member.roles.has(game.id)) {
+				call.message.member.removeRole(game).then(() => {
+					call.message.reply(`Since you already had the \`${game.name}\` game role, it has been removed from you.`).catch(() => {
+						call.message.author.send(`Since you already had the \`${game.name}\` gamerole, it has been removed from you.`);
 					});
 				}).catch(() => {
-					call.message.reply(`Unable to remove the \`${GAME.name}\` game role.`).catch(() => {
-						call.message.author.send(`Unable to remove the \`${GAME.name}\` game role from you.`);
+					call.message.reply(`Unable to remove the \`${game.name}\` game role.`).catch(() => {
+						call.message.author.send(`Unable to remove the \`${game.name}\` game role from you.`);
 					});
 				});
 			} else {
-				call.message.member.addRole(GAME).then(() => {
-					call.message.reply(`Successfully given you the \`${GAME.name}\` game role.`).catch(() => {
-						call.message.author.send(`Successfully given you the \`${GAME.name}\` game role.`);
+				call.message.member.addRole(game).then(() => {
+					call.message.reply(`Successfully given you the \`${game.name}\` game role.`).catch(() => {
+						call.message.author.send(`Successfully given you the \`${game.name}\` game role.`);
 					});
 				}).catch(() => {
-					call.message.reply(`Unable to give you the \`${GAME.name}\` game role.`).catch(() => {
-						call.message.author.send(`Unable to give you the \`${GAME.name}\` game role.`);
+					call.message.reply(`Unable to give you the \`${game.name}\` game role.`).catch(() => {
+						call.message.author.send(`Unable to give you the \`${game.name}\` game role.`);
 					});
 				});
 			}
