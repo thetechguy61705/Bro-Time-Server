@@ -3,6 +3,7 @@ const fs = require("fs");
 
 module.exports = {
 	id: "guildnames",
+	needs: "330913265573953536",
 	exec: (client) => {
 		var hangoutChannel;
 		client.on("guildMemberAdd", (member) => {

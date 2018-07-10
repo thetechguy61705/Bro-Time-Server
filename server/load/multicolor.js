@@ -1,5 +1,6 @@
 module.exports = {
 	id: "multicolor",
+	needs: "330913265573953536",
 	exec: (client) => {
 		for (let guild of client.guilds.array()) {
 			if (client.user.id === "393532251398209536") {
@@ -13,11 +14,11 @@ module.exports = {
 					var loopNumber = hexcolors.indexOf(multiColorRole.hexColor) + 1;
 					if (!loopNumber) loopNumber = 0;
 					if (loopNumber === colors.length) loopNumber = 0;
-					multiColorRole.setColor(brotime.roles.find("name", colors[loopNumber]).hexColor).catch(function() {});
+					multiColorRole.setColor(brotime.roles.find("name", colors[loopNumber]).hexColor).catch(() => {});
 					loopNumber++;
-					client.setInterval(function() {
+					client.setInterval(() => {
 						if (loopNumber === colors.length) loopNumber = 0;
-						multiColorRole.setColor(brotime.roles.find("name", colors[loopNumber]).hexColor).catch(function() {});
+						multiColorRole.setColor(brotime.roles.find("name", colors[loopNumber]).hexColor).catch(() => {});
 						loopNumber++;
 						if (loopNumber === colors.length) loopNumber = 0;
 					}, 3600000);

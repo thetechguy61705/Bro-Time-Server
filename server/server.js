@@ -129,29 +129,32 @@ client.on("ready", () => {
 	console.log("Loading...");
 	Profiler.writeLegend();
 	for (var loader of loaders) {
-		loading.push(new Promise(async (resolve) => {
-			var profiler = new Profiler(loader.id.length + (loader.profilerBytes || 2));
-			profiler.writeStart(loader.id);
-			var timeout = client.setTimeout(() => {
-				profiler.writeState(Profiler.states.Timeout);
-				resolve();
-			}, LOAD_TIMEOUT);
-			try {
-				profiler.writeState(Profiler.states.Started);
-				if (loader.exec != null) {
-					var promise = loader.exec(client, profiler);
-					if (promise != null)
-						await promise;
+		if (!loader.needs || client.guilds.has(loader.needs)) {
+			loading.push(new Promise(async (resolve) => {
+				var profiler = new Profiler(loader.id.length + (loader.profilerBytes || 2));
+				profiler.writeStart(loader.id);
+				var timeout = client.setTimeout(() => {
+					profiler.writeState(Profiler.states.Timeout);
+					resolve();
+				}, LOAD_TIMEOUT);
+				try {
+					profiler.writeState(Profiler.states.Started);
+					if (loader.exec != null) {
+						var promise = loader.exec(client, profiler);
+						if (promise != null)
+							await promise;
+					}
+					profiler.writeState(Profiler.states.Ended);
+				} catch (exc) {
+					profiler.writeState(Profiler.states.Error);
+					console.warn(exc.stack);
 				}
-				profiler.writeState(Profiler.states.Ended);
-			} catch (exc) {
-				profiler.writeState(Profiler.states.Error);
-				console.warn(exc.stack);
-			}
-			clearTimeout(timeout);
-			resolve();
-		}));
+				clearTimeout(timeout);
+				resolve();
+			}));
+		}
 	}
+
 	Promise.all(loading).then(() => {
 		for (var handler of chatHandlers) {
 			try {
