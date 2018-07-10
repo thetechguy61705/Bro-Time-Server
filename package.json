@@ -7,10 +7,10 @@
     "node": ">= 7.10.1"
   },
   "scripts": {
-    "start": "node server/launcher.js",
-    "debug": "node --inspect-brk server/server.js",
-    "test": "eslint . && eslint test/. --env mocha && mocha",
-    "fix": "eslint . --fix && eslint test/. --env mocha --fix"
+    "start": "node -r ts-node/register server/launcher.js",
+    "debug": "node -r ts-node/register --inspect-brk server/server.js",
+    "test": "eslint . && eslint test/. --env mocha && mocha --require ts-node/register",
+    "fix": "eslint . --fix && eslint test/. --env mocha --require ts-node/register --fix"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/cloewen8/Bro-Time-Server#readme",
   "dependencies": {
+    "@types/pg": "^7.4.10",
     "discord.js": "^11.3.2",
     "emoji-regex": "^7.0.0",
     "enum": "^2.5.0",
@@ -40,15 +41,17 @@
     "node-opus": "^0.2.7",
     "opusscript": "0.0.6",
     "pg": "^7.4.3",
+    "ts-node": "^7.0.0",
+    "typescript": "^2.9.2",
     "uuid": "^3.3.2",
     "ytdl-core": "^0.20.4"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.3",
     "eslint": "^4.19.1",
     "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-no-for-each": "github:ethanlaj/eslint-plugin-no-for-each",
     "eslint-plugin-promise": "^3.8.0",
-    "mocha": "^4.1.0"
+    "mocha": "^4.1.0",
+    "typescript-eslint-parser": "^16.0.1"
   }
 }

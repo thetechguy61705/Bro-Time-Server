@@ -1,0 +1,7 @@
+{
+	"module": "commonjs",
+	"target": "es6",
+	"pretty": true,
+	"sourceMap": true,
+	"esModuleInterop": true,
+}
