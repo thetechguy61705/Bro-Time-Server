@@ -6,16 +6,16 @@ var RESPONSE = "%s <@%s>!";
 var MAX_LENGTH = 100;
 
 module.exports = {
-	exec: function(message, client) {
-		if (message.isMentioned(client.user)) {
-			var greeting = this.getGreeting(message, client);
+	exec: function(message) {
+		if (message.isMentioned(message.client.user)) {
+			var greeting = this.getGreeting(message);
 
 			if (greeting != null)
 				message.channel.send(util.format(RESPONSE, greeting, message.author.id));
 		}
 	},
 
-	getGreeting: function(message, client) {
+	getGreeting: function(message) {
 		var content = message.content;
 		var matches;
 		var greeting;
@@ -23,10 +23,10 @@ module.exports = {
 			if (responses.hasOwnProperty(pattern)) {
 				matches = new RegExp(pattern, OPTIONS).exec(content);
 				if (matches != null) {
-					if (!client.locked) {
+					if (!message.client.locked) {
 						greeting = responses[pattern](matches).substring(0, MAX_LENGTH);
 					} else {
-						client.lockedChannels.push(message.channel.id);
+						message.client.lockedChannels.push(message.channel.id);
 						message.channel.send("The client is currently in lockdown and inaccessible by any user.");
 					}
 					break;

@@ -63,9 +63,9 @@ module.exports = {
 			console.warn(exc.stack);
 		});
 	},
-	exec: function (message, client) {
-		if (!client.locked && message.channel.id === "433831764105101332" && !this.isAwaitingDrop && this.currentTimer > 0) {
-			client.setTimeout(() => {
+	exec: function (message) {
+		if (!message.client.locked && message.channel.id === "433831764105101332" && !this.isAwaitingDrop && this.currentTimer > 0) {
+			message.client.setTimeout(() => {
 				this.isAwaitingDrop = true;
 			}, this.currentTimer);
 		}

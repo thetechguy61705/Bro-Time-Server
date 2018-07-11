@@ -13,10 +13,10 @@ const TESTING = process.env.NODE_ENV !== "production";
 const ACCESS = new Enum(["Public", "Private", "Server"], { ignoreCase: true });
 
 class Call {
-	constructor(commands, message, client, params, command) {
+	constructor(commands, message, params, command) {
 		this.commands = commands;
 		this.message = message;
-		this.client = client;
+		this.client = message.client;
 		this.params = params;
 		this.command = command;
 		this.TRANSFER_RATE = 0.8;
@@ -87,16 +87,16 @@ function loadModule(file, category) {
 	});
 }
 
-function hasPermissions(command, message, client) {
+function hasPermissions(command, message) {
 	var has = true;
 	if (message.guild != null) {
 		if (command.botRequires != null)
-			has = client.requestPermissions(message.guild.members.get(client.user.id),
+			has = message.client.requestPermissions(message.guild.members.get(message.client.user.id),
 				message.channel,
 				command.botRequires,
 				command.botRequiresMessage || `To use ${command.id}.`);
 		if (has && command.userRequires != null)
-			has = client.requestPermissions(message.member,
+			has = message.client.requestPermissions(message.member,
 				message.channel,
 				command.userRequires,
 				command.userRequiresMessage || `To use ${command.id}.`);
@@ -170,17 +170,17 @@ module.exports = {
 		}
 		return request || null;
 	},
-	processRequest: function(request, message, client) {
+	processRequest: function(request, message) {
 		clearTimeout(request.timeout);
 		if (request.settings&this.CANCELLABLE !== 0 && message.content.toLowerCase() === "cancel") {
 			request.reject();
 		} else {
-			request.resolve(new Call(this, message, client, new Parameters(message)));
+			request.resolve(new Call(this, message, new Parameters(message)));
 		}
 		this._requests.delete(request.author);
 		return true;
 	},
-	processCommand: function(message, client) {
+	processCommand: function(message) {
 		var data = (message.guild || message.channel).data;
 		var prefix = message.content.match(new RegExp(util.format(prefixPattern,
 			escapeStringRegexp(data != null ? data.prefix : "/")), "i"));
@@ -192,7 +192,7 @@ module.exports = {
 			prefix = message.content.match("^" + MessageMentions.USERS_PATTERN.source);
 			using = prefix != null &&
 				message.mentions.users.size === 1 &&
-				message.mentions.users.first().id == client.user.id;
+				message.mentions.users.first().id == message.client.user.id;
 		}
 		if (using) {
 			var params = new Parameters(message);
@@ -202,14 +202,14 @@ module.exports = {
 			if (name != null) {
 				var command = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.includes(name));
 
-				if (command != null && checkAccess(command, message) && checkClient(command, message) && hasPermissions(command, message, client)) {
-					if (!client.locked || command.id === "lockdown") {
+				if (command != null && checkAccess(command, message) && checkClient(command, message) && hasPermissions(command, message)) {
+					if (!message.client.locked || command.id === "lockdown") {
 						params.readSeparator();
-						command.execute(new Call(this, message, client, params, command));
+						command.execute(new Call(this, message, params, command));
 						used = true;
 					} else {
-						if (!client.lockedChannels.includes(message.channel.id)) {
-							client.lockedChannels.push(message.channel.id);
+						if (!message.client.lockedChannels.includes(message.channel.id)) {
+							message.client.lockedChannels.push(message.channel.id);
 							message.channel.send("The client is currently in lockdown and inaccessible by any user.");
 						}
 					}
@@ -218,14 +218,14 @@ module.exports = {
 		}
 		return used;
 	},
-	exec: function(message, client) {
+	exec: function(message) {
 		var used;
 		var request = this.getRequesting(message);
 		if (request != null) {
-			if (message.author != client.user)
-				used = this.processRequest(request, message, client);
+			if (message.author != message.client.user)
+				used = this.processRequest(request, message);
 		} else {
-			used = this.processCommand(message, client);
+			used = this.processCommand(message);
 		}
 		return used;
 	}
