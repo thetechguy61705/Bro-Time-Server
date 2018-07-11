@@ -65,7 +65,7 @@ class Profiler {
 			if (state.ends) {
 				this.ended = true;
 				this.buffer.write("\n", this.offset);
-				stdout.write(this.buffer, "ascii");
+				// stdout.write(this.buffer, "ascii");
 				if (state === Profiler.states.Error) {
 					if (this.parent != null)
 						this.parent.writeState(state);
