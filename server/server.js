@@ -27,7 +27,7 @@ class Profiler {
 			rows.push(`┃${state.symbol}┃${state.description.padEnd(descLength)}┃`);
 		rows.push(`┗━┻${"━".repeat(descLength)}┛`);
 		// eslint-disable-next-line no-console
-		console.log(rows.join("\n"));
+		// console.log(rows.join("\n"));
 	}
 
 	constructor(size, parent) {
