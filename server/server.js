@@ -5,7 +5,6 @@ const LOAD_TIMEOUT = 60000;
 
 var errorHandler = require("app/errorHandler");
 var config = require("../config");
-var stdout = process.stdout;
 var loaders = [];
 var chatHandlers = [];
 var client = new Discord.Client(config.CLIENT);
