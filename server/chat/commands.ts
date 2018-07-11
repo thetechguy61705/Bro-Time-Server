@@ -4,7 +4,6 @@ import { WalletAccess } from "./../../data/server";
 import fs = require("fs");
 import path = require("path");
 import util = require("util");
-import { rejects } from "assert";
 var modules = new Collection<string, ICommand>();
 var prefixPattern = "^(%s)";
 
