@@ -19,12 +19,12 @@ module.exports = {
 	botRequires: ["MANAGE_ROLES"],
 	botRequiresMessage: "To give name colors.",
 	execute: (call) => {
-		const ROLE = call.params.readRole();
-		if (ROLE != null && COLOR_ROLES.includes(ROLE.name)) {
+		var role = call.params.readRole();
+		if (role != null && COLOR_ROLES.includes(role.name)) {
 			removeColorRoles(call.message.guild.roles, call.message.member);
-			call.message.member.addRole(ROLE).then(() => {
-				call.message.reply(`Successfully given you the \`${ROLE.name}\` color role!`).catch(() => {
-					call.message.author.send(`Successfully given you the \`${ROLE.name}\` color role, note that I can not chat in ${call.message.channel}.`);
+			call.message.member.addRole(role).then(() => {
+				call.message.reply(`Successfully given you the \`${role.name}\` color role!`).catch(() => {
+					call.message.author.send(`Successfully given you the \`${role.name}\` color role, note that I can not chat in ${call.message.channel}.`);
 				});
 			}).catch(() => {
 				call.safeSend("There was an error while giving you the color role. Please try again.");
