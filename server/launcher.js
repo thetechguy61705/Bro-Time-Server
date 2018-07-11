@@ -13,8 +13,10 @@ manager.on("launch", (shard) => {
 });
 
 manager.on("message", (shard, message) => {
-	console.log(`Recieved a message from shard ${shard.id}`);
-	console.log(message);
+	if (!message._eval) {
+		console.log(`Recieved a message from shard ${shard.id}:`);
+		console.log(message);
+	}
 });
 
 /* eslint-enable no-console */
