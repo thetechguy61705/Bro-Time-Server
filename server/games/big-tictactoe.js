@@ -9,12 +9,12 @@ module.exports = {
 	requiresInvite: true,
 	allowLateJoin: false,
 	load: () => {},
-	start: () => {
+	start: (session) => {
 		session.context.channel.send("SOON™");
 		session.endGame();
 	},
 	input: () => {
 		return false;
 	},
-	end: (session) => {},
+	end: () => {},
 };
