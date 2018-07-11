@@ -1,11 +1,11 @@
 const Discord = require("discord.js");
 const fs = require("fs");
+// todo: Move configuration to config.js.
 const BRO_TIME_GUILDS = ["330913265573953536", "453694109819994114", "463408396872187904", "398948242790023168"];
 const LOAD_TIMEOUT = 60000;
 
 var errorHandler = require("app/errorHandler");
 var config = require("../config");
-var stdout = process.stdout;
 var loaders = [];
 var chatHandlers = [];
 var client = new Discord.Client(config.CLIENT);
@@ -15,88 +15,8 @@ client.lockedChannels = [];
 client.bbkLocked = false;
 client.bbkLockedChannels = [];
 
+errorHandler(client);
 require("enum").register();
-
-class Profiler {
-	static writeLegend() {
-		var rows = [];
-		var descLength = Math.max.apply(Math, Profiler.states.enums.map((state) => state.description.length));
-		rows.push(`┏━┳${"━".repeat(descLength)}┓`);
-		rows.push(`┃S┃${"Description".padEnd(descLength)}┃`);
-		rows.push(`┣━╋${"━".repeat(descLength)}┫`);
-		for (var state of Profiler.states)
-			rows.push(`┃${state.symbol}┃${state.description.padEnd(descLength)}┃`);
-		rows.push(`┗━┻${"━".repeat(descLength)}┛`);
-		// eslint-disable-next-line no-console
-		console.log(rows.join("\n"));
-	}
-
-	constructor(size, parent) {
-		this.states = Profiler.states;
-		this.parent = parent;
-		this.ended = false;
-		this.used = [];
-		this.buffer = Buffer.alloc(size + 2);
-		this.offset = 0;
-		this.subProfilers = [];
-	}
-
-	newSubProfiler(size) {
-		var subProfiler = new Profiler(this.id.length + size + 4, this);
-		subProfiler.buffer.write(this.id, subProfiler.offset);
-		subProfiler.offset += this.id.length;
-		subProfiler.buffer.write(" -> ", subProfiler.offset);
-		subProfiler.offset += 4;
-		this.subProfilers.push(subProfiler);
-		return subProfiler;
-	}
-
-	writeStart(id) {
-		this.id = id;
-		this.buffer.write(id + " ", this.offset);
-		this.offset += id.length + 1;
-	}
-
-	writeState(state) {
-		var subProfiler;
-		if (!this.ended && !this.used.some((other) => other === state)) {
-			this.buffer.write(state.symbol, this.offset);
-			this.offset += state.symbol.length;
-			if (state.ends) {
-				this.ended = true;
-				this.buffer.write("\n", this.offset);
-				stdout.write(this.buffer, "ascii");
-				if (state === Profiler.states.Error) {
-					if (this.parent != null)
-						this.parent.writeState(state);
-					for (subProfiler of this.subProfilers)
-						subProfiler.writeState(Profiler.states.Interrupted);
-				} else if (state !== Profiler.states.Ended) {
-					for (subProfiler of this.subProfilers)
-						subProfiler.writeState(state);
-				}
-			}
-		}
-	}
-}
-Object.defineProperty(Profiler, "states", {
-	value: new Enum(["Started", "Ended", "Timeout", "Error", "Interrupted"])
-});
-Profiler.states.Started.symbol = "S";
-Profiler.states.Started.description = "Loading has started.";
-Profiler.states.Ended.symbol = "F";
-Profiler.states.Ended.description = "Finished loading.";
-Profiler.states.Ended.ends = true;
-Profiler.states.Timeout.symbol = "T";
-Profiler.states.Timeout.description = "Took too long to load.";
-Profiler.states.Timeout.ends = true;
-Profiler.states.Error.symbol = "E";
-Profiler.states.Error.description = "An error occured.";
-Profiler.states.Error.ends = true;
-Profiler.states.Interrupted.symbol = "I";
-Profiler.states.Interrupted.description = "A parent loader interrupted this loader.";
-Profiler.states.Interrupted.ends = true;
-Profiler.states.freezeEnums();
 
 for (let file of fs.readdirSync(__dirname + "/chat")) {
 	if (file.endsWith(".js")) {
@@ -121,32 +41,23 @@ for (let file of fs.readdirSync(__dirname + "/load")) {
 	}
 }
 
-errorHandler(client);
-
 client.on("ready", () => {
 	var loading = [];
-	// eslint-disable-next-line no-console
-	console.log("Loading...");
-	Profiler.writeLegend();
-	for (var loader of loaders) {
+	for (let loader of loaders) {
 		if (!loader.needs || client.guilds.has(loader.needs)) {
-			loading.push(new Promise(async (resolve) => {
-				var profiler = new Profiler(loader.id.length + (loader.profilerBytes || 2));
-				profiler.writeStart(loader.id);
+			loading.push(new Promise((resolve) => {
 				var timeout = client.setTimeout(() => {
-					profiler.writeState(Profiler.states.Timeout);
+					console.warn(`Loader ${loader.id} took too long to load.`);
 					resolve();
 				}, LOAD_TIMEOUT);
 				try {
-					profiler.writeState(Profiler.states.Started);
 					if (loader.exec != null) {
-						var promise = loader.exec(client, profiler);
+						var promise = loader.exec(client);
 						if (promise != null)
-							await promise;
+							loading.push(promise);
 					}
-					profiler.writeState(Profiler.states.Ended);
 				} catch (exc) {
-					profiler.writeState(Profiler.states.Error);
+					console.warn("Failed to load loader:");
 					console.warn(exc.stack);
 				}
 				clearTimeout(timeout);
@@ -154,19 +65,32 @@ client.on("ready", () => {
 			}));
 		}
 	}
-
-	Promise.all(loading).then(() => {
-		for (var handler of chatHandlers) {
+	for (let handler of chatHandlers) {
+		loading.push(new Promise((resolve) => {
+			var timeout = client.setTimeout(() => {
+				console.warn(`Chat handler ${handler.id} took too long to load.`);
+				resolve();
+			}, LOAD_TIMEOUT);
 			try {
-				if (handler.load != null) handler.load(client);
+				if (handler.load != null) {
+					var promise = handler.load(client);
+					if (promise != null)
+						loading.push(promise);
+				}
 			} catch (exc) {
 				console.warn("Failed to load chat message:");
 				console.warn(exc.stack);
 			}
-		}
+			clearTimeout(timeout);
+			resolve();
+		}));
+	}
+
+	Promise.all(loading).then(() => {
 		client.on("message", (message) => {
-			for (var handler of chatHandlers) {
+			for (let handler of chatHandlers) {
 				try {
+					// todo: Move client out of the arguments of handler.exec.
 					if (handler.exec(message, client))
 						break;
 				} catch (exc) {
@@ -177,7 +101,7 @@ client.on("ready", () => {
 		});
 
 		// eslint-disable-next-line no-console
-		console.log("Finished loading!");
+		console.log("Shard loaded!");
 	});
 });
 
