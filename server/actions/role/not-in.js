@@ -1,11 +1,11 @@
 module.exports = {
 	id: "not-in",
 	run: (call) => {
-		const paramOne = call.params.readParameter(),
+		const paramOne = call.params.readParam(),
 			target = (paramOne != null) ? call.message.guild.roles.find((role) => role.id === paramOne || role.name.toLowerCase().startsWith(paramOne.toLowerCase())) : null;
 		var rolesToChange = { rolesToAdd: [], rolesToRemove: [] };
 		if (target != null) {
-			for (let role of (call.params.readParameter(true) || "").split(",")) {
+			for (let role of (call.params.readParam(true) || "").split(",")) {
 				const ammToSlice = (role.trim().startsWith("+") || role.trim().startsWith("-")) ? 1 : 0;
 				var newRole = call.message.guild.roles
 					.find((r) => r.id === role.trim().slice(ammToSlice) || r.name.toLowerCase().startsWith(role.trim().slice(ammToSlice).toLowerCase()));

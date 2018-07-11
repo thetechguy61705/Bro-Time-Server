@@ -29,7 +29,7 @@ function randomReject() {
 }
 
 function rateLimitUser(call) {
-	var remindOption = ["remindme", "timer", "t", "true"].includes(call.params.readParameter());
+	var remindOption = ["remindme", "timer", "t", "true"].includes(call.params.readParam());
 	module.exports.rateLimit.push(call.message.author.id);
 	call.client.setTimeout(() => {
 		module.exports.rateLimit.splice(module.exports.rateLimit.indexOf(call.message.author.id), 1);

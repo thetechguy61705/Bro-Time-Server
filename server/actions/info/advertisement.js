@@ -9,7 +9,7 @@ module.exports = {
 				throw err;
 			} else {
 				var advertisement = data.toString("utf8");
-				if ((call.params.readParameter() || "").toLowerCase() === "computer") advertisement = "```" + advertisement + "```";
+				if ((call.params.readParam() || "").toLowerCase() === "computer") advertisement = "```" + advertisement + "```";
 				call.safeSend(advertisement);
 			}
 		});

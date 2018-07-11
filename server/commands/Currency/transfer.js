@@ -8,7 +8,7 @@ module.exports = {
 	access: "Public",
 	userType: "User",
 	execute: async (call) => {
-		var param = call.params.readParameter();
+		var param = call.params.readParam();
 		param = (param != null) ? param.toLowerCase() : null;
 		var target;
 		var failed = false;
@@ -22,7 +22,7 @@ module.exports = {
 		} catch (exc) {
 			failed = exc.message;
 		}
-		var amount = Number(call.params.readParameter());
+		var amount = Number(call.params.readParam());
 		target = (target instanceof GuildMember) ? target : target;
 		if (target != null && !failed) {
 			if (amount != null && !isNaN(amount)) {

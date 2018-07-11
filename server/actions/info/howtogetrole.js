@@ -26,7 +26,7 @@ module.exports = {
 	run: async (call, actions, rerun) => {
 		var parameter = (rerun === true)
 			? await call.requestInput(0, "Invalid choice. Choices are `preview`, `specify` or `list`. Please retry. Say `cancel` to cancel the prompt.")
-			: call.params.readParameter();
+			: call.params.readParam();
 		if (parameter && parameter.message != null) parameter = parameter.message.content;
 		if (parameter != null) {
 			if (parameter.toLowerCase() === "preview") {

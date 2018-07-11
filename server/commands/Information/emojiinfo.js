@@ -7,7 +7,7 @@ module.exports = {
 	paramsHelp: "(emoji)",
 	access: "Server",
 	execute: (call) => {
-		var param = (call.params.readParameter(true) || "").toLowerCase();
+		var param = (call.params.readParam(true) || "").toLowerCase();
 		var emoji = call.message.guild.emojis.find((emoji) => emoji.toString().toLowerCase() === param || emoji.name.toLowerCase().startsWith(param));
 		if (emoji != null) {
 			var infoEmbed = new RichEmbed()

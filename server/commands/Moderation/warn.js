@@ -9,8 +9,8 @@ module.exports = {
 	access: "Server",
 	execute: async (call) => {
 		const rawContent = call.params.readRaw(),
-			parameterOne = (call.params.readParameter() || ""),
-			parameterTwo = (call.params.readParameter() || "");
+			parameterOne = (call.params.readParam() || ""),
+			parameterTwo = (call.params.readParam() || "");
 		if (Moderator(call.message.member)) {
 			if (parameterOne != "") {
 				const target = call.message.guild.members.find((member) => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));

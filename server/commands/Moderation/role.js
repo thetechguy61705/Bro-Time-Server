@@ -23,7 +23,7 @@ module.exports = {
 	access: "Server",
 	execute: (call) => {
 		if (Moderator(call.message.member)) {
-			const PARAMETER = (call.params.readParameter() || "").toLowerCase(),
+			const PARAMETER = (call.params.readParam() || "").toLowerCase(),
 				ACTION = actions.find((a) => a.id === PARAMETER || (a.aliases || []).includes(PARAMETER));
 			try {
 				(ACTION || actions.get("default")).run(call, actions, PARAMETER);

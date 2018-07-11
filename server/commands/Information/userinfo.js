@@ -7,7 +7,7 @@ module.exports = {
 	paramsHelp: "(user tag in guild or user id anywhere)",
 	access: "Server",
 	execute: async (call) => {
-		var param = (call.params.readParameter(true) || "").toLowerCase();
+		var param = (call.params.readParam(true) || "").toLowerCase();
 		var user;
 		try {
 			if (call.message.channel.type === "text") {

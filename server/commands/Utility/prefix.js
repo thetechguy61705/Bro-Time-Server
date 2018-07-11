@@ -9,7 +9,7 @@ module.exports = {
 	execute: (call) => {
 		if (isModerator(call.message.author)) {
 			var data = (call.message.guild || call.message.channel).data;
-			var newPrefix = call.params.readParameter(true);
+			var newPrefix = call.params.readParam(true);
 			if (data != null) {
 				if (newPrefix != null && newPrefix.length <= 5) {
 					data.setPrefix(newPrefix).then(() => {

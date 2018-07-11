@@ -9,7 +9,7 @@ module.exports = {
 	access: "Public",
 	execute: async (call) => {
 		if (GRANTERS.includes(call.message.author.id)) {
-			var param = call.params.readParameter();
+			var param = call.params.readParam();
 			param = (param != null) ? param.toLowerCase() : "";
 			var target;
 			var failed;

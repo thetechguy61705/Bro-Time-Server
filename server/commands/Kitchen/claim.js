@@ -9,7 +9,7 @@ module.exports = {
 	access: "Public",
 	execute: (call) => {
 		if (!call.client.bbkLocked) {
-			var code = call.params.readParameter();
+			var code = call.params.readParam();
 			if (code != null) {
 				var kitchenServer = call.client.guilds.get("398948242790023168"),
 					member = kitchenServer.members.get(call.message.author.id);

@@ -3,7 +3,7 @@ module.exports = {
 	aliases: ["starts"],
 	run: (call) => {
 		var amountToPurge = call.params.readNumber() || NaN,
-			query = call.params.readParameter(true);
+			query = call.params.readParam(true);
 		if (!isNaN(amountToPurge) && amountToPurge > 0 && amountToPurge <= 100) {
 			if (query != null) {
 				call.message.delete().then(() => {

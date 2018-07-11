@@ -2,7 +2,7 @@ module.exports = {
 	id: "all",
 	aliases: ["everyone"],
 	run: (call) => {
-		const greedyParam = call.params.readParameter(true), roles = (greedyParam != null) ? greedyParam.split(",") : [];
+		const greedyParam = call.params.readParam(true), roles = (greedyParam != null) ? greedyParam.split(",") : [];
 		var rolesToChange = { rolesToAdd: [], rolesToRemove: [] };
 		for (let role of roles) {
 			const ammToSlice = (role.trim().startsWith("+") || role.trim().startsWith("-")) ? 1 : 0;

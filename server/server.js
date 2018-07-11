@@ -19,7 +19,7 @@ errorHandler(client);
 require("enum").register();
 
 for (let file of fs.readdirSync(__dirname + "/chat")) {
-	if (file.endsWith(".js")) {
+	if (file.endsWith(".js") || file.endsWith(".ts")) {
 		new Promise((resolve, reject) => {
 			try {
 				resolve(require("./chat/" + file));
@@ -36,7 +36,7 @@ for (let file of fs.readdirSync(__dirname + "/chat")) {
 }
 
 for (let file of fs.readdirSync(__dirname + "/load")) {
-	if (file.endsWith(".js")) {
+	if (file.endsWith(".js") || file.endsWith(".ts")) {
 		loaders.push(require("./load/" + file));
 	}
 }

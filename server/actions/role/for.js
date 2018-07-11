@@ -4,10 +4,10 @@ module.exports = {
 	id: "for",
 	aliases: ["time"],
 	run: (call) => {
-		var muteTime = call.params.readParameter();
+		var muteTime = call.params.readParam();
 		muteTime = ms((muteTime != null) ? muteTime : " ");
 		if (muteTime != null && muteTime > 0 && muteTime < 604800000) {
-			var target = call.params.readParameter();
+			var target = call.params.readParam();
 			target = (target != null) ? call.message.guild.members.find((m) => target.includes(m.id) || m.user.tag.startsWith(target)) : target;
 			if (target != null) {
 				var role = call.params.readRole();

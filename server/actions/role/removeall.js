@@ -1,7 +1,7 @@
 module.exports = {
 	id: "removeall",
 	run: (call) => {
-		const parameter = call.params.readParameter(),
+		const parameter = call.params.readParam(),
 			target = (parameter != null) ? call.message.guild.members.find((member) => parameter.includes(member.user.id) || member.user.tag.startsWith(parameter)) : null;
 		if (target != null) {
 			const rolesToRemove = target.roles

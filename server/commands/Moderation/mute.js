@@ -9,7 +9,7 @@ module.exports = {
 	botRequires: ["MANAGE_ROLES"],
 	access: "Server",
 	execute: (call) => {
-		const parameterOne = call.params.readParameter(), parameterTwo = call.params.readParameter();
+		const parameterOne = call.params.readParam(), parameterTwo = call.params.readParam();
 		if (Moderator(call.message.member)) {
 			const target = call.message.guild.members.find((member) => (parameterOne || "").includes(member.user.id) ||
 				member.user.tag.toLowerCase().startsWith(parameterOne));

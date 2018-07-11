@@ -20,7 +20,7 @@ module.exports = {
 	access: "Server",
 	execute: (call) => {
 		if (isModerator(call.message.member)) {
-			var param = call.params.readParameter(), action = actions[(param || "").toLowerCase()];
+			var param = call.params.readParam(), action = actions[(param || "").toLowerCase()];
 			if (action != null) {
 				call.requestInput(0, "Please specify a option for the `" + param + "` configuration category. Options: `" + Object.keys(action).join("`, `") + "`.").then((input) => {
 					if (Object.keys(action).includes(input.message.content.toLowerCase())) {

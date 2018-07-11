@@ -1,7 +1,8 @@
 {
-	"module": "commonjs",
-	"target": "es6",
-	"pretty": true,
-	"sourceMap": true,
-	"esModuleInterop": true,
+    "compilerOptions": {
+        "target": "es2016",
+        "module": "commonjs",
+        "preserveConstEnums": true,
+        "sourceMap": true
+    }
 }

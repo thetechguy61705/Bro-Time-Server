@@ -7,7 +7,7 @@ module.exports = {
 			null;
 		var rolesToChange = { rolesToAdd: [], rolesToRemove: [] };
 		if (target != null) {
-			for (let role of (call.params.readParameter(true) || "").split(",")) {
+			for (let role of (call.params.readParam(true) || "").split(",")) {
 				const ammToSlice = (role.trim().startsWith("+") || role.trim().startsWith("-")) ? 1 : 0;
 				var newRole = call.message.guild.roles
 					.find((r) => r.id === role.trim().slice(ammToSlice) || r.name.toLowerCase().startsWith(role.trim().slice(ammToSlice).toLowerCase()));

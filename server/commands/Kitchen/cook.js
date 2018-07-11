@@ -32,7 +32,7 @@ module.exports = {
 				member = kitchenServer.members.get(call.message.author.id);
 			if (member != null && isWorker(member)) {
 				if (call.message.content.split("|")[1] && call.message.content.split("|")[2]) {
-					var code = call.params.readParameter().trim();
+					var code = call.params.readParam().trim();
 					var food = titleCase(call.message.content.split("|")[1].trim());
 					var link = call.message.content.split("|")[2].trim().toLowerCase();
 					if (code != null && food != null && link != null) {

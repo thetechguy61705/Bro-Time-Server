@@ -27,8 +27,8 @@ module.exports = {
 			var rawContent = call.params.readRaw(),
 				title = rawContent.split(":")[0];
 			call.params.offset(title.length + 2);
-			var time = ms(call.params.readParameter() || "."),
-				param = call.params.readParameter(),
+			var time = ms(call.params.readParam() || "."),
+				param = call.params.readParam(),
 				channel = call.message.guild.channels.find((c) => c.type === "text" && ((param || "").includes(c.id) || c.name.toLowerCase().startsWith(param))),
 				amountOfWinners = (call.params.readNumber() || 1);
 			if (title.length <= 256) {

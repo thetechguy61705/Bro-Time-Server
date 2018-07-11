@@ -6,7 +6,7 @@ module.exports = {
 	botRequiresMessage: "To play music.",
 	access: "Server",
 	execute: (call) => {
-		var query = call.params.readParameter(true);
+		var query = call.params.readParam(true);
 		if (query != null) {
 			call.client.music.play(query, call);
 		} else {

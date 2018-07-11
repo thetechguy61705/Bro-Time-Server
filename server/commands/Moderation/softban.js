@@ -10,8 +10,8 @@ module.exports = {
 	access: "Server",
 	execute: async (call) => {
 		const rawContent = call.params.readRaw(),
-			parameterOne = (call.params.readParameter() || ""),
-			parameterTwo = (call.params.readParameter() || "");
+			parameterOne = (call.params.readParam() || ""),
+			parameterTwo = (call.params.readParam() || "");
 		if (Moderator(call.message.member)) {
 			const target = call.message.guild.members.find((m) => parameterOne.includes(`${m.user.id}`));
 			if (target != null) {

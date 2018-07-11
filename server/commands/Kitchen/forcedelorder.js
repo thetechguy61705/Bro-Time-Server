@@ -12,8 +12,8 @@ module.exports = {
 			var kitchenServer = call.client.guilds.get("398948242790023168"),
 				member = kitchenServer.members.get(call.message.author.id);
 			if (member != null && isWorker(member)) {
-				var code = call.params.readParameter(),
-					reason = call.params.readParameter(true);
+				var code = call.params.readParam(),
+					reason = call.params.readParam(true);
 				if (code != null && reason != null) {
 					var filteredOrder = orders.find((o) => o.id === code.toUpperCase());
 					if (filteredOrder != null) {
