@@ -1,4 +1,4 @@
-import { Message, Client, Guild, Collection, MessageMentions } from "discord.js";
+import { Message, Client, Guild, Collection, MessageMentions, User } from "discord.js";
 import escapeRegExp = require("escape-string-regexp");
 import { WalletAccess } from "./../../data/server";
 import fs = require("fs");
@@ -21,7 +21,7 @@ export interface ICommand {
 	readonly aliases?: string[]
 	readonly description?: string
 	readonly paramsHelp?: string
-	readonly access?: "Server"
+	readonly access?: string | number
 	category?: string
 	file?: string
 	execute(call: Call): void
@@ -60,25 +60,25 @@ export class Params {
 		this.index = 0;
 	}
 
-	private static normalizeParam(str: string) {
+	private static normalizeParam(str: string): string {
 		if (str.length > 1)
 			str.trim().replace(new RegExp(`^[${QUOTES}]|[${QUOTES}]$`), "");
 		return str;
 	}
 
-	public offset(offset) {
+	public offset(offset: number): void {
 		this.index += offset;
 	}
 
-	public hasFinished() {
+	public hasFinished(): boolean {
 		return this.index >= this.raw.length;
 	}
 
-	public readRaw() {
+	public readRaw(): string {
 		return this.raw.substring(this.index);
 	}
 
-	public readSep(greedy = true) {
+	public readSep(greedy = true): string {
 		var value = null;
 		if (!this.hasFinished()) {
 			this.sep.lastIndex = this.index;
@@ -92,7 +92,7 @@ export class Params {
 		return value;
 	}
 
-	public readParam(greedy = false, offset = true) {
+	public readParam(greedy = false, offset = true): string {
 		var value = null;
 		if (!this.hasFinished()) {
 			var pattern = greedy ? this.paramGreedy : this.param;
@@ -108,7 +108,7 @@ export class Params {
 		return value;
 	}
 
-	public readWord(classes = "", offset = true) {
+	public readWord(classes = "", offset = true): string {
 		var value = null;
 		if (!this.hasFinished()) {
 			var pattern = new RegExp(`[${classes}a-zA-Z]+`, "y");
@@ -122,7 +122,7 @@ export class Params {
 		return value;
 	}
 
-	public readNumber(offset = true) {
+	public readNumber(offset = true): number {
 		var param = this.readParam(false, offset);
 		var value = null;
 		if (param != null) {
@@ -134,7 +134,12 @@ export class Params {
 		return value;
 	}
 
-	public readObject(objects, name = "name", mentions = /(.+)/, allowPartial = true, filter = () => { return true; }, offset = true) {
+	public readObject(objects: Collection<string, any>,
+		name = "name",
+		mentions = /(.+)/,
+		allowPartial = true,
+		filter = () => true,
+		offset = true) {
 		var param = (this.readParam(true, offset) || "").toLowerCase();
 		var mention = param.match(mentions);
 		var object = null;
@@ -149,7 +154,7 @@ export class Params {
 			objects = objects.filter(filter);
 
 			if (!isNaN(id)) {
-				object = objects.get(id);
+				object = objects.get(param);
 			}
 			if (object == null) {
 				for (let candidate of objects.array()) {
@@ -193,9 +198,9 @@ class Call {
 	public readonly message: Message
 	public readonly params: Params
 	public readonly client: Client
-	public readonly command: any
+	public readonly command: ICommand
 
-	public constructor(commands, message, params, command) {
+	public constructor(commands: any, message: Message, params: Params, command: ICommand) {
 		this.commands = commands;
 		this.message = message;
 		this.client = message.client;
@@ -203,7 +208,10 @@ class Call {
 		this.command = command;
 	}
 
-	public requestInput(settings = 0, prompt = null, timeout = 180000, accepts = null) {
+	public requestInput(settings: number = 0,
+		prompt: string = null,
+		timeout: number = 180000,
+		accepts: any = null) {
 		return new Promise(((resolve, reject) => {
 			settings = settings|this.commands.MULTISTEP_DEFAULTS;
 			if (prompt != null)
@@ -224,7 +232,7 @@ class Call {
 		}).bind(this));
 	}
 
-	public denyInput(author = this.message.author) {
+	public denyInput(author: User = this.message.author) {
 		if (this.commands._requests.has(author.id)) {
 			var request = this.commands._requests.get(author.id);
 			clearTimeout(request.timeout);
