@@ -4,6 +4,7 @@ import { WalletAccess } from "./../../data/server";
 import fs = require("fs");
 import path = require("path");
 import util = require("util");
+import { rejects } from "assert";
 var modules = new Collection<string, ICommand>();
 var prefixPattern = "^(%s)";
 
@@ -15,7 +16,7 @@ const ACCESS = new Enum(["Public", "Private", "Server"], { ignoreCase: true });
 const SPACE = "\\s,";
 const QUOTES = "\"'";
 
-interface ICommand {
+export interface ICommand {
 	readonly id: string
 	readonly test?: boolean
 	readonly aliases?: string[]
@@ -24,22 +25,20 @@ interface ICommand {
 	readonly access?: "Server"
 	category?: string
 	file?: string
-	execute: (call) => {
-		// the command data
-	}
+	execute(call: Call): void
 }
 
 interface IRequest {
-	readonly resolve: any
-	readonly reject: any
+	resolve(call: Call): void
+	reject(): void
 	readonly settings: number
 	readonly author: string
 	readonly channel: string
-	readonly timeout: any
-	readonly accepts: any
+	readonly timeout: NodeJS.Timer
+	accepts(message: Message): boolean
 }
 
-class Params {
+export class Params {
 	private readonly sep: RegExp
 	private readonly sepGreedy: RegExp
 	private readonly param: RegExp
