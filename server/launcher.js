@@ -6,7 +6,7 @@ const manager = new ShardingManager(__dirname + "/server.js", { token: config.TO
 
 console.log("Launching shards...");
 
-manager.spawn(manager.totalShards, 30000);
+manager.spawn();
 
 manager.on("launch", (shard) => {
 	console.log(`Launched shard ${shard.id}`);
