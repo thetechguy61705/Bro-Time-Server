@@ -16,7 +16,6 @@ client.bbkLocked = false;
 client.bbkLockedChannels = [];
 
 errorHandler(client);
-require("enum").register();
 
 for (let file of fs.readdirSync(__dirname + "/chat")) {
 	if (file.endsWith(".js") || file.endsWith(".ts")) {

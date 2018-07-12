@@ -7,10 +7,16 @@
     "node": ">= 7.10.1"
   },
   "scripts": {
-    "start": "node -r ts-node/register server/launcher.js",
-    "debug": "node -r ts-node/register --inspect-brk server/server.js",
-    "test": "eslint . && eslint test/. --env mocha && mocha --require ts-node/register",
+    "start": "node --require ./register.js server/launcher.js",
+    "debug": "node --require ./register.js --inspect-brk server/launcher.js",
+    "test": "eslint . && eslint test/. --env mocha && mocha --require ./register.js",
     "fix": "eslint . --fix && eslint test/. --env mocha --fix"
+  },
+  "_moduleAliases": {
+    "@server": "server",
+    "@data": "data",
+    "@types": "types",
+    "@utility": "utility"
   },
   "repository": {
     "type": "git",
@@ -37,6 +43,7 @@
     "escape-string-regexp": "^1.0.5",
     "ffmpeg-binaries": "^3.2.2-3",
     "miniget": "^1.2.0",
+    "module-alias": "^2.1.0",
     "ms": "^2.1.1",
     "node-gyp": "^3.7.0",
     "node-opus": "^0.2.7",
