@@ -25,7 +25,7 @@ module.exports = {
 	aliases: ["htgr"],
 	run: async (call, actions, rerun) => {
 		var parameter = (rerun === true)
-			? await call.requestInput(0, "Invalid choice. Choices are `preview`, `specify` or `list`. Please retry. Say `cancel` to cancel the prompt.")
+			? await call.requestInput(null, "Invalid choice. Choices are `preview`, `specify` or `list`. Please retry. Say `cancel` to cancel the prompt.")
 			: call.params.readParam();
 		if (parameter && parameter.message != null) parameter = parameter.message.content;
 		if (parameter != null) {
@@ -66,7 +66,7 @@ module.exports = {
 						call.safeSend("Invalid game specified. Please try out `!info htgr list` and take one of those games. Prompt cancelled.");
 					}
 				} else {
-					call.requestInput(0, "Please specify the obtainable role you would like to view.", 60000).then((result) => {
+					call.requestInput(null, "Please specify the obtainable role you would like to view.", 60000).then((result) => {
 						var specifiedHTGR = OBTAINABLE_ROLES.map((role) => role.toLowerCase()).indexOf(result.message.content.toLowerCase());
 						if (specifiedHTGR > -1) {
 							call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message.guild, specifiedHTGR) });

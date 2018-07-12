@@ -19,7 +19,7 @@ module.exports = {
 	aliases: ["games"],
 	run: async (call, actions, rerun, parameter) => {
 		parameter = (parameter || (rerun === true)
-			? await call.requestInput(0, "Invalid choice. Choices are `preview`, `specify` or `list`. Please retry. Say `cancel` to cancel the prompt.", 60000)
+			? await call.requestInput(null, "Invalid choice. Choices are `preview`, `specify` or `list`. Please retry. Say `cancel` to cancel the prompt.", 60000)
 			: call.params.readParam());
 		if (parameter && parameter.message != null) parameter = parameter.message.content;
 		if (parameter != null) {
@@ -60,7 +60,7 @@ module.exports = {
 						call.safeSend("Invalid game specified. Please try out `!info gameroles list` and take one of those games. Prompt cancelled.");
 					}
 				} else {
-					call.requestInput(0, "Please specify the game you would like to view.", 60000).then((result) => {
+					call.requestInput(null, "Please specify the game you would like to view.", 60000).then((result) => {
 						var specifiedGame = GAMES.map((game) => game.toLowerCase()).indexOf(result.message.content.toLowerCase());
 						if (specifiedGame > -1) {
 							call.message.channel.send({ embed: updateEmbed(new Discord.RichEmbed().setDefaultFooter(call.message.author), call.message.guild, specifiedGame) });

@@ -5,7 +5,7 @@ module.exports = {
 		var role = call.params.readRole();
 		if (role != null) {
 			if (role.position < call.message.member.highestRole.position || call.message.guild.ownerID === call.message.author.id) {
-				call.requestInput(0, "Are you sure you want to delete the `" + role.name + "` role? Respond `yes` or `no`.", 30000).then((response) => {
+				call.requestInput(null, "Are you sure you want to delete the `" + role.name + "` role? Respond `yes` or `no`.", 30000).then((response) => {
 					if (response.params.readRaw().toLowerCase().startsWith("y")) {
 						role.delete().then((deletedRole) => {
 							response.message.reply("Deleted the `" + deletedRole.name + "` role.").catch(() => {});

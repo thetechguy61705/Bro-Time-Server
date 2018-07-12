@@ -30,7 +30,7 @@ export interface ICommand {
 interface IRequest {
 	resolve(call: Call): void
 	reject(): void
-	readonly settings: number
+	readonly options: any
 	readonly author: string
 	readonly channel: string
 	readonly timeout: NodeJS.Timer
@@ -194,13 +194,13 @@ export class Params {
 class Call {
 	public readonly TRANSFER_RATE: number = 0.8
 
-	public readonly commands: any
+	public readonly commands: CommandsManager
 	public readonly message: Message
 	public readonly params: Params
 	public readonly client: Client
 	public readonly command: ICommand
 
-	public constructor(commands: any, message: Message, params: Params, command: ICommand) {
+	public constructor(commands: CommandsManager, message: Message, params: Params, command: ICommand) {
 		this.commands = commands;
 		this.message = message;
 		this.client = message.client;
@@ -208,12 +208,11 @@ class Call {
 		this.command = command;
 	}
 
-	public requestInput(settings: number = 0,
+	public requestInput(options: any = null,
 		prompt: string = null,
 		timeout: number = 180000,
 		accepts: any = null) {
 		return new Promise(((resolve, reject) => {
-			settings = settings|this.commands.MULTISTEP_DEFAULTS;
 			if (prompt != null)
 				this.message.channel.send(prompt);
 			if (accepts == null)
@@ -223,7 +222,7 @@ class Call {
 			this.commands._requests.set(this.message.author.id, {
 				resolve: resolve,
 				reject: reject,
-				settings: settings,
+				options: CommandsManager.REQUEST_OPTIONS.isDefined(options) ? options : CommandsManager.REQUEST_OPTIONS.None,
 				author: this.message.author.id,
 				channel: this.message.channel.id,
 				timeout: this.client.setTimeout(() => this.denyInput(), timeout),
@@ -295,11 +294,10 @@ function hasPermissions(command, message) {
 }
 
 function checkAccess(command, message) {
-	var access = ACCESS.get(command.access);
 	var result;
-	if (access === ACCESS.Public) {
+	if (ACCESS.Public.is(command.access)) {
 		result = true;
-	} else if (access === ACCESS.Private) {
+	} else if (ACCESS.Private.is(command.access)) {
 		result = message.guild == null;
 	} else {
 		result = message.guild != null;
@@ -342,36 +340,35 @@ try {
 	console.warn(exc.stack);
 }
 
-module.exports = {
-	MULTISTEP_DEFAULTS: 0,
-	ANYONE: 0x00000001,
-	CANCELLABLE: 0x00000002,
-	_requests: new Collection(),
-	loaded: modules,
+export class CommandsManager {
+	public static readonly REQUEST_OPTIONS = new Enum(["None", "Anyone", "Cancellable"], { ignoreCase: true });
+	public readonly REQUEST_OPTIONS = CommandsManager.REQUEST_OPTIONS;
+	public readonly _requests: Collection<string, IRequest> = new Collection()
+	public readonly loaded: Collection<string, ICommand> = modules
 
-	getRequesting: function(message: Message) {
+	getRequesting(message: Message): IRequest {
 		var requests = this._requests.filter((request) => request.channel === message.channel.id && request.accepts(message));
 		var request: IRequest;
 		if (requests.has(message.author.id)) {
 			request = requests.get(message.author.id);
-		} else if (requests.some((request) => (request.settings&this.ANYONE) !== 0)) {
-			request = requests.find((request) => (request.settings&this.ANYONE) !== 0);
+		} else if (requests.some((request) => this.REQUEST_OPTIONS.Anyone.is(request.options))) {
+			request = requests.find((request) => this.REQUEST_OPTIONS.Anyone.is(request.options));
 		}
 		return request || null;
-	},
+	}
 
-	processRequest: function(request: IRequest, message: Message) {
+	processRequest(request: IRequest, message: Message): boolean {
 		clearTimeout(request.timeout);
-		if ((request.settings&this.CANCELLABLE) !== 0 && message.content.toLowerCase() === "cancel") {
+		if (this.REQUEST_OPTIONS.Cancellable.is(request.options) && message.content.toLowerCase() === "cancel") {
 			request.reject();
 		} else {
 			request.resolve(new Call(this, message, new Params(message), null));
 		}
 		this._requests.delete(request.author);
 		return true;
-	},
+	}
 
-	processCommand: function(message: any) {
+	processCommand(message: any): boolean {
 		var data = (message.guild || message.channel).data;
 		var prefix = message.content.match(new RegExp(util.format(prefixPattern,
 			escapeRegExp(data != null ? data.prefix : "/")), "i"));
@@ -408,9 +405,9 @@ module.exports = {
 			}
 		}
 		return used;
-	},
+	}
 
-	exec: function(message: Message) {
+	exec(message: Message): boolean {
 		var used;
 		var request = this.getRequesting(message);
 		if (request != null) {
@@ -422,3 +419,4 @@ module.exports = {
 		return used;
 	}
 };
+module.exports = new CommandsManager();

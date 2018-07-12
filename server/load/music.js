@@ -125,7 +125,7 @@ class Music {
 		return 0;
 	}
 
-	static async getTicket(client, channel, query, requestInput, caller) {
+	static async getTicket(query, call) {
 		var ticket;
 		for (var source of sources) {
 			ticket = await source.getTicket(query, tokens.get(source.id));
@@ -156,19 +156,19 @@ class Music {
 
 				ticket = null;
 				try {
-					choice = await requestInput(1, prompt);
+					choice = await call.requestInput(call.REQUEST_OPTIONS.Anyone, prompt);
 					if (choice != null) {
 						choice = choice.params.readNumber();
 						if (choice != null) {
 							result = results[choice - 1];
 							if (result != null)
-								ticket = Music.getTicket(client, channel, result.query);
+								ticket = Music.getTicket(call.client, call.message.channel, result.query);
 						}
 					}
 				// eslint-disable-next-line no-empty
 				} finally {}
 			}
-		} else if (!Music.isAcceptable(ticket, source, false, channel)) {
+		} else if (!Music.isAcceptable(ticket, source, false, call.message.channel)) {
 			ticket = null;
 		}
 		return ticket;
@@ -193,7 +193,7 @@ class Music {
 			this.players.get(call.message.guild.id) :
 			new Queue(this, call.message.guild);
 		if (query != null) {
-			Music.getTicket(call.message.client, call.message.channel, query, call.requestInput.bind(call), call.message.author).then((ticket) => {
+			Music.getTicket(query, call).then((ticket) => {
 				if (ticket != null) {
 					queue.play(ticket.load(), call);
 				} else {
