@@ -38,7 +38,8 @@ module.exports = {
 											.addField("Status", `Delivered (${call.message.author.tag})`)
 											.addField("Links", filteredOrder.links);
 										logsChannel.send({ embed: orderEmbed }).catch(() => {});
-										filteredOrder.msg.delete().catch(() => {
+										filteredOrder.msg.delete().catch((exc) => {
+											console.warn(exc.stack);
 											call.message.author.send("I couldn't delete this order from the #kitchen channel, please manually delete it before the next bot restart!");
 										});
 										delOrder(filteredOrder);

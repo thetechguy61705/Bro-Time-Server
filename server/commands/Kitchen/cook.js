@@ -71,7 +71,8 @@ module.exports = {
 												addOrder(filteredOrder.msg, filteredOrder.id, filteredOrder.order, filteredOrder.customer, filteredOrder.orderedFrom, status, links);
 												delOrder(filteredOrder);
 												call.message.reply("Successfully cooked this item.").catch(() => {});
-											}).catch(() => {
+											}).catch((exc) => {
+												console.warn(exc.stack);
 												call.safeSend("Couldn't cook this food, please try again");
 											});
 										} else call.safeSend("Not a valid link");

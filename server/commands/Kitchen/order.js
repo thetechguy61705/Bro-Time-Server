@@ -63,7 +63,8 @@ module.exports = {
 										links: "None",
 									});
 									call.message.reply("Your order has been sent!").catch(() => {});
-								}).catch(() => {
+								}).catch((exc) => {
+									console.warn(exc.stack);
 									call.safeSend("Couldn't deliver your order, please try again.");
 								});
 							} else call.safeSend("You cannot order duplicate items!");

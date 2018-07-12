@@ -41,7 +41,8 @@ module.exports = {
 							} else {
 								call.message.reply("Couldn't find the user to message, but I deleted the order anyways.");
 							}
-						}).catch(() => {
+						}).catch((exc) => {
+							console.warn(exc.stack);
 							call.safeSend("Couldn't cancel this order, please try again");
 						});
 					} else call.safeSend("Not a valid order ID!");

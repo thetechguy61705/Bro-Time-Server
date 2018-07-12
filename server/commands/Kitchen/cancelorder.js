@@ -12,7 +12,8 @@ module.exports = {
 					filteredOrder.msg.delete().then(() => {
 						delOrder(filteredOrder);
 						call.safeSend("Successfully cancelled your order");
-					}).catch(() => {
+					}).catch((exc) => {
+						console.warn(exc.stack);
 						call.safeSend("Couldn't cancel your order, please try again");
 					});
 				} else call.safeSend("This order is already claimed, so you cannot cancel it!");

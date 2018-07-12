@@ -39,7 +39,8 @@ module.exports = {
 								} else {
 									call.message.reply("Couldn't find the user to message, but I claimed the order anyways.");
 								}
-							}).catch(() => {
+							}).catch((exc) => {
+								console.warn(exc.stack);
 								call.safeSend("Couldn't claim this order, please try again");
 							});
 						} else call.safeSend("This order is already claimed, so you cannot re-claim it!");
