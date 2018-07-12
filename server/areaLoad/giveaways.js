@@ -34,33 +34,35 @@ function acceptEntry(client, message, endTime, authorName, giveawayWinners, priz
 }
 
 function pickWinner(client, message, authorName, giveawayWinners, prize) {
-	message.reactions.find((r) => r.emoji.name === EMOJI).fetchUsers().then((users) => {
-		var winner = users
-			.filter((r) => r.id !== client.user.id && r.id !== authorName.id)
-			.random(giveawayWinners);
-		if (winner.length === 0)
-			winner = ["**Not enough users entered.**"];
-		var endEmbed = new RichEmbed()
-			.setTitle(prize)
-			.setDescription(`Winner(s): ${winner.join(", ")}`)
-			.setColor(0x00AE86)
-			.setFooter(`${client.user.username} | Giveaway by ${authorName}.`);
+	if (message.reactions.find((r) => r.emoji.name) === EMOJI) {
+		message.reactions.find((r) => r.emoji.name === EMOJI).fetchUsers().then((users) => {
+			var winner = users
+				.filter((r) => r.id !== client.user.id && r.id !== authorName.id)
+				.random(giveawayWinners);
+			if (winner.length === 0)
+				winner = ["**Not enough users entered.**"];
+			var endEmbed = new RichEmbed()
+				.setTitle(prize)
+				.setDescription(`Winner(s): ${winner.join(", ")}`)
+				.setColor(0x00AE86)
+				.setFooter(`${client.user.username} | Giveaway by ${authorName}.`);
 
-		message.edit(`${EMOJI} **GIVEAWAY ENDED** ${EMOJI}`, {
-			embed: endEmbed
-		}).then(() => {
-			message.delete().catch((exc) => {
-				handleError(message, exc);
-			});
-			if (winner[0] !== "**Not enough users entered.**") {
-				message.channel.send(`${winner.join(", ")} won **${prize}**!`).catch((exc) => {
+			message.edit(`${EMOJI} **GIVEAWAY ENDED** ${EMOJI}`, {
+				embed: endEmbed
+			}).then(() => {
+				message.delete().catch((exc) => {
 					handleError(message, exc);
 				});
-			}
-		}, (exc) => {
-			handleError(message, exc);
+				if (winner[0] !== "**Not enough users entered.**") {
+					message.channel.send(`${winner.join(", ")} won **${prize}**!`).catch((exc) => {
+						handleError(message, exc);
+					});
+				}
+			}, (exc) => {
+				handleError(message, exc);
+			});
 		});
-	});
+	} else message.delete();
 }
 
 function reloadGiveaways(channel, client) {
