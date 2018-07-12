@@ -1,6 +1,6 @@
 const { RichEmbed } = require("discord.js");
 const isWorker = require("@utility/workers");
-const { addOrder, delOrder, orders } = require("@server/load/orders.js");
+const { addOrder, delOrder, orders, kitchen } = require("@server/load/orders.js");
 
 module.exports = {
 	id: "claim",
@@ -11,7 +11,7 @@ module.exports = {
 		if (!call.client.bbkLocked) {
 			var code = call.params.readParam();
 			if (code != null) {
-				var kitchenServer = call.client.guilds.get("398948242790023168"),
+				var kitchenServer = kitchen,
 					member = kitchenServer.members.get(call.message.author.id);
 				if (member != null && isWorker(member)) {
 					var filteredOrder = orders.find((o) => o.id === code.toUpperCase());

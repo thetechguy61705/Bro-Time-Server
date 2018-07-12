@@ -1,11 +1,12 @@
 const isKitchenAdmin = require("@utility/kitchenAdmins");
+const { kitchen } = require("@server/load/orders.js");
 
 module.exports = {
 	id: "kitchenlockdown",
 	description: "Locks down all kitchen commands",
 	access: "Public",
 	execute: (call) => {
-		var kitchenServer = call.client.guilds.get("398948242790023168"),
+		var kitchenServer = kitchen,
 			member = kitchenServer.members.get(call.message.author.id);
 		if (member && isKitchenAdmin(member)) {
 			call.client.bbkLocked = !call.client.bbkLocked;

@@ -23,6 +23,7 @@ module.exports = {
 			client.shard.broadcastEval(
 				"var ordersChannel = this.channels.get('399290151932526593');" +
 				"if (ordersChannel != null) {" +
+					"require('@server/load/orders.js').kitchen = ordersChannel;" +
 					"ordersChannel.fetchMessages({ limit: 100 }).then((orders) => {" +
 						"orders = orders.filter((m) => m.embeds[0]).array();" +
 						"for (let order of orders) {" +

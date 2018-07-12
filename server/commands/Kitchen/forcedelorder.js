@@ -1,5 +1,5 @@
 const isWorker = require("@utility/workers");
-const { delOrder, orders } = require("@server/load/orders.js");
+const { delOrder, orders, kitchen } = require("@server/load/orders.js");
 const { RichEmbed } = require("discord.js");
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
 	access: "Public",
 	execute: (call) => {
 		if (!call.client.bbkLocked) {
-			var kitchenServer = call.client.guilds.get("398948242790023168"),
+			var kitchenServer = kitchen,
 				member = kitchenServer.members.get(call.message.author.id);
 			if (member != null && isWorker(member)) {
 				var code = call.params.readParam(),
@@ -19,7 +19,7 @@ module.exports = {
 					if (filteredOrder != null) {
 						var userToMessage = call.client.users.find((m) => m.tag === filteredOrder.customer);
 						filteredOrder.msg.delete().then(() => {
-							var logsChannel = call.client.channels.get("458288216609652736");
+							var logsChannel = kitchenServer.channels.get("458288216609652736");
 							var orderEmbed = new RichEmbed()
 								.setColor("RED")
 								.addField("Order ID", filteredOrder.id)

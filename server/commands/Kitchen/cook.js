@@ -1,6 +1,6 @@
 const isWorker = require("@utility/workers");
 const { RichEmbed } = require("discord.js");
-const { addOrder, delOrder, orders } = require("@server/load/orders.js");
+const { addOrder, delOrder, orders, kitchen } = require("@server/load/orders.js");
 
 function titleCase(str) {
 	var newString = "";
@@ -28,7 +28,7 @@ module.exports = {
 	access: "Public",
 	execute: (call) => {
 		if (!call.client.bbkLocked) {
-			var kitchenServer = call.client.guilds.get("398948242790023168"),
+			var kitchenServer = kitchen,
 				member = kitchenServer.members.get(call.message.author.id);
 			if (member != null && isWorker(member)) {
 				if (call.message.content.split("|")[1] && call.message.content.split("|")[2]) {

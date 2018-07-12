@@ -1,6 +1,6 @@
 const { MENU } = require("@utility/menu");
 const { RichEmbed } = require("discord.js");
-const { orders } = require("@server/load/orders.js");
+const { orders, kitchen } = require("@server/load/orders.js");
 
 function randomLetters(num) {
 	var abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -41,7 +41,7 @@ module.exports = {
 						if (noMenu.length === 0) {
 							if (foods.find((val) => foods.filter((v) => v === val).length > 1) == null) {
 								var id = randomLetters(3),
-									ordersChannel = call.client.channels.get("399290151932526593"),
+									ordersChannel = kitchen.channels.get("399290151932526593"),
 									orderedFromString = `${call.message.channel.toString()} (${call.message.channel.id}) in ${call.message.guild.name} (${call.message.guild.id})`;
 								var orderEmbed = new RichEmbed()
 									.setColor("RED")

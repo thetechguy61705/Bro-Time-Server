@@ -1,5 +1,5 @@
 const isWorker = require("@utility/workers");
-const { delOrder, orders } = require("@server/load/orders.js");
+const { delOrder, orders, kitchen } = require("@server/load/orders.js");
 const { RichEmbed } = require("discord.js");
 
 module.exports = {
@@ -17,14 +17,14 @@ module.exports = {
 		if (!call.client.bbkLocked) {
 			var code = call.params.readParam();
 			if (code != null) {
-				var kitchenServer = call.client.guilds.get("398948242790023168"),
+				var kitchenServer = kitchen,
 					member = kitchenServer.members.get(call.message.author.id);
 				if (member != null && isWorker(member)) {
 					var filteredOrder = orders.find((o) => o.id === code.toUpperCase());
 					if (filteredOrder != null) {
 						if (filteredOrder.status.startsWith("Cooked")) {
 							if (filteredOrder.status.includes(call.message.author.tag)) {
-								var logsChannel = call.client.channels.get("458288216609652736");
+								var logsChannel = kitchenServer.channels.get("458288216609652736");
 								var usertoSend = call.client.users.find((m) => m.tag === filteredOrder.customer);
 								if (usertoSend != null) {
 									usertoSend.send(`Your food was delivered by ${call.message.author.tag}:\n${filteredOrder.links}`).then(() => {
