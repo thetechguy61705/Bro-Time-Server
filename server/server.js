@@ -180,6 +180,15 @@ client.on("ready", () => {
 	});
 });
 
+client.on("disconnect", () => {
+	console.warn(`Shard ${client.shard.id} disconnected from the WebSocket.`);
+});
+
+client.on("error", (exc) => {
+	console.warn(`Shard ${client.shard.id} recieved a connection error.`);
+	console.warn(exc.stack);
+});
+
 client.login(config.TOKEN);
 
 process.on("SIGTERM", async () => {
