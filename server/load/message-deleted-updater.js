@@ -3,7 +3,7 @@ module.exports = {
 	exec: (client) => {
 		client.on("message", (message) => {
 			message.deleted = false;
-		})
+		});
 
 		client.on("messageDelete", (message) => {
 			message.deleted = true;
