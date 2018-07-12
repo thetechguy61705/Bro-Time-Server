@@ -23,11 +23,12 @@ module.exports = {
 			client.shard.broadcastEval(
 				"var ordersChannel = this.channels.get('399290151932526593');" +
 				"if (ordersChannel != null) {" +
-					"require('@server/load/orders.js').kitchen = ordersChannel;" +
+					"var orderModule = require('@server/load/orders.js');" +
+					"orderModule.kitchen = ordersChannel.guild;" +
 					"ordersChannel.fetchMessages({ limit: 100 }).then((orders) => {" +
 						"orders = orders.filter((m) => m.embeds[0]).array();" +
 						"for (let order of orders) {" +
-							"require('@server/load/orders.js').orders.push({" +
+							"orderModule.orders.push({" +
 								"msg: order," +
 								"id: order.embeds[0].fields[0].value," +
 								"order: order.embeds[0].fields[1].value," +
