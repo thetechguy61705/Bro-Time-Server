@@ -2,7 +2,7 @@ module.exports = {
 	id: "orders",
 	orders: [],
 	addOrder: function (msg, id, order, customer, orderedFrom, status, links) {
-		module.exports.orders.push({
+		this.orders.push({
 			msg: msg,
 			id: id,
 			order: order,
@@ -13,15 +13,15 @@ module.exports = {
 		});
 	},
 	delOrder: function (order) {
-		module.exports.orders.splice(module.exports.orders.indexOf(order), 1);
+		this.orders.splice(this.orders.indexOf(order), 1);
 	},
-	exec: (client) => {
+	exec: function (client) {
 		var ordersChannel = client.channels.get("399290151932526593");
 		if (ordersChannel != null) {
 			ordersChannel.fetchMessages({ limit: 100 }).then((orders) => {
 				orders = orders.filter((m) => m.embeds[0]).array();
 				for (let order of orders) {
-					module.exports.orders.push({
+					this.orders.push({
 						msg: order,
 						id: order.embeds[0].fields[0].value,
 						order: order.embeds[0].fields[1].value,
