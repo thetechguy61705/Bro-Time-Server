@@ -13,14 +13,12 @@ module.exports = {
 		var members;
 		var content = call.params.readRaw();
 		var role = call.params.readRole();
-		if (role) {
+		if (role || content === "") {
 			if (content !== "") {
-				members = role.members.map((m) => m.user.tag).sort()
-					.map((u) => call.client.users.find((r) => r.tag === u).toString()).join("\n");
+				members = role.members.array().sort((a, b) => a.displayName.localeCompare(b.displayName)).map((u) => u.toString()).join("\n");
 				memberEmbed.setTitle(`Users in ${role.name}`);
 			} else {
-				members = call.message.guild.members.map((m) => m.user.tag).sort()
-					.map((u) => call.client.users.find((r) => r.tag === u).toString()).join("\n");
+				members = call.message.guild.members.array().sort((a, b) => a.displayName.localeCompare(b.displayName)).map((u) => u.toString()).join("\n");
 				memberEmbed.setTitle("Users");
 			}
 			var membersLength = members.length;
@@ -47,13 +45,13 @@ module.exports = {
 							if (page !== 1) {
 								page--;
 								membersLength -= 20;
-								membersToSend = members.split("\n").slice(membersLength, membersLength+20);
+								membersToSend = members.split("\n").slice(membersLength, membersLength + 20);
 							}
 						} else {
 							if (page !== totalPages) {
 								page++;
 								membersLength += 20;
-								membersToSend = members.split("\n").slice(membersLength, membersLength+20);
+								membersToSend = members.split("\n").slice(membersLength, membersLength + 20);
 							}
 						}
 
