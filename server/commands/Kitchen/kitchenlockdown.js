@@ -1,4 +1,4 @@
-const isKitchenAdmin = require("app/kitchenAdmins");
+const isKitchenAdmin = require("@utility/kitchenAdmins");
 
 module.exports = {
 	id: "kitchenlockdown",

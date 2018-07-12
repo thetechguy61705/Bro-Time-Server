@@ -1,6 +1,6 @@
 const { RichEmbed } = require("discord.js");
-const isWorker = require("app/workers");
-const { addOrder, delOrder, orders } = require("../../load/orders.js");
+const isWorker = require("@utility/workers");
+const { addOrder, delOrder, orders } = require("@server/load/orders.js");
 
 module.exports = {
 	id: "claim",

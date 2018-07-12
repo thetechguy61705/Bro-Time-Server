@@ -1,5 +1,5 @@
 const { RichEmbed } = require("discord.js");
-const isModerator = require("app/moderator");
+const isModerator = require("@utility/moderator");
 
 module.exports = {
 	id: "prefix",

@@ -1,4 +1,4 @@
-const { delOrder, orders } = require("../../load/orders.js");
+const { delOrder, orders } = require("@server/load/orders.js");
 
 module.exports = {
 	id: "cancelorder",

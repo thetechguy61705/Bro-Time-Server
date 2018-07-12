@@ -61,15 +61,17 @@ module.exports = function vote(time, channel, required,
 						};
 
 						upVote = message.reactions.first();
-						if (vote.users != null)
-							vote.users.forEach((user) => upVote.users.set(user.id, user));
+						if (vote.users != null) {
+							for (let user of vote.users)
+								upVote.users.set(user.id, user);
+						}
 						vote.users = upVote.users;
 						channel.client.on("messageReactionAdd", updateMessage);
 						channel.client.on("messageReactionRemove", updateMessage);
 						timeout = channel.client.setTimeout(finish, time);
 					});
 				});
-			} catch(exc) {
+			} catch (exc) {
 				var voteIndex = running.indexOf(running.find((other) => getScope(channel) == other.scope && other.id === id));
 				if (voteIndex >= 0)
 					running.splice(voteIndex, 1);
@@ -78,4 +80,4 @@ module.exports = function vote(time, channel, required,
 		});
 	}
 	return result;
-}
+};

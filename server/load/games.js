@@ -1,7 +1,7 @@
 module.exports = {
 	id: "games",
 	exec: (client) => {
-		var games = require("./../commands/games");
+		var games = require("@server/commands/games");
 		client.on("message", (message) => {
 			games.dispatchInput(new games.Input("message", message.content, message.author, message.channel));
 		});

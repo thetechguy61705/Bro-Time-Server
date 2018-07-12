@@ -35,7 +35,7 @@ module.exports = {
 		} else {
 			console.warn("The client does not have access to the orders channel.");
 			console.warn("All kitchen commands have been disabled on the client.");
-			const COMMANDS = require("../chat/commands.ts");
+			const COMMANDS = require("@server/chat/commands.ts");
 			COMMANDS.loaded = COMMANDS.loaded.filter((cmd) => cmd.category !== "Kitchen");
 		}
 	}

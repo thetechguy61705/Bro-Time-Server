@@ -1,10 +1,10 @@
-var errorHandler = require("app/errorHandler");
-var config = require("../../config");
+var errorHandler = require("@utility/errorHandler");
+var config = require("@root/config");
 var { Collection, RichEmbed } = require("discord.js");
 var fs = require("fs");
 var sources = [];
 var tokens = new Collection();
-var vote = require("app/vote");
+var vote = require("@utility/vote");
 
 // A map from source to token.
 const TOKENS_MAPPING = {
@@ -152,7 +152,7 @@ class Music {
 				// Eventually color should be changable for servers using the future settings command and the database.
 				for (let [number, result] of results.entries())
 					display.push(`${number + 1} - \`${result.display.substring(0, 300)}\``);
-				prompt.setDescription(display.join("\n")).setDefaultFooter(caller);
+				prompt.setDescription(display.join("\n")).setDefaultFooter(call.message.author);
 
 				ticket = null;
 				try {
@@ -254,7 +254,7 @@ for (let file of fs.readdirSync(__dirname + "/../music")) {
 	if (match != null) {
 		new Promise((resolve, reject) => {
 			try {
-				resolve(require("./../music/" + match[1]));
+				resolve(require("@server/music/" + match[1]));
 			} catch (exc) {
 				reject(exc);
 			}

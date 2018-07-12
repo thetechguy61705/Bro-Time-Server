@@ -1,11 +1,11 @@
 const Discord = require("discord.js");
 const fs = require("fs");
-const isModerator = require("app/moderator");
+const isModerator = require("@utility/moderator");
 var actions = new Discord.Collection();
 
 for (let file of fs.readdirSync(__dirname + "/../../actions/purge")) {
 	try {
-		const ACTION = require("../../actions/purge/" + file);
+		const ACTION = require("@server/actions/purge/" + file);
 		actions.set(ACTION.id, ACTION);
 	} catch (err) {
 		console.warn("Error loading purge action " + file + ":");

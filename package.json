@@ -13,6 +13,7 @@
     "fix": "eslint . --fix && eslint test/. --env mocha --fix"
   },
   "_moduleAliases": {
+    "@root": ".",
     "@server": "server",
     "@data": "data",
     "@types": "types",

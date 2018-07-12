@@ -1,6 +1,6 @@
-const { MENU } = require("app/menu");
+const { MENU } = require("@utility/menu");
 const { RichEmbed } = require("discord.js");
-const { orders } = require("../../load/orders.js");
+const { orders } = require("@server/load/orders.js");
 
 function randomLetters(num) {
 	var abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");

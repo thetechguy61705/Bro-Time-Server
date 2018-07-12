@@ -1,12 +1,12 @@
 const fs = require("fs");
-const isModerator = require("app/moderator");
+const isModerator = require("@utility/moderator");
 var actions = {};
 
 for (let file of fs.readdirSync(__dirname + "/../../actions/configuration")) {
 	if (!file.includes(".")) {
 		actions[file] = {};
 		for (let subFile of fs.readdirSync(__dirname + "/../../actions/configuration/" + file)) {
-			var prop = require("../../actions/configuration/" + file + "/" + subFile);
+			var prop = require("@server/actions/configuration/" + file + "/" + subFile);
 			actions[file][prop.id] = prop;
 		}
 	}

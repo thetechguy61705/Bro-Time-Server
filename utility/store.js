@@ -9,4 +9,4 @@ module.exports = {
 		price: 5,
 		description: "A cool rank."
 	}
-}
+};

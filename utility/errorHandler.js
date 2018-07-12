@@ -8,7 +8,7 @@ process.on("unhandledRejection", (reason) => {
 });
 process.on("warning", (warning) => {
 	output(new Error(warning));
-})
+});
 module.exports = function handle(object) {
 	object.on("error", output);
-}
+};

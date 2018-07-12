@@ -1,4 +1,4 @@
-var vote = require("app/vote");
+var vote = require("@utility/vote");
 
 module.exports = {
 	id: "votetest",

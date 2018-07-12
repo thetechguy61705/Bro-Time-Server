@@ -1,5 +1,5 @@
-const isWorker = require("app/workers");
-const { delOrder, orders } = require("../../load/orders.js");
+const isWorker = require("@utility/workers");
+const { delOrder, orders } = require("@server/load/orders.js");
 const { RichEmbed } = require("discord.js");
 
 module.exports = {

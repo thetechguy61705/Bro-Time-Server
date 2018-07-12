@@ -4,8 +4,8 @@ const fs = require("fs");
 const BRO_TIME_GUILDS = ["330913265573953536", "453694109819994114", "463408396872187904", "398948242790023168"];
 const LOAD_TIMEOUT = 60000;
 
-var errorHandler = require("app/errorHandler");
-var config = require("../config");
+var errorHandler = require("@utility/errorHandler");
+var config = require("@root/config");
 var loaders = [];
 var chatHandlers = [];
 var client = new Discord.Client(config.CLIENT);

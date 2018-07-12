@@ -1,5 +1,5 @@
 var { GuildChannel } = require("discord.js");
-var config = require("../../config");
+var config = require("@root/config");
 
 module.exports = {
 	id: "names",

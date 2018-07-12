@@ -21,7 +21,7 @@ function loadChannel(channel, client) {
 
 for (let file of fs.readdirSync(__dirname + "/../areaLoad")) {
 	if (file.endsWith(".js"))
-		areaLoaders.push(require("../areaLoad/" + file));
+		areaLoaders.push(require("@server/areaLoad/" + file));
 }
 
 module.exports = {

@@ -1,11 +1,11 @@
 const Discord = require("discord.js");
 const fs = require("fs");
-const Moderator = require("app/moderator");
+const Moderator = require("@utility/moderator");
 var actions = new Discord.Collection();
 
 for (let file of fs.readdirSync(__dirname + "/../../actions/role")) {
 	try {
-		const ACTION = require("../../actions/role/" + file);
+		const ACTION = require("@server/actions/role/" + file);
 		actions.set(ACTION.id, ACTION);
 	} catch (err) {
 		console.warn("Error loading role action " + file + ":");

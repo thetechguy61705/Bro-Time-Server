@@ -1,4 +1,4 @@
-var config = require("../config");
+var config = require("@root/config");
 var { Guild } = require("discord.js");
 const { Pool } = require("pg");
 const escapeRegExp = require("escape-string-regexp");
@@ -90,7 +90,7 @@ class WalletAccess {
 	constructor(userId = null) {
 		this.TRANSFER_RATE = WalletAccess.TRANSFER_RATE;
 		this._userId = userId;
-		this.client = require("../server/server").client;
+		this.client = require("@server/server").client;
 	}
 
 	async getTotal() {

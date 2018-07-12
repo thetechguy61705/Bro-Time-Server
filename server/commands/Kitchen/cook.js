@@ -1,6 +1,6 @@
-const isWorker = require("app/workers");
+const isWorker = require("@utility/workers");
 const { RichEmbed } = require("discord.js");
-const { addOrder, delOrder, orders } = require("../../load/orders.js");
+const { addOrder, delOrder, orders } = require("@server/load/orders.js");
 
 function titleCase(str) {
 	var newString = "";

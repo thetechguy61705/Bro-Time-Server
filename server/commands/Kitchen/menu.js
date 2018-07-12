@@ -1,4 +1,4 @@
-const { getMenu } = require("app/menu");
+const { getMenu } = require("@utility/menu");
 
 module.exports = {
 	id: "menu",

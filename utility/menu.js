@@ -41,4 +41,4 @@ module.exports = {
 			.setDescription("`" + MENU.join("`\n`") + "`")
 			.setFooter(`Ran by ${user.tag}.`, user.displayAvatarURL);
 	}
-}
+};

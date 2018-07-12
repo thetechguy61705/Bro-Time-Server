@@ -4,7 +4,7 @@ var actions = new Discord.Collection();
 
 for (let file of fs.readdirSync(__dirname + "/../../actions/info")) {
 	try {
-		const ACTION = require("../../actions/info/" + file);
+		const ACTION = require("@server/actions/info/" + file);
 		actions.set(ACTION.id, ACTION);
 	} catch (exc) {
 		console.warn("Error loading info action " + file + ":");

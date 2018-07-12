@@ -1,4 +1,4 @@
-var { BotAccess } = require("../../data/server");
+var { BotAccess } = require("@data/server");
 
 module.exports = {
 	id: "data",

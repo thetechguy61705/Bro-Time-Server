@@ -2,7 +2,7 @@ const modRoles = ["436013049808420866", "436013613568884736", "40217509431266509
 const { User, GuildMember } = require("discord.js");
 
 module.exports = function isModerator(member) {
-	result = false;
+	var result = false;
 	if (member instanceof GuildMember || member instanceof User) {
 		member = member.client.guilds.has("330913265573953536") ?
 			member.client.guilds.get("330913265573953536").member(member.id) :
@@ -13,4 +13,4 @@ module.exports = function isModerator(member) {
 		}
 	} else throw new TypeError("Parameter must be an instance of User or GuildMember.");
 	return result;
-}
+};

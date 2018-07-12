@@ -4,7 +4,7 @@ Number 1 - 10 for non-premium users, 1 - 20 for premium users.
 Use every 10 minutes.
 */
 
-var premium = require("app/premium");
+var premium = require("@utility/premium");
 const FAILURE_MESSAGES = [
 	"You tripped over a rock and broke your leg.",
 	"You got knocked by a sticky bomb and your teammates were laughing too hard to res you.",

@@ -1,4 +1,4 @@
-var store = require("app/store");
+var store = require("@utility/store");
 const Discord = require("discord.js");
 module.exports = {
 	id: "store",

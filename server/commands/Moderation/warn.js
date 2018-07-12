@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const Moderator = require("app/moderator");
+const Moderator = require("@utility/moderator");
 
 module.exports = {
 	id: "warn",

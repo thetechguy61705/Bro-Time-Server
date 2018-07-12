@@ -1,4 +1,4 @@
-const isModerator = require("app/moderator");
+const isModerator = require("@utility/moderator");
 
 module.exports = {
 	id: "mentionable",

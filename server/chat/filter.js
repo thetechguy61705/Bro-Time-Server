@@ -1,5 +1,6 @@
 const { Message } = require("discord.js");
-const isModerator = require("app/moderator");
+const isModerator = require("@utility/moderator");
+const GUILDS = require("@server/server").guilds;
 const INVITE_REGEX = /(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite)\/\w+/gi;
 const MARKDOWN = /(`|\*|_|~)+/g;
 
@@ -10,8 +11,6 @@ module.exports = {
 		client.on("messageUpdate", this.exec);
 	},
 	exec: async function(message, newMessage) {
-		const GUILDS = require("../server").guilds;
-
 		if (newMessage instanceof Message)
 			message = newMessage;
 

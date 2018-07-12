@@ -1,5 +1,5 @@
-const { orders } = require("../../load/orders.js");
-const isWorker = require("app/workers");
+const { orders } = require("@server/load/orders.js");
+const isWorker = require("@utility/workers");
 
 module.exports = {
 	id: "orders",

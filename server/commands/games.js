@@ -4,7 +4,7 @@ const fs = require("fs");
 const util = require("util");
 const { Collection, RichEmbed, ReactionCollector, Message } = require("discord.js");
 
-var { GameAccess, WalletAccess } = require("./../../data/server");
+var { GameAccess, WalletAccess } = require("@data/server");
 var modules = new Collection();
 var sessions = [];
 var noPing = [];
@@ -200,7 +200,7 @@ for (let file of fs.readdirSync(__dirname + "/../games")) {
 	if (match != null) {
 		new Promise((resolve, reject) => {
 			try {
-				var game = require("../games/" + match[1]);
+				var game = require("@server/games/" + match[1]);
 				for (var entry of DEFAULTS) {
 					if (typeof game[entry.key] !== typeof entry.value)
 						game[entry.key] = entry.value;
@@ -267,7 +267,7 @@ module.exports = {
 	},
 	dispatchBalances: (userId, newBalance) => {
 		for (let session of sessions) {
-			if (session.game.betting && session.game.bet > 0 && session.players.has(userId || require("../../server").client.user.id) && session.game.bet > newBalance) {
+			if (session.game.betting && session.game.bet > 0 && session.players.has(userId || require("@server/server").client.user.id) && session.game.bet > newBalance) {
 				session.tooPoor = true;
 				session.endGame();
 			}

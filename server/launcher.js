@@ -1,5 +1,5 @@
 const { ShardingManager } = require("discord.js");
-const config = require("../config");
+const config = require("@root/config");
 const manager = new ShardingManager(__dirname + "/server.js", { token: config.TOKEN });
 
 /* eslint-disable no-console */
