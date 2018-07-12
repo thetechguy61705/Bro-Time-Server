@@ -36,7 +36,7 @@ module.exports = {
 							"links: order.embeds[0].fields[5].value || 'None'," +
 						"});" +
 					"}" +
-				"});" +
+				"});"
 			);
 		} else {
 			console.warn("The client does not have access to the orders channel.");
