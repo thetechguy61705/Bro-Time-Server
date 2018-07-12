@@ -1,10 +1,10 @@
-const { delOrder, orders } = require("@server/load/orders.js");
-
 module.exports = {
 	id: "cancelorder",
 	description: "Cancels your current order",
 	access: "Public",
 	execute: (call) => {
+		const { delOrder, orders } = require("@server/load/orders.js");
+
 		if (!call.client.bbkLocked) {
 			var filteredOrder = orders.find((o) => o.customer === call.message.author.tag);
 			if (filteredOrder != null) {

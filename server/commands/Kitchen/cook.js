@@ -1,6 +1,5 @@
 const isWorker = require("@utility/workers");
 const { RichEmbed } = require("discord.js");
-const { addOrder, delOrder, orders, kitchen } = require("@server/load/orders.js");
 
 function titleCase(str) {
 	var newString = "";
@@ -27,6 +26,8 @@ module.exports = {
 	paramsHelp: "(order number) | (food/drink) | (link)",
 	access: "Public",
 	execute: (call) => {
+		const { addOrder, delOrder, orders, kitchen } = require("@server/load/orders.js");
+
 		if (!call.client.bbkLocked) {
 			var kitchenServer = kitchen,
 				member = kitchenServer.members.get(call.message.author.id);

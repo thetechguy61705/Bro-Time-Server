@@ -1,4 +1,3 @@
-const { orders, kitchen } = require("@server/load/orders.js");
 const isWorker = require("@utility/workers");
 
 module.exports = {
@@ -7,6 +6,8 @@ module.exports = {
 	paramsHelp: "[status]",
 	access: "Public",
 	execute: (call) => {
+		const { orders, kitchen } = require("@server/load/orders.js");
+
 		if (!call.client.bbkLocked) {
 			var kitchenServer = kitchen,
 				member = kitchenServer.members.get(call.message.author.id);

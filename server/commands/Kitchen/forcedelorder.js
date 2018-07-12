@@ -1,5 +1,4 @@
 const isWorker = require("@utility/workers");
-const { delOrder, orders, kitchen } = require("@server/load/orders.js");
 const { RichEmbed } = require("discord.js");
 
 module.exports = {
@@ -8,6 +7,8 @@ module.exports = {
 	paramsHelp: "(order number) (reason)",
 	access: "Public",
 	execute: (call) => {
+		const { delOrder, orders, kitchen } = require("@server/load/orders.js");
+
 		if (!call.client.bbkLocked) {
 			var kitchenServer = kitchen,
 				member = kitchenServer.members.get(call.message.author.id);

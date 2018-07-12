@@ -1,6 +1,5 @@
 const { RichEmbed } = require("discord.js");
 const isWorker = require("@utility/workers");
-const { addOrder, delOrder, orders, kitchen } = require("@server/load/orders.js");
 
 module.exports = {
 	id: "claim",
@@ -8,6 +7,8 @@ module.exports = {
 	paramsHelp: "(order id)",
 	access: "Public",
 	execute: (call) => {
+		const { addOrder, delOrder, orders, kitchen } = require("@server/load/orders.js");
+
 		if (!call.client.bbkLocked) {
 			var code = call.params.readParam();
 			if (code != null) {

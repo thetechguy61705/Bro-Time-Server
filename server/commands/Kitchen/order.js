@@ -1,6 +1,5 @@
 const { MENU } = require("@utility/menu");
 const { RichEmbed } = require("discord.js");
-const { orders, kitchen } = require("@server/load/orders.js");
 
 function randomLetters(num) {
 	var abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -26,6 +25,8 @@ module.exports = {
 	paramsHelp: "(item), [item2], [item3]",
 	access: "Server",
 	execute: (call) => {
+		const { orders, kitchen } = require("@server/load/orders.js");
+
 		if (!call.client.bbkLocked) {
 			var filteredOrder = orders.find((o) => o.customer === call.message.author.tag);
 			if (!filteredOrder) {

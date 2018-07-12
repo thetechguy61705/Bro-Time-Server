@@ -1,5 +1,4 @@
 const isWorker = require("@utility/workers");
-const { delOrder, orders, kitchen } = require("@server/load/orders.js");
 const { RichEmbed } = require("discord.js");
 
 module.exports = {
@@ -8,6 +7,8 @@ module.exports = {
 	paramsHelp: "(order id)",
 	access: "Public",
 	execute: (call) => {
+		const { delOrder, orders, kitchen } = require("@server/load/orders.js");
+
 		if (call.client.bbkLocked && !call.client.bbkLockedChannels.includes(call.message.channel.id)) {
 			call.client.bbkLockedChannels.push(call.message.channel.id);
 			return call.message.channel.send("Bro Bot Kitchen is currently in lockdown and inaccessible by any user.");

@@ -1,11 +1,12 @@
 const { RichEmbed } = require("discord.js");
-const { orders } = require("@server/load/orders.js");
 
 module.exports = {
 	id: "myorder",
 	description: "Sends your current order and its status",
 	access: "Public",
 	execute: (call) => {
+		const { orders } = require("@server/load/orders.js");
+
 		if (!call.client.bbkLocked) {
 			var filteredOrder = orders.find((o) => o.customer === call.message.author.tag);
 			if (filteredOrder != null) {
