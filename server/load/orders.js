@@ -22,7 +22,7 @@ module.exports = {
 		if (containsOrders) {
 			client.shard.broadcastEval(
 				"var ordersChannel = this.channels.get('399290151932526593');" +
-				"if (ordersChannel == null) return;"
+				"if (ordersChannel == null) return;" +
 				"ordersChannel.fetchMessages({ limit: 100 }).then((orders) => {" +
 					"orders = orders.filter((m) => m.embeds[0]).array();" +
 					"for (let order of orders) {" +
