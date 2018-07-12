@@ -1,8 +1,13 @@
 {
     "compilerOptions": {
+        "baseUrl": ".",
         "target": "es2016",
         "module": "commonjs",
-        "preserveConstEnums": true,
-        "sourceMap": true
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "typeRoots": [
+            "node_modules/@types",
+            "types"
+        ]
     }
 }

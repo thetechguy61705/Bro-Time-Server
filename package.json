@@ -16,7 +16,6 @@
     "@root": ".",
     "@server": "server",
     "@data": "data",
-    "@types": "types",
     "@utility": "utility"
   },
   "repository": {

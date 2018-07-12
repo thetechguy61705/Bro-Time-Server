@@ -1,13 +1,11 @@
 import { Message, Client, Guild, Collection, MessageMentions, User } from "discord.js";
-import escapeRegExp = require("escape-string-regexp");
-import { WalletAccess } from "./../../data/server";
-import fs = require("fs");
-import path = require("path");
-import util = require("util");
+const escapeRegExp = require("escape-string-regexp");
+const { WalletAccess } = require("@data/server");
+const fs = require("fs");
+const path = require("path");
+const util = require("util");
 var modules = new Collection<string, ICommand>();
 var prefixPattern = "^(%s)";
-
-declare var Enum;
 
 const COMMANDS = __dirname + "/../commands";
 const TESTING = process.env.NODE_ENV !== "production";
@@ -368,7 +366,7 @@ export class CommandsManager {
 		return true;
 	}
 
-	processCommand(message: any): boolean {
+	processCommand(message: Message): boolean {
 		var data = (message.guild || message.channel).data;
 		var prefix = message.content.match(new RegExp(util.format(prefixPattern,
 			escapeRegExp(data != null ? data.prefix : "/")), "i"));
