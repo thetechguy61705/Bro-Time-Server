@@ -8,6 +8,7 @@ module.exports = {
 		client.on("messageDelete", (message) => {
 			message.deleted = true;
 		});
+
 		client.on("messageDeleteBulk", (messages) => {
 			for (let message of messages.array())
 				message.deleted = true;
