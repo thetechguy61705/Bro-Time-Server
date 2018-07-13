@@ -2,7 +2,7 @@ module.exports = {
 	id: "orders",
 	orders: [],
 	addOrder: function (msg, id, order, customer, orderedFrom, status, links) {
-		this.orders.push({
+		module.exports.orders.push({
 			msg: msg,
 			id: id,
 			order: order,
@@ -13,7 +13,7 @@ module.exports = {
 		});
 	},
 	delOrder: function (order) {
-		this.orders.splice(this.orders.indexOf(order), 1);
+		module.exports.orders.splice(module.exports.orders.indexOf(order), 1);
 	},
 	exec: async function (client) {
 		var containsOrders = await client.shard.broadcastEval("this.channels.keyArray();");
