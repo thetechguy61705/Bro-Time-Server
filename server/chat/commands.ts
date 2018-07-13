@@ -1,6 +1,7 @@
 import { Message, Client, Guild, Collection, MessageMentions, User } from "discord.js";
 const escapeRegExp = require("escape-string-regexp");
-const { WalletAccess } = require("@data/server");
+const server = require("@data/server");
+const WalletAccess = server.WalletAccess;
 const fs = require("fs");
 const path = require("path");
 const util = require("util");
@@ -389,13 +390,13 @@ export class CommandsManager {
 				var command: ICommand = modules.get(name.toLowerCase()) || modules.find((module: ICommand) => module.aliases != null && module.aliases.includes(name));
 
 				if (command != null && checkAccess(command, message) && checkClient(command, message) && hasPermissions(command, message)) {
-					if (!message.client.locked || command.id === "lockdown") {
+					if (!server.locked.value || command.id === "lockdown") {
 						params.readSep();
 						command.execute(new Call(this, message, params, command));
 						used = true;
 					} else {
-						if (!message.client.lockedChannels.includes(message.channel.id)) {
-							message.client.lockedChannels.push(message.channel.id);
+						if (!server.locked.channels.includes(message.channel.id)) {
+							server.locked.channels.push(message.channel.id);
 							message.channel.send("The client is currently in lockdown and inaccessible by any user.");
 						}
 					}

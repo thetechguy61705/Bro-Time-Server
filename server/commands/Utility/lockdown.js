@@ -1,4 +1,5 @@
 const Moderator = require("@utility/moderator");
+const server = require("@server/server")
 
 module.exports = {
 	id: "lockdown",
@@ -7,9 +8,9 @@ module.exports = {
 	access: "Public",
 	execute: (call) => {
 		if (Moderator(call.message.member)) {
-			call.client.locked = !call.client.locked;
-			if (!call.client.locked) call.client.lockedChannels.length = 0;
-			call.message.reply(`The client is now ${(call.client.locked) ? "inaccessible" : "accessible"}.`);
+			server.locked.value = !server.locked.value;
+			if (!server.locked) server.locked.channels.length = 0;
+			call.message.reply(`The client is now ${(server.locked.value) ? "inaccessible" : "accessible"}.`);
 		}
 	}
 };

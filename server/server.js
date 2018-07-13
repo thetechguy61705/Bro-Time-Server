@@ -121,5 +121,9 @@ process.on("SIGTERM", async () => {
 
 module.exports = {
 	client: client,
+	locked: {
+		value: false,
+		channels: []
+	},
 	guilds: BRO_TIME_GUILDS
 };
