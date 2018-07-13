@@ -1,5 +1,5 @@
 const isPremium = require("@utility/premium");
-var { WalletAccess } = require("@data/server");
+var { WalletAccess } = require("@data/server.ts");
 var { RichEmbed } = require("discord.js");
 
 function getWallet(userId = null) {

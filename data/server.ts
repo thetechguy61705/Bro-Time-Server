@@ -1,5 +1,6 @@
-var config = require("@root/config");
-var { Guild } = require("discord.js");
+import { ILoadable } from "types/server";
+import { Guild, Client, Snowflake } from "discord.js";
+const config = require("@root/config");
 const { Pool } = require("pg");
 const escapeRegExp = require("escape-string-regexp");
 
@@ -24,45 +25,35 @@ if (pool != null) {
 	console.warn("No database provided. The server will run without data persistence.");
 }
 
-class DataAccess {
-	constructor() {
-		this._pool = pool;
-		this.loaded = false;
-	}
+export class GameAccess implements ILoadable<void> {
+	public readonly games: any
+	private readonly _game: any
 
-	load() {
-		if (this.loaded)
-			throw "Data has already been loaded.";
-		this.loaded = true;
-	}
-}
-
-class GameAccess extends DataAccess {
-	constructor(game, games) {
-		super();
+	public constructor(game, games) {
 		this.games = games;
 		this._game = game;
 	}
 
-	load() {
-		super.load();
+	public load() {
 		return this._game.load();
 	}
 }
 
-class BotAccess extends DataAccess {
-	constructor(area, client) {
-		super();
+export class BotAccess implements ILoadable<void> {
+	private readonly _client: Client
+	public readonly server: Guild
+	public prefix: string
+
+	public constructor(area, client: Client) {
 		this._client = client;
 		if (area instanceof Guild)
 			this.server = area;
 		this.prefix = DM_PREFIX;
 	}
 
-	async load() {
-		super.load();
-		if (this._pool != null && this.server != null) {
-			var client = await this._pool.connect();
+	public async load() {
+		if (pool != null && this.server != null) {
+			var client = await pool.connect();
 			// Provide the bot id and server id.
 			await client.query("SELECT discord.AddBot($1) FOR UPDATE", [this.server.id]);
 			this.prefix = (await client.query(`SELECT Prefix
@@ -73,12 +64,12 @@ class BotAccess extends DataAccess {
 		return true;
 	}
 
-	async setPrefix(newPrefix) {
+	public async setPrefix(newPrefix) {
 		if (this.server == null)
 			throw new Error("Cannot set a prefix for non-server data.");
 		newPrefix = escapeRegExp(newPrefix);
-		if (this._pool != null)
-			await this._pool.query(`UPDATE discord.Servers
+		if (pool != null)
+			await pool.query(`UPDATE discord.Servers
 		                            SET Prefix = $2
 		                            WHERE Server_Id = $1`, [this.server.id, newPrefix]);
 		this.prefix = newPrefix;
@@ -86,11 +77,16 @@ class BotAccess extends DataAccess {
 	}
 }
 
-class WalletAccess {
-	constructor(userId = null) {
+export class WalletAccess {
+	public static readonly TRANSFER_RATE: number = .20
+	public readonly TRANSFER_RATE: number = WalletAccess.TRANSFER_RATE
+	private readonly _userId: Snowflake
+	private readonly _client: Client
+
+	constructor(userId: Snowflake = null) {
 		this.TRANSFER_RATE = WalletAccess.TRANSFER_RATE;
 		this._userId = userId;
-		this.client = require("@server/server").client;
+		this._client = require("@server/server").client;
 	}
 
 	async getTotal() {
@@ -100,29 +96,22 @@ class WalletAccess {
 		return result;
 	}
 
-	async change(amount) {
+	async change(amount: number) {
 		await pool.query("SELECT discord.WalletChange($2, $1) FOR UPDATE", [this._userId, amount]);
 		this.getTotal().then((newTotal) => {
-			this.client.shard.broadcastEval(`this.emit('walletChange', '${this._userId}', ${amount}, ${newTotal});`);
+			this._client.shard.broadcastEval(`this.emit('walletChange', '${this._userId}', ${amount}, ${newTotal});`);
 		});
 		return true;
 	}
 
-	async transfer(amount, toUserId = null) {
+	async transfer(amount: number, toUserId: Snowflake = null) {
 		await pool.query("SELECT discord.WalletTransfer($3, $1, $2) FOR UPDATE", [this._userId, toUserId, amount]);
 		this.getTotal().then((newTotal) => {
-			this.client.shard.broadcastEval(`this.emit('walletChange', '${this._userId},' -${amount}, ${newTotal});`);
+			this._client.shard.broadcastEval(`this.emit('walletChange', '${this._userId},' -${amount}, ${newTotal});`);
 		});
 		new WalletAccess(toUserId).getTotal().then((newTotal) => {
-			this.client.shard.broadcastEval(`this.emit('walletChange', '${toUserId}', ${amount} - ${amount} * ${this.TRANSFER_RATE}, ${newTotal});`);
+			this._client.shard.broadcastEval(`this.emit('walletChange', '${toUserId}', ${amount} - ${amount} * ${this.TRANSFER_RATE}, ${newTotal});`);
 		});
 		return true;
 	}
 }
-WalletAccess.TRANSFER_RATE = .20;
-
-module.exports = {
-	BotAccess: BotAccess,
-	GameAccess: GameAccess,
-	WalletAccess: WalletAccess
-};

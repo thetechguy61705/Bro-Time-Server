@@ -4,7 +4,7 @@ const fs = require("fs");
 const util = require("util");
 const { Collection, RichEmbed, ReactionCollector, Message } = require("discord.js");
 
-var { GameAccess, WalletAccess } = require("@data/server");
+var { GameAccess, WalletAccess } = require("@data/server.ts");
 var modules = new Collection();
 var sessions = [];
 var noPing = [];

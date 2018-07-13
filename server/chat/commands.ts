@@ -1,7 +1,8 @@
-import { Message, Client, Guild, Collection, MessageMentions, User } from "discord.js";
+import { Message, Client, Guild, Collection, MessageMentions, User, MessageOptions } from "discord.js";
+import { WalletAccess } from "@data/server";
+import { IExecutable } from "types/server";
 const escapeRegExp = require("escape-string-regexp");
 const server = require("@server/server");
-const { WalletAccess } = require("@data/server");
 const fs = require("fs");
 const path = require("path");
 const util = require("util");
@@ -210,7 +211,7 @@ class Call {
 	public requestInput(options: any = null,
 		prompt: string = null,
 		timeout: number = 180000,
-		accepts: any = null) {
+		accepts: any = null): Promise<Params> {
 		return new Promise(((resolve, reject) => {
 			if (prompt != null)
 				this.message.channel.send(prompt);
@@ -230,7 +231,7 @@ class Call {
 		}).bind(this));
 	}
 
-	public denyInput(author: User = this.message.author) {
+	public denyInput(author: User = this.message.author): void {
 		if (this.commands._requests.has(author.id)) {
 			var request = this.commands._requests.get(author.id);
 			clearTimeout(request.timeout);
@@ -239,11 +240,13 @@ class Call {
 		}
 	}
 
-	public getWallet(userId = null) {
+	public getWallet(userId = null): WalletAccess {
 		return new WalletAccess(userId);
 	}
 
-	public safeSend(content, message = this.message, options = { reply: this.message.author }) {
+	public safeSend(content?: any,
+		message: Message = this.message,
+		options: MessageOptions = { reply: this.message.author }): void {
 		message.channel.send((content || options), (content != null) ? options : undefined).catch((exc) => {
 			message.author.send(`You attempted to use the \`${this.command.id}\` command in ${message.channel}, but I can not chat there.`);
 			console.warn(exc.stack);
@@ -339,7 +342,7 @@ try {
 	console.warn(exc.stack);
 }
 
-export class CommandsManager {
+export class CommandsManager implements IExecutable<Message> {
 	public static readonly REQUEST_OPTIONS = new Enum(["None", "Anyone", "Cancellable"], { ignoreCase: true });
 	public readonly REQUEST_OPTIONS = CommandsManager.REQUEST_OPTIONS;
 	public readonly _requests: Collection<string, IRequest> = new Collection()
