@@ -15,6 +15,15 @@ client.lockedChannels = [];
 client.bbkLocked = false;
 client.bbkLockedChannels = [];
 
+module.exports = {
+	client: client,
+	locked: {
+		value: false,
+		channels: []
+	},
+	guilds: BRO_TIME_GUILDS
+};
+
 errorHandler(client);
 
 for (let file of fs.readdirSync(__dirname + "/chat")) {
@@ -118,12 +127,3 @@ client.login(config.TOKEN);
 process.on("SIGTERM", async () => {
 	await client.destroy();
 });
-
-module.exports = {
-	client: client,
-	locked: {
-		value: false,
-		channels: []
-	},
-	guilds: BRO_TIME_GUILDS
-};

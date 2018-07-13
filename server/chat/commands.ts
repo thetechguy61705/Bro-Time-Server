@@ -1,7 +1,7 @@
 import { Message, Client, Guild, Collection, MessageMentions, User } from "discord.js";
 const escapeRegExp = require("escape-string-regexp");
-const server = require("@data/server");
-const WalletAccess = server.WalletAccess;
+const server = require("@server/server");
+const { WalletAccess } = require("@data/server");
 const fs = require("fs");
 const path = require("path");
 const util = require("util");
