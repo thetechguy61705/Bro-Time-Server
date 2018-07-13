@@ -191,7 +191,7 @@ export class Params {
 	}
 }
 
-class Call {
+export class Call {
 	public readonly TRANSFER_RATE: number = 0.8
 
 	public readonly commands: CommandsManager

@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const fs = require("fs");
+const dataProcessor = require("@utility/datarequest.ts");
 // todo: Move configuration to config.js.
 const BRO_TIME_GUILDS = ["330913265573953536", "453694109819994114", "463408396872187904", "398948242790023168"];
 const LOAD_TIMEOUT = 60000;
@@ -51,6 +52,9 @@ for (let file of fs.readdirSync(__dirname + "/load")) {
 
 client.on("ready", () => {
 	var loading = [];
+
+	dataProcessor.setShard(client.shard);
+
 	for (let loader of loaders) {
 		if (!loader.needs || client.guilds.has(loader.needs)) {
 			loading.push(new Promise((resolve) => {
