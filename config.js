@@ -7,6 +7,7 @@ var config = {
 		fetchAllMembers: true,
 		disableEveryone: true
 	},
+	SHARD: {},
 	NAMES: []
 };
 config.NAMES["330913265573953536"] = "Bro Bot (!help)";
@@ -21,5 +22,6 @@ try {
 	if (exc.code !== "MODULE_NOT_FOUND")
 		throw exc;
 }
+config.SHARD.token = config.TOKEN;
 
 module.exports = config;

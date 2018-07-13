@@ -3,7 +3,6 @@ var shard: ShardClientUtil;
 var pending: DataRequest[] = [];
 var nextRequestId = 0;
 
-// { isInvalid: false, type: 'RoundTrip', requestId: 0 }
 export class DataRequest {
     public static REQUEST_TYPE = new Enum(["RoundTrip"])
     public sentInstance: string = "DataRequest"

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node --require ./register.js server/launcher.js",
-    "debug": "node --require ./register.js --inspect-brk server/launcher.js",
+    "debug": "node --require ./register.js --inspect-brk=0 server/launcher.js",
     "test": "eslint . && eslint test/. --env mocha && mocha --require ./register.js",
     "fix": "eslint . --fix && eslint test/. --env mocha --fix"
   },
