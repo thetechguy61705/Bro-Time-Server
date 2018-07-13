@@ -3,7 +3,7 @@ module.exports = {
 	aliases: ["remove", "del"],
 	run: (call) => {
 		var role = call.params.readRole();
-		if (role != null) {
+		if (role != null && role.editable) {
 			if (role.position < call.message.member.highestRole.position || call.message.guild.ownerID === call.message.author.id) {
 				call.requestInput(null, "Are you sure you want to delete the `" + role.name + "` role? Respond `yes` or `no`.", 30000).then((response) => {
 					if (response.params.readRaw().toLowerCase().startsWith("y")) {
@@ -21,6 +21,6 @@ module.exports = {
 					call.safeSend("You did not reply within 30 seconds. Prompt cancelled.");
 				});
 			} else call.safeSend("The role specified is too high up in this guild's role hierarchy to be deleted by you.");
-		} else call.safeSend("Could not find the role you specified.");
+		} else call.safeSend("Could not find the role you specified. The role must be deletable by the client user.");
 	}
 };

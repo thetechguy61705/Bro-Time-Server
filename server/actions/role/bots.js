@@ -8,7 +8,7 @@ module.exports = {
 			const ammToSlice = (role.trim().startsWith("+") || role.trim().startsWith("-")) ? 1 : 0;
 			var newRole = call.message.guild.roles
 				.find((r) => r.id === role.trim().slice(ammToSlice) || r.name.toLowerCase().startsWith(role.trim().slice(ammToSlice).toLowerCase()));
-			if (newRole != null && newRole.position < call.message.member.highestRole.position && newRole.position < call.message.guild.me.highestRole.position) {
+			if (newRole != null && newRole.position < call.message.member.highestRole.position && newRole.editable) {
 				if (role.trim().startsWith("-")) rolesToChange.rolesToRemove.push(newRole);
 				else rolesToChange.rolesToAdd.push(newRole);
 			}
