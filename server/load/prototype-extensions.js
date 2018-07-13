@@ -64,7 +64,7 @@ Discord.Client.prototype.requestPermissions = function(member, channel, permissi
 	if (!has)
 		channel.send(new Discord.RichEmbed()
 			.setTitle("Permissions Required")
-			.setDescription(`For ${member.displayName} to:\n` + (usage instanceof Array ?
+			.setDescription(`For ${member.displayName} to:\n` + (Array.isArray(usage) ?
 				usage.map((use) => "• " + use) :
 				"• " + usage))
 			.setFooter("Permissions: " + (permissions instanceof Discord.Permissions ?
