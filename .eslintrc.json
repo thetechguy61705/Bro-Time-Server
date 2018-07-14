@@ -1,13 +1,9 @@
 {
+	"extends": "eslint:recommended",
 	"env": {
 		"es6": true,
 		"node": true
 	},
-	"globals": {
-		"Enum": false
-	},
-	"extends": "eslint:recommended",
-	"parser": "typescript-eslint-parser",
 	"parserOptions": {
 		"sourceType": "module",
 		"ecmaFeatures": {
@@ -15,53 +11,24 @@
 		}
 	},
 	"plugins": [
-		"typescript",
 		"json",
 		"promise",
 		"no-for-each"
 	],
+	"globals": {
+		"Enum": false
+	},
 	"rules": {
-		"max-len": [
-			"error", {
-				"code": 200
-			}
-		],
-		"line-comment-position": [
-			"error",
-			"above"
-		],
-		"indent": [
-			"error",
-			"tab"
-		],
-		"no-trailing-spaces": [
-			"error"
-		],
+		"max-len": ["error", { "code": 200 }],
+		"line-comment-position": ["error", "above"],
+		"indent": ["error", "tab"],
+		"no-trailing-spaces": "error",
 		"space-before-blocks": "error",
 		"keyword-spacing": "error",
 		"arrow-spacing": "error",
 		"comma-spacing": "error",
-		"quotes": [
-			"error",
-			"double"
-		],
-		"semi": [
-			"error",
-			"always"
-		],
-		"typescript/adjacent-overload-signatures": "error",
-		"typescript/class-name-casing": "error",
-		"typescript/explicit-member-accessibility": "error",
-		"typescript/interface-name-prefix": "error",
-		"typescript/member-naming": "error",
-		"typescript/no-angle-bracket-type-assertion": "error",
-		"typescript/no-array-constructor": "error",
-		"typescript/no-empty-interface": "error",
-		"typescript/no-explicit-any": "error",
-		"typescript/no-namespace": "error",
-		"typescript/no-triple-slash-reference": "error",
-		"typescript/no-type-alias": "error",
-		"typescript/type-annotation-spacing": "error",
+		"quotes": ["error", "double"],
+		"semi": ["error", "always"],
 		"arrow-parens": ["error", "always"],
 		"no-for-each/no-for-each": "error",
 		"no-for-each/no-for-in": "error",
@@ -73,5 +40,29 @@
 		"promise/no-new-statics": "error",
 		"promise/no-return-in-finally": "error",
 		"no-console": ["warn", { "allow": ["warn", "error"] }]
+	},
+
+	"overrides": {
+		"files": ["**/*.ts"],
+		"parser": "typescript-eslint-parser",
+		"plugins": [
+			"typescript"
+		],
+		"rules": {
+			"no-undef": "off",
+			"no-unused-vars": "off",
+
+			"typescript/adjacent-overload-signatures": "error",
+			"typescript/class-name-casing": "error",
+			"typescript/explicit-member-accessibility": "error",
+			"typescript/member-naming": "error",
+			"typescript/no-angle-bracket-type-assertion": "error",
+			"typescript/no-array-constructor": "error",
+			"typescript/no-empty-interface": "error",
+			"typescript/no-namespace": "error",
+			"typescript/no-triple-slash-reference": "error",
+			"typescript/no-type-alias": "error",
+			"typescript/type-annotation-spacing": "error"
+		}
 	}
 }
