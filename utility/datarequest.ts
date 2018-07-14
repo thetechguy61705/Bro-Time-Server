@@ -1,5 +1,5 @@
-import { ShardingManager, Shard, ShardClientUtil } from "discord.js";
-var shard: ShardClientUtil;
+import { Client, Shard } from "discord.js";
+var client: Client = null;
 var pending: DataRequest[] = [];
 var nextRequestId = 0;
 
@@ -22,14 +22,20 @@ export class DataRequest {
         this.reject = reject;
     }
 
+    private static sendRequest(request: DataRequest) {
+        if (client == null)
+            throw new Error("Unable to send a data request from the parent process.");
+        pending.push(request);
+        client.shard.send(request);
+    }
+
     public static doRoundTrip(isInvalid?: boolean): Promise<any> {
         return new Promise((resolve, reject) => {
             var request = new DataRequest(DataRequest.REQUEST_TYPE.RoundTrip,
                 resolve, reject);
             if (isInvalid)
                 request.isInvalid = isInvalid;
-            pending.push(request);
-            shard.send(request);
+            DataRequest.sendRequest(request);
         });
     }
 }
@@ -37,37 +43,40 @@ export class DataRequest {
 export class DataResponse {
     public sentInstance: string = "DataResponse"
     public result?: any
+    public isError: boolean;
     public requestId: number
 
     public constructor(result: any, requestId: number) {
-        this.result = result;
+        this.isError = result instanceof Error;
+        this.result = this.isError ? result.message : result;
+        this.requestId = requestId;
     }
 }
 
-export function setShard(newShard: ShardClientUtil) {
-    shard = newShard;
+export function setClient(newClient: Client): void {
+    client = newClient;
 }
 
 export function processServer(request: DataRequest, shard: Shard): void {
     var result: any;
-    switch (request.type) {
+    switch (DataRequest.REQUEST_TYPE.get(request.type)) {
         case DataRequest.REQUEST_TYPE.RoundTrip: {
             if (request.isInvalid)
                 result = new Error("The request was intentionally made invalid.");
+            break;
         }
+        default:
+            result = new Error("The data request type has not been implemented.");
     }
-    // fixme: The client is not receiving the message.
-    shard.send(new DataResponse(result, request.requestId));
+    shard.process.send(new DataResponse(result, request.requestId));
 }
 
 export function processClient(response: DataResponse): void {
-    console.log("received response");
     var index = pending.findIndex((candidate) => candidate.requestId === response.requestId);
-    console.log(index);
     if (index >= 0) {
         var request = pending[index];
-        if (response.result instanceof Error) {
-            request.reject(response.result);
+        if (response.result != null && response.isError) {
+            request.reject(new Error(response.result));
         } else {
             request.resolve(response.result);
         }

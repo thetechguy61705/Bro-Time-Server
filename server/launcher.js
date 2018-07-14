@@ -14,14 +14,12 @@ manager.on("launch", (shard) => {
 manager.on("message", (shard, message) => {
 	if (message.sentInstance === "DataRequest") {
 		dataProcessor.processServer(message, shard);
-	} else if (message.sentInstance === "DataResponse") {
-		dataProcessor.processClient(message);
 	} else if (!message._eval) {
 		console.log(`Recieved a message from shard ${shard.id}:`);
 		console.log(message);
 	}
 });
 
-manager.spawn();
-
 /* eslint-enable no-console */
+
+manager.spawn();

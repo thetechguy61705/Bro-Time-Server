@@ -53,7 +53,12 @@ for (let file of fs.readdirSync(__dirname + "/load")) {
 client.on("ready", () => {
 	var loading = [];
 
-	dataProcessor.setShard(client.shard);
+	dataProcessor.setClient(client);
+	process.on("message", (message) => {
+		if (message.sentInstance === "DataResponse") {
+			dataProcessor.processClient(message);
+		}
+	});
 
 	for (let loader of loaders) {
 		if (!loader.needs || client.guilds.has(loader.needs)) {
