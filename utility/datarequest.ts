@@ -1,10 +1,8 @@
 import { Client, Shard, Snowflake } from "discord.js";
 import { Pool, PoolClient } from "pg";
-const config = require("@root/config");
 var client: Client = null;
 var pending: DataRequest[] = [];
 var nextRequestId = 0;
-var pool: Pool = null;
 
 export const PREFIX_DEFAULT = "/";
 
@@ -93,95 +91,104 @@ export class DataResponse {
 	}
 }
 
-export function setClient(newClient: Client): void {
-	client = newClient;
-}
+if (process.env.SHARD_ID != null) {
+	// child
 
-async function doTransaction(
-	onlineTrans: { (connection: PoolClient): Promise<any> },
-	offlineTrans: { (): Promise<any> },
-	setupTrans: { (): void } = null) {
+	module.exports.processRequest = function(response: DataResponse): void {
+		var index = pending.findIndex((candidate) => candidate.requestId === response.requestId);
+		if (index >= 0) {
+			var request = pending[index];
+			if (response.result != null && response.isError) {
+				request.reject(new Error(response.result));
+			} else {
+				request.resolve(response.result);
+			}
+			pending.splice(index, 1);
+		}
+	}
 
-	var connection: PoolClient = null;
-	var result: any;
+	module.exports.setClient = function (newClient: Client): void {
+		client = newClient;
+	}
+} else {
+	// parent
+
+	const config = require("@root/config");
+	var pool: Pool = null;
+
+	async function doTransaction(
+		onlineTrans: { (connection: PoolClient): Promise<any> },
+		offlineTrans: { (): Promise<any> },
+		setupTrans: { (): void } = null) {
+	
+		var connection: PoolClient = null;
+		var result: any;
+		try {
+			if (setupTrans != null)
+				setupTrans();
+			if (pool != null) {
+				connection = await pool.connect();
+				result = await onlineTrans(connection);
+			} else {
+				result = await offlineTrans();
+			}
+		} catch (exc) {
+			throw exc;
+		} finally {
+			if (connection != null)
+				connection.release();
+		}
+		return result;
+	}
+
+	module.exports.processRequest = async function(request: DataRequest, shard: Shard): Promise<void> {
+		var result: any;
+		switch (DataRequest.REQUEST_TYPE.get(request.type)) {
+		case DataRequest.REQUEST_TYPE.RoundTrip: {
+			if (request.isInvalid)
+				result = new Error("The request was intentionally made invalid.");
+			break;
+		}
+		case DataRequest.REQUEST_TYPE.GetPrefix: {
+			// todo: Deprecate discord.AddBot sql function.
+			result = await doTransaction(async (connection: PoolClient) => {
+				return request.guildId == null ? PREFIX_DEFAULT : (await connection.query(`SELECT Prefix
+					FROM discord.Servers
+					WHERE Server_Id = $1`, [request.guildId])).rows[0].prefix || PREFIX_DEFAULT;
+			}, async () => {
+				return PREFIX_DEFAULT;
+			});
+			break;
+		}
+		case DataRequest.REQUEST_TYPE.SetPrefix: {
+			await doTransaction(async (connection: PoolClient) => {
+				await connection.query(`UPDATE discord.Servers
+					SET Prefix = $2
+					WHERE Server_Id = $1`, [request.guildId, request.newPrefix]);
+			}, async () => {});
+			break;
+		}
+		default:
+			result = new Error("The data request type has not been implemented.");
+		}
+		shard.process.send(new DataResponse(result, request.requestId));
+	}
+
 	try {
-		if (setupTrans != null)
-			setupTrans();
+		pool = config.DB != null ? new Pool({
+			max: config.DB_CONNECTIONS,
+			connectionString: config.DB
+		}) : null;
+	
 		if (pool != null) {
-			connection = await pool.connect();
-			result = await onlineTrans(connection);
+			process.on("SIGTERM", async () => {
+				await pool.end();
+			});
 		} else {
-			result = await offlineTrans();
+			console.warn("No database provided. The server will run without data persistence.");
 		}
 	} catch (exc) {
-		throw exc;
-	} finally {
-		if (connection != null)
-			connection.release();
+		console.warn("Unable to connect to a database:");
+		console.warn(exc.stack);
 	}
-	return result;
-}
-
-export async function processServer(request: DataRequest, shard: Shard): Promise<void> {
-	var result: any;
-	switch (DataRequest.REQUEST_TYPE.get(request.type)) {
-	case DataRequest.REQUEST_TYPE.RoundTrip: {
-		if (request.isInvalid)
-			result = new Error("The request was intentionally made invalid.");
-		break;
-	}
-	case DataRequest.REQUEST_TYPE.GetPrefix: {
-		// todo: Deprecate discord.AddBot sql function.
-		result = await doTransaction(async (connection: PoolClient) => {
-			return request.guildId == null ? PREFIX_DEFAULT : (await connection.query(`SELECT Prefix
-				FROM discord.Servers
-				WHERE Server_Id = $1`, [request.guildId])).rows[0].prefix || PREFIX_DEFAULT;
-		}, async () => {
-			return PREFIX_DEFAULT;
-		});
-		break;
-	}
-	case DataRequest.REQUEST_TYPE.SetPrefix: {
-		await doTransaction(async (connection: PoolClient) => {
-			await connection.query(`UPDATE discord.Servers
-				SET Prefix = $2
-				WHERE Server_Id = $1`, [request.guildId, request.newPrefix]);
-		}, async () => {});
-		break;
-	}
-	default:
-		result = new Error("The data request type has not been implemented.");
-	}
-	shard.process.send(new DataResponse(result, request.requestId));
-}
-
-export function processClient(response: DataResponse): void {
-	var index = pending.findIndex((candidate) => candidate.requestId === response.requestId);
-	if (index >= 0) {
-		var request = pending[index];
-		if (response.result != null && response.isError) {
-			request.reject(new Error(response.result));
-		} else {
-			request.resolve(response.result);
-		}
-		pending.splice(index, 1);
-	}
-}
-
-try {
-	pool = config.DB != null ? new Pool({
-		max: config.DB_CONNECTIONS,
-		connectionString: config.DB
-	}) : null;
-
-	if (pool != null) {
-		process.on("SIGTERM", async () => {
-			await pool.end();
-		});
-	} else {
-		console.warn("No database provided. The server will run without data persistence.");
-	}
-} catch (exc) {
-	console.warn("Unable to connect to a database:");
-	console.warn(exc.stack);
 }

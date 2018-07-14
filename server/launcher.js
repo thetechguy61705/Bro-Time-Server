@@ -13,7 +13,7 @@ manager.on("launch", (shard) => {
 
 manager.on("message", (shard, message) => {
 	if (message.sentInstance === "DataRequest") {
-		dataProcessor.processServer(message, shard);
+		dataProcessor.processRequest(message, shard);
 	} else if (!message._eval) {
 		console.log(`Recieved a message from shard ${shard.id}:`);
 		console.log(message);

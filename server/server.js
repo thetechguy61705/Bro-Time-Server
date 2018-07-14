@@ -52,7 +52,7 @@ client.on("ready", () => {
 	dataProcessor.setClient(client);
 	process.on("message", (message) => {
 		if (message.sentInstance === "DataResponse") {
-			dataProcessor.processClient(message);
+			dataProcessor.processRequest(message);
 		}
 	});
 
