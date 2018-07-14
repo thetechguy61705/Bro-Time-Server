@@ -325,7 +325,7 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 	public readonly _requests: Collection<string, IRequest> = new Collection()
 	public readonly loaded: Collection<string, ICommand> = modules
 
-	async load(client: Client) {
+	public async load(client: Client) {
 		try {
 			for (let name of fs.readdirSync(COMMANDS)) {
 				try {
@@ -349,7 +349,7 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 		}
 	}
 
-	exec(message: Message): boolean {
+	public exec(message: Message): boolean {
 		var request = this.getRequesting(message);
 		if (request != null) {
 			if (message.author != message.client.user)
@@ -360,7 +360,7 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 		return true;
 	}
 
-	getRequesting(message: Message): IRequest {
+	private getRequesting(message: Message): IRequest {
 		var requests = this._requests.filter((request) => request.channel === message.channel.id && request.accepts(message));
 		var request: IRequest;
 		if (requests.has(message.author.id)) {
@@ -371,7 +371,7 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 		return request || null;
 	}
 
-	processRequest(request: IRequest, message: Message): void {
+	private processRequest(request: IRequest, message: Message): void {
 		clearTimeout(request.timeout);
 		if (this.REQUEST_OPTIONS.Cancellable.is(request.options) && message.content.toLowerCase() === "cancel") {
 			request.reject();
@@ -381,7 +381,7 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 		this._requests.delete(request.author);
 	}
 
-	async processCommand(message: Message): Promise<void> {
+	private async processCommand(message: Message): Promise<void> {
 		var prefix = await DataRequest.getPrefix(message.guild != null ? message.guild.id : null);
 		var using = false;
 		if (message.content.startsWith(prefix)) {
@@ -417,5 +417,5 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 			}
 		}
 	}
-};
+}
 module.exports = new CommandsManager();

@@ -1,4 +1,3 @@
-import { ILoadable } from "types/server";
 import { Guild, Client, Snowflake } from "discord.js";
 const config = require("@root/config");
 const { Pool } = require("pg");
@@ -25,30 +24,13 @@ if (pool != null) {
 	console.warn("No database provided. The server will run without data persistence.");
 }
 
-export class GameAccess implements ILoadable<void> {
-	public readonly games: any
-	private readonly _game: any
+export class BotAccess {
+	public readonly server?: Guild
+	public prefix: string = DM_PREFIX
 
-	public constructor(game, games) {
-		this.games = games;
-		this._game = game;
-	}
-
-	public load() {
-		return this._game.load();
-	}
-}
-
-export class BotAccess implements ILoadable<void> {
-	private readonly _client: Client
-	public readonly server: Guild
-	public prefix: string
-
-	public constructor(area, client: Client) {
-		this._client = client;
+	public constructor(area) {
 		if (area instanceof Guild)
 			this.server = area;
-		this.prefix = DM_PREFIX;
 	}
 
 	public async load() {
@@ -80,24 +62,24 @@ export class BotAccess implements ILoadable<void> {
 // todo: Copy into a new file (and implement the new data processor).
 export class WalletAccess {
 	public static readonly TRANSFER_RATE: number = .20
-	public readonly TRANSFER_RATE: number = WalletAccess.TRANSFER_RATE
-	private readonly _userId: Snowflake
-	private readonly _client: Client
+	public readonly TRANSFER_RATE: number = .20
+	private readonly _userId?: Snowflake
+	private readonly _client?: Client
 
-	constructor(userId: Snowflake = null) {
+	public constructor(userId: Snowflake = null) {
 		this.TRANSFER_RATE = WalletAccess.TRANSFER_RATE;
 		this._userId = userId;
 		this._client = require("@server/server").client;
 	}
 
-	async getTotal() {
+	public async getTotal() {
 		var result = (await pool.query("SELECT discord.WalletGet($1)", [this._userId])).rows[0].walletget;
 		if (result === -1)
 			result = Infinity;
 		return result;
 	}
 
-	async change(amount: number) {
+	public async change(amount: number) {
 		await pool.query("SELECT discord.WalletChange($2, $1) FOR UPDATE", [this._userId, amount]);
 		this.getTotal().then((newTotal) => {
 			this._client.shard.broadcastEval(`this.emit('walletChange', '${this._userId}', ${amount}, ${newTotal});`);
@@ -105,7 +87,7 @@ export class WalletAccess {
 		return true;
 	}
 
-	async transfer(amount: number, toUserId: Snowflake = null) {
+	public async transfer(amount: number, toUserId: Snowflake = null) {
 		await pool.query("SELECT discord.WalletTransfer($3, $1, $2) FOR UPDATE", [this._userId, toUserId, amount]);
 		this.getTotal().then((newTotal) => {
 			this._client.shard.broadcastEval(`this.emit('walletChange', '${this._userId},' -${amount}, ${newTotal});`);

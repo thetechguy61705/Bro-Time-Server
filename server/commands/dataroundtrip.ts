@@ -1,7 +1,7 @@
 import { ICommand, Call } from "@server/chat/commands";
 import { DataRequest } from "@utility/datarequest.ts";
 
-module.exports = <ICommand>{
+module.exports = {
 	id: "roundtrip",
 	test: true,
 	execute: (call: Call) => {
@@ -11,4 +11,4 @@ module.exports = <ICommand>{
 			call.message.channel.send(`Round trip failed: ${error.message}.`);
 		});
 	}
-};
+} as ICommand;

@@ -4,7 +4,7 @@ const fs = require("fs");
 const util = require("util");
 const { Collection, RichEmbed, ReactionCollector, Message } = require("discord.js");
 
-var { GameAccess, WalletAccess } = require("@data/server.ts");
+var { WalletAccess } = require("@data/server.ts");
 var modules = new Collection();
 var sessions = [];
 var noPing = [];
@@ -141,7 +141,7 @@ function startGame(game, context) {
 
 	loading = [new Promise((resolve, reject) => {
 		try {
-			resolve(new GameAccess(game, context.games).load());
+			resolve(game.load());
 		} catch (exc) {
 			reject(exc);
 		}
