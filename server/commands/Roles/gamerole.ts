@@ -38,6 +38,7 @@ module.exports = {
 		take: true,
 		multiple: true
 	},
+	response: "Invalid game role. A list of game roles can be found in `!info gameroles list`.",
 	reference: "game role",
 	description: "Gives the user the specified role if it is a part of !info gameroles list.",
 	paramsHelp: "(game role)"
