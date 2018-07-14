@@ -40,15 +40,10 @@ load("load", {
 	TimeoutTime: LOAD_TIMEOUT,
 	timeout: (exc) => {
 		throw exc;
-	}
-});
-load("chat", {
-	client: client,
-	failureMessage: "Unable to load chat module:",
-	success: (exported) => {
-		chatHandlers.push(exported);
 	},
-	TimeoutTime: LOAD_TIMEOUT
+	predicate: (exported) => {
+		return !exported.needs || client.guilds.has(exported.needs);
+	}
 });
 
 client.on("ready", () => {
@@ -62,47 +57,33 @@ client.on("ready", () => {
 	});
 
 	for (let loader of loaders) {
-		if (!loader.needs || client.guilds.has(loader.needs)) {
-			loading.push(new Promise((resolve) => {
-				var timeout = client.setTimeout(() => {
-					console.warn(`Loader ${loader.id} took too long to load.`);
-					resolve();
-				}, LOAD_TIMEOUT);
-				try {
-					if (loader.exec != null) {
-						var promise = loader.exec(client);
-						if (promise != null)
-							loading.push(promise);
-					}
-				} catch (exc) {
-					console.warn("Failed to load loader:");
-					console.warn(exc.stack);
-				}
-				clearTimeout(timeout);
-				resolve();
-			}));
-		}
-	}
-	for (let handler of chatHandlers) {
 		loading.push(new Promise((resolve) => {
 			var timeout = client.setTimeout(() => {
-				console.warn(`Chat handler ${handler.id} took too long to load.`);
+				console.warn(`Loader ${loader.id} took too long to load.`);
 				resolve();
 			}, LOAD_TIMEOUT);
 			try {
-				if (handler.load != null) {
-					var promise = handler.load(client);
+				if (loader.exec != null) {
+					var promise = loader.exec(client);
 					if (promise != null)
 						loading.push(promise);
 				}
 			} catch (exc) {
-				console.warn("Failed to load chat message:");
+				console.warn("Failed to load loader:");
 				console.warn(exc.stack);
 			}
 			clearTimeout(timeout);
 			resolve();
 		}));
 	}
+	loading.push(load("chat", {
+		client: client,
+		failureMessage: "Unable to load chat module:",
+		success: (exported) => {
+			chatHandlers.push(exported);
+		},
+		TimeoutTime: LOAD_TIMEOUT
+	}));
 
 	Promise.all(loading).then(() => {
 		client.on("message", (message) => {
