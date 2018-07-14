@@ -7,7 +7,9 @@ var pending: DataRequest[] = [];
 var nextRequestId = 0;
 var pool: Pool = null;
 
-const DM_PREFIX = "/";
+const DEFAULT_PREFIX = "/";
+
+export const PREFIX_DEFAULT = DEFAULT_PREFIX;
 
 export class DataRequest {
     public static REQUEST_TYPE = new Enum(["RoundTrip"])
@@ -73,11 +75,11 @@ export class DataRequest {
     public static getPrefix(guildId: Snowflake): Promise<string> {
         // todo: Deprecate discord.AddBot sql function.
         return DataRequest.doTransaction(async (connection: PoolClient) => {
-            return guildId == null ? DM_PREFIX : (await connection.query(`SELECT Prefix
+            return guildId == null ? DEFAULT_PREFIX : (await connection.query(`SELECT Prefix
                 FROM discord.Servers
-                WHERE Server_Id = $1`, [guildId])).rows[0].prefix || DM_PREFIX;
+                WHERE Server_Id = $1`, [guildId])).rows[0].prefix || DEFAULT_PREFIX;
         }, async () => {
-            return DM_PREFIX;
+            return DEFAULT_PREFIX;
         });
     }
 
@@ -86,7 +88,7 @@ export class DataRequest {
     // todo: Implement getting a wallet total.
 
     // todo: Implement changing a wallet amount.
-    
+
     // todo: Implement transfering a wallet amount.
 }
 
@@ -139,7 +141,7 @@ try {
 		max: config.DB_CONNECTIONS,
 		connectionString: config.DB
     }) : null;
-    
+
     if (pool != null) {
         process.on("SIGTERM", async () => {
             await pool.end();
