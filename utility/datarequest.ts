@@ -9,14 +9,17 @@ var pool: Pool = null;
 export const PREFIX_DEFAULT = "/";
 
 export class DataRequest {
-	public static REQUEST_TYPE = new Enum(["RoundTrip"])
+	public static REQUEST_TYPE = new Enum(["RoundTrip", "GetPrefix", "SetPrefix"])
 	public sentInstance: string = "DataRequest"
 	public type: any
 	public requestId: number
 	public resolve?: { (value?: any): void }
 	public reject?: { (reason?: any): void }
 
-	public isInvalid?: boolean = false;
+	public isInvalid?: boolean = false
+
+	public guildId?: Snowflake
+	public newPrefix?: string
 
 	private constructor(type: any,
 		resolve: { (value?: any): void },
@@ -34,31 +37,6 @@ export class DataRequest {
 		client.shard.send(request);
 	}
 
-	private static async doTransaction(
-		onlineTrans: { (connection: PoolClient): Promise<any> },
-		offlineTrans: { (): Promise<any> },
-		setupTrans: { (): void } = null) {
-
-		var connection: PoolClient = null;
-		var result: any;
-		try {
-			if (setupTrans != null)
-				setupTrans();
-			if (pool != null) {
-				connection = await pool.connect();
-				result = await onlineTrans(connection);
-			} else {
-				result = await offlineTrans();
-			}
-		} catch (exc) {
-			throw exc;
-		} finally {
-			if (connection != null)
-				connection.release();
-		}
-		return result;
-	}
-
 	public static doRoundTrip(isInvalid?: boolean): Promise<any> {
 		return new Promise((resolve, reject) => {
 			var request = new DataRequest(DataRequest.REQUEST_TYPE.RoundTrip,
@@ -70,13 +48,11 @@ export class DataRequest {
 	}
 
 	public static getPrefix(guildId: Snowflake): Promise<string> {
-		// todo: Deprecate discord.AddBot sql function.
-		return DataRequest.doTransaction(async (connection: PoolClient) => {
-			return guildId == null ? PREFIX_DEFAULT : (await connection.query(`SELECT Prefix
-				FROM discord.Servers
-				WHERE Server_Id = $1`, [guildId])).rows[0].prefix || PREFIX_DEFAULT;
-		}, async () => {
-			return PREFIX_DEFAULT;
+		return new Promise((resolve, reject) => {
+			var request = new DataRequest(DataRequest.REQUEST_TYPE.GetPrefix,
+				resolve, reject);
+			request.guildId = guildId;
+			DataRequest.sendRequest(request);
 		});
 	}
 
@@ -86,11 +62,13 @@ export class DataRequest {
 			throw new Error("Cannot set a prefix for a non-guild.");
 		if (newPrefix == null)
 			throw new Error("A prefix must be provided.");
-		return DataRequest.doTransaction(async (connection: PoolClient) => {
-			await pool.query(`UPDATE discord.Servers
-				SET Prefix = $2
-				WHERE Server_Id = $1`, [guildId, newPrefix]);
-		}, async () => {});
+		return new Promise((resolve, reject) => {
+			var request = new DataRequest(DataRequest.REQUEST_TYPE.SetPrefix,
+				resolve, reject);
+			request.guildId = guildId;
+			request.newPrefix = newPrefix;
+			DataRequest.sendRequest(request);
+		});
 	}
 
 	// todo: Implement getting a wallet total.
@@ -119,12 +97,56 @@ export function setClient(newClient: Client): void {
 	client = newClient;
 }
 
-export function processServer(request: DataRequest, shard: Shard): void {
+async function doTransaction(
+	onlineTrans: { (connection: PoolClient): Promise<any> },
+	offlineTrans: { (): Promise<any> },
+	setupTrans: { (): void } = null) {
+
+	var connection: PoolClient = null;
+	var result: any;
+	try {
+		if (setupTrans != null)
+			setupTrans();
+		if (pool != null) {
+			connection = await pool.connect();
+			result = await onlineTrans(connection);
+		} else {
+			result = await offlineTrans();
+		}
+	} catch (exc) {
+		throw exc;
+	} finally {
+		if (connection != null)
+			connection.release();
+	}
+	return result;
+}
+
+export async function processServer(request: DataRequest, shard: Shard): Promise<void> {
 	var result: any;
 	switch (DataRequest.REQUEST_TYPE.get(request.type)) {
 	case DataRequest.REQUEST_TYPE.RoundTrip: {
 		if (request.isInvalid)
 			result = new Error("The request was intentionally made invalid.");
+		break;
+	}
+	case DataRequest.REQUEST_TYPE.GetPrefix: {
+		// todo: Deprecate discord.AddBot sql function.
+		result = await doTransaction(async (connection: PoolClient) => {
+			return request.guildId == null ? PREFIX_DEFAULT : (await connection.query(`SELECT Prefix
+				FROM discord.Servers
+				WHERE Server_Id = $1`, [request.guildId])).rows[0].prefix || PREFIX_DEFAULT;
+		}, async () => {
+			return PREFIX_DEFAULT;
+		});
+		break;
+	}
+	case DataRequest.REQUEST_TYPE.SetPrefix: {
+		await doTransaction(async (connection: PoolClient) => {
+			await connection.query(`UPDATE discord.Servers
+				SET Prefix = $2
+				WHERE Server_Id = $1`, [request.guildId, request.newPrefix]);
+		}, async () => {});
 		break;
 	}
 	default:

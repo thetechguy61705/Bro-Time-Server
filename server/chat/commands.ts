@@ -325,7 +325,7 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 	public readonly _requests: Collection<string, IRequest> = new Collection()
 	public readonly loaded: Collection<string, ICommand> = modules
 
-	public async load(client: Client) {
+	public async load() {
 		try {
 			for (let name of fs.readdirSync(COMMANDS)) {
 				try {
