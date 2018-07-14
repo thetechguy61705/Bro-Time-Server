@@ -77,6 +77,7 @@ export class BotAccess implements ILoadable<void> {
 	}
 }
 
+// todo: Copy into a new file (and implement the new data processor).
 export class WalletAccess {
 	public static readonly TRANSFER_RATE: number = .20
 	public readonly TRANSFER_RATE: number = WalletAccess.TRANSFER_RATE

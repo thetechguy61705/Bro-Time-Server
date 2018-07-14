@@ -1,13 +1,12 @@
 import { Message, Client, Guild, Collection, MessageMentions, User, MessageOptions } from "discord.js";
 import { WalletAccess } from "@data/server";
-import { IExecutable } from "types/server";
+import { IExecutable, ILoadable } from "types/server";
+import { DataRequest } from "@utility/datarequest";
 const escapeRegExp = require("escape-string-regexp");
 const server = require("@server/server");
 const fs = require("fs");
 const path = require("path");
-const util = require("util");
 var modules = new Collection<string, ICommand>();
-var prefixPattern = "^(%s)";
 
 const COMMANDS = __dirname + "/../commands";
 const TESTING = process.env.NODE_ENV !== "production";
@@ -320,33 +319,46 @@ function checkClient(command, message) {
 	return result;
 }
 
-try {
-	for (let name of fs.readdirSync(COMMANDS)) {
-		try {
-			let file = path.join(COMMANDS, name);
-			let stats = fs.statSync(file);
-			if (stats.isDirectory()) {
-				for (let subname of fs.readdirSync(file)) {
-					loadModule(path.join(file, subname), name);
-				}
-			} else {
-				loadModule(file, null);
-			}
-		} catch (exc) {
-			console.warn(`Failed to load file ${name}:`);
-			console.warn(exc.stack);
-		}
-	}
-} catch (exc) {
-	console.warn("Failed to load commands:");
-	console.warn(exc.stack);
-}
-
-export class CommandsManager implements IExecutable<Message> {
+export class CommandsManager implements IExecutable<Message>, ILoadable<Client> {
 	public static readonly REQUEST_OPTIONS = new Enum(["None", "Anyone", "Cancellable"], { ignoreCase: true });
 	public readonly REQUEST_OPTIONS = CommandsManager.REQUEST_OPTIONS;
 	public readonly _requests: Collection<string, IRequest> = new Collection()
 	public readonly loaded: Collection<string, ICommand> = modules
+
+	async load(client: Client) {
+		try {
+			for (let name of fs.readdirSync(COMMANDS)) {
+				try {
+					let file = path.join(COMMANDS, name);
+					let stats = fs.statSync(file);
+					if (stats.isDirectory()) {
+						for (let subname of fs.readdirSync(file)) {
+							loadModule(path.join(file, subname), name);
+						}
+					} else {
+						loadModule(file, null);
+					}
+				} catch (exc) {
+					console.warn(`Failed to load file ${name}:`);
+					console.warn(exc.stack);
+				}
+			}
+		} catch (exc) {
+			console.warn("Failed to load commands:");
+			console.warn(exc.stack);
+		}
+	}
+
+	exec(message: Message): boolean {
+		var request = this.getRequesting(message);
+		if (request != null) {
+			if (message.author != message.client.user)
+				this.processRequest(request, message);
+		} else {
+			this.processCommand(message);
+		}
+		return true;
+	}
 
 	getRequesting(message: Message): IRequest {
 		var requests = this._requests.filter((request) => request.channel === message.channel.id && request.accepts(message));
@@ -359,7 +371,7 @@ export class CommandsManager implements IExecutable<Message> {
 		return request || null;
 	}
 
-	processRequest(request: IRequest, message: Message): boolean {
+	processRequest(request: IRequest, message: Message): void {
 		clearTimeout(request.timeout);
 		if (this.REQUEST_OPTIONS.Cancellable.is(request.options) && message.content.toLowerCase() === "cancel") {
 			request.reject();
@@ -367,26 +379,25 @@ export class CommandsManager implements IExecutable<Message> {
 			request.resolve(new Call(this, message, new Params(message), null));
 		}
 		this._requests.delete(request.author);
-		return true;
 	}
 
-	processCommand(message: Message): boolean {
-		var data = (message.guild || message.channel).data;
-		var prefix = message.content.match(new RegExp(util.format(prefixPattern,
-			escapeRegExp(data != null ? data.prefix : "/")), "i"));
-		var using;
-		var used = false;
-		if (prefix != null) {
+	async processCommand(message: Message): Promise<void> {
+		var prefix = await DataRequest.getPrefix(message.guild != null ? message.guild.id : null);
+		var using = false;
+		if (message.content.startsWith(prefix)) {
 			using = true;
 		} else {
-			prefix = message.content.match("^" + MessageMentions.USERS_PATTERN.source);
-			using = prefix != null &&
-				message.mentions.users.size === 1 &&
-				message.mentions.users.first().id == message.client.user.id;
+			var match = message.content.match("^" + MessageMentions.USERS_PATTERN.source);
+			if (match != null) {
+				prefix = match[0];
+				using = message.mentions.users.size === 1 &&
+					message.mentions.users.first().id == message.client.user.id;
+			}
 		}
+
 		if (using) {
 			var params = new Params(message);
-			params.offset(prefix[0].length);
+			params.offset(prefix.length);
 			params.readSep();
 			var name = params.readParam();
 			if (name != null) {
@@ -396,7 +407,6 @@ export class CommandsManager implements IExecutable<Message> {
 					if (!server.locked.value || command.id === "lockdown") {
 						params.readSep();
 						command.execute(new Call(this, message, params, command));
-						used = true;
 					} else {
 						if (!server.locked.channels.includes(message.channel.id)) {
 							server.locked.channels.push(message.channel.id);
@@ -406,19 +416,6 @@ export class CommandsManager implements IExecutable<Message> {
 				}
 			}
 		}
-		return used;
-	}
-
-	exec(message: Message): boolean {
-		var used;
-		var request = this.getRequesting(message);
-		if (request != null) {
-			if (message.author != message.client.user)
-				used = this.processRequest(request, message);
-		} else {
-			used = this.processCommand(message);
-		}
-		return used;
 	}
 };
 module.exports = new CommandsManager();
