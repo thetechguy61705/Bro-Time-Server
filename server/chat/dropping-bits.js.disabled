@@ -36,6 +36,7 @@ module.exports = {
 	},
 	dropBits: function (channel) {
 		var bitsDropped = this.getRate("RATES");
+		// todo: Use the new RequestData class to get the prefix.
 		var randomCommand = (channel.guild || channel).data.prefix + this.getRate();
 		channel.send({ embed: new RichEmbed()
 			.setTitle(bitsDropped + " Bro Bits dropped!")

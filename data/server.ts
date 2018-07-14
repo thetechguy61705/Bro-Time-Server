@@ -1,9 +1,6 @@
 import { Guild, Client, Snowflake } from "discord.js";
 const config = require("@root/config");
 const { Pool } = require("pg");
-const escapeRegExp = require("escape-string-regexp");
-
-const DM_PREFIX = "/";
 
 var pool = null;
 try {
@@ -26,35 +23,19 @@ if (pool != null) {
 
 export class BotAccess {
 	public readonly server?: Guild
-	public prefix: string = DM_PREFIX
 
 	public constructor(area) {
 		if (area instanceof Guild)
 			this.server = area;
 	}
 
-	public async load() {
-		if (pool != null && this.server != null) {
-			var client = await pool.connect();
-			// Provide the bot id and server id.
-			await client.query("SELECT discord.AddBot($1) FOR UPDATE", [this.server.id]);
-			this.prefix = (await client.query(`SELECT Prefix
-			                                   FROM discord.Servers
-			                                   WHERE Server_Id = $1`, [this.server.id])).rows[0].prefix;
-			client.release();
-		}
-		return true;
-	}
-
 	public async setPrefix(newPrefix) {
 		if (this.server == null)
 			throw new Error("Cannot set a prefix for non-server data.");
-		newPrefix = escapeRegExp(newPrefix);
 		if (pool != null)
 			await pool.query(`UPDATE discord.Servers
 		                            SET Prefix = $2
 		                            WHERE Server_Id = $1`, [this.server.id, newPrefix]);
-		this.prefix = newPrefix;
 		return true;
 	}
 }
