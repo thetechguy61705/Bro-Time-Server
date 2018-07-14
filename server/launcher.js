@@ -1,14 +1,14 @@
 const { ShardingManager } = require("discord.js");
+const dataProcessor = require("@utility/datarequest.ts");
 const config = require("@root/config");
 const manager = new ShardingManager(__dirname + "/server.js", config.SHARD);
-const dataProcessor = require("@utility/datarequest.ts");
 
 /* eslint-disable no-console */
 
 console.log("Launching shards...");
 
 manager.on("launch", (shard) => {
-	console.log(`Launched shard ${shard.id}`);
+	console.log(`Launched shard ${shard.id}!`);
 });
 
 manager.on("message", (shard, message) => {

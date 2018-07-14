@@ -99,7 +99,7 @@ client.on("ready", () => {
 		});
 
 		// eslint-disable-next-line no-console
-		console.log("Shard loaded!");
+		console.log(`Loaded shard ${client.shard.id}!`);
 	});
 });
 
