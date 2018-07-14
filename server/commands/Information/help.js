@@ -58,11 +58,10 @@ module.exports = {
 				`\nAliases: \`${(aliases || ["None"]).join("`, `")}\`` +
 				`\nCategory: \`${command.category}\`` +
 				"\n\n[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server/tree/master/server/commands/" +
-					`${(command.category !== "Other") ? command.category.replace(/\s/g, "%20") + "/" : ""}${file}.js)`)
+					`${(command.category !== "Other") ? command.category.replace(/\s/g, "%20") + "/" : ""}${file})`)
 				.setDefaultFooter(call.message.author);
-		} else {
-			call.safeSend("Invalid command name. Please run `!help (command)` or just `!help`");
-		}
+		} else call.safeSend("Invalid command name. Please run `!help (command)` or just `!help`");
+
 		if (helpEmbed.description != null) {
 			call.safeSend(null, call.message, { embed: helpEmbed });
 		}

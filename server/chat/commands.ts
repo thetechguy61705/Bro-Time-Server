@@ -343,7 +343,7 @@ function loadModule(file, category) {
 		}
 	}).then((module: ICommand | IRoleCommand) => {
 		module.category = (category != null) ? category : "Other";
-		module.file = path.parse(file).name;
+		module.file = path.parse(file).name + path.parse(file).ext;
 		if (module["roles"]) {
 			module["execute"] = function (call: Call) {
 				new RoleCommand(call).changeRole();
