@@ -1,4 +1,4 @@
-import { Client, Shard } from "discord.js";
+import { Client, Shard, Snowflake } from "discord.js";
 import { Pool, PoolClient } from "pg";
 const config = require("@root/config");
 const escapeRegExp = require("escape-string-regexp");
@@ -70,7 +70,16 @@ export class DataRequest {
         });
     }
 
-    // todo: Implement prefix loading.
+    public static getPrefix(guildId: Snowflake): Promise<string> {
+        // todo: Deprecate discord.AddBot sql function.
+        return DataRequest.doTransaction(async (connection: PoolClient) => {
+            return (await connection.query(`SELECT Prefix
+                FROM discord.Servers
+                WHERE Server_Id = $1`, [guildId])).rows[0].prefix || DM_PREFIX;
+        }, async () => {
+            return DM_PREFIX;
+        });
+    }
 
     // todo: Implement setting a prefix.
 
