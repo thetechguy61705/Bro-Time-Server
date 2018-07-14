@@ -13,13 +13,14 @@ module.exports = {
 			parameterTwo = (call.params.readParam() || "");
 		if (Moderator(call.message.member)) {
 			if (parameterOne != "") {
-				const target = call.message.guild.members.find((member) => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
+				var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
+				const target = guild.members.find((member) => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
 				if (target != null) {
 					if (!target.user.bot) {
 						if (target.highestRole.position < call.message.member.highestRole.position) {
 							var reason = (parameterTwo !== "") ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
 							try {
-								await target.send(`You have been warned in the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}.`);
+								await target.send(`You have been warned in the \`${guild.name}\` server by \`${call.message.author.tag}\` for ${reason}.`);
 							} catch (err) {
 								console.warn(err.stack);
 							}

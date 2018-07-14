@@ -8,12 +8,13 @@ module.exports = {
 	access: "Server",
 	botRequires: ["ADD_REACTIONS"],
 	botRequiresMessage: "To scroll through the member list.",
-	execute: (call) => {
+	execute: async (call) => {
 		var memberEmbed = new Discord.RichEmbed().setColor("ORANGE");
 		var members;
 		var content = call.params.readRaw();
 		var role = call.params.readRole();
 		if (role || content === "") {
+			await call.message.guild.fetchMembers("", call.message.guild.memberCount);
 			if (content !== "") {
 				members = role.members.array().sort((a, b) => a.displayName.localeCompare(b.displayName)).map((u) => u.toString()).join("\n");
 				memberEmbed.setTitle(`Users in ${role.name}`);

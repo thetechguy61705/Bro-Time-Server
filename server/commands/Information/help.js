@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const { DataRequest } = require("@utility/datarequest.ts");
 
 function add(command, help, prefix) {
 	var category = command.category || "Other";
@@ -20,14 +21,13 @@ module.exports = {
 	description: "Returns information and commands on the bot.",
 	paramsHelp: "[command]",
 	access: "Public",
-	execute: (call) => {
+	execute: async (call) => {
 		const commandFilter = (cmd) => {
 			if (call.message.channel.type === "dm" && ["Private", "Public"].includes(cmd.access)) return true;
 			if (call.message.channel.type === "text" && ["Server", "Public", undefined].includes(cmd.access)) return true;
 			return false;
 		};
-		const data = (call.message.guild || call.message.channel).data;
-		const prefix = (data != null) ? data.prefix : "help";
+		const prefix = await DataRequest.getPrefix(call.message.guild.id);
 		const param1 = (call.params.readRaw() !== "" && call.params.readRaw() != null) ? call.params.readRaw() : "";
 		const command = call.commands.loaded.find((cmd) => (cmd.aliases || []).concat(cmd.id).includes(param1.toLowerCase()));
 		var helpEmbed = new Discord.RichEmbed()

@@ -4,7 +4,6 @@ var config = {
 	DB_CONNECTIONS: 20,
 	DB: process.env.DB,
 	CLIENT: {
-		fetchAllMembers: true,
 		disableEveryone: true
 	},
 	SHARD: {},

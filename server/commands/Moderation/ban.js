@@ -13,13 +13,14 @@ module.exports = {
 			parameterOne = (call.params.readParam() || ""),
 			parameterTwo = (call.params.readParam() || "");
 		if (Moderator(call.message.member)) {
-			const target = call.message.guild.members.find((m) => parameterOne.includes(`${m.user.id}`));
+			var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
+			const target = guild.members.find((m) => parameterOne.includes(`${m.user.id}`));
 			if (target != null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					var reason = (parameterTwo !== "") ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
 					if (target.bannable) {
 						try {
-							await target.send(`You have been banned from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);
+							await target.send(`You have been banned from the \`${guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);
 						} catch (err) {
 							console.warn(err.stack);
 						}

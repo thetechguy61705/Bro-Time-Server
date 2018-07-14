@@ -8,22 +8,23 @@ module.exports = {
 	requires: "Moderator permissions",
 	botRequires: ["MANAGE_ROLES"],
 	access: "Server",
-	execute: (call) => {
+	execute: async (call) => {
 		const parameterOne = call.params.readParam(), parameterTwo = call.params.readParam();
 		if (Moderator(call.message.member)) {
-			const target = call.message.guild.members.find((member) => (parameterOne || "").includes(member.user.id) ||
+			var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
+			const target = guild.members.find((member) => (parameterOne || "").includes(member.user.id) ||
 				member.user.tag.toLowerCase().startsWith(parameterOne));
 			if (target != null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
-					if (!target.roles.has(call.message.guild.roles.find("name", "Muted").id)) {
+					if (!target.roles.has(guild.roles.find("name", "Muted").id)) {
 						var muteTime = (parameterTwo != null) ? ms(parameterTwo) : null;
 						if (muteTime != null) {
 							if (muteTime >= 10000) {
-								target.addRole(call.message.guild.roles.find("name", "Muted")).then(() => {
+								target.addRole(guild.roles.find("name", "Muted")).then(() => {
 									call.message.channel.send(`***Successfully muted \`${target.user.tag}\` for ${ms(muteTime, { long: true })}.***`);
 									call.client.channels.get("457235875487678465").send(`${target.user.id} ${Date.now() + muteTime}`).then((msg) => {
 										call.client.setTimeout(() => {
-											target.removeRole(call.message.guild.roles.find("name", "Muted"));
+											target.removeRole(guild.roles.find("name", "Muted"));
 											msg.delete();
 										}, muteTime);
 									});
@@ -32,7 +33,7 @@ module.exports = {
 								});
 							} else call.message.reply("The time to mute the user must be at least 10 seconds.");
 						} else {
-							target.addRole(call.message.guild.roles.find("name", "Muted")).then(() => {
+							target.addRole(guild.roles.find("name", "Muted")).then(() => {
 								call.message.channel.send(`***Successfully muted \`${target.user.tag}\`.***`);
 							}).catch(() => {
 								call.message.channel.send(`Failed to mute \`${target.user.tag}\`.`);

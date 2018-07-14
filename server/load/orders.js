@@ -24,8 +24,7 @@ module.exports = {
 				"var ordersChannel = this.channels.get('399290151932526593');" +
 				"if (ordersChannel != null) {" +
 					"var orderModule = require('@server/load/orders.js');" +
-					"orderModule.kitchen = ordersChannel.guild;" +
-					"ordersChannel.fetchMessages({ limit: 100 }).then((orders) => {" +
+					"ordersChannel.fetchMessages({ limit: 100 }).then(async (orders) => {" +
 						"orders = orders.filter((m) => m.embeds[0]).array();" +
 						"for (let order of orders) {" +
 							"orderModule.orders.push({" +
@@ -38,6 +37,7 @@ module.exports = {
 								"links: order.embeds[0].fields[5].value || 'None'," +
 							"});" +
 						"}" +
+						"orderModule.kitchen = await ordersChannel.guild.fetchMembers();" +
 					"});" +
 				"}"
 			);

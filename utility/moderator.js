@@ -7,10 +7,11 @@ module.exports = function isModerator(member) {
 		member = member.client.guilds.has("330913265573953536") ?
 			member.client.guilds.get("330913265573953536").member(member.id) :
 			member.client.guilds.first().member(member.id);
+		// todo: Change this to work for future settings, this can currently be abused if local testing on a bot without access to Bro Time.
 		if (member != null && member instanceof GuildMember) {
 			if (member.hasPermission("ADMINISTRATOR") || member.roles.some((role) => modRoles.includes(role.id)))
 				result = true;
 		}
-	} else throw new TypeError("Parameter must be an instance of User or GuildMember.");
+	} else throw new TypeError("Parameter must be an instance of User or GuildMember..");
 	return result;
 };
