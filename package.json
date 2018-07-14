@@ -44,6 +44,7 @@
     "ffmpeg-binaries": "^3.2.2-3",
     "miniget": "^1.2.0",
     "module-alias": "^2.1.0",
+    "normalize-strings": "^1.1.0",
     "ms": "^2.1.1",
     "node-gyp": "^3.7.0",
     "node-opus": "^0.2.7",

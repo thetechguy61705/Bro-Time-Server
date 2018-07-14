@@ -1,12 +1,13 @@
+import { ICommand, Call } from "@server/chat/commands";
 const { RichEmbed } = require("discord.js");
 const isModerator = require("@utility/moderator");
 
-module.exports = {
+module.exports = <ICommand>{
 	id: "prefix",
 	description: "Changes the guild's prefix.",
 	paramsHelp: "(new prefix)",
 	access: "Server",
-	execute: (call) => {
+	execute: (call: Call) => {
 		if (isModerator(call.message.author)) {
 			var data = (call.message.guild || call.message.channel).data;
 			var newPrefix = call.params.readParam(true);
