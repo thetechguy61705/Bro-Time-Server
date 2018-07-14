@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const fs = require("fs");
+const { load } = require("@utility/filesloader.ts");
 const dataProcessor = require("@utility/datarequest.ts");
 // todo: Move configuration to config.js.
 const BRO_TIME_GUILDS = ["330913265573953536", "453694109819994114", "463408396872187904", "398948242790023168"];
@@ -27,28 +27,29 @@ module.exports = {
 
 errorHandler(client);
 
-for (let file of fs.readdirSync(__dirname + "/chat")) {
-	if (file.endsWith(".js") || file.endsWith(".ts")) {
-		new Promise((resolve, reject) => {
-			try {
-				resolve(require("./chat/" + file));
-			} catch (exc) {
-				reject(exc);
-			}
-		}).then((handler) => {
-			chatHandlers.push(handler);
-		}, (exc) => {
-			console.warn(`Unable to load chat module ${file}:`);
-			console.warn(exc.stack);
-		});
+load("load", {
+	client: client,
+	displayErrorStack: false,
+	success: (exported, file) => {
+		loaders.push(exported);
+	},
+	failure: (exc) => {
+		console.warn("Failed to load:");
+		throw exc;
+	},
+	TimeoutTime: LOAD_TIMEOUT,
+	timeout: (exc) => {
+		throw exc;
 	}
-}
-
-for (let file of fs.readdirSync(__dirname + "/load")) {
-	if (file.endsWith(".js") || file.endsWith(".ts")) {
-		loaders.push(require("./load/" + file));
-	}
-}
+});
+load("chat", {
+	client: client,
+	failureMessage: "Unable to load chat module:",
+	success: (exported) => {
+		chatHandlers.push(exported);
+	},
+	TimeoutTime: LOAD_TIMEOUT
+});
 
 client.on("ready", () => {
 	var loading = [];
@@ -108,8 +109,7 @@ client.on("ready", () => {
 			for (let handler of chatHandlers) {
 				try {
 					// todo: Move client out of the arguments of handler.exec.
-					if (handler.exec(message, client))
-						break;
+					handler.exec(message, client)
 				} catch (exc) {
 					console.warn("Failed to handle chat message:");
 					console.warn(exc.stack);
