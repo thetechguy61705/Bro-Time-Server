@@ -1,7 +1,13 @@
 import { Client, Shard } from "discord.js";
+import { Pool, PoolClient } from "pg";
+const config = require("@root/config");
+const escapeRegExp = require("escape-string-regexp");
 var client: Client = null;
 var pending: DataRequest[] = [];
 var nextRequestId = 0;
+var pool: Pool = null;
+
+const DM_PREFIX = "/";
 
 export class DataRequest {
     public static REQUEST_TYPE = new Enum(["RoundTrip"])
@@ -29,6 +35,31 @@ export class DataRequest {
         client.shard.send(request);
     }
 
+    private static async doTransaction(
+        onlineTrans: { (connection: PoolClient): Promise<any> },
+        offlineTrans: { (): Promise<any> },
+        setupTrans: { (): void } = null) {
+
+        var connection: PoolClient = null;
+        var result: any;
+        try {
+            if (setupTrans != null)
+                setupTrans();
+            if (pool != null) {
+                connection = await pool.connect();
+                result = await onlineTrans(connection);
+            } else {
+                result = await offlineTrans();
+            }
+        } catch (exc) {
+            throw exc;
+        } finally {
+            if (connection != null)
+                connection.release();
+        }
+        return result;
+    }
+
     public static doRoundTrip(isInvalid?: boolean): Promise<any> {
         return new Promise((resolve, reject) => {
             var request = new DataRequest(DataRequest.REQUEST_TYPE.RoundTrip,
@@ -38,6 +69,16 @@ export class DataRequest {
             DataRequest.sendRequest(request);
         });
     }
+
+    // todo: Implement prefix loading.
+
+    // todo: Implement setting a prefix.
+
+    // todo: Implement getting a wallet total.
+
+    // todo: Implement changing a wallet amount.
+    
+    // todo: Implement transfering a wallet amount.
 }
 
 export class DataResponse {
@@ -82,4 +123,22 @@ export function processClient(response: DataResponse): void {
         }
         pending.splice(index, 1);
     }
+}
+
+try {
+	pool = config.DB != null ? new Pool({
+		max: config.DB_CONNECTIONS,
+		connectionString: config.DB
+    }) : null;
+    
+    if (pool != null) {
+        process.on("SIGTERM", async () => {
+            await pool.end();
+        });
+    } else {
+        console.warn("No database provided. The server will run without data persistence.");
+    }
+} catch (exc) {
+	console.warn("Unable to connect to a database:");
+	console.warn(exc.stack);
 }
