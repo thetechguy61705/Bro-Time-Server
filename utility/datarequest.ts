@@ -105,22 +105,23 @@ if (process.env.SHARD_ID != null) {
 			}
 			pending.splice(index, 1);
 		}
-	}
+	};
 
 	module.exports.setClient = function (newClient: Client): void {
 		client = newClient;
-	}
+	};
 } else {
 	// parent
 
 	const config = require("@root/config");
 	var pool: Pool = null;
 
+	// eslint-disable-next-line no-inner-declarations
 	async function doTransaction(
 		onlineTrans: { (connection: PoolClient): Promise<any> },
 		offlineTrans: { (): Promise<any> },
 		setupTrans: { (): void } = null) {
-	
+
 		var connection: PoolClient = null;
 		var result: any;
 		try {
@@ -172,14 +173,14 @@ if (process.env.SHARD_ID != null) {
 			result = new Error("The data request type has not been implemented.");
 		}
 		shard.process.send(new DataResponse(result, request.requestId));
-	}
+	};
 
 	try {
 		pool = config.DB != null ? new Pool({
 			max: config.DB_CONNECTIONS,
 			connectionString: config.DB
 		}) : null;
-	
+
 		if (pool != null) {
 			process.on("SIGTERM", async () => {
 				await pool.end();
