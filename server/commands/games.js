@@ -1,8 +1,7 @@
-const Discord = require("discord.js");
+const { Collection, RichEmbed, ReactionCollector, Message } = require("discord.js");
 const uuid = require("uuid/v1");
 const fs = require("fs");
 const util = require("util");
-const { Collection, RichEmbed, ReactionCollector, Message } = require("discord.js");
 
 var { WalletAccess } = require("@data/server.ts");
 var modules = new Collection();
@@ -57,7 +56,7 @@ class Input {
 function listGames(message) {
 	var gameList = modules.keyArray();
 	if (message == null) return gameList;
-	var gameEmbed = new Discord.RichEmbed()
+	var gameEmbed = new RichEmbed()
 		.setTitle("Available Games")
 		.setDescription("`" + gameList.join("`\n`") + "`")
 		.setFooter(`Ran by ${message.author.username} (${message.author.id})`, message.author.dsiplayAvatarURL)

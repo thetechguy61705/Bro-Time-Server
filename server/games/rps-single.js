@@ -3,6 +3,7 @@ module.exports = {
 	shortDescription: "Play rps against Bro Bot.",
 	longDescription: "Play rock-paper-scissors with Bro Bot, where the objective is to crush the opponent's chosen item.",
 	instructions: "State either rock, paper or scissors to fight the opponents choice.",
+	betting: false,
 	minPlayers: 1,
 	maxPlayers: 1,
 	requiresInvite: false,
