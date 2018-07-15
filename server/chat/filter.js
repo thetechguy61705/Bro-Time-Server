@@ -24,6 +24,9 @@ function specialCharsToLetters(str) {
 }
 
 module.exports = {
+	INVITE_REGEX: INVITE_REGEX,
+	MARKDOWN_REGEX: MARKDOWN,
+
 	checks: [
 		function(message) {
 			const BAD_WORDS = ["-".repeat(2001)];
