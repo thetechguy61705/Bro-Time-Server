@@ -1,6 +1,8 @@
 import { RichEmbed, TextChannel, Message } from "discord.js";
 import { ICommand, Call } from "@server/chat/commands.ts";
 import { INVITE_REGEX, MARKDOWN } from "@server/chat/filter.js";
+const COOLDOWN_TIME = 1800000;
+// 30 minutes.
 
 module.exports = {
 	id: "suggest",
@@ -39,7 +41,7 @@ module.exports = {
 							});
 							call.client.setTimeout(() => {
 								module.exports.cooldown.splice(module.exports.cooldown.indexOf(call.message.author.id), 1);
-							}, 3600000);
+							}, COOLDOWN_TIME);
 						}).catch((exc: Error) => {
 							call.safeSend("Failed to send the suggestion.");
 							module.exports.cooldown.splice(module.exports.cooldown.indexOf(call.message.author.id), 1);
@@ -49,7 +51,7 @@ module.exports = {
 					} else call.safeSend("Your suggestion contains an invite link (fake or not). Please avoid using invite links in suggestions");
 				} else call.safeSend("Please specify a title (256 chars or less) and a description of your suggestion (500 chars or less)." +
 					" Example: `!suggest Hello Command: Replies saying Hello @user! to you.`.");
-			} else call.safeSend("Please wait 60 minutes before sending another suggestion.");
+			} else call.safeSend("Please wait 30 minutes before sending another suggestion.");
 		} else call.safeSend("This guild has no channel named `suggestions` that the client has permission to post embed links, send, and read messages.");
 	}
 } as ICommand;
