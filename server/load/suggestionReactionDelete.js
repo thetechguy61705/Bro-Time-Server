@@ -11,6 +11,7 @@ module.exports = {
 					"channels.push(suggestionChannel.id);" +
 				"}" +
 			"}" +
+			"for (let channel of channels) this.channels.get(channel).fetchMessages({ limit: 100 });" +
 			"this.on('messageReactionAdd', (reaction, user) => {" +
 				"if (channels.includes(reaction.message.channel.id) &&" +
 					"reaction.message.author.id === this.user.id &&" +
