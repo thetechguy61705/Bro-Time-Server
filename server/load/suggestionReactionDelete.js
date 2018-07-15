@@ -16,7 +16,10 @@ module.exports = {
 					"reaction.message.author.id === this.user.id &&" +
 					"reaction.emoji.name === '🗑' &&" +
 					"reaction.message.embeds[0] && reaction.message.embeds[0].footer.text.endsWith(`(${user.id})`)) {" +
-					"if (reaction.message.deletable) reaction.message.delete();" +
+					"if (reaction.message.deletable) {" +
+						"reaction.message.delete();" +
+						"require('@server/commands/Posting/suggest.ts').cooldown.splice(require('@server/commands/Posting/suggest.ts').cooldown.indexOf(`${user.id} ${reaction.message.guild.id}`), 1);" +
+					"}" +
 				"}" +
 			"});" +
 			"'non circular object';"

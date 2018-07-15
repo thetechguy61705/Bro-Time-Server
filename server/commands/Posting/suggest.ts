@@ -16,7 +16,7 @@ module.exports = {
 				return c.name === "suggestions" && c.type === "text" && c.permissionsFor(call.message.guild.me).has(["READ_MESSAGES", "SEND_MESSAGES", "EMBED_LINKS"]);
 			}) as TextChannel;
 		if (suggestionChannel != null) {
-			if (module.exports.cooldown.indexOf({ user: call.message.author.id, guild: call.message.guild.id}) === -1) {
+			if (module.exports.cooldown.indexOf(`${call.message.author.id} ${call.message.guild.id}`) === -1) {
 				var rawContent = call.params.readRaw(),
 					title = rawContent.split(":")[0],
 					suggestion = rawContent.split(":")[1];
@@ -28,7 +28,7 @@ module.exports = {
 						.setFooter(`${call.client.user.username} | Suggestion by ${call.message.author.tag} (${call.message.author.id})`,
 							call.message.author.displayAvatarURL);
 					if (!INVITE_REGEX.test(suggestionEmbed.title.replace(MARKDOWN, "")) && !INVITE_REGEX.test(suggestionEmbed.description.replace(MARKDOWN, ""))) {
-						module.exports.cooldown.push({ user: call.message.author.id, guild: call.message.guild.id});
+						module.exports.cooldown.push(`${call.message.author.id} ${call.message.guild.id}`);
 						suggestionChannel.send({ embed: suggestionEmbed }).then((msg: Message) => {
 							msg.reactMultiple(["👍", "👎"]);
 							call.message.channel.send({ embed: new RichEmbed()
@@ -40,11 +40,11 @@ module.exports = {
 								console.warn(exc.stack);
 							});
 							call.client.setTimeout(() => {
-								module.exports.cooldown.splice(module.exports.cooldown.indexOf({ user: call.message.author.id, guild: call.message.guild.id}), 1);
+								module.exports.cooldown.splice(module.exports.cooldown.indexOf(`${call.message.author.id} ${call.message.guild.id}`), 1);
 							}, COOLDOWN_TIME);
 						}).catch((exc: Error) => {
 							call.safeSend("Failed to send the suggestion.");
-							module.exports.cooldown.splice(module.exports.cooldown.indexOf(call.message.author.id), 1);
+							module.exports.cooldown.splice(module.exports.cooldown.indexOf(`${call.message.author.id} ${call.message.guild.id}`), 1);
 							console.warn("Failed sending suggestionEmbed:");
 							console.warn(exc.stack);
 						});
