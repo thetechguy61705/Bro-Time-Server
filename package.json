@@ -37,7 +37,6 @@
   "dependencies": {
     "@types/node": "^10.5.2",
     "@types/pg": "^7.4.10",
-    "canvas": "1.6.11",
     "defaults": "^1.0.3",
     "discord.js": "^11.3.2",
     "emoji-regex": "^7.0.0",
