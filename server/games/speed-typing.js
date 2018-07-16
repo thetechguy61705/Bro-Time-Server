@@ -32,6 +32,7 @@ module.exports = {
 	maxPlayers: 5,
 	requiresInvite: true,
 	allowLateJoin: false,
+	inviteTime: 60000,
 	load: () => {},
 	start: (session) => {
 		session.players.set(session.host.id, session.host);
@@ -45,16 +46,18 @@ module.exports = {
 					msg.edit(`Game starting in **${i}**`);
 				} else {
 					session.context.client.clearInterval(interval);
+					var startedAt = Date.now();
 					msg.edit("", {
 							embed: new RichEmbed()
 								.setColor(0x00AE86)
-								.setTitle("Rewrite the words and send it to this channel.")
+								.setTitle("Rewrite the words in one message and send it to this channel.")
 								.setDescription(`\`\`\`${unicodeWords.join("\n")}\`\`\``)
 						}).then(() => {
 						msg.channel.awaitMessages((m) => session.players.keyArray().includes(m.author.id) &&
 							m.content.toUpperCase() === words.join(" "),
 							{ time: 120000, maxMatches: 1, errors: ["time"] }).then((results) => {
 								session.winner = results.first().author;
+								session.timeTaken = Date.now() - startedAt;
 								session.endGame();
 							});
 					});
@@ -64,6 +67,10 @@ module.exports = {
 	},
 	input: () => { return false; },
 	end: (session) => {
-		session.context.channel.send(`${session.winner || "Nobody"} won the game!`);
+		if (session.winner != null) {
+			session.context.channel.send(`${session.winner} won the game! It took ${Math.round(session.timeTaken / 1000)} seconds for them to finish.`);
+		} else {
+			session.context.channel.send("Nobody won the game; the time ran out.");
+		}
 	},
 };
