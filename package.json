@@ -37,6 +37,7 @@
   "dependencies": {
     "@types/node": "^10.5.2",
     "@types/pg": "^7.4.10",
+    "canvas": "1.6.11",
     "defaults": "^1.0.3",
     "discord.js": "^11.3.2",
     "emoji-regex": "^7.0.0",
@@ -51,6 +52,8 @@
     "normalize-strings": "^1.1.0",
     "opusscript": "0.0.6",
     "pg": "^7.4.3",
+    "random-words": "^1.1.0",
+    "text2png": "1.1.1",
     "ts-node": "^7.0.0",
     "typescript": "^2.9.2",
     "uuid": "^3.3.2",

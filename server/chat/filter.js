@@ -19,7 +19,8 @@ function specialCharsToLetters(str) {
 		.replace(/4|@/g, "A")
 		.replace(/5/g, "S")
 		.replace(/6|8/g, "B")
-		.replace(/9/g, "G");
+		.replace(/9/g, "G")
+		.replace(/\[^A-Z]/gi, "");
 	return newStr;
 }
 
