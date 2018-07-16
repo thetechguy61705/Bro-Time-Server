@@ -2,7 +2,7 @@ const { RichEmbed } = require("discord.js");
 
 module.exports = {
 	id: "roleinfo",
-	aliases: ["roleinformation", "inforole"],
+	aliases: ["roleinformation", "inforole", "ri"],
 	description: "Displays information on the specified role.",
 	paramsHelp: "(role)",
 	access: "Server",

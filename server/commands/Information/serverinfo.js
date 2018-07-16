@@ -5,7 +5,7 @@ function channelMap(channels, type) {
 
 module.exports = {
 	id: "serverinfo",
-	aliases: ["infoserver"],
+	aliases: ["infoserver", "si"],
 	description: "Displays information on the current server.",
 	access: "Server",
 	execute: (call) => {

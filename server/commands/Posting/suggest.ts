@@ -7,6 +7,7 @@ const COOLDOWN_TIME = 1800000;
 module.exports = {
 	id: "suggest",
 	description: "Used to suggest ideas for the current server",
+	aliases: ["idea"],
 	paramsHelp: "(idea)",
 	access: "Server",
 	cooldown: [],

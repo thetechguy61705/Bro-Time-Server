@@ -1,6 +1,6 @@
 module.exports = {
 	id: "uptime",
-	aliases: ["timeup"],
+	aliases: ["timeup", "up"],
 	description: "Returns how it has been since the bot was last restarted.",
 	access: "Public",
 	execute: (call) => {

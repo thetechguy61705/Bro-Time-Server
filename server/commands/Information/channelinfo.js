@@ -2,7 +2,7 @@ const { RichEmbed } = require("discord.js");
 
 module.exports = {
 	id: "channelinfo",
-	aliases: ["channelinformation", "infochannel"],
+	aliases: ["channelinformation", "infochannel", "ci"],
 	description: "Displays information on the specified channel.",
 	paramsHelp: "(channel)",
 	access: "Server",

@@ -2,7 +2,7 @@ const { RichEmbed, GuildMember } = require("discord.js");
 
 module.exports = {
 	id: "userinfo",
-	aliases: ["userinformation", "infouser", "whois"],
+	aliases: ["userinformation", "infouser", "whois", "ui"],
 	description: "Displays information on the specified user.",
 	paramsHelp: "(user tag in guild or user id anywhere)",
 	access: "Server",
