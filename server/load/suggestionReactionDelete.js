@@ -1,4 +1,4 @@
-const SUGGEST_COMMAND = require("@server/commands/Posting/suggest.ts")
+const SUGGEST_COMMAND = require("@server/commands/Posting/suggest.ts");
 
 module.exports = {
 	id: "suggest-reaction",

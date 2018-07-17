@@ -5,7 +5,7 @@ const isModerator = require("@utility/moderator");
 const { ALPHABET, NUMBERS } = require("@utility/alphaNumericChars.ts");
 const GUILDS = require("@server/server").guilds;
 const INVITE_REGEX = /(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite)\/\w+/gi;
-const URL_REGEX = /(https?:\/\/(www\.)?)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
+const URL_REGEX = /(https?:\/\/(www\.)?)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi;
 const MARKDOWN = /(`|\*|_|~)+/g;
 
 function getKeyByValue(object, value) {
@@ -57,6 +57,7 @@ module.exports = {
 		function(message) {
 			return false;
 			// Currently disabled because this requires settings.
+			// eslint-disable-next-line no-unreachable
 			if (!(message.channel.topic || "").includes("<ignore-url>") && !isModerator(message.member) && URL_REGEX.test(message.content)) {
 				return "Please do not send links.";
 			}

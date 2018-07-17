@@ -54,18 +54,18 @@ module.exports = {
 					session.context.client.clearInterval(interval);
 					var startedAt = Date.now();
 					msg.edit("", {
-							embed: new RichEmbed()
-								.setColor(0x00AE86)
-								.setTitle("Rewrite the words in one message and send it to this channel.")
-								.setDescription(`\`\`\`${unicodeWords.join("\n")}\`\`\``)
-						}).then(() => {
+						embed: new RichEmbed()
+							.setColor(0x00AE86)
+							.setTitle("Rewrite the words in one message and send it to this channel.")
+							.setDescription(`\`\`\`${unicodeWords.join("\n")}\`\`\``)
+					}).then(() => {
 						msg.channel.awaitMessages((m) => session.players.keyArray().includes(m.author.id) &&
 							m.content.toUpperCase() === words.join(" "),
-							{ time: 120000, maxMatches: 1, errors: ["time"] }).then((results) => {
-								session.winner = results.first().author;
-								session.timeTaken = Date.now() - startedAt;
-								session.endGame();
-							});
+						{ time: 120000, maxMatches: 1, errors: ["time"] }).then((results) => {
+							session.winner = results.first().author;
+							session.timeTaken = Date.now() - startedAt;
+							session.endGame();
+						});
 					});
 				}
 			}, 1000);
