@@ -6,12 +6,8 @@ var config = {
 	CLIENT: {
 		disableEveryone: true
 	},
-	SHARD: {},
-	NAMES: []
+	SHARD: {}
 };
-config.NAMES["330913265573953536"] = "Bro Bot (!help)";
-config.NAMES["453694109819994114"] = "Test Bro Bot (!help)";
-config.NAMES["398948242790023168"] = "Bro Time Kitchen";
 
 try {
 	var userConfig = require("./user_config");
