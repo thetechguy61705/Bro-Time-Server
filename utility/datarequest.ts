@@ -7,7 +7,8 @@ var nextRequestId = 0;
 export const PREFIX_DEFAULT = "/";
 
 export class DataRequest {
-	public static REQUEST_TYPE = new Enum(["RoundTrip", "GetPrefix", "SetPrefix"])
+	public static REQUEST_TYPE = new Enum(["RoundTrip", "GetPrefix", "SetPrefix",
+		"WalletGetTotal", "WalletChange", "WalletTransfer"])
 	public sentInstance: string = "DataRequest"
 	public type: any
 	public requestId: number
@@ -18,6 +19,11 @@ export class DataRequest {
 
 	public guildId?: Snowflake
 	public newPrefix?: string
+
+	public userId?: Snowflake
+	public toUserId?: Snowflake
+	public fromUserId?: Snowflake
+	public amount?: number
 
 	private constructor(type: any,
 		resolve: { (value?: any): void },
@@ -69,13 +75,48 @@ export class DataRequest {
 		});
 	}
 
-	// todo: Implement getting a wallet total.
+	public static walletGetTotal(userId: Snowflake): Promise<number> {
+		return new Promise((resolve, reject) => {
+			if (userId == null) {
+				resolve(Infinity);
+			} else {
+				var request = new DataRequest(DataRequest.REQUEST_TYPE.WalletGetTotal,
+					resolve, reject);
+				request.userId = userId;
+				DataRequest.sendRequest(request);
+			}
+		});
+	}
 
-	// todo: Implement changing a wallet amount.
+	public static walletChange(userId: Snowflake, amount: number): Promise<number> {
+		return new Promise((resolve, reject) => {
+			if (userId == null) {
+				resolve(Infinity);
+			} else {
+				var request = new DataRequest(DataRequest.REQUEST_TYPE.WalletChange,
+					resolve, reject);
+				request.userId = userId;
+				request.amount = amount;
+				DataRequest.sendRequest(request);
+			}
+		});
+	}
 
-	// todo: Implement changing a wallet amount.
+	public static walletTransfer(fromUserId: Snowflake, amount: number, toUserId: Snowflake = null): Promise<IWalletTransferResult> {
+		return new Promise((resolve, reject) => {
+			var request = new DataRequest(DataRequest.REQUEST_TYPE.WalletTransfer,
+				resolve, reject);
+			request.fromUserId = fromUserId;
+			request.toUserId = toUserId;
+			request.amount = amount;
+			DataRequest.sendRequest(request);
+		});
+	}
+}
 
-	// todo: Implement transfering a wallet amount.
+export interface IWalletTransferResult {
+	toAmount: number
+	fromAmount: number
 }
 
 export class DataResponse {
@@ -151,7 +192,6 @@ if (process.env.SHARD_ID != null) {
 			break;
 		}
 		case DataRequest.REQUEST_TYPE.GetPrefix: {
-			// todo: Deprecate discord.AddBot sql function.
 			result = await doTransaction(async (connection: PoolClient) => {
 				return request.guildId == null ? PREFIX_DEFAULT : (await connection.query(`SELECT Prefix
 					FROM discord.Servers
@@ -166,6 +206,41 @@ if (process.env.SHARD_ID != null) {
 				await connection.query(`UPDATE discord.Servers
 					SET Prefix = $2
 					WHERE Server_Id = $1`, [request.guildId, request.newPrefix]);
+			}, async () => {});
+			break;
+		}
+		case DataRequest.REQUEST_TYPE.WalletGetTotal: {
+			result = await doTransaction(async (connection: PoolClient) => {
+				return (await connection.query("SELECT discord.WalletGet($1)",
+					[request.userId])).rows[0].walletget;
+			}, async () => {});
+			break;
+		}
+		case DataRequest.REQUEST_TYPE.WalletChange: {
+			result = await doTransaction(async (connection: PoolClient) => {
+				var amount = (await connection.query("SELECT discord.WalletChange($2, $1) FOR UPDATE",
+					[request.userId, request.amount])).rows[0].walletchange;
+
+				shard.manager.broadcastEval(`this.emit('walletChange', '${request.userId}', ${amount});`);
+
+				return amount;
+			}, async () => {});
+			break;
+		}
+		case DataRequest.REQUEST_TYPE.WalletTransfer: {
+			result = await doTransaction(async (connection: PoolClient) => {
+				var amounts = (await connection.query("SELECT discord.WalletTransfer($3, $1, $2) FOR UPDATE",
+					[request.fromUserId, request.toUserId, request.amount])).rows[0].wallettransfer;
+
+				shard.manager.broadcastEval(`this.emit('walletChange', '${request.fromUserId}', ${amounts.from_amount});`);
+				shard.manager.broadcastEval(`this.emit('walletChange', '${request.toUserId}', ${amounts.to_amount});`);
+
+				amounts = { fromAmount: amounts.from_amount, toAmount: amounts.to_amount };
+				if (amounts.fromAmount === -1)
+					amounts.fromAmount = Infinity;
+				if (amounts.toAmount === -1)
+					amounts.toAmount = Infinity;
+				return amounts;
 			}, async () => {});
 			break;
 		}

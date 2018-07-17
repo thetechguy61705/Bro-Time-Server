@@ -1,5 +1,5 @@
 import { Message, Client, Guild, Collection, MessageMentions, User, MessageOptions } from "discord.js";
-import { WalletAccess } from "@data/server";
+import { Wallet } from "@utility/wallet.ts";
 import { IExecutable, ILoadable } from "types/server";
 import { DataRequest } from "@utility/datarequest";
 const escapeRegExp = require("escape-string-regexp");
@@ -246,8 +246,8 @@ export class Call {
 		}
 	}
 
-	public getWallet(userId = null): WalletAccess {
-		return new WalletAccess(userId);
+	public getWallet(userId = null): Wallet {
+		return new Wallet(userId);
 	}
 
 	public safeSend(content?: any,
