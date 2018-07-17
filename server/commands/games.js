@@ -74,7 +74,7 @@ function invite(game, channel, players, host) {
 		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id, (game.bet > 0) ? "\n**THIS GAME HAS A BET ON IT.**" : ""))
 		.addField("Minimum Players", game.minPlayers, true)
 		.addField("Maximum Players", game.maxPlayers, true)
-		.setTitle(`Invite to ${game.id}`		)
+		.setTitle(`Invite to ${game.id}`)
 		.setDefaultFooter(host)
 		.setColor(0x00AE86);
 	if (channel.guild.roles.find("name", "Bro Time Games")) {
@@ -113,7 +113,7 @@ function invite(game, channel, players, host) {
 							if (players.size >= game.maxPlayers - 1) {
 								collector.stop("ready");
 								resolve();
-							} else if (players.size == game.minPlayers - 1) {
+							} else if (players.size === game.minPlayers - 1) {
 								if (!game.allowLateJoin)
 									collector.stop("ready");
 								resolve();
@@ -127,15 +127,18 @@ function invite(game, channel, players, host) {
 					}
 				});
 				collector.on("end", (_, reason) => {
-					if (reason !== "ready")
+					if (reason === "time" && players.size >= (game.minPlayers - 1) && players.size <= (game.maxPlayers - 1)) {
+						resolve();
+					} else if (reason !== "ready") {
 						reject();
+					}
 				});
 			});
 		});
 	});
 }
 
-function startGame(game, context) {
+function startGame(game, context, solo) {
 	var loading, session;
 
 	loading = [new Promise((resolve, reject) => {
@@ -161,7 +164,7 @@ function startGame(game, context) {
 				session.ended = true;
 				if (session.tooPoor) session.context.channel.send("This game was cancelled because a user playing it became too poor to meet the bet required on this gmae.");
 				session.game.end(session);
-				if (session.game.betting && session.winner != null && session.game.bet > 0) {
+				if (session.game.betting && session.winner != null && session.game.bet > 0 && session.players.size > 1) {
 					for (let player of session.players.keyArray())
 						if (player != session.winner.id)
 							getWallet(player).transfer(session.game.bet, (session.winner.id != session.context.client.user.id) ? session.winner.id : null);
@@ -171,7 +174,7 @@ function startGame(game, context) {
 	};
 	if (context.message != null)
 		session.host = context.message.author;
-	if (game.requiresInvite)
+	if (game.requiresInvite && !solo)
 		loading.push(invite(game, context.channel, session.players, session.host));
 
 	Promise.all(loading).then(() => {
@@ -230,7 +233,7 @@ module.exports = {
 	botRequiresMessage: "To create a game invitation method. Some games also require MANAGE_MESSAGES for removing reactions although it is not required.",
 	execute: async (call) => {
 		var name = call.params.readParam();
-		var bet = (call.client.user.id === "393532251398209536") ? (call.params.readNumber() || 0) : 0;
+		var bet = (call.client.user.id === "393532251398209536") ? (call.params.readNumber(false, false) || 0) : 0;
 		if (bet < 0) bet = 0;
 		var found = false;
 		if (games != null)
@@ -241,11 +244,12 @@ module.exports = {
 			if (game != null) {
 				found = true;
 				if (game.betting) game.bet = bet;
+				var solo = bet === 0 && call.params.readParam() === "-solo" && game.minPlayers === 1;
 				var userBalance = (call.client.user.id === "393532251398209536") ? await getWallet(call.message.author.id).getTotal() : Infinity;
 
 				if (userBalance >= bet) {
 					if (!game.autostart) {
-						startGame(game, new Context(call.client, call.message));
+						startGame(game, new Context(call.client, call.message), solo);
 					} else {
 						call.message.channel.send(`The game ${name} can not be started manually.`);
 					}

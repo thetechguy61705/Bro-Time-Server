@@ -2,7 +2,7 @@ const { RichEmbed, GuildMember } = require("discord.js");
 
 module.exports = {
 	id: "userinfo",
-	aliases: ["userinformation", "infouser"],
+	aliases: ["userinformation", "infouser", "whois", "ui"],
 	description: "Displays information on the specified user.",
 	paramsHelp: "(user tag in guild or user id anywhere)",
 	access: "Server",
@@ -11,7 +11,8 @@ module.exports = {
 		var user;
 		try {
 			if (call.message.channel.type === "text") {
-				user = call.message.guild.members.find((member) => param.includes(member.id) || member.user.tag.toLowerCase().startsWith(param || null)) ||
+				var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
+				user = guild.members.find((member) => param.includes(member.id) || member.user.tag.toLowerCase().startsWith(param || null)) ||
 					await call.client.fetchUser(param || "nothing");
 			} else {
 				user = await call.client.fetchUser(param || "nothing");

@@ -14,6 +14,7 @@ const VOTE_TIMEOUT = 60000;
 const VOTE_REQUIRED = 0.30;
 const MUSIC_CHANNELS = ["music", "songs"];
 const ABANDONED_TIMEOUT = 30000;
+const DJ_ROLES = ["330919872630358026", "402175094312665098", "436013049808420866", "436013613568884736", "DJ"];
 
 class Queue extends Array {
 	constructor(music, guild) {
@@ -94,9 +95,8 @@ class Queue extends Array {
 
 class Music {
 	static isDJ(member) {
-		const premiumRoles = ["330919872630358026", "402175094312665098", "436013049808420866", "436013613568884736", "DJ"];
-		return ((member.roles.some((role) => premiumRoles.includes(role.name) || premiumRoles.includes(role.id)))
-			|| (member.voiceChannel != null && member.voiceChannel.members.filter((member) => !member.user.bot).size === 1)) ? true : false;
+		return (member.roles.some((role) => DJ_ROLES.includes(role.name) || DJ_ROLES.includes(role.id)))
+			|| (member.voiceChannel != null && member.voiceChannel.members.filter((member) => !member.user.bot).size === 1);
 	}
 
 	static request(message, prompt) {
@@ -108,7 +108,7 @@ class Music {
 			if (voiceChannel.members.filter((member) => { return !member.user.bot; }).size() == 0) {
 				result = Promise.resolve(true);
 			} else {
-				result = vote(VOTE_TIMEOUT, message.channel, Math.floor(voiceChannel.members.size*VOTE_REQUIRED),
+				result = vote(VOTE_TIMEOUT, message.channel, Math.floor(voiceChannel.members.size * VOTE_REQUIRED),
 					(user) => { return voiceChannel.members.has(user.id); },
 					null, prompt, message.user);
 			}

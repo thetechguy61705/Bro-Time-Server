@@ -2,7 +2,7 @@ const { RichEmbed } = require("discord.js");
 
 module.exports = {
 	id: "emojiinfo",
-	aliases: ["emojiinformation", "infoemoji"],
+	aliases: ["emojiinformation", "infoemoji", "ei"],
 	description: "Displays information on the specified custom emoji.",
 	paramsHelp: "(emoji)",
 	access: "Server",

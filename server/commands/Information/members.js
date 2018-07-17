@@ -4,6 +4,7 @@ const EMOJI_ARRAY = ["◀", "▶"];
 module.exports = {
 	id: "members",
 	description: "Gets members from a role or from a guild.",
+	aliases: ["users"],
 	paramsHelp: "[role]",
 	access: "Server",
 	botRequires: ["ADD_REACTIONS"],

@@ -43,8 +43,12 @@ Array.prototype.difference = function(arr) {
 };
 
 Discord.Message.prototype.reactMultiple = async function(reactions) {
-	for (var reaction of reactions)
-		await this.react(reaction);
+	var results = [];
+	for (var reaction of reactions) {
+		var result = await this.react(reaction);
+		results.push(result);
+	}
+	return results;
 };
 
 Discord.Message.prototype.deleted = false;

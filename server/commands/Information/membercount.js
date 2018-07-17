@@ -2,6 +2,7 @@ const { RichEmbed } = require("discord.js");
 
 module.exports = {
 	id: "membercount",
+	aliases: ["count"],
 	description: "Displays the current member count",
 	access: "Server",
 	execute: function (call) {

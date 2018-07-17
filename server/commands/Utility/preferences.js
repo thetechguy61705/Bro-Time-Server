@@ -1,5 +1,5 @@
-const fs = require("fs");
 const isModerator = require("@utility/moderator");
+var fs = require("fs");
 var actions = {};
 
 for (let file of fs.readdirSync(__dirname + "/../../actions/configuration")) {

@@ -64,3 +64,4 @@ typings/
 *.project
 package-lock.json
 config.js
+server/commands/Utility/eval.js

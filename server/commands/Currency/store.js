@@ -2,6 +2,7 @@ var store = require("@utility/store");
 const Discord = require("discord.js");
 module.exports = {
 	id: "store",
+	aliases: ["shop"],
 	description: "Shows you the store.",
 	access: "Public",
 	execute: (call) => {

@@ -2,7 +2,7 @@ const { GuildMember } = require("discord.js");
 
 module.exports = {
 	id: "transfer",
-	aliases: ["give"],
+	aliases: ["give", "t"],
 	description: "Transfers Bro Bits from you to another user with a 90% exchange rate.",
 	paramsHelp: "(user) (amount)",
 	access: "Public",
@@ -23,8 +23,8 @@ module.exports = {
 		} catch (exc) {
 			failed = exc.message;
 		}
-		var amount = Number(call.params.readParam());
-		target = (target instanceof GuildMember) ? target : target;
+		var amount = call.params.readNumber();
+		target = (target instanceof GuildMember) ? target.user : target;
 		if (target != null && !failed) {
 			if (amount != null && !isNaN(amount)) {
 				if (amount >= 1) {
