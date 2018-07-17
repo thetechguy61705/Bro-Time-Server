@@ -1,9 +1,9 @@
 const isPremium = require("@utility/premium");
-var { WalletAccess } = require("@data/server.ts");
+var { Wallet } = require("@utility/wallet.ts");
 var { RichEmbed } = require("discord.js");
 
 function getWallet(userId = null) {
-	return new WalletAccess(userId);
+	return new Wallet(userId);
 }
 
 module.exports = {

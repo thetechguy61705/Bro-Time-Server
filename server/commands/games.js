@@ -3,7 +3,7 @@ const uuid = require("uuid/v1");
 const fs = require("fs");
 const util = require("util");
 
-var { WalletAccess } = require("@data/server.ts");
+var { Wallet } = require("@utility/wallet.ts");
 var modules = new Collection();
 var sessions = [];
 var noPing = [];
