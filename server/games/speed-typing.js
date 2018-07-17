@@ -22,6 +22,11 @@ function unicodeText(str) {
 	return newStr;
 }
 
+function round(num, places) {
+	var multiplier = Math.pow(10, places);
+	return Math.round(num * multiplier) / multiplier;
+}
+
 module.exports = {
 	id: "speed-typing",
 	aliases: "typing",
@@ -37,6 +42,7 @@ module.exports = {
 	start: (session) => {
 		session.players.set(session.host.id, session.host);
 		var words = randomWords({ exactly: 20, maxLength: 16, formatter: (word) => { return word.toUpperCase(); }});
+		session.letters = words.map((word) => word.length).reduce((a, b) => a += b);
 		var unicodeWords = words.map((word) => { return unicodeText(word); });
 		var i = 3;
 		session.context.channel.send(`Game starting in **${i}**.`).then((msg) => {
@@ -67,8 +73,11 @@ module.exports = {
 	},
 	input: () => { return false; },
 	end: (session) => {
+		var timeTaken = session.timeTaken / 1000;
 		if (session.winner != null) {
-			session.context.channel.send(`${session.winner} won the game! It took ${Math.round(session.timeTaken / 1000)} seconds for them to finish.`);
+			session.context.channel.send(`${session.winner} won the game! It took ${Math.round(timeTaken)} seconds for them to finish. ` +
+				`${round((20 / timeTaken) * 60, 2)} WPM (words per minute). ` +
+				`${round((session.letters / timeTaken) * 60, 2)} CPM (characters per minute).`);
 		} else {
 			session.context.channel.send("Nobody won the game; the time ran out.");
 		}
