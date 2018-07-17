@@ -10,7 +10,7 @@ var noPing = [];
 var games;
 
 function getWallet(userId = null) {
-	return new WalletAccess(userId);
+	return new Wallet(userId);
 }
 
 const DEFAULTS = [
