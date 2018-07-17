@@ -1,5 +1,4 @@
 import { Client } from "discord.js";
-
 const defaults = require("defaults");
 const fs = require("fs");
 

@@ -12,7 +12,7 @@ module.exports = {
 		var target;
 		try {
 			if (call.message.channel.type === "text") {
-				await message.guild.fetchMembers("", message.guild.memberCount);
+				await call.message.guild.fetchMembers("", call.message.guild.memberCount);
 				target = call.params.readMember() ||
 					await call.client.fetchUser(param || call.message.author.id);
 			} else {

@@ -9,8 +9,8 @@
   "scripts": {
     "start": "node --require ./register.js server/launcher.js",
     "debug": "node --require ./register.js --inspect-brk=0 server/launcher.js",
-    "test": "eslint . --ext ts && eslint test/. --ext ts --env mocha && mocha --require ./register.js",
-    "fix": "eslint . --fix --ext ts && eslint test/. --ext ts --env mocha --fix"
+    "test": "eslint . --ext js,ts && eslint test/. --ext js,ts --env mocha && mocha --require ./register.js",
+    "fix": "eslint . --fix --ext js,ts && eslint test/. --ext js,ts --env mocha --fix"
   },
   "_moduleAliases": {
     "@root": ".",

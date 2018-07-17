@@ -30,7 +30,7 @@ errorHandler(client);
 load("load", {
 	client: client,
 	displayErrorStack: false,
-	success: (exported, file) => {
+	success: (exported) => {
 		loaders.push(exported);
 	},
 	failure: (exc) => {
@@ -90,7 +90,7 @@ client.on("ready", () => {
 			for (let handler of chatHandlers) {
 				try {
 					// todo: Move client out of the arguments of handler.exec.
-					handler.exec(message, client)
+					handler.exec(message, client);
 				} catch (exc) {
 					console.warn("Failed to handle chat message:");
 					console.warn(exc.stack);

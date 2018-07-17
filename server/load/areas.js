@@ -1,5 +1,6 @@
 const { GuildChannel } = require("discord.js");
 const { load } = require("@utility/filesloader.ts");
+
 const LOAD_TIMEOUT = 60000;
 
 module.exports = {
