@@ -197,7 +197,7 @@ function startGame(game, context, solo) {
 	});
 }
 
-for (let file of fs.readdirSync(__dirname + "/../games")) {
+for (let file of fs.readdirSync(__dirname + "/../../games")) {
 	var match = file.match(/^(.*)\.js$/);
 	if (match != null) {
 		new Promise((resolve, reject) => {

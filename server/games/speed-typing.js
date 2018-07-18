@@ -1,5 +1,6 @@
 const { RichEmbed } = require("discord.js");
 const randomWords = require("random-words");
+const math = require("mathjs");
 const UNICODE_CHARS = [
 	"Ａ", "Ｂ", "Ｃ",
 	"Ｄ", "Ｅ", "Ｆ",
@@ -20,11 +21,6 @@ function unicodeText(str) {
 		newStr = newStr.replace(new RegExp(char, "i"), UNICODE_CHARS[NORMAL_CHARS.indexOf(char)]);
 	}
 	return newStr;
-}
-
-function round(num, places) {
-	var multiplier = Math.pow(10, places);
-	return Math.round(num * multiplier) / multiplier;
 }
 
 module.exports = {
@@ -76,8 +72,8 @@ module.exports = {
 		var timeTaken = session.timeTaken / 1000;
 		if (session.winner != null) {
 			session.context.channel.send(`${session.winner} won the game! It took ${Math.round(timeTaken)} seconds for them to finish. ` +
-				`${round((20 / timeTaken) * 60, 2)} WPM (words per minute). ` +
-				`${round((session.letters / timeTaken) * 60, 2)} CPM (characters per minute).`);
+				`${math.round((20 / timeTaken) * 60, 2)} WPM (words per minute). ` +
+				`${math.round((session.letters / timeTaken) * 60, 2)} CPM (characters per minute).`);
 		} else {
 			session.context.channel.send("Nobody won the game; the time ran out.");
 		}
