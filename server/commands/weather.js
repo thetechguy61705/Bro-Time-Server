@@ -19,7 +19,7 @@ module.exports = {
 						.addField("Feels Like", `${result.current.feelslike} °F.`, true)
 						.addField("Humidity", `${result.current.humidity}%`, true)
 						.addField("Sky", `${result.current.skytext}.`, true)
-						.addField("Last Updated", result.current.observationtime)
+						.addField("Last Updated", result.current.observationtime, true)
 						.addField("Windspeed", `${result.current.windspeed}.`, true)
 						.setColor(0x00AE86)
 						.setDefaultFooter(call.message.author);
