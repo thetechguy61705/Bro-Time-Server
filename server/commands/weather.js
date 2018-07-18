@@ -9,9 +9,7 @@ module.exports = {
 	execute: async (call) => {
 		var area = call.params.readParam(true);
 		if (area) {
-			// I have no idea why result is triggering the no-unused error.
-			// eslint-disable-next-line no-unused-vars
-			var result = weather.find({ search: area, degreeType: "F" }, (err, result) => {
+			weather.find({ search: area, degreeType: "F" }, (err, result) => {
 				if (err) console.warn(err.stack);
 				result = result[0];
 				if (result) {
