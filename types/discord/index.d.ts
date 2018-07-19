@@ -1,4 +1,4 @@
-import { Snowflake, MessageReaction, Emoji, ReactionEmoji, User, UserResolveable, RichEmbed } from "discord.js";
+import { Snowflake, PermissionResolvable, EmojiIdentifierResolvable, MessageReaction, RichEmbed, User } from "discord.js";
 
 declare module "discord.js" {
 	interface Client {
@@ -6,12 +6,13 @@ declare module "discord.js" {
 		bbkLocked: boolean
 		lockedChannels: Snowflake[]
 		bbkLockedChannels: Snowflake[]
+		requestPermissions: { (member: any, channel: DMChannel | TextChannel | GroupDMChannel, permissions: PermissionResolvable | PermissionResolvable[], usage: string | string[]): boolean }
 		music: any
 	}
 
 	interface Message {
 		deleted: boolean
-		reactMultiple(reactions: string[] | Emoji[] | ReactionEmoji[]): Promise<MessageReaction[]>
+		reactMultiple(reactions: EmojiIdentifierResolvable[]): Promise<MessageReaction[]>
 	}
 
 	interface Guild {

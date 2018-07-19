@@ -31,7 +31,9 @@ String.prototype.toNumber = function(num = 0) {
 		return num / 16;
 	} else if (this.endsWith("%")) {
 		return num * Number(this.slice(0, -1)) / 100;
-	} else return NaN;
+	} else {
+		return NaN;
+	}
 };
 
 String.prototype.toBoolean = function() {

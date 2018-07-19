@@ -1,4 +1,4 @@
-import { Message, Client, Guild, Collection, MessageMentions, User, MessageOptions } from "discord.js";
+import { Message, Client, Guild, Collection, MessageMentions, User, MessageOptions, PermissionResolvable } from "discord.js";
 import { Wallet } from "@utility/wallet.ts";
 import { IExecutable, ILoadable } from "types/server";
 import { DataRequest } from "@utility/datarequest";
@@ -11,6 +11,7 @@ var modules = new Collection<string, ICommand | IRoleCommand>();
 const COMMANDS = __dirname + "/../commands";
 const TESTING = process.env.NODE_ENV !== "production";
 const ACCESS = new Enum(["Public", "Private", "Server"], { ignoreCase: true });
+const USER_TYPE = new Enum(["User", "Bot"], { ignoreCase: true });
 const SPACE = "\\s,";
 const QUOTES = "\"'";
 
@@ -21,6 +22,11 @@ export interface ICommand {
 	readonly description?: string
 	readonly paramsHelp?: string
 	readonly access?: string | number
+	readonly userRequires?: PermissionResolvable | PermissionResolvable[]
+	readonly userRequiresMessage?: string | string[]
+	botRequires?: PermissionResolvable | PermissionResolvable[]
+	botRequiresMessage?: string | string[]
+	readonly userType?: string | number
 	category?: string
 	file?: string
 	execute?(call: Call): void
@@ -348,8 +354,17 @@ function loadModule(file, category) {
 			module["execute"] = function (call: Call) {
 				new RoleCommand(call).changeRole();
 			};
-			module["botRequires"] = ["MANAGE_ROLES"];
-			module["botRequiresMessage"] = `To give/remove ${module["reference"] || module.id}s.`;
+			if (module.botRequires == null) {
+				module.botRequires = "MANAGE_ROLES";
+				module.botRequiresMessage = `To give/remove ${module["reference"] || module.id}s.`;
+			} else {
+				if (!Array.isArray(module.botRequires))
+					module.botRequires = [module.botRequires];
+				if (!Array.isArray(module.botRequiresMessage))
+					module.botRequiresMessage = [module.botRequiresMessage];
+				module.botRequires.push("MANAGE_ROLES");
+				module.botRequiresMessage.push(`To give/remove ${module["reference"] || module.id}s.`);
+			}
 		}
 		modules.set(module.id, module);
 	}, (exc) => {
@@ -358,48 +373,6 @@ function loadModule(file, category) {
 			console.warn(exc.stack);
 		}
 	});
-}
-
-function hasPermissions(command, message) {
-	var has = true;
-	if (message.guild != null) {
-		if (command.botRequires != null)
-			has = message.client.requestPermissions(message.guild.members.get(message.client.user.id),
-				message.channel,
-				command.botRequires,
-				command.botRequiresMessage || `To use ${command.id}.`);
-		if (has && command.userRequires != null)
-			has = message.client.requestPermissions(message.member,
-				message.channel,
-				command.userRequires,
-				command.userRequiresMessage || `To use ${command.id}.`);
-	}
-	return has;
-}
-
-function checkAccess(command, message) {
-	var result;
-	if (ACCESS.Public.is(command.access)) {
-		result = true;
-	} else if (ACCESS.Private.is(command.access)) {
-		result = message.guild == null;
-	} else {
-		result = message.guild != null;
-	}
-	return result;
-}
-
-function checkClient(command, message) {
-	var result = false;
-	var type = (command.userType != null) ? command.userType.toLowerCase() : "both";
-	if (type === "user" && !message.author.bot) {
-		result = true;
-	} else if (type === "bot" && message.author.bot) {
-		result = true;
-	} else if (type === "both") {
-		result = true;
-	}
-	return result;
 }
 
 export class CommandsManager implements IExecutable<Message>, ILoadable<Client> {
@@ -487,7 +460,7 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 				var command: ICommand | IRoleCommand = modules.get(name.toLowerCase()) ||
 					modules.find((module: ICommand | IRoleCommand) => module.aliases != null && module.aliases.includes(name));
 
-				if (command != null && checkAccess(command, message) && checkClient(command, message) && hasPermissions(command, message)) {
+				if (command != null && this.checkAccess(command, message)) {
 					if (!server.locked.value || command.id === "lockdown") {
 						params.readSep();
 						command.execute(new Call(this, message, params, command));
@@ -500,6 +473,70 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 				}
 			}
 		}
+	}
+
+	public async checkAccess(command: ICommand, message: Message) {
+		var result: boolean;
+		if (ACCESS.Public.is(command.access)) {
+			result = true;
+		} else if (ACCESS.Private.is(command.access)) {
+			result = message.guild == null;
+		} else {
+			result = message.guild != null;
+		}
+
+		if (result)
+			result = await this.checkUser(command, message);
+
+		if (result)
+			result = await this.checkPermissions(command, message);
+
+		if (result)
+			result = await this.checkRestrictions(command, message);
+
+		return result;
+	}
+
+	private async checkUser(command: ICommand, message: Message): Promise<boolean> {
+		var result: boolean;
+		if (USER_TYPE.User.is(command.userType)) {
+			result = !message.author.bot;
+		} else if (USER_TYPE.Bot.is(command.userType)) {
+			result = message.author.bot;
+		} else {
+			result = true;
+		}
+		return result;
+	}
+
+	private async checkPermissions(command: ICommand, message: Message): Promise<boolean> {
+		var result: boolean = true;
+		if (message.guild != null) {
+			if (command.botRequires != null)
+				result = message.client.requestPermissions(message.guild.members.get(message.client.user.id),
+					message.channel,
+					command.botRequires,
+					command.botRequiresMessage || `To use ${command.id}.`);
+			if (result && command.userRequires != null)
+				result = message.client.requestPermissions(message.member,
+					message.channel,
+					command.userRequires,
+					command.userRequiresMessage || `To use ${command.id}.`);
+		}
+		return result;
+	}
+
+	// eslint-disable-next-line no-unused-vars
+	private async checkRestrictions(_command: ICommand, _message: Message): Promise<boolean> {
+		var result: boolean = true;
+
+		// todo: Check command restrictions.
+
+		if (!result) {
+			// todo: Check database restrictions.
+		}
+
+		return result;
 	}
 }
 module.exports = new CommandsManager();
