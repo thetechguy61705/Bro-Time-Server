@@ -14,7 +14,7 @@ module.exports = {
 				var result = math.eval(expression);
 				mathEmbed
 					.setTitle("Success")
-					.setDescription(`Result:\n\`${result}\`.`)
+					.setDescription(`Result:\n\`\`\`js\n${result}${" ".repeat(3)}\`\`\``)
 					.setColor("GREEN");
 			} catch (exc) {
 				mathEmbed
@@ -23,6 +23,6 @@ module.exports = {
 					.setColor("RED");
 			}
 			call.safeSend(null, call.message, { embed: mathEmbed });
-		} else call.safeSend("You must supply an expression");
+		} else call.safeSend("You must supply an expression.");
 	}
 };
