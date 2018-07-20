@@ -1,3 +1,7 @@
+import { Snowflake } from "discord.js";
+
+export type DiscordResolvable<T> = Snowflake | string | { (value: T): boolean };
+
 export interface IExecutable<T> {
     exec(arg: T): boolean | void
 }

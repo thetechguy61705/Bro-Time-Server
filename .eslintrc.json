@@ -64,7 +64,6 @@
 			"typescript/no-empty-interface": "error",
 			"typescript/no-namespace": "error",
 			"typescript/no-triple-slash-reference": "error",
-			"typescript/no-type-alias": "error",
 			"typescript/type-annotation-spacing": "error"
 		}
 	}

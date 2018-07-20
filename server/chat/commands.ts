@@ -1,6 +1,6 @@
-import { Message, Client, Guild, Collection, MessageMentions, User, MessageOptions, PermissionResolvable } from "discord.js";
+import { Channel, Role, Permissions, Message, Client, Guild, Collection, MessageMentions, User, MessageOptions, PermissionResolvable } from "discord.js";
 import { Wallet } from "@utility/wallet.ts";
-import { IExecutable, ILoadable } from "types/server";
+import { DiscordResolvable, IExecutable, ILoadable } from "types/server";
 import { DataRequest } from "@utility/datarequest";
 import { load } from "@utility/filesloader";
 const escapeRegExp = require("escape-string-regexp");
@@ -20,11 +20,17 @@ export interface ICommand extends IExecutable<Call> {
 	readonly description?: string
 	readonly paramsHelp?: string
 	readonly access?: string | number
+	readonly userType?: string | number
 	readonly userRequires?: PermissionResolvable | PermissionResolvable[]
 	readonly userRequiresMessage?: string | string[]
 	botRequires?: PermissionResolvable | PermissionResolvable[]
 	botRequiresMessage?: string | string[]
-	readonly userType?: string | number
+	readonly restrictions?: {
+		servers?: DiscordResolvable<Guild>[],
+		channels?: DiscordResolvable<Channel>[],
+		roles?: DiscordResolvable<Role>[],
+		permissions?: DiscordResolvable<Permissions>[]
+	}[]
 	category?: string
 	file?: string
 }
