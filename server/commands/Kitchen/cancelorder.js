@@ -2,7 +2,7 @@ module.exports = {
 	id: "cancelorder",
 	description: "Cancels your current order",
 	access: "Public",
-	execute: (call) => {
+	exec: (call) => {
 		const { delOrder, orders } = require("@server/load/orders.js");
 
 		if (!call.client.bbkLocked) {

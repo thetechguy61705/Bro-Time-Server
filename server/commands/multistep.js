@@ -9,7 +9,7 @@ function trim(output, max) {
 module.exports = {
 	id: "multistep",
 	test: true,
-	execute: (call) => {
+	exec: (call) => {
 		var settings = 0;
 		var cancel = false;
 		var param;

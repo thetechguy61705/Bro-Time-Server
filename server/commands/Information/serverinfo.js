@@ -8,7 +8,7 @@ module.exports = {
 	aliases: ["infoserver", "si"],
 	description: "Displays information on the current server.",
 	access: "Server",
-	execute: (call) => {
+	exec: (call) => {
 		var guild = call.message.guild;
 		var members = require("./membercount").members(guild);
 		var serverEmbed = new RichEmbed()

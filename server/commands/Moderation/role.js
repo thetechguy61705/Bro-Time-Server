@@ -21,7 +21,7 @@ module.exports = {
 	botRequires: ["MANAGE_ROLES"],
 	botRequiresMessage: "To delete/add roles to/from members.",
 	access: "Server",
-	execute: async (call) => {
+	exec: async (call) => {
 		if (Moderator(call.message.member)) {
 			await call.message.guild.fetchMembers("", call.message.guild.memberCount);
 			const PARAMETER = (call.params.readParam() || "").toLowerCase(),

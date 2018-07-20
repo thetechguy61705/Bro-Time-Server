@@ -21,7 +21,7 @@ module.exports = {
 	botRequires: ["MANAGE_MESSAGES"],
 	botRequiresMessages: "To delete messages.",
 	access: "Server",
-	execute: (call) => {
+	exec: (call) => {
 		call.purgeMessages = async function(amount, channel = this.message.channel, filter = () => true) {
 			var messages = await channel.fetchMessages({ limit: 100 });
 			messages = messages.filter(filter).first(amount);

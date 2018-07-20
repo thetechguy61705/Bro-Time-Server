@@ -2,20 +2,18 @@ import { Message, Client, Guild, Collection, MessageMentions, User, MessageOptio
 import { Wallet } from "@utility/wallet.ts";
 import { IExecutable, ILoadable } from "types/server";
 import { DataRequest } from "@utility/datarequest";
+import { load } from "@utility/filesloader";
 const escapeRegExp = require("escape-string-regexp");
 const server = require("@server/server");
-const fs = require("fs");
-const path = require("path");
-var modules = new Collection<string, ICommand | IRoleCommand>();
 
-const COMMANDS = __dirname + "/../commands";
+const LOAD_TIMEOUT = 60000;
 const TESTING = process.env.NODE_ENV !== "production";
 const ACCESS = new Enum(["Public", "Private", "Server"], { ignoreCase: true });
 const USER_TYPE = new Enum(["User", "Bot"], { ignoreCase: true });
 const SPACE = "\\s,";
 const QUOTES = "\"'";
 
-export interface ICommand {
+export interface ICommand extends IExecutable<Call> {
 	readonly id: string
 	readonly test?: boolean
 	readonly aliases?: string[]
@@ -29,14 +27,6 @@ export interface ICommand {
 	readonly userType?: string | number
 	category?: string
 	file?: string
-	execute?(call: Call): void
-}
-
-export interface IRoleCommand extends ICommand {
-	readonly roles: string[]
-	readonly reference?: string
-	readonly response?: string
-	readonly allow?: { multiple?: boolean, give?: boolean, take?: boolean }
 }
 
 interface IRequest {
@@ -210,9 +200,9 @@ export class Call {
 	public readonly message: Message
 	public readonly params: Params
 	public readonly client: Client
-	public readonly command: ICommand | IRoleCommand
+	public readonly command: ICommand
 
-	public constructor(commands: CommandsManager, message: Message, params: Params, command: ICommand | IRoleCommand) {
+	public constructor(commands: CommandsManager, message: Message, params: Params, command: ICommand) {
 		this.commands = commands;
 		this.message = message;
 		this.client = message.client;
@@ -266,143 +256,27 @@ export class Call {
 	}
 }
 
-class RoleCommand {
-	public readonly data: Call
-	public readonly roles: string[]
-	public readonly response: string
-	public readonly reference: string
-	public readonly allowMultiple: boolean
-	public readonly allowGive: boolean
-	public readonly allowTake: boolean
-
-	public constructor(data: Call) {
-		this.data = data;
-		if (!data.command["allow"]) {
-			this.allowMultiple = true;
-			this.allowGive = true;
-			this.allowTake = true;
-		} else {
-			this.allowMultiple = (data.command["allow"]["multiple"] == null) ? true : data.command["allow"]["multiple"];
-			this.allowGive = (data.command["allow"]["give"] == null) ? true : data.command["allow"]["give"];
-			this.allowTake = (data.command["allow"]["take"] == null) ? true : data.command["allow"]["take"];
-		}
-		this.roles = data.command["roles"];
-		this.reference = data.command["reference"] || data.command.id;
-		this.response = data.command["response"] || `Please specify a valid ${this.reference} option. Options: \`${this.roles.join("`, `")}\`.`;
-	}
-
-	public isValidQuery(): boolean {
-		return this.roles.includes((this.data.params.readRole(true, () => { return true; }, false) || { name: "" }).name.toUpperCase());
-	}
-
-	public async removeRoles(): Promise<void> {
-		let member = this.data.message.member;
-		var roles = member.roles.filter((r) => { return this.roles.includes(r.name.toUpperCase()); });
-		await member.removeRoles(roles);
-	}
-
-	public async changeRole(): Promise<void> {
-		let member = this.data.message.member;
-		if (this.isValidQuery()) {
-			if (!this.allowMultiple) await this.removeRoles();
-			var role = this.data.params.readRole(true, () => { return true; }, false);
-			if (member.roles.has(role.id)) {
-				if (this.allowTake) {
-					member.removeRole(role).then(() => {
-						this.data.message.reply(`Successfully removed the \`${role.name}\` ${this.reference} from you.`).catch(() => {
-							this.data.message.author.send(`Successfully removed the \`${role.name}\` ${this.reference} from you.`);
-						});
-					}).catch((exc) => {
-						this.data.safeSend(`Unable to remove the \`${role.name}\` ${this.reference} from you.`);
-						console.warn("Failed to remove role from user:");
-						console.warn(exc.stack);
-					});
-				} else this.data.safeSend(`You already have the \`${role.name}\` ${this.reference}.`);
-			} else {
-				if (this.allowGive) {
-					member.addRole(role).then(() => {
-						this.data.message.reply(`Successfully added the \`${role.name}\` ${this.reference} to you.`).catch(() => {
-							this.data.message.author.send(`Successfully added the \`${role.name}\` ${this.reference} to you.`);
-						});
-					}).catch((exc) => {
-						this.data.safeSend(`Unable to add the \`${role.name}\` ${this.reference} to you.`);
-						console.warn("Failed to remove role from user:");
-						console.warn(exc.stack);
-					});
-				} else this.data.safeSend(`You don't have the \`${role.name}\` ${this.reference}.`);
-			}
-		} else this.data.safeSend(this.response);
-	}
-}
-
-function loadModule(file, category) {
-	new Promise((resolve, reject) => {
-		try {
-			let module: ICommand | IRoleCommand = require(file);
-			if (TESTING || module.test !== true) {
-				resolve(module);
-			} else {
-				throw null;
-			}
-		} catch (exc) {
-			reject(exc);
-		}
-	}).then((module: ICommand | IRoleCommand) => {
-		module.category = (category != null) ? category : "Other";
-		module.file = path.parse(file).name + path.parse(file).ext;
-		if (module["roles"]) {
-			module["execute"] = function (call: Call) {
-				new RoleCommand(call).changeRole();
-			};
-			if (module.botRequires == null) {
-				module.botRequires = "MANAGE_ROLES";
-				module.botRequiresMessage = `To give/remove ${module["reference"] || module.id}s.`;
-			} else {
-				if (!Array.isArray(module.botRequires))
-					module.botRequires = [module.botRequires];
-				if (!Array.isArray(module.botRequiresMessage))
-					module.botRequiresMessage = [module.botRequiresMessage];
-				module.botRequires.push("MANAGE_ROLES");
-				module.botRequiresMessage.push(`To give/remove ${module["reference"] || module.id}s.`);
-			}
-		}
-		modules.set(module.id, module);
-	}, (exc) => {
-		if (exc != null) {
-			console.warn(`Command failed to load ${path.parse(file).name}:`);
-			console.warn(exc.stack);
-		}
-	});
-}
-
 export class CommandsManager implements IExecutable<Message>, ILoadable<Client> {
 	public static readonly REQUEST_OPTIONS = new Enum(["None", "Anyone", "Cancellable"], { ignoreCase: true });
 	public readonly REQUEST_OPTIONS = CommandsManager.REQUEST_OPTIONS;
 	public readonly _requests: Collection<string, IRequest> = new Collection()
-	public readonly loaded: Collection<string, ICommand | IRoleCommand> = modules
+	public readonly loaded: Collection<string, ICommand> = new Collection<string, ICommand>()
 
-	public async load() {
-		try {
-			for (let name of fs.readdirSync(COMMANDS)) {
-				try {
-					let file = path.join(COMMANDS, name);
-					let stats = fs.statSync(file);
-					if (stats.isDirectory()) {
-						for (let subname of fs.readdirSync(file)) {
-							loadModule(path.join(file, subname), name);
-						}
-					} else {
-						loadModule(file, null);
-					}
-				} catch (exc) {
-					console.warn(`Failed to load file ${name}:`);
-					console.warn(exc.stack);
-				}
+	public async load(client: Client) {
+		load("commands", {
+			client: client,
+			success: (exported) => {
+				this.loaded.set(exported.id, exported);
+			},
+			failure: (exc, file) => {
+				console.warn(`Command failed to load (${file}):`);
+				console.warn(exc.stack);
+			},
+			timeoutTime: LOAD_TIMEOUT,
+			predicate: (exported: ICommand): boolean => {
+				return TESTING || !exported.test;
 			}
-		} catch (exc) {
-			console.warn("Failed to load commands:");
-			console.warn(exc.stack);
-		}
+		});
 	}
 
 	public exec(message: Message): boolean {
@@ -457,13 +331,13 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 			params.readSep();
 			var name = params.readParam();
 			if (name != null) {
-				var command: ICommand | IRoleCommand = modules.get(name.toLowerCase()) ||
-					modules.find((module: ICommand | IRoleCommand) => module.aliases != null && module.aliases.includes(name));
+				var command: ICommand = this.loaded.get(name.toLowerCase()) ||
+				this.loaded.find((module: ICommand) => module.aliases != null && module.aliases.includes(name));
 
 				if (command != null && this.checkAccess(command, message)) {
 					if (!server.locked.value || command.id === "lockdown") {
 						params.readSep();
-						command.execute(new Call(this, message, params, command));
+						command.exec(new Call(this, message, params, command));
 					} else {
 						if (!server.locked.channels.includes(message.channel.id)) {
 							server.locked.channels.push(message.channel.id);

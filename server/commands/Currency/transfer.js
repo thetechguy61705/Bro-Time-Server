@@ -7,7 +7,7 @@ module.exports = {
 	paramsHelp: "(user) (amount)",
 	access: "Public",
 	userType: "User",
-	execute: async (call) => {
+	exec: async (call) => {
 		var param = call.params.readParam();
 		param = (param != null) ? param.toLowerCase() : null;
 		var target;

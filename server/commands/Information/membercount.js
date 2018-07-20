@@ -5,7 +5,7 @@ module.exports = {
 	aliases: ["count"],
 	description: "Displays the current member count",
 	access: "Server",
-	execute: function (call) {
+	exec: function (call) {
 		var members = this.members(call.message.guild);
 		var memberEmbed = new RichEmbed()
 			.addField("Members", members.count)

@@ -6,7 +6,7 @@ module.exports = {
 	aliases: ["math", "calc", "c"],
 	description: "Allows you to run math equations",
 	paramsHelp: "(expression)",
-	execute: async (call) => {
+	exec: async (call) => {
 		var expression = call.params.readParam(true);
 		var mathEmbed = new RichEmbed();
 		if (expression) {

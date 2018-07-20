@@ -7,7 +7,7 @@ module.exports = {
 	paramsHelp: "(user) [reason]",
 	requires: "Moderator permissions",
 	access: "Server",
-	execute: async (call) => {
+	exec: async (call) => {
 		const rawContent = call.params.readRaw(),
 			parameterOne = (call.params.readParam() || ""),
 			parameterTwo = (call.params.readParam() || "");

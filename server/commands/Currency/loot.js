@@ -43,7 +43,7 @@ module.exports = {
 	rateLimit: [],
 	access: "Public",
 	userType: "User",
-	execute: (call) => {
+	exec: (call) => {
 		if (module.exports.rateLimit.indexOf(call.message.author.id) === -1) {
 			var randomSuccess = ((Math.random() * 10) > 3) ? true : false;
 			var multiplier = (premium(call.message.author)) ? 20 : 10;

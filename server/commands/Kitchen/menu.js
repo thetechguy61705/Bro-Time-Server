@@ -4,7 +4,7 @@ module.exports = {
 	id: "menu",
 	description: "Sends you the menu",
 	access: "Public",
-	execute: (call) => {
+	exec: (call) => {
 		if (!call.client.bbkLocked) {
 			call.safeSend(null, call.message, { embed: getMenu(call.message.author) });
 		} else {

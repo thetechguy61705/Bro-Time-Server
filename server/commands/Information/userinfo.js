@@ -6,7 +6,7 @@ module.exports = {
 	description: "Displays information on the specified user.",
 	paramsHelp: "(user tag in guild or user id anywhere)",
 	access: "Server",
-	execute: async (call) => {
+	exec: async (call) => {
 		var param = (call.params.readParam(true) || "").toLowerCase();
 		var user;
 		try {

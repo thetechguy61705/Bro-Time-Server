@@ -4,7 +4,7 @@ module.exports = {
 	id: "kitchenlockdown",
 	description: "Locks down all kitchen commands",
 	access: "Public",
-	execute: (call) => {
+	exec: (call) => {
 		const { kitchen } = require("@server/load/orders.js");
 
 		var kitchenServer = kitchen,

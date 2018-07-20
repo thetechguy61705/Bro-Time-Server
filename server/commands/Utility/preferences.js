@@ -18,13 +18,13 @@ module.exports = {
 	description: "Change Bro Bot's configuration for this server.",
 	paramsHelp: "... prompt",
 	access: "Server",
-	execute: (call) => {
+	exec: (call) => {
 		if (isModerator(call.message.member)) {
 			var param = call.params.readParam(), action = actions[(param || "").toLowerCase()];
 			if (action != null) {
 				call.requestInput(null, "Please specify a option for the `" + param + "` configuration category. Options: `" + Object.keys(action).join("`, `") + "`.").then((input) => {
 					if (Object.keys(action).includes(input.message.content.toLowerCase())) {
-						action[input.message.content.toLowerCase()].execute(call, actions, action, param);
+						action[input.message.content.toLowerCase()].exec(call, actions, action, param);
 					} else call.safeSend("You did not specify a valid option. Options: `" + Object.keys(action).join("`, `") + "`. Please re-run the command.");
 				});
 			} else call.safeSend("You did not specify a valid category. Categories: `" + Object.keys(actions).join("`, `") + "`. Please re-run the command.");

@@ -6,7 +6,7 @@ module.exports = {
 	description: "Delivers food to customer",
 	paramsHelp: "(order id)",
 	access: "Public",
-	execute: (call) => {
+	exec: (call) => {
 		const { delOrder, orders, kitchen } = require("@server/load/orders.js");
 
 		if (call.client.bbkLocked && !call.client.bbkLockedChannels.includes(call.message.channel.id)) {

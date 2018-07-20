@@ -11,7 +11,7 @@ module.exports = {
 	paramsHelp: "(idea)",
 	access: "Server",
 	cooldown: [],
-	execute: (call: Call) => {
+	exec: (call: Call) => {
 		var suggestionChannel = call.message.guild.channels
 			.find((c) => {
 				return c.name === "suggestions" && c.type === "text" && c.permissionsFor(call.message.guild.me).has(["READ_MESSAGES", "SEND_MESSAGES", "EMBED_LINKS"]);

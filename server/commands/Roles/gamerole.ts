@@ -1,6 +1,6 @@
-import { IRoleCommand } from "@server/chat/commands.ts";
+import { IRoleCommand, RoleCommand } from "@utility/rolecommand";
 
-const GAMES = [
+const ROLES = [
 	"Roblox",
 	"Minecraft",
 	"Cuphead",
@@ -30,16 +30,14 @@ const GAMES = [
 	"Bro Time Games"
 ];
 
-module.exports = {
+module.exports = new RoleCommand({
 	id: "gamerole",
-	roles: GAMES,
-	allow: {
-		give: true,
-		take: true,
-		multiple: true
-	},
+	roles: ROLES,
+	allowGive: true,
+	allowTake: true,
+	allowMultiple: true,
 	response: "Invalid game role. A list of game roles can be found in `!info gameroles list`.",
 	reference: "game role",
 	description: "Gives the user the specified role if it is a part of !info gameroles list.",
 	paramsHelp: "(game role)"
-} as IRoleCommand;
+} as IRoleCommand);

@@ -4,7 +4,7 @@ module.exports = {
 	paramsHelp: "(qotd)",
 	requires: "Role: QoTD Host",
 	access: "Server",
-	execute: (call) => {
+	exec: (call) => {
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "QOTD Host").id)) {
 			const ANN_CHANNEL = call.message.guild.channels.find("name", "announcements"),
 				QOTD = call.params.readRaw(" "),

@@ -8,7 +8,7 @@ module.exports = {
 	requires: "Moderator permissions",
 	botRequires: ["MANAGE_ROLES"],
 	access: "Server",
-	execute: async (call) => {
+	exec: async (call) => {
 		const parameterOne = call.params.readParam(), parameterTwo = call.params.readParam();
 		if (Moderator(call.message.member)) {
 			var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);

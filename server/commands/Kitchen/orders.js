@@ -5,7 +5,7 @@ module.exports = {
 	description: "Lists unclaimed orders",
 	paramsHelp: "[status]",
 	access: "Public",
-	execute: (call) => {
+	exec: (call) => {
 		const { orders, kitchen } = require("@server/load/orders.js");
 
 		if (!call.client.bbkLocked) {

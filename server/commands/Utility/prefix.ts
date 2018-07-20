@@ -17,7 +17,7 @@ module.exports = {
 	description: "Changes the guild's prefix.",
 	paramsHelp: "(option) [new prefix]",
 	access: "Server",
-	execute: (call: Call) => {
+	exec: (call: Call) => {
 		var option = call.params.readParam();
 		switch (option) {
 		case "set":

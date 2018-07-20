@@ -6,7 +6,7 @@ module.exports = {
 	description: "Displays information on the specified channel.",
 	paramsHelp: "[channel]",
 	access: "Server",
-	execute: async (call) => {
+	exec: async (call) => {
 		var channel = call.params.readChannel() || call.message.channel;
 		var infoEmbed = new RichEmbed()
 			.setTitle("Information on " + channel.name)

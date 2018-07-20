@@ -7,7 +7,7 @@ module.exports = {
 	description: "Denies the send messages permission to each channel for the specified role.",
 	paramsHelp: "(mute role)",
 	access: "Server",
-	execute: (call) => {
+	exec: (call) => {
 		if (isModerator(call.message.author)) {
 			var muteRole = call.params.readRole();
 			if (muteRole != null) {

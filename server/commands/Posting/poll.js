@@ -10,7 +10,7 @@ module.exports = {
 	access: "Server",
 	botRequires: ["ADD_REACTIONS"],
 	botRequiresMessage: "To add the poll emojis.",
-	execute: (call) => {
+	exec: (call) => {
 		const pollTitle = call.params.readRaw().split(":")[0];
 		if (call.params.readRaw().split(":")[1] !== undefined) {
 			var pollOptions = call.params.readRaw().split(":").slice(1).join(":").split("|");

@@ -20,7 +20,7 @@ module.exports = {
 	paramsHelp: "... prompt",
 	requires: "Role: Game Night Host",
 	access: "Server",
-	execute: async (call) => {
+	exec: async (call) => {
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {
 			var game = await call.requestInput(null, "What is the game you want to host on?", 60000);
 			if (!game) return call.message.channel.send("Canceled prompt because there was no resonse after one minute.");

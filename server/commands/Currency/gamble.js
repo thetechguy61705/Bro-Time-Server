@@ -10,7 +10,7 @@ module.exports = {
 	paramsHelp: "(amount)",
 	access: "Public",
 	userType: "User",
-	execute: async (call) => {
+	exec: async (call) => {
 		var userBalance = await call.getWallet(call.message.author.id).getTotal();
 		var param = call.params.readNumber(), amountToBet = Math.ceil(param || param.toNumber(userBalance));
 		if (amountToBet != null && !isNaN(amountToBet) && amountToBet > 0) {

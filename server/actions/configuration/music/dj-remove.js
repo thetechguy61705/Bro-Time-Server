@@ -1,6 +1,6 @@
 module.exports = {
 	id: "dj-remove",
-	execute: (/*call, actions, action, parameter*/) => {
+	exec: (/*call, actions, action, parameter*/) => {
 
 	}
 };

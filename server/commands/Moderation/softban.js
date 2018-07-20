@@ -8,7 +8,7 @@ module.exports = {
 	botRequires: ["BAN_MEMBERS"],
 	botRequiresMessage: "To ban members and unban them.",
 	access: "Server",
-	execute: async (call) => {
+	exec: async (call) => {
 		const rawContent = call.params.readRaw(),
 			parameterOne = (call.params.readParam() || ""),
 			parameterTwo = (call.params.readParam() || "");

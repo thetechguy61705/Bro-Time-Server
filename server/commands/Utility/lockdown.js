@@ -6,7 +6,7 @@ module.exports = {
 	description: "Locks down the bot preventing any chat handlers from functioning.",
 	aliases: ["unlockdown"],
 	access: "Public",
-	execute: (call) => {
+	exec: (call) => {
 		if (Moderator(call.message.member)) {
 			server.locked.value = !server.locked.value;
 			if (!server.locked) server.locked.channels.length = 0;

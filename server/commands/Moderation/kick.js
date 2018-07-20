@@ -8,7 +8,7 @@ module.exports = {
 	botRequires: ["KICK_MEMBERS"],
 	botRequiresMessage: "To kick members.",
 	access: "Server",
-	execute: async (call) => {
+	exec: async (call) => {
 		const rawContent = call.params.readRaw(),
 			parameterOne = (call.params.readParam() || ""),
 			parameterTwo = (call.params.readParam() || "");

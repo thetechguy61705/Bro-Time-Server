@@ -231,7 +231,7 @@ module.exports = {
 	access: "Server",
 	botRequires: ["ADD_REACTIONS"],
 	botRequiresMessage: "To create a game invitation method. Some games also require MANAGE_MESSAGES for removing reactions although it is not required.",
-	execute: async (call) => {
+	exec: async (call) => {
 		var name = call.params.readParam();
 		var bet = (call.client.user.id === "393532251398209536") ? (call.params.readNumber(false, false) || 0) : 0;
 		if (bet < 0) bet = 0;
