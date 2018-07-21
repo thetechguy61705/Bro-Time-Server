@@ -1,6 +1,6 @@
-import { IRoleCommand } from "@server/chat/commands.ts";
+import { IRoleCommand, RoleCommand } from "@utility/rolecommand";
 
-const COLOR_ROLES = [
+const ROLES = [
 	"BLACK",
 	"RED",
 	"BRIGHTRED",
@@ -27,18 +27,16 @@ const COLOR_ROLES = [
 	"MULTICOLORED"
 ];
 
-module.exports = {
+module.exports = new RoleCommand({
 	id: "namecolor",
-	roles: COLOR_ROLES,
+	roles: ROLES,
 	reference: "color role",
-	allow: {
-		give: true,
-		take: false,
-		multiple: false
-	},
+	allowGive: true,
+	allowTake: false,
+	allowMultiple: false,
 	response: "Invalid color role. A list of color roles can be found in `!info namecolors list`.",
 	aliases: ["color"],
 	description: "Gives the user the specified role if it is a part of !info namecolors list.",
 	paramsHelp: "(color role)",
-	requires: "Nothing/Bro Time Premium",
-} as IRoleCommand;
+	requires: "Nothing/Bro Time Premium"
+} as IRoleCommand);

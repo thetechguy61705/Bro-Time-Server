@@ -2,7 +2,7 @@ var vote = require("@utility/vote");
 
 module.exports = {
 	id: "votetest",
-	execute: (call) => {
+	exec: (call) => {
 		vote(60000, call.message.channel, 2, () => true, `${call.message.guild.id} VOTE TEST`, "`<current>` out of `<required>` voted!", call.message.author)
 			.then((result) => {
 				if (result) {

@@ -21,7 +21,7 @@ module.exports = {
 	description: "Returns information and commands on the bot.",
 	paramsHelp: "[command]",
 	access: "Public",
-	execute: async (call) => {
+	exec: async (call) => {
 		const commandFilter = (cmd) => {
 			if (call.message.channel.type === "dm" && ["Private", "Public"].includes(cmd.access)) return true;
 			if (call.message.channel.type === "text" && ["Server", "Public", undefined].includes(cmd.access)) return true;

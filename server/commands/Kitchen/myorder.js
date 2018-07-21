@@ -4,7 +4,7 @@ module.exports = {
 	id: "myorder",
 	description: "Sends your current order and its status",
 	access: "Public",
-	execute: (call) => {
+	exec: (call) => {
 		const { orders } = require("@server/load/orders.js");
 
 		if (!call.client.bbkLocked) {

@@ -22,7 +22,7 @@ module.exports = {
 	access: "Server",
 	botRequires: ["ADD_REACTIONS"],
 	botRequiresMessage: "To add the poll emojis.",
-	execute: (call) => {
+	exec: (call) => {
 		if (call.message.member.roles.find("name", "Giveaways") != null) {
 			var rawContent = call.params.readRaw(),
 				title = rawContent.split(":")[0];

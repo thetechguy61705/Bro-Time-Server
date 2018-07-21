@@ -1,7 +1,7 @@
 module.exports = {
 	id: "accepts",
 	test: true,
-	execute: (call) => {
+	exec: (call) => {
 		call.requestInput(null, "Enter a number...", 180000, /^[0-9]+$/).then(() => {
 			call.message.channel.send("Number entered.");
 		}).catch(() => {

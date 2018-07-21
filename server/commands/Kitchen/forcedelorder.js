@@ -6,7 +6,7 @@ module.exports = {
 	description: "Deletes someone else's order",
 	paramsHelp: "(order number) (reason)",
 	access: "Public",
-	execute: (call) => {
+	exec: (call) => {
 		const { delOrder, orders, kitchen } = require("@server/load/orders.js");
 
 		if (!call.client.bbkLocked) {

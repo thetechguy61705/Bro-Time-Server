@@ -6,7 +6,7 @@ module.exports = {
 	description: "Claims an order",
 	paramsHelp: "(order id)",
 	access: "Public",
-	execute: (call) => {
+	exec: (call) => {
 		const { addOrder, delOrder, orders, kitchen } = require("@server/load/orders.js");
 
 		if (!call.client.bbkLocked) {

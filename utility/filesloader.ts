@@ -4,8 +4,10 @@ const fs = require("fs");
 
 const OPTION_DEFAULTS = {
 	displayErrorStack: true,
-	predicate: () => true
+	predicate: () => true,
+	loadCategories: true
 } as ILoadOptions;
+const EXTENSIONS = Object.keys(require.extensions);
 
 export interface ILoadOptions {
 	client?: Client
@@ -17,15 +19,12 @@ export interface ILoadOptions {
 	timeout?: { (exc: Error): void }
 	timeoutMessage?: string
 	predicate?: { (exported: any, file: string): boolean }
+	loadCategories?: boolean
 }
 
-export function load(path: string, options: ILoadOptions): Promise<any[]> {
-	var tasks = [];
-	var exts = Object.keys(require.extensions);
-
-	defaults(options, OPTION_DEFAULTS);
+function loadFiles(path: string, options: ILoadOptions, tasks: Promise<any>[], category?: string): void {
 	for (let file of fs.readdirSync(`${__dirname}/../server/${path}`)) {
-		if (exts.some((ext) => file.endsWith(ext))) {
+		if (EXTENSIONS.some((ext) => file.endsWith(ext))) {
 			let task = new Promise(async (resolve, reject) => {
 				var finished = false;
 				if (options.timeout != null) {
@@ -48,6 +47,8 @@ export function load(path: string, options: ILoadOptions): Promise<any[]> {
 					var exported = require(`@server/${path}/${file}`);
 					if (options.predicate(exported, file)) {
 						if (exported.load != null) {
+							exported.file = file;
+							exported.category = category;
 							var promise = exported.load(options.client);
 							if (promise != null)
 								await promise;
@@ -70,6 +71,20 @@ export function load(path: string, options: ILoadOptions): Promise<any[]> {
 			});
 
 			tasks.push(task);
+		}
+	}
+}
+
+export function load(path: string, options: ILoadOptions): Promise<any[]> {
+	var tasks = [];
+	defaults(options, OPTION_DEFAULTS);
+
+	loadFiles(path, options, tasks);
+	if (options.loadCategories) {
+		for (let folder of fs.readdirSync(`${__dirname}/../server/${path}`)) {
+			if (fs.statSync(`${__dirname}/../server/${path}/${folder}`).isDirectory()) {
+				loadFiles(`${path}/${folder}`, options, tasks, folder);
+			}
 		}
 	}
 

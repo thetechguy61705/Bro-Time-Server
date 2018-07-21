@@ -9,7 +9,7 @@ module.exports = {
 	access: "Server",
 	botRequires: ["ADD_REACTIONS"],
 	botRequiresMessage: "To scroll through the member list.",
-	execute: async (call) => {
+	exec: async (call) => {
 		var memberEmbed = new Discord.RichEmbed().setColor("ORANGE");
 		var members;
 		var content = call.params.readRaw();

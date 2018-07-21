@@ -9,7 +9,7 @@ module.exports = {
 	access: "Server",
 	botRequires: ["MANAGE_ROLES"],
 	botRequiresMessage: "To change the mentionability of roles.",
-	execute: (call) => {
+	exec: (call) => {
 		const DATA = (call.message.guild || call.message.channel).data,
 			PREFIX = DATA != null ? DATA.prefix : "/",
 			ROLE = call.params.readRole();

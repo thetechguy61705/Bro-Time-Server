@@ -20,7 +20,7 @@ module.exports = {
 	access: "Public",
 	botRequires: ["ADD_REACTIONS"],
 	botRequiresMessage: "To have information scrolling.",
-	execute: (call) => {
+	exec: (call) => {
 		const PARAMETER = (call.params.readParam() || "").toLowerCase(),
 			ACTION = actions.find((a) => a.id === PARAMETER || (a.aliases || []).includes(PARAMETER));
 		try {

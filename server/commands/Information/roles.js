@@ -9,7 +9,7 @@ module.exports = {
 	botRequires: ["ADD_REACTIONS"],
 	botRequiresMessage: "To add reactions for role scrolling.",
 	access: "Server",
-	execute: (call) => {
+	exec: (call) => {
 		var all = !call.params.readRaw();
 		var member = call.params.readMember();
 		if (member != null || all) {

@@ -3,7 +3,7 @@ module.exports = {
 	aliases: ["pong"],
 	description: "Returns the response time of the bot in milliseconds, as well as a diagnostic.",
 	access: "Public",
-	execute: (call) => {
+	exec: (call) => {
 		var delay = call.client.pings[0];
 		call.message.channel.send(`Pong! Latency: \`pinging...\`. API latency: \`${delay} ms; ${delay.diagnostic()}.\`!`).then((msg) => {
 			var latency = Math.abs(msg.createdTimestamp - call.message.createdTimestamp);

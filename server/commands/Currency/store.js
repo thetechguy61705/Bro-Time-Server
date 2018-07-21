@@ -5,7 +5,7 @@ module.exports = {
 	aliases: ["shop"],
 	description: "Shows you the store.",
 	access: "Public",
-	execute: (call) => {
+	exec: (call) => {
 		var storeEmbed = new Discord.RichEmbed()
 			.setTitle("Store")
 			.setColor("GREEN")

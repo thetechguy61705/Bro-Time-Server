@@ -6,7 +6,7 @@ module.exports = {
 	description: "Displays information on the specified role.",
 	paramsHelp: "(role)",
 	access: "Server",
-	execute: (call) => {
+	exec: (call) => {
 		var role = call.params.readRole();
 		if (role != null) {
 			var infoEmbed = new RichEmbed()

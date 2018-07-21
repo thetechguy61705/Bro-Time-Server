@@ -1,6 +1,6 @@
 module.exports = {
 	id: "filter-explicit",
-	execute: (/*call, actions, action, parameter*/) => {
+	exec: (/*call, actions, action, parameter*/) => {
 
 	}
 };

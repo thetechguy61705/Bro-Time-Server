@@ -6,7 +6,7 @@ module.exports = {
 	description: "Displays information on the specified custom emoji.",
 	paramsHelp: "(emoji)",
 	access: "Server",
-	execute: (call) => {
+	exec: (call) => {
 		var param = (call.params.readParam(true) || "").toLowerCase();
 		var emoji = call.message.guild.emojis.find((emoji) => emoji.toString().toLowerCase() === param || emoji.name.toLowerCase().startsWith(param));
 		if (emoji != null) {

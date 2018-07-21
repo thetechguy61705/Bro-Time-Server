@@ -6,7 +6,7 @@ module.exports = {
 	paramsHelp: "[user]",
 	aliases: ["bal", "money", "b"],
 	access: "Public",
-	execute: async (call) => {
+	exec: async (call) => {
 		var param = call.params.readRaw();
 		param = (param !== "" && param != null) ? param.toLowerCase() : null;
 		var target;

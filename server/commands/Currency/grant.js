@@ -7,7 +7,7 @@ module.exports = {
 	paramsHelp: "(user) (amount)",
 	requires: "Role: Co-Owner Bro, Owner Bro",
 	access: "Public",
-	execute: async (call) => {
+	exec: async (call) => {
 		if (GRANTERS.includes(call.message.author.id)) {
 			var param = call.params.readParam();
 			param = (param != null) ? param.toLowerCase() : "";

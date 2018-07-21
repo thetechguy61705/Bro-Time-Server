@@ -15,7 +15,7 @@ module.exports = {
 	paramsHelp: "(title) | (description) | (discord invite OR thumbnail url)",
 	requires: "Role: Community Manager Bro",
 	access: "Server",
-	execute: (call) => {
+	exec: (call) => {
 		if (call.message.member.roles.has("409153912558583818")) {
 			if (call.params.readRaw()) {
 				const PARTNER_CHANNEL = call.message.guild.channels.get("409156491640045571"),

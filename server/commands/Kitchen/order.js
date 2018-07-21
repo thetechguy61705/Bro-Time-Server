@@ -24,7 +24,7 @@ module.exports = {
 	description: "Orders food",
 	paramsHelp: "(item), [item2], [item3]",
 	access: "Server",
-	execute: (call) => {
+	exec: (call) => {
 		const { orders, kitchen } = require("@server/load/orders.js");
 
 		if (!call.client.bbkLocked) {

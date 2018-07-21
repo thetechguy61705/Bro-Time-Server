@@ -1,6 +1,6 @@
 module.exports = {
 	id: "add",
-	execute: (/*call, actions, action, parameter*/) => {
+	exec: (/*call, actions, action, parameter*/) => {
 
 	}
 };

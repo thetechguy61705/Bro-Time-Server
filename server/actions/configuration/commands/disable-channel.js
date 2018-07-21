@@ -1,6 +1,6 @@
 module.exports = {
 	id: "disable-channel",
-	execute: (/*call, actions, action, parameter*/) => {
+	exec: (/*call, actions, action, parameter*/) => {
 
 	}
 };
