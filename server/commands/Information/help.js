@@ -27,7 +27,7 @@ module.exports = {
 			if (call.message.channel.type === "text" && ["Server", "Public", undefined].includes(cmd.access)) return true;
 			return false;
 		};
-		const prefix = await DataRequest.getPrefix(call.message.guild.id);
+		const prefix = call.message.guild ? await DataRequest.getPrefix(call.message.guild.id) : "/";
 		const param1 = (call.params.readRaw() !== "" && call.params.readRaw() != null) ? call.params.readRaw() : "";
 		const command = call.commands.loaded.find((cmd) => (cmd.aliases || []).concat(cmd.id).includes(param1.toLowerCase()));
 		var helpEmbed = new Discord.RichEmbed()

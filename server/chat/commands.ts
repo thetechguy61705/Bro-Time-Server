@@ -5,6 +5,7 @@ import { DataRequest } from "@utility/datarequest";
 import { load } from "@utility/filesloader";
 const escapeRegExp = require("escape-string-regexp");
 const server = require("@server/server");
+const fs = require("fs");
 
 const LOAD_TIMEOUT = 60000;
 const TESTING = process.env.NODE_ENV !== "production";
@@ -12,6 +13,16 @@ const ACCESS = new Enum(["Public", "Private", "Server"], { ignoreCase: true });
 const USER_TYPE = new Enum(["User", "Bot"], { ignoreCase: true });
 const SPACE = "\\s,";
 const QUOTES = "\"'";
+
+for (let file of fs.readdirSync(`${__dirname}/../commands`)) {
+	if (!file.includes(".")) {
+		for (let subFile of fs.readdirSync(`${__dirname}/../commands/${file}`)) {
+			require(`@server/commands/${file}/${subFile}`)["category"] = file;
+		}
+	} else {
+		require(`@server/commands/${file}`)["category"] = "Other";
+	}
+}
 
 export interface ICommand extends IExecutable<Call> {
 	readonly id: string
@@ -31,7 +42,6 @@ export interface ICommand extends IExecutable<Call> {
 		roles?: DiscordResolvable<Role>[],
 		permissions?: DiscordResolvable<Permissions>[]
 	}[]
-	category?: string
 	file?: string
 }
 
