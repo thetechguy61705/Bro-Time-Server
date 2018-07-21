@@ -56,8 +56,8 @@ module.exports = {
 							.setDescription(`\`\`\`${unicodeWords.join("\n")}\`\`\``)
 					}).then(() => {
 						msg.channel.awaitMessages((m) => session.players.keyArray().includes(m.author.id) &&
-							m.content.toUpperCase() === words.join(" "),
-						{ time: 120000, maxMatches: 1, errors: ["time"] }).then((results) => {
+							m.content.toUpperCase().replace(/\s+/g, " ") === words.join(" "),
+						{ time: 300000, maxMatches: 1, errors: ["time"] }).then((results) => {
 							session.winner = results.first().author;
 							session.timeTaken = Date.now() - startedAt;
 							session.endGame();
