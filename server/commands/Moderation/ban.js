@@ -10,13 +10,7 @@ module.exports = {
 	botRequiresMessage: "To ban members.",
 	access: "Server",
 	exec: async (call) => {
-<<<<<<< HEAD
 		var param = call.params.readParam() || "";
-=======
-		const rawContent = call.params.readRaw(),
-			parameterOne = (call.params.readParam() || ""),
-			parameterTwo = (call.params.readParam() || "");
->>>>>>> 1b1d5d06071a35256de9626bbf4e936614e35f11
 		if (Moderator(call.message.member)) {
 			var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
 			var target = guild.members.find((m) => param.includes(`${m.user.id}`)) || param;
