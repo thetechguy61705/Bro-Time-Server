@@ -1,4 +1,5 @@
 const Moderator = require("@utility/moderator");
+const { GuildMember } = require("discord.js");
 
 module.exports = {
 	id: "ban",
@@ -8,27 +9,33 @@ module.exports = {
 	botRequires: ["BAN_MEMBERS"],
 	botRequiresMessage: "To ban members.",
 	access: "Server",
-	execute: async (call) => {
-		const rawContent = call.params.readRaw(),
-			parameterOne = (call.params.readParam() || ""),
-			parameterTwo = (call.params.readParam() || "");
+	exec: async (call) => {
+		var param = call.params.readParam() || "";
 		if (Moderator(call.message.member)) {
 			var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
-			const target = guild.members.find((m) => parameterOne.includes(`${m.user.id}`));
+			var target = guild.members.find((m) => param.includes(`${m.user.id}`)) || param;
+			if (!(target instanceof GuildMember) && target != null) {
+				try {
+					await call.client.fetchUser(target);
+				} catch (exc) {
+					console.warn(exc.stack);
+				}
+			}
 			if (target != null) {
-				if (call.message.member.highestRole.position > target.highestRole.position) {
-					var reason = (parameterTwo !== "") ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
-					if (target.bannable) {
+				if (call.message.member.highestRole.position > (target.highestRole || { position: 0 }).position) {
+					var reason = call.params.readParam(true) || "No reason specified.";
+					if (target.bannable || target.bannable === undefined) {
 						try {
-							await target.send(`You have been banned from the \`${guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);
+							if (target instanceof GuildMember)
+								await target.send(`You have been banned from the \`${guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);
 						} catch (err) {
 							console.warn(err.stack);
 						}
 
-						target.ban({ days:7, reason:`Banned by ${call.message.author.tag} for ${reason}` }).then(() => {
-							call.message.channel.send(`***Successfully banned \`${target.user.tag}\`.***`);
+						call.message.guild.ban(target, { days: 7, reason: `Banned by ${call.message.author.tag} for ${reason}` }).then((user) => {
+							call.message.channel.send(`***Successfully banned \`${user.tag}\`.***`);
 						}).catch(() => {
-							call.message.channel.send(`Failed to ban \`${target.user.tag}\`.`);
+							call.message.channel.send(`Failed to ban \`${target instanceof GuildMember ? target.user.tag : target}\`.`);
 						});
 					} else call.safeSend("I do not have permission to ban this user.");
 				} else call.safeSend("That user is too far up in this guild's hierarchy to be banned by you.");

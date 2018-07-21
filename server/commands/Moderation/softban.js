@@ -8,16 +8,14 @@ module.exports = {
 	botRequires: ["BAN_MEMBERS"],
 	botRequiresMessage: "To ban members and unban them.",
 	access: "Server",
-	execute: async (call) => {
-		const rawContent = call.params.readRaw(),
-			parameterOne = (call.params.readParam() || ""),
-			parameterTwo = (call.params.readParam() || "");
+	exec: async (call) => {
+		var param = call.params.readParam() || "";
 		if (Moderator(call.message.member)) {
 			var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
-			const target = guild.members.find((m) => parameterOne.includes(`${m.user.id}`));
+			var target = guild.members.find((m) => param.includes(`${m.user.id}`));
 			if (target != null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
-					var reason = (parameterTwo !== "") ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
+					var reason = call.params.readParam(true) || "No reason specified.";
 					if (target.bannable) {
 						try {
 							await target.send(`You have been softbanned/kicked from the \`${guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);
@@ -26,8 +24,8 @@ module.exports = {
 						}
 
 						guild.ban(target, { days: 7, reason: `Softbanned by ${call.message.author.tag} for ${reason}` }).then(() => {
-							guild.unban(target.user, `Softbanned by ${call.message.author.tag} for ${reason}`).then(() => {
-								call.message.channel.send(`***Successfully softbanned \`${target.user.tag}\`.***`);
+							guild.unban(target.user, `Softbanned by ${call.message.author.tag} for ${reason}`).then((user) => {
+								call.message.channel.send(`***Successfully softbanned \`${user.tag}\`.***`);
 							}).catch(() => {
 								call.message.reply(`Failed to unban \`${target.user.tag}\`.`);
 							});

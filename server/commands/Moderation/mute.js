@@ -8,11 +8,12 @@ module.exports = {
 	requires: "Moderator permissions",
 	botRequires: ["MANAGE_ROLES"],
 	access: "Server",
-	execute: async (call) => {
-		const parameterOne = call.params.readParam(), parameterTwo = call.params.readParam();
+	exec: async (call) => {
+		var parameterOne = call.params.readParam(),
+			parameterTwo = call.params.readParam();
 		if (Moderator(call.message.member)) {
 			var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
-			const target = guild.members.find((member) => (parameterOne || "").includes(member.user.id) ||
+			var target = guild.members.find((member) => (parameterOne || "").includes(member.user.id) ||
 				member.user.tag.toLowerCase().startsWith(parameterOne));
 			if (target != null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {

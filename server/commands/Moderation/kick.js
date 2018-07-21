@@ -8,16 +8,14 @@ module.exports = {
 	botRequires: ["KICK_MEMBERS"],
 	botRequiresMessage: "To kick members.",
 	access: "Server",
-	execute: async (call) => {
-		const rawContent = call.params.readRaw(),
-			parameterOne = (call.params.readParam() || ""),
-			parameterTwo = (call.params.readParam() || "");
+	exec: async (call) => {
+		var param = call.params.readParam() || "";
 		if (Moderator(call.message.member)) {
 			var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
-			const target = guild.members.find((m) => parameterOne.includes(`${m.user.id}`));
+			var target = guild.members.find((m) => param.includes(`${m.user.id}`));
 			if (target != null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
-					var reason = (parameterTwo !== "") ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
+					var reason = call.params.readParam(true) || "No reason specified.";
 					if (target.kickable) {
 						try {
 							await target.send(`You have been kicked from the \`${guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);
@@ -25,8 +23,8 @@ module.exports = {
 							console.warn(err.stack);
 						}
 
-						target.kick(`Kicked by ${call.message.author.tag} for ${reason}`).then(() => {
-							call.message.channel.send(`***Successfully kicked \`${target.user.tag}\`.***`);
+						target.kick(`Kicked by ${call.message.author.tag} for ${reason}`).then((user) => {
+							call.message.channel.send(`***Successfully kicked \`${user.tag}\`.***`);
 						}).catch(() => {
 							call.message.channel.send(`Failed to kick \`${target.user.tag}\`.`);
 						});

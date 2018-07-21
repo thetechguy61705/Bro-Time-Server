@@ -6,7 +6,7 @@ module.exports = {
 	aliases: ["w"],
 	description: "Displays the weather in the area given",
 	paramsHelp: "(place)",
-	execute: async (call) => {
+	exec: async (call) => {
 		var area = call.params.readParam(true);
 		if (area) {
 			weather.find({ search: area, degreeType: "F" }, (err, result) => {
