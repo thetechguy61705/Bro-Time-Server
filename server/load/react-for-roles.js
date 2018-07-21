@@ -7,7 +7,6 @@ const freeRoles = ["QOTD", "ANN", "GW", "MOVIES", "Roblox", "Minecraft", "Cuphea
 
 module.exports = {
 	id: "reactroles",
-	needs: "330913265573953536",
 	exec: (client) => {
 		if (client.user.id === "393532251398209536") {
 			var channel = client.channels.get("447205162436788235");
