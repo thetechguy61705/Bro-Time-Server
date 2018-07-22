@@ -12,6 +12,7 @@ module.exports = {
 		if (expression) {
 			try {
 				var result = math.eval(expression);
+				if (Array.isArray(result.entries)) result = result.entries[result.entries.length - 1];
 				mathEmbed
 					.setTitle("Success")
 					.setDescription(`Result:\n\`\`\`js\n${result}${" ".repeat(3)}\`\`\``)
