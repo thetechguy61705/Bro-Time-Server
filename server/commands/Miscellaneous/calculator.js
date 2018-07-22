@@ -15,7 +15,7 @@ module.exports = {
 				if (Array.isArray(result.entries)) result = result.entries[result.entries.length - 1];
 				mathEmbed
 					.setTitle("Success")
-					.setDescription(`Result:\n\`\`\`js\n${result}${" ".repeat(3)}\`\`\``)
+					.setDescription(`Result:\n\`\`\`js\n${result}${" ".repeat(3)}\`\`\``.substring(0, 2048))
 					.setColor("GREEN");
 			} catch (exc) {
 				mathEmbed

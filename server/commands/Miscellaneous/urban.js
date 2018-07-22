@@ -25,8 +25,8 @@ module.exports = {
 						.setURL(result.permalink)
 						.setFooter(`👍 ${result.thumbs_up} / 👎 ${result.thumbs_down} | ` +
 							`Written by ${result.author} at ${result.written_on.substring(0, 10).replace(/-/g, "/")}`)
-						.setDescription(hyperlinkText(result.definition))
-						.addField("Example", hyperlinkText(result.example));
+						.setDescription(hyperlinkText(result.definition).substring(0, 2048))
+						.addField("Example", hyperlinkText(result.example).substring(0, 1024));
 					call.safeSend(null, call.message, { embed: urbanEmbed });
 				} else call.safeSend("Could not find the given query on urban dictionary.");
 			});
