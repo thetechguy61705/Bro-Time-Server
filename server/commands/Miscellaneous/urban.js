@@ -1,6 +1,14 @@
 const urban = require("urban");
 const { RichEmbed } = require("discord.js");
 
+function hyperlinkText(text) {
+	var hyperlinks = text.match(/\[(.*?)\]/g);
+	for (let link of hyperlinks) {
+		text = text.replace(link, `${link}(https://www.urbandictionary.com/define.php?term=${link.replace(/\[|\]/g, "").replace(/ /g, "%20")})`);
+	}
+	return text;
+}
+
 module.exports = {
 	id: "urban",
 	aliases: ["urbandictionary"],
@@ -15,13 +23,10 @@ module.exports = {
 						.setTitle(result.word)
 						.setColor(0x00AE86)
 						.setURL(result.permalink)
-						.setFooter(`👍 ${result.thumbs_up} / ${result.thumbs_down} 👎`);
-					var hyperlinks = result.definition.match(/\[(.*?)\]/g);
-					var description = result.definition;
-					for (let link of hyperlinks)
-						description = description.replace(link,
-							`${link}(https://www.urbandictionary.com/define.php?term=${link.replace(/\[|\]/g, "").replace(/ /g, "%20")})`);
-					urbanEmbed.setDescription(description);
+						.setFooter(`👍 ${result.thumbs_up} / 👎 ${result.thumbs_down} | ` +
+							`Written by ${result.author} at ${result.written_on.substring(0, 10).replace(/-/g, "/")}`)
+						.setDescription(hyperlinkText(result.definition))
+						.addField("Example", hyperlinkText(result.example));
 					call.safeSend(null, call.message, { embed: urbanEmbed });
 				} else call.safeSend("Could not find the given query on urban dictionary.");
 			});
