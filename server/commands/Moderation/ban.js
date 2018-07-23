@@ -3,8 +3,9 @@ const { GuildMember } = require("discord.js");
 
 module.exports = {
 	id: "ban",
+	aliases: ["hackerban"],
 	description: "Bans specified user.",
-	paramsHelp: "(user) [reason]",
+	paramsHelp: "(user) [days to delete messages] [reason]",
 	requires: "Moderator permissions",
 	botRequires: ["BAN_MEMBERS"],
 	botRequiresMessage: "To ban members.",
@@ -16,13 +17,19 @@ module.exports = {
 			var target = guild.members.find((m) => param.includes(`${m.user.id}`)) || param;
 			if (!(target instanceof GuildMember) && target != null) {
 				try {
-					await call.client.fetchUser(target);
+					target = await call.client.fetchUser(target);
 				} catch (exc) {
-					console.warn(exc.stack);
+					if (!exc.message.includes("not snowflake") && !exc.message.includes("Not Found")) console.warn(exc.stack);
+					target = null;
 				}
 			}
 			if (target != null) {
 				if (call.message.member.highestRole.position > (target.highestRole || { position: 0 }).position) {
+					var daysToDelete = call.params.readNumber(false);
+					if (daysToDelete != null) {
+						call.params.offset(daysToDelete.toString().length + 1);
+						daysToDelete = daysToDelete < 0 ? 0 : daysToDelete > 7 ? 7 : daysToDelete;
+					} else daysToDelete = 7;
 					var reason = call.params.readParam(true) || "No reason specified.";
 					if (target.bannable || target.bannable === undefined) {
 						try {
@@ -32,7 +39,7 @@ module.exports = {
 							console.warn(err.stack);
 						}
 
-						call.message.guild.ban(target, { days: 7, reason: `Banned by ${call.message.author.tag} for ${reason}` }).then((user) => {
+						call.message.guild.ban(target, { days: daysToDelete, reason: `Banned by ${call.message.author.tag} for ${reason}` }).then((user) => {
 							call.message.channel.send(`***Successfully banned \`${user.tag}\`.***`);
 						}).catch(() => {
 							call.message.channel.send(`Failed to ban \`${target instanceof GuildMember ? target.user.tag : target}\`.`);

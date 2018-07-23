@@ -3,7 +3,7 @@ const Moderator = require("@utility/moderator");
 module.exports = {
 	id: "softban",
 	description: "Bans specified user, purging the messages they sent in the last seven days, then unbans the user. Basically rendering this as a kick.",
-	paramsHelp: "(user) [reason]",
+	paramsHelp: "(user) [days to delete messages] [reason]",
 	requires: "Moderator permissions",
 	botRequires: ["BAN_MEMBERS"],
 	botRequiresMessage: "To ban members and unban them.",
@@ -15,6 +15,11 @@ module.exports = {
 			var target = guild.members.find((m) => param.includes(`${m.user.id}`));
 			if (target != null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
+					var daysToDelete = call.params.readNumber(false);
+					if (daysToDelete != null) {
+						call.params.offset(daysToDelete.toString().length + 1);
+						daysToDelete = daysToDelete < 0 ? 0 : daysToDelete > 7 ? 7 : daysToDelete;
+					} else daysToDelete = 7;
 					var reason = call.params.readParam(true) || "No reason specified.";
 					if (target.bannable) {
 						try {
@@ -23,7 +28,7 @@ module.exports = {
 							console.warn(err.stack);
 						}
 
-						guild.ban(target, { days: 7, reason: `Softbanned by ${call.message.author.tag} for ${reason}` }).then(() => {
+						guild.ban(target, { days: daysToDelete, reason: `Softbanned by ${call.message.author.tag} for ${reason}` }).then(() => {
 							guild.unban(target.user, `Softbanned by ${call.message.author.tag} for ${reason}`).then((user) => {
 								call.message.channel.send(`***Successfully softbanned \`${user.tag}\`.***`);
 							}).catch(() => {

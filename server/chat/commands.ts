@@ -42,6 +42,7 @@ export interface ICommand extends IExecutable<Call> {
 		roles?: DiscordResolvable<Role>[],
 		permissions?: DiscordResolvable<Permissions>[]
 	}[]
+	category?: string
 	file?: string
 }
 
@@ -276,13 +277,14 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 	public static readonly REQUEST_OPTIONS = new Enum(["None", "Anyone", "Cancellable"], { ignoreCase: true });
 	public readonly REQUEST_OPTIONS = CommandsManager.REQUEST_OPTIONS;
 	public readonly _requests: Collection<string, IRequest> = new Collection()
-	public readonly loaded: Collection<string, ICommand> = new Collection<string, ICommand>()
+	public loaded: Collection<string, ICommand> = new Collection<string, ICommand>()
 
 	public async load(client: Client) {
 		load("commands", {
 			client: client,
 			success: (exported) => {
 				this.loaded.set(exported.id, exported);
+				if (exported.category === "Kitchen") require("@server/load/orders.js").storedCommands.set(exported.id, exported);
 			},
 			failure: (exc, file) => {
 				console.warn(`Command failed to load (${file}):`);
