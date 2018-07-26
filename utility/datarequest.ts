@@ -193,9 +193,9 @@ if (process.env.SHARD_ID != null) {
 		}
 		case DataRequest.REQUEST_TYPE.GetPrefix: {
 			result = await doTransaction(async (connection: PoolClient) => {
-				return request.guildId == null ? PREFIX_DEFAULT : (await connection.query(`SELECT Prefix
+				return request.guildId == null ? PREFIX_DEFAULT : ((await connection.query(`SELECT Prefix
 					FROM discord.Servers
-					WHERE Server_Id = $1`, [request.guildId])).rows[0].prefix || PREFIX_DEFAULT;
+					WHERE Server_Id = $1`, [request.guildId])).rows[0] || { prefix: PREFIX_DEFAULT }).prefix;
 			}, async () => {
 				return PREFIX_DEFAULT;
 			});

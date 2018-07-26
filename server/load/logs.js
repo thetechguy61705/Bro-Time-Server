@@ -199,7 +199,7 @@ module.exports = {
 		client.on("roleUpdate", async (oldRole, newRole) => {
 			let executor = await this.getExecutor(newRole.guild, "ROLE_UPDATE");
 			let logs = this.getChannel(newRole.guild);
-			if (logs && !this.objectsEqual(oldRole, newRole)) logs.send(
+			if (logs && !this.objectsEqual(oldRole, newRole) && !/(rainbow(role)?)|(multicolou?r(ed)?)/i.test(newRole.name)) logs.send(
 				new RichEmbed()
 					.setAuthor(executor.tag, executor.displayAvatarURL)
 					.setTitle("Role Updated")
