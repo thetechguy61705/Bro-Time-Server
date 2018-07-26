@@ -7,7 +7,7 @@ module.exports = {
 			if (role.position < call.message.member.highestRole.position || call.message.guild.ownerID === call.message.author.id) {
 				call.requestInput(null, "Are you sure you want to delete the `" + role.name + "` role? Respond `yes` or `no`.", 30000).then((response) => {
 					if (response.params.readRaw().toLowerCase().startsWith("y")) {
-						role.delete().then((deletedRole) => {
+						role.delete(`Deleted by ${call.message.author.tag} (${call.message.author.id}).`).then((deletedRole) => {
 							response.message.reply("Deleted the `" + deletedRole.name + "` role.").catch(() => {});
 						}).catch(() => {
 							response.message.reply("Something went wrong while attempting to delete the `" + role.name + "` role.").catch(() => {

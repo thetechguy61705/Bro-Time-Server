@@ -1,18 +1,14 @@
 const Discord = require("discord.js");
 const { DataRequest } = require("@utility/datarequest.ts");
 
-function add(command, help, prefix) {
+function add(command, help) {
 	var category = command.category || "Other";
 	var array = help[category];
 	if (array == null) {
 		array = [];
 		help[category] = array;
 	}
-	if (command.paramsHelp != null) {
-		array.push(`\`${prefix}${command.id} ${command.paramsHelp}\``);
-	} else {
-		array.push(`\`${prefix}${command.id}\``);
-	}
+	array.push(`\`${command.id}\``);
 }
 
 module.exports = {
@@ -48,7 +44,7 @@ module.exports = {
 					`Shard: \`${call.client.shard.id}\`\n` +
 					"[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server)");
 			for (var [category, commands] of Object.entries(commandHelp)) {
-				helpEmbed.addField(category, commands.join("\n"));
+				helpEmbed.addField(category, commands.join(", "));
 			}
 		} else if (command != null) {
 			const { aliases, description, paramsHelp, requires, id, file } = command;

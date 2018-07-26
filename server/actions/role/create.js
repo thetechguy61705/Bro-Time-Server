@@ -18,18 +18,15 @@ module.exports = {
 			if (hexTag != null) amountToSubstr += hexTag.length + 1;
 			var name = args.join(" ").substr(amountToSubstr);
 			if (name !== "" && name.length < 100) {
-				call.message.guild.createRole({ name: name, color: hexTag, hoist: hoist[0] }).then((role) => {
-					call.message
-						.reply(`Successfully created the role \`${role.name}\` with \`${role.hoist}\` hoist and \`${(role.hexColor !== "#0000000") ? role.hexColor : "no"}\` color.`)
-						.catch(() => {});
-				}).catch(() => {
-					call.safeSend("There was an error upon attempting to make that role.");
-				});
-			} else {
-				call.safeSend("The role name given is either non-existant or has more than 100 characters.");
-			}
-		} else {
-			call.safeSend("Please specify the following params [optional] (required). `!role create [hexcolor: #XXXXXX] [hoist: true/false] (role name)`.");
-		}
+				call.message.guild.createRole({ name: name, color: hexTag, hoist: hoist[0] }, `Created by ${call.message.author.tag} (${call.message.author.id})`)
+					.then((role) => {
+						call.message
+							.reply(`Successfully created the role \`${role.name}\` with \`${role.hoist}\` hoist and \`${(role.hexColor !== "#0000000") ? role.hexColor : "no"}\` color.`)
+							.catch(() => {});
+					}).catch(() => {
+						call.safeSend("There was an error upon attempting to make that role.");
+					});
+			} else call.safeSend("The role name given is either non-existant or has more than 100 characters.");
+		} else call.safeSend("Please specify the following params [optional] (required). `!role create [hexcolor: #XXXXXX] [hoist: true/false] (role name)`.");
 	}
 };

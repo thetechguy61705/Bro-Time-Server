@@ -21,8 +21,6 @@ module.exports = {
 				for (let role of rolesToChange.rolesToAdd)
 					member.addRole(role);
 			}
-		} else {
-			call.safeSend("No valid roles were specified. Roles that are above your or my hierarchy can not be changed.");
-		}
+		} else call.safeSend("No valid roles were specified. Roles that are above your or my hierarchy can not be changed.");
 	}
 };

@@ -1,7 +1,7 @@
 import { ICommand, Call } from "@server/chat/commands";
 import { DataRequest, PREFIX_DEFAULT } from "@utility/datarequest.ts";
 import { User, GuildMember } from "discord.js";
-const isModerator = require("@utility/moderator");
+import * as isModerator from "@utility/moderator";
 
 function checkMod(user: User | GuildMember, send: Function) {
 	if (isModerator(user)) {
@@ -23,7 +23,7 @@ module.exports = {
 		case "set":
 			if (checkMod(call.message.author, call.safeSend)) {
 				var newPrefix = call.params.readParam(true);
-				if (newPrefix && newPrefix.length <= 5) {
+				if (newPrefix && newPrefix.length <= 100) {
 					DataRequest.setPrefix(call.message.guild.id, newPrefix).then(() => {
 						call.message.channel.send(`Set the prefix for this server to \`${newPrefix}\`.`);
 					}, (exc: Error) => {
@@ -31,7 +31,7 @@ module.exports = {
 						console.warn("Unable to set prefix:");
 						console.warn(exc.stack);
 					});
-				} else call.safeSend("Invalid prefix. The prefix must be at least one character and at most five.");
+				} else call.safeSend("Invalid prefix. The prefix must be at least one character and at most 100.");
 			}
 			break;
 		case "reset":

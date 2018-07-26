@@ -3,9 +3,9 @@ import { Wallet } from "@utility/wallet.ts";
 import { DiscordResolvable, IExecutable, ILoadable } from "types/server";
 import { DataRequest } from "@utility/datarequest";
 import { load } from "@utility/filesloader";
-const escapeRegExp = require("escape-string-regexp");
-const server = require("@server/server");
-const fs = require("fs");
+import * as server from "@server/server";
+import * as escapeRegExp from "escape-string-regexp";
+import * as fs from "fs";
 
 const LOAD_TIMEOUT = 60000;
 const TESTING = process.env.NODE_ENV !== "production";
@@ -18,9 +18,11 @@ for (let file of fs.readdirSync(`${__dirname}/../commands`)) {
 	if (!file.includes(".")) {
 		for (let subFile of fs.readdirSync(`${__dirname}/../commands/${file}`)) {
 			require(`@server/commands/${file}/${subFile}`)["category"] = file;
+			require(`@server/commands/${file}/${subFile}`)["file"] = subFile;
 		}
 	} else {
 		require(`@server/commands/${file}`)["category"] = "Other";
+		require(`@server/commands/${file}`)["file"] = file;
 	}
 }
 

@@ -1,6 +1,6 @@
 import { Client } from "discord.js";
-const defaults = require("defaults");
-const fs = require("fs");
+import * as defaults from "defaults";
+import * as fs from "fs";
 
 const OPTION_DEFAULTS = {
 	displayErrorStack: true,
