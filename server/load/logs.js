@@ -1,4 +1,4 @@
-const { RichEmbed, Role, Collection } = require("discord.js");
+const { RichEmbed, Role, Collection, GuildChannel } = require("discord.js");
 
 const GREEN_HEX = "#00FF7F";
 const ORANGE_HEX = "#FFA500";
@@ -62,7 +62,7 @@ module.exports = {
 		});
 
 		client.on("channelCreate", async (channel) => {
-			if (!["group", "dm"].includes(channel.type)) {
+			if (channel instanceof GuildChannel) {
 				let executor = await this.getExecutor(channel.guild, "CHANNEL_CREATE");
 				let logs = this.getChannel(channel.guild);
 				if (logs) logs.send(
@@ -76,7 +76,7 @@ module.exports = {
 		});
 
 		client.on("channelDelete", async (channel) => {
-			if (!["group", "dm"].includes(channel.type)) {
+			if (channel instanceof GuildChannel) {
 				let executor = await this.getExecutor(channel.guild, "CHANNEL_DELETE");
 				let logs = this.getChannel(channel.guild);
 				if (logs) logs.send(
@@ -231,7 +231,7 @@ module.exports = {
 		client.on("messageDelete", (message) => {
 			let executor = message.author;
 			let logs = this.getChannel(message.guild);
-			if (logs) logs.send(
+			if (logs && message.content !== "") logs.send(
 				new RichEmbed()
 					.setAuthor(executor.tag, executor.displayAvatarURL)
 					.setTitle("Message Deleted")

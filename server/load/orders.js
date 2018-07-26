@@ -11,7 +11,6 @@ function changeKitchenCommands(remove) {
 			commands.set(cmd.id, cmd);
 		console.warn("The client has been given access to the orders channel. Kitchen commands have been loaded into the client.");
 	}
-
 }
 
 module.exports = {
