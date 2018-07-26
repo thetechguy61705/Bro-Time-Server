@@ -1,4 +1,4 @@
-const { RichEmbed, Role } = require("discord.js");
+const { RichEmbed, Role, Collection } = require("discord.js");
 
 const GREEN_HEX = "#00FF7F";
 const ORANGE_HEX = "#FFA500";
@@ -44,6 +44,23 @@ module.exports = {
 		return audit.entries.first().executor;
 	},
 	exec: function (client) {
+		client.on("raw", async (packet) => {
+			if (packet.t === "MESSAGE_UPDATE") {
+				let channel = client.channels.get(packet.d.channel_id);
+				if (channel && !channel.messages.has(packet.d.id)) {
+					channel.fetchMessage(packet.d.id);
+				}
+			} else if (packet.t === "MESSAGE_DELETE_BULK") {
+				var coll = [];
+				let guild = client.guilds.get(packet.d.guild_id);
+				for (let value of packet.d.ids) {
+					coll.push([value, { guild: guild }]);
+				}
+				coll = new Collection(coll);
+				client.emit("rawMessageDeleteBulk", coll);
+			}
+		});
+
 		client.on("channelCreate", async (channel) => {
 			if (!["group", "dm"].includes(channel.type)) {
 				let executor = await this.getExecutor(channel.guild, "CHANNEL_CREATE");
@@ -196,5 +213,43 @@ module.exports = {
 					.setColor(ORANGE_HEX)
 			);
 		});
+
+		client.on("messageUpdate", (oldMessage, newMessage) => {
+			let executor = newMessage.author;
+			let logs = this.getChannel(newMessage.guild);
+			if (logs && oldMessage.content !== newMessage.content) logs.send(
+				new RichEmbed()
+					.setAuthor(executor.tag, executor.displayAvatarURL)
+					.setTitle("Message Updated")
+					.setDescription(`ID: \`${newMessage.id}\`\nDate: \`${newMessage.editedAt.toString().substring(0, 15)}\``)
+					.addField("Old Content", `\`\`\`md\n${oldMessage.content.substring(0, 1014)}\`\`\``)
+					.addField("New Content", `\`\`\`md\n${newMessage.content.substring(0, 1014)}\`\`\``)
+					.setColor(ORANGE_HEX)
+			);
+		});
+
+		client.on("messageDelete", (message) => {
+			let executor = message.author;
+			let logs = this.getChannel(message.guild);
+			if (logs) logs.send(
+				new RichEmbed()
+					.setAuthor(executor.tag, executor.displayAvatarURL)
+					.setTitle("Message Deleted")
+					.setDescription(`ID: \`${message.id}\``)
+					.addField("Content", `\`\`\`md\n${message.content.substring(0, 1014)}\`\`\``)
+					.setColor(RED_HEX)
+			);
+		});
+
+		client.on("rawMessageDeleteBulk", (messages) => {
+			let logs = this.getChannel(messages.first().guild);
+			if (logs) logs.send(
+				new RichEmbed()
+					.setTitle("Bulk Messages Deleted")
+					.setDescription(`Size: \`${messages.size}\`\nIDs: \`${messages.keyArray().join("`, `").substring(0, 2020)}\``)
+					.setColor(RED_HEX)
+			);
+		});
+		// Self emitted event to handle emitting non-cached bulk deletes.
 	}
 };
