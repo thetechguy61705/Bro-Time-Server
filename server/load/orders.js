@@ -13,6 +13,13 @@ function changeKitchenCommands(remove) {
 	}
 }
 
+async function hasOrders(client) {
+	var containsOrders = await client.shard.broadcastEval("this.channels" +
+		".filter((channel) => channel.permissionsFor(channel.guild.me).has(['READ_MESSAGES', 'SEND_MESSAGES'])).keyArray();");
+	containsOrders = containsOrders.find((channels) => channels.includes("399290151932526593"));
+	return containsOrders;
+}
+
 module.exports = {
 	id: "orders",
 	orders: [],
@@ -33,21 +40,19 @@ module.exports = {
 		module.exports.orders.splice(module.exports.orders.indexOf(order), 1);
 	},
 	exec: async function (client) {
-		var containsOrders = await client.shard.broadcastEval("this.channels" +
-			".filter((channel) => channel.permissionsFor(channel.guild.me).has(['READ_MESSAGES', 'SEND_MESSAGES'])).keyArray();");
-		containsOrders = containsOrders.find((channels) => channels.includes("399290151932526593"));
-
-		client.on("guildDelete", (guild) => {
-			if (guild.channels.has("399290151932526593")) changeKitchenCommands(true);
+		client.on("guildDelete", async (guild) => {
+			let orders = await hasOrders(guild.client);
+			if (orders) changeKitchenCommands(true);
 		});
 
-		client.on("guildCreate", (guild) => {
-			if (guild.channels.find((channel) => channel.id === "399290151932526593" && channel.permissionsFor(guild.me).has(["SEND_MESSAGES", "READ_MESSAGES"])))
+		client.on("guildCreate", async (guild) => {
+			let orders = await hasOrders(guild.client);
+			if (orders)
 				changeKitchenCommands(false);
 		});
 
 		client.on("guildMemberUpdate", (_, member) => {
-			let channel = member.guild.channels.get("399290151932526593");
+			var channel = member.guild.channels.get("399290151932526593");
 			if (member.id === member.guild.me.id && channel) {
 				if (channel.permissionsFor(member).has(["SEND_MESSAGES", "READ_MESSAGES"])) {
 					changeKitchenCommands(false);
@@ -55,7 +60,8 @@ module.exports = {
 			}
 		});
 
-		if (containsOrders) {
+		let orders = await hasOrders(client);
+		if (orders) {
 			client.shard.broadcastEval(
 				"var ordersChannel = this.channels.get('399290151932526593');" +
 				"if (ordersChannel != null) {" +

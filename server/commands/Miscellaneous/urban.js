@@ -1,5 +1,6 @@
-const urban = require("urban");
 const { RichEmbed } = require("discord.js");
+const urban = require("urban-dictionary");
+const emojis = require("@server/load/emojis.js").emojis;
 
 function hyperlinkText(text) {
 	var hyperlinks = text.match(/\[(.*?)\]/g);
@@ -17,16 +18,18 @@ module.exports = {
 	exec: (call) => {
 		var search = call.params.readParam(true);
 		if (search != null) {
-			urban(search).first((result) => {
+			urban.term(search).then((result) => {
+				result = result.entries[0];
 				if (result != null) {
 					var urbanEmbed = new RichEmbed()
 						.setTitle(result.word)
-						.setColor(0x00AE86)
 						.setURL(result.permalink)
-						.setFooter(`👍 ${result.thumbs_up} / 👎 ${result.thumbs_down} | ` +
-							`Written by ${result.author} at ${result.written_on.substring(0, 10).replace(/-/g, "/")}`)
+						.setColor(0x00AE86)
+						.setDefaultFooter(call.message.author)
 						.setDescription(hyperlinkText(result.definition).substring(0, 2048))
-						.addField("Example", hyperlinkText(result.example).substring(0, 1024));
+						.addField("Example", hyperlinkText(result.example).substring(0, 1024))
+						.addField("\u200B", `**${emojis.get("thumbsup")} ${result.thumbs_up} / ${emojis.get("thumbsdown")} ${result.thumbs_down} | ` +
+							`Written by ${result.author} at ${result.written_on.substring(0, 10).replace(/-/g, "/")}**`);
 					call.safeSend(null, call.message, { embed: urbanEmbed });
 				} else call.safeSend("Could not find the given query on urban dictionary.");
 			});
