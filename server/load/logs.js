@@ -1,4 +1,4 @@
-const { RichEmbed, Role, Collection, GuildChannel } = require("discord.js");
+const { RichEmbed, Role, GuildChannel } = require("discord.js");
 
 const GREEN_HEX = "#00FF7F";
 const ORANGE_HEX = "#FFA500";
@@ -51,13 +51,7 @@ module.exports = {
 					channel.fetchMessage(packet.d.id);
 				}
 			} else if (packet.t === "MESSAGE_DELETE_BULK") {
-				var coll = [];
-				let guild = client.guilds.get(packet.d.guild_id);
-				for (let value of packet.d.ids) {
-					coll.push([value, { guild: guild }]);
-				}
-				coll = new Collection(coll);
-				client.emit("rawMessageDeleteBulk", coll);
+				client.emit("rawMessageDeleteBulk", packet.d.ids, client.channels.get(packet.d.channel_id));
 			}
 		});
 
@@ -241,12 +235,12 @@ module.exports = {
 			);
 		});
 
-		client.on("rawMessageDeleteBulk", (messages) => {
-			let logs = this.getChannel(messages.first().guild);
+		client.on("rawMessageDeleteBulk", (messageIDS, channel) => {
+			let logs = this.getChannel(channel.guild);
 			if (logs) logs.send(
 				new RichEmbed()
 					.setTitle("Bulk Messages Deleted")
-					.setDescription(`Size: \`${messages.size}\`\nIDs: \`${messages.keyArray().join("`, `").substring(0, 2020)}\``)
+					.setDescription(`Size: \`${messageIDS.length}\`\nIDs: \`${messageIDS.join("`, `").substring(0, 2020)}\``)
 					.setColor(RED_HEX)
 			);
 		});
