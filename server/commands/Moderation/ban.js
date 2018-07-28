@@ -32,15 +32,25 @@ module.exports = {
 					} else daysToDelete = 7;
 					var reason = call.params.readParam(true) || "No reason specified.";
 					if (target.bannable || target.bannable === undefined) {
+						var dmed = false;
 						try {
-							if (target instanceof GuildMember)
+							if (target instanceof GuildMember) {
 								await target.send(`You have been banned from the \`${guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);
+								dmed = true;
+							}
 						} catch (err) {
 							console.warn(err.stack);
 						}
 
 						call.message.guild.ban(target, { days: daysToDelete, reason: `Banned by ${call.message.author.tag} for ${reason}` }).then((user) => {
-							call.message.channel.send(`***Successfully banned \`${user.tag}\`.***`);
+							call.message.channel.send(`***Successfully banned \`${user.tag || user.id || user}\`.***`);
+							call.client.emit("bannedByCommand", {
+								target: target,
+								executor: call.message.member,
+								reason: reason,
+								daysDeleted: daysToDelete,
+								dmed: dmed
+							});
 						}).catch(() => {
 							call.message.channel.send(`Failed to ban \`${target instanceof GuildMember ? target.user.tag : target}\`.`);
 						});

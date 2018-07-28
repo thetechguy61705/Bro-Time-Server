@@ -18,6 +18,11 @@ module.exports = {
 					var reason = call.params.readParam(true) || "No reason specified.";
 					call.message.guild.unban(user, `Unbanned by ${call.message.author.tag} for ${reason}`).then((unbannedUser) => {
 						call.message.channel.send(`***Successfully unbanned \`${unbannedUser.tag}\`.***`);
+						call.client.emit("unbannedByCommand", {
+							target: user,
+							executor: call.message.member,
+							reason: reason
+						});
 					}).catch(() => {
 						call.message.reply(`Failed to unban \`${user.tag}\`.`);
 					});

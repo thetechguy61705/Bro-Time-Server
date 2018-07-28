@@ -1,4 +1,3 @@
-const Discord = require("discord.js");
 const Moderator = require("@utility/moderator");
 
 module.exports = {
@@ -8,29 +7,25 @@ module.exports = {
 	requires: "Moderator permissions",
 	access: "Server",
 	exec: async (call) => {
-		const rawContent = call.params.readRaw(),
-			parameterOne = (call.params.readParam() || ""),
-			parameterTwo = (call.params.readParam() || "");
+		var param = call.params.readParam() || "";
 		if (Moderator(call.message.member)) {
-			if (parameterOne != "") {
+			if (param != null) {
 				var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
-				const target = guild.members.find((member) => parameterOne.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(parameterOne.toLowerCase()));
+				var target = guild.members.find((member) => param.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(param.toLowerCase()));
 				if (target != null) {
 					if (!target.user.bot) {
 						if (target.highestRole.position < call.message.member.highestRole.position) {
-							var reason = (parameterTwo !== "") ? "`" + rawContent.substr(parameterOne.length + 1) + "`" : "`No reason specified.`";
+							var reason = call.params.readParam(true) || "`No reason specified.`";
+							var dmed = false;
 							try {
 								await target.send(`You have been warned in the \`${guild.name}\` server by \`${call.message.author.tag}\` for ${reason}.`);
+								dmed = true;
 							} catch (err) {
 								console.warn(err.stack);
 							}
 
 							call.message.channel.send(`***Successfully warned \`${target.user.tag}\`.***`);
-							var warnEmbed = new Discord.RichEmbed().setAuthor(target.user.tag, target.user.displayAvatarURL).setDescription(reason.substr(1).slice(0, -1))
-								.setFooter(`Warned by ${call.message.author.tag} (${call.message.author.id})`)
-								.setColor("ORANGE")
-								.setTimestamp();
-							call.client.channels.get("436353363786072104").send({ embed: warnEmbed });
+							call.client.emit("memberWarned", { target: target, executor: call.message.member, reason: reason, dmed: dmed });
 						} else call.safeSend("Specified user is too high in this guild's hierarchy to be warned by you.");
 					} else call.safeSend("You cannot warn a bot account.");
 				} else call.safeSend("Please supply a valid user tag, mention, or id.");

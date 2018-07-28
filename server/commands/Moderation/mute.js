@@ -19,16 +19,26 @@ module.exports = {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					if (!target.roles.has(guild.roles.find("name", "Muted").id)) {
 						var muteTime = (parameterTwo != null) ? ms(parameterTwo) : null;
+						if (muteTime == null) call.params.offset(parameterTwo.length + 1);
+						var reason = call.params.readParam(true) || "No reason specified.";
 						if (muteTime != null) {
 							if (muteTime >= 10000) {
 								target.addRole(guild.roles.find("name", "Muted")).then(() => {
 									call.message.channel.send(`***Successfully muted \`${target.user.tag}\` for ${ms(muteTime, { long: true })}.***`);
-									call.client.channels.get("457235875487678465").send(`${target.user.id} ${Date.now() + muteTime}`).then((msg) => {
-										call.client.setTimeout(() => {
-											target.removeRole(guild.roles.find("name", "Muted"));
-											msg.delete();
-										}, muteTime);
+									call.client.emit("mutedByCommand", {
+										target: target,
+										executor: call.message.member,
+										time: muteTime,
+										reason: reason
 									});
+									call.client.setTimeout(() => {
+										target.removeRole(guild.roles.find("name", "Muted"));
+										call.client.emit("unmutedByCommand", {
+											target: target,
+											executor: call.message.guild.me,
+											reason: "auto"
+										});
+									}, muteTime);
 								}).catch(() => {
 									call.message.channel.send(`Failed to mute \`${target.user.tag}\`.`);
 								});
@@ -36,6 +46,12 @@ module.exports = {
 						} else {
 							target.addRole(guild.roles.find("name", "Muted")).then(() => {
 								call.message.channel.send(`***Successfully muted \`${target.user.tag}\`.***`);
+								call.client.emit("mutedByCommand", {
+									target: target,
+									executor: call.message.member,
+									time: Infinity,
+									reason: reason
+								});
 							}).catch(() => {
 								call.message.channel.send(`Failed to mute \`${target.user.tag}\`.`);
 							});

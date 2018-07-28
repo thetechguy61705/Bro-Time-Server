@@ -17,14 +17,22 @@ module.exports = {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					var reason = call.params.readParam(true) || "No reason specified.";
 					if (target.kickable) {
+						var dmed = false;
 						try {
 							await target.send(`You have been kicked from the \`${guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);
+							dmed = true;
 						} catch (err) {
 							console.warn(err.stack);
 						}
 
 						target.kick(`Kicked by ${call.message.author.tag} for ${reason}`).then((user) => {
 							call.message.channel.send(`***Successfully kicked \`${user.tag}\`.***`);
+							call.client.emit("kickedByCommand", {
+								target: target,
+								executor: call.message.member,
+								reason: reason,
+								dmed: dmed
+							});
 						}).catch(() => {
 							call.message.channel.send(`Failed to kick \`${target.user.tag}\`.`);
 						});

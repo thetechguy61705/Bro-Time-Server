@@ -145,7 +145,7 @@ module.exports = {
 		client.on("guildBanAdd", async (guild, user) => {
 			let executor = await this.getExecutor(guild, "MEMBER_BAN_ADD");
 			let logs = this.getChannel(guild);
-			if (logs) logs.send(
+			if (logs && executor.id !== guild.me.id) logs.send(
 				new RichEmbed()
 					.setAuthor(executor.tag, executor.displayAvatarURL)
 					.setTitle("Member Banned")
@@ -157,7 +157,7 @@ module.exports = {
 		client.on("guildBanRemove", async (guild, user) => {
 			let executor = await this.getExecutor(guild, "MEMBER_BAN_REMOVE");
 			let logs = this.getChannel(guild);
-			if (logs) logs.send(
+			if (logs && executor.id !== guild.me.id) logs.send(
 				new RichEmbed()
 					.setAuthor(executor.tag, executor.displayAvatarURL)
 					.setTitle("Member Unbanned")
@@ -245,5 +245,82 @@ module.exports = {
 			);
 		});
 		// Self emitted event to handle emitting non-cached bulk deletes.
+
+		client.on("memberWarned", (warning) => {
+			let logs = this.getChannel(warning.target.guild);
+			if (logs) logs.send(
+				new RichEmbed()
+					.setAuthor(warning.executor.user.tag, warning.executor.user.displayAvatarURL)
+					.setTitle("Member Warned")
+					.setDescription(`Member: \`${warning.target.user.tag} (${warning.target.id})\`\n` +
+						`Reason: \`${warning.reason}\`\n` +
+						`Member DMed: \`${warning.dmed}\``)
+					.setColor(RED_HEX)
+			);
+		});
+
+		client.on("bannedByCommand", (banInfo) => {
+			let logs = this.getChannel(banInfo.executor.guild);
+			if (logs) logs.send(
+				new RichEmbed()
+					.setAuthor(banInfo.executor.user.tag, banInfo.executor.user.displayAvatarURL)
+					.setTitle("Member Banned")
+					.setDescription(`Member: \`${(banInfo.target.user || { tag: banInfo.target.tag }).tag || banInfo.target.id || banInfo} (${banInfo.target.id || banInfo})\`\n` +
+						`Reason: \`${banInfo.reason}\`\n` +
+						`Member DMed: \`${banInfo.dmed}\`\n` +
+						`Days of messages deleted: \`${banInfo.daysDeleted}\``)
+					.setColor(RED_HEX)
+			);
+		});
+
+		client.on("unbannedByCommand", (unbanInfo) => {
+			let logs = this.getChannel(unbanInfo.executor.guild);
+			if (logs) logs.send(
+				new RichEmbed()
+					.setAuthor(unbanInfo.executor.user.tag, unbanInfo.executor.user.displayAvatarURL)
+					.setTitle("Member Unbanned")
+					.setDescription(`Member: \`${unbanInfo.tag} (${unbanInfo.id})\`\n` +
+						`Reason: \`${unbanInfo.reason}\`\n`)
+					.setColor(GREEN_HEX)
+			);
+		});
+
+		client.on("kickedByCommand", (kickInfo) => {
+			let logs = this.getChannel(kickInfo.executor.guild);
+			if (logs) logs.send(
+				new RichEmbed()
+					.setAuthor(kickInfo.executor.user.tag, kickInfo.executor.user.displayAvatarURL)
+					.setTitle("Member Kicked")
+					.setDescription(`Member: \`${kickInfo.target.user.tag} (${kickInfo.target.id})\`\n` +
+						`Reason: \`${kickInfo.reason}\`\n` +
+						`Member DMed: \`${kickInfo.dmed}\``)
+					.setColor(RED_HEX)
+			);
+		});
+
+		client.on("mutedByCommand", (muteInfo) => {
+			let logs = this.getChannel(muteInfo.executor.guild);
+			if (logs) logs.send(
+				new RichEmbed()
+					.setAuthor(muteInfo.executor.user.tag, muteInfo.executor.user.displayAvatarURL)
+					.setTitle("Member Muted")
+					.setDescription(`Member: \`${muteInfo.target.user.tag} (${muteInfo.target.id})\`\n` +
+						`Time: \`${muteInfo.time.expandPretty().replace(/`/g, "")}\`\n` +
+						`Reason: \`${muteInfo.reason}\``)
+					.setColor(RED_HEX)
+			);
+		});
+
+		client.on("unmutedByCommand", (unmuteInfo) => {
+			let logs = this.getChannel(unmuteInfo.executor.guild);
+			if (logs) logs.send(
+				new RichEmbed()
+					.setAuthor(unmuteInfo.executor.user.tag, unmuteInfo.executor.user.displayAvatarURL)
+					.setTitle("Member Muted")
+					.setDescription(`Member: \`${unmuteInfo.target.user.tag} (${unmuteInfo.target.id})\`\n` +
+						`Reason: \`${unmuteInfo.reason}\``)
+					.setColor(GREEN_HEX)
+			);
+		});
 	}
 };

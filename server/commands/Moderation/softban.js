@@ -30,7 +30,7 @@ module.exports = {
 
 						guild.ban(target, { days: daysToDelete, reason: `Softbanned by ${call.message.author.tag} for ${reason}` }).then(() => {
 							guild.unban(target.user, `Softbanned by ${call.message.author.tag} for ${reason}`).then((user) => {
-								call.message.channel.send(`***Successfully softbanned \`${user.tag}\`.***`);
+								call.message.channel.send(`***Successfully softbanned \`${user.tag || user.id || user}\`.***`);
 							}).catch(() => {
 								call.message.reply(`Failed to unban \`${target.user.tag}\`.`);
 							});
