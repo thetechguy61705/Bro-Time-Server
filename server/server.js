@@ -108,8 +108,8 @@ client.on("disconnect", () => {
 });
 
 client.on("error", (exc) => {
-	console.warn(`Shard ${client.shard.id} recieved a connection error.`);
-	console.warn(exc.stack);
+	console.warn(`Shard ${client.shard.id} recieved a connection error:`);
+	console.warn(exc);
 });
 
 client.login(config.TOKEN);
