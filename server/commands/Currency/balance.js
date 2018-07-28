@@ -14,7 +14,7 @@ module.exports = {
 			if (call.message.channel.type === "text") {
 				await call.message.guild.fetchMembers("", call.message.guild.memberCount);
 				target = call.params.readMember() ||
-					await call.client.fetchUser(param || call.message.author.id);
+					await call.client.fetchUser(param || call.message.author.id, false);
 			} else {
 				target = await call.client.fetchUser(param || call.message.author.id);
 			}

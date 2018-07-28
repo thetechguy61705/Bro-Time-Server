@@ -13,9 +13,9 @@ module.exports = {
 			if (call.message.channel.type === "text") {
 				var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
 				user = guild.members.find((member) => param.includes(member.id) || member.user.tag.toLowerCase().startsWith(param || null)) ||
-					await call.client.fetchUser(param || "nothing");
+					await call.client.fetchUser(param || "nothing", false);
 			} else {
-				user = await call.client.fetchUser(param || "nothing");
+				user = await call.client.fetchUser(param || "nothing", false);
 			}
 		} catch (exc) {
 			console.warn(exc.stack);
