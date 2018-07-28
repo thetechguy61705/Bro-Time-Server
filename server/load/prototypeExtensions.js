@@ -80,7 +80,7 @@ Discord.Client.prototype.requestPermissions = function(member, channel, permissi
 };
 
 Discord.RichEmbed.prototype.setDefaultFooter = function(user) {
-	return this.setFooter((this.footer || { text: "" }).text + " " + "Ran by " + user.username + " (" + user.id + ")", user.displayAvatarURL);
+	return this.setFooter(`${(this.footer || { text: "" }).text} Ran by ${user.username} (${user.id})`, user.displayAvatarURL);
 };
 
 if (!Discord.Collection.prototype.sweep) {

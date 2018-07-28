@@ -13,7 +13,7 @@ module.exports = {
 		if (Moderator(call.message.member)) {
 			var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
 			var target = guild.members.find((m) => param.includes(`${m.user.id}`));
-			if (target != null) {
+			if (target != "") {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
 					var reason = call.params.readParam(true) || "No reason specified.";
 					if (target.kickable) {

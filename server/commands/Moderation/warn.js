@@ -9,7 +9,7 @@ module.exports = {
 	exec: async (call) => {
 		var param = call.params.readParam() || "";
 		if (Moderator(call.message.member)) {
-			if (param != null) {
+			if (param != "") {
 				var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
 				var target = guild.members.find((member) => param.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(param.toLowerCase()));
 				if (target != null) {
