@@ -162,7 +162,7 @@ class Music {
 						if (choice != null) {
 							result = results[choice - 1];
 							if (result != null)
-								ticket = Music.getTicket(call.client, call.message.channel, result.query);
+								ticket = Music.getTicket(result.query, call);
 						}
 					}
 				// eslint-disable-next-line no-empty
