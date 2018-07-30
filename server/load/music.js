@@ -156,7 +156,7 @@ class Music {
 
 				ticket = null;
 				try {
-					choice = await call.requestInput(call.REQUEST_OPTIONS.Anyone, prompt);
+					choice = await call.requestInput(call.commands.REQUEST_OPTIONS.Anyone, prompt);
 					if (choice != null) {
 						choice = choice.params.readNumber();
 						if (choice != null) {
