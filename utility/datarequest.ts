@@ -78,7 +78,7 @@ export class DataRequest {
 	public static walletGetStaticTotal(): Promise<number> {
 		return new Promise((resolve, reject) => {
 			var request = new DataRequest(DataRequest.REQUEST_TYPE.WalletGetTotal,
-			resolve, reject);
+				resolve, reject);
 			DataRequest.sendRequest(request);
 		});
 	}
