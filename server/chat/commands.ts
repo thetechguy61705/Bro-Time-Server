@@ -230,7 +230,7 @@ export class Call {
 	}
 
 	public requestInput(options: any = null,
-		prompt: string = null,
+		prompt: any = null,
 		timeout: number = 180000,
 		accepts: any = null): Promise<Params> {
 		return new Promise(((resolve, reject) => {

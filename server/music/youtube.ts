@@ -1,3 +1,5 @@
+import { Source } from "@server/load/music";
+
 var ytdl = require("ytdl-core");
 var miniget = require("miniget");
 var querystring = require("querystring");
@@ -14,7 +16,7 @@ module.exports = {
 			try {
 				ytdl.getInfo(query, this, (err, info) => {
 					if (err == null) {
-						miniget(`https://www.googleapis.com/youtube/v3/videos?id=${info.video_id}&part=contentDetails&key=${key}`, (err, res, body) => {
+						miniget(`https://www.googleapis.com/youtube/v3/videos?id=${info.video_id}&part=contentDetails&key=${key}`, (err, _res, body) => {
 							if (err) {
 								throw err;
 							} else {
@@ -54,7 +56,7 @@ module.exports = {
 
 	search(query, key) {
 		return new Promise((resolve) => {
-			miniget(`https://www.googleapis.com/youtube/v3/search?type=video&q=${querystring.escape(query)}&maxResults=5&part=id,snippet&key=${key}`, (err, res, body) => {
+			miniget(`https://www.googleapis.com/youtube/v3/search?type=video&q=${querystring.escape(query)}&maxResults=5&part=id,snippet&key=${key}`, (err, _res, body) => {
 				if (err != null) {
 					console.warn(err.stack);
 					resolve([]);
@@ -69,4 +71,4 @@ module.exports = {
 			});
 		});
 	}
-};
+} as Source;

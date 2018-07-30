@@ -1,9 +1,12 @@
+import { IExecutable, ReadableStream } from "types/server";
+import { Client, Collection, Snowflake, RichEmbed, Guild, GuildMember, Message, TextChannel, DMChannel, GroupDMChannel, VoiceChannel, VoiceConnection, StreamDispatcher } from "discord.js";
+import { Call } from "@server/chat/commands";
+
 var errorHandler = require("@utility/errorHandler");
 var config = require("@root/config");
-var { Collection, RichEmbed } = require("discord.js");
 var fs = require("fs");
-var sources = [];
-var tokens = new Collection();
+var sources: Source[] = [];
+var tokens: Collection<string, string> = new Collection();
 var vote = require("@utility/vote");
 
 // A map from source to token.
@@ -16,14 +19,30 @@ const MUSIC_CHANNELS = ["music", "songs"];
 const ABANDONED_TIMEOUT = 30000;
 const DJ_ROLES = ["330919872630358026", "402175094312665098", "436013049808420866", "436013613568884736", "DJ"];
 
+export type ticket = any;
+
+export interface Source {
+	id: string
+	test?: boolean
+	getTicket: { (queue: string, key?: string): ticket }
+	getPlayable: { (ticket: ticket): string }
+	load: { (ticket: ticket): ReadableStream }
+	search: { (query: string, key?: string): Promise<{ display: string, query: string }[]> }
+}
+
 class Queue extends Array {
-	constructor(music, guild) {
+	private music: Music
+	private connection?: VoiceConnection
+	private dispatcher?: StreamDispatcher
+	private timer?: NodeJS.Timer
+
+	constructor(music: Music, guild: Guild) {
 		super();
 		this.music = music;
 		music.players.set(guild.id, this);
 	}
 
-	play(stream, call) {
+	play(stream: ReadableStream, call: Call) {
 		call.message.channel.send(`Added ${stream.title} by ${stream.author} to the queue.`);
 		if (this.length === 0)
 			this.begin(stream, call);
@@ -60,7 +79,7 @@ class Queue extends Array {
 		}
 	}
 
-	begin(stream, call) {
+	begin(stream, call: Call) {
 		if (this.connection != null) {
 			this.dispatcher = this.connection.playStream(stream);
 			errorHandler(this.dispatcher);
@@ -94,29 +113,32 @@ class Queue extends Array {
 }
 
 class Music {
-	static isDJ(member) {
+	public isDJ: { (member: GuildMember): boolean }
+	public players: Collection<Snowflake, Queue>
+
+	static isDJ(member: GuildMember) {
 		return (member.roles.some((role) => DJ_ROLES.includes(role.name) || DJ_ROLES.includes(role.id)))
 			|| (member.voiceChannel != null && member.voiceChannel.members.filter((member) => !member.user.bot).size === 1);
 	}
 
-	static request(message, prompt) {
+	static request(message: Message, prompt: string) {
 		var result;
 		if (Music.isDJ(message.member)) {
 			result = Promise.resolve(true);
 		} else {
 			var voiceChannel = message.client.voiceConnections.get(message.guild.id).channel;
-			if (voiceChannel.members.filter((member) => { return !member.user.bot; }).size() == 0) {
+			if (voiceChannel.members.filter((member) => !member.user.bot).size === 0) {
 				result = Promise.resolve(true);
 			} else {
 				result = vote(VOTE_TIMEOUT, message.channel, Math.floor(voiceChannel.members.size * VOTE_REQUIRED),
 					(user) => { return voiceChannel.members.has(user.id); },
-					null, prompt, message.user);
+					null, prompt, message.author);
 			}
 		}
 		return result;
 	}
 
-	static isMusicChannel(channel) {
+	static isMusicChannel(channel: VoiceChannel) {
 		var name = channel.name.toLowerCase();
 		return MUSIC_CHANNELS.some((keyword) => { return name.startsWith(keyword) || name.endsWith(keyword); });
 	}
@@ -125,7 +147,7 @@ class Music {
 		return 0;
 	}
 
-	static async getTicket(query, call) {
+	static async getTicket(query: string, call: Call): Promise<ticket> {
 		var ticket;
 		for (var source of sources) {
 			ticket = await source.getTicket(query, tokens.get(source.id));
@@ -174,7 +196,7 @@ class Music {
 		return ticket;
 	}
 
-	static isAcceptable(ticket, source, matureAllowed, channel) {
+	static isAcceptable(ticket: any, source: Source, matureAllowed: boolean, channel: TextChannel | DMChannel | GroupDMChannel) {
 		var playable = source.getPlayable(ticket);
 		if (playable == "mature" && !matureAllowed)
 			channel.send("Mature music is not allowed here.");
@@ -182,13 +204,12 @@ class Music {
 		return playable !== "bad" && (matureAllowed || playable !== "mature");
 	}
 
-	constructor(client) {
+	constructor() {
 		this.isDJ = Music.isDJ;
 		this.players = new Collection();
-		this.client = client;
 	}
 
-	play(query, call) {
+	play(query: string, call: Call) {
 		var queue = this.players.has(call.message.guild.id) ?
 			this.players.get(call.message.guild.id) :
 			new Queue(this, call.message.guild);
@@ -200,12 +221,12 @@ class Music {
 					call.message.channel.send("Can't find music for the query!");
 				}
 			});
-		} else if (queue.paused) {
-			queue.resume();
+		} else if (queue.isPaused()) {
+			queue.toggle();
 		}
 	}
 
-	stop(call) {
+	stop(call: Call) {
 		if (call.client.voiceConnections.has(call.message.guild.id)) {
 			Music.request(call.message, "Stop playing music?").then((accepted) => {
 				if (accepted) {
@@ -219,7 +240,7 @@ class Music {
 		}
 	}
 
-	skip(call) {
+	skip(call: Call) {
 		var queue = this.players.get(call.message.guild.id);
 		if (queue != null) {
 			Music.request(call.message, "Skip the current song?").then((accepted) => {
@@ -232,7 +253,7 @@ class Music {
 		}
 	}
 
-	toggle(call) {
+	toggle(call: Call) {
 		var queue = this.players.get(call.message.guild.id);
 		if (queue != null) {
 			Music.request(call.message, "Pause or resume playing?").then((accepted) => {
@@ -250,7 +271,7 @@ class Music {
 }
 
 for (let file of fs.readdirSync(__dirname + "/../music")) {
-	let match = file.match(/^(.*)\.js$/);
+	let match = file.match(/^(.*)\.ts$/);
 	if (match != null) {
 		new Promise((resolve, reject) => {
 			try {
@@ -258,9 +279,9 @@ for (let file of fs.readdirSync(__dirname + "/../music")) {
 			} catch (exc) {
 				reject(exc);
 			}
-		}).then((source) => {
+		}).then((source: Source) => {
 			sources.push(source);
-		}, (exc) => {
+		}, (exc: Error) => {
 			console.warn(`Unable to load music source ${match}:`);
 			console.warn(exc.stack);
 		});
@@ -269,7 +290,7 @@ for (let file of fs.readdirSync(__dirname + "/../music")) {
 
 module.exports = {
 	id: "music",
-	exec: (client) => {
+	exec: (client: Client) => {
 		for (var [source, key] of Object.entries(TOKENS_MAPPING))
 			tokens.set(source, config[key]);
 		client.music = new Music();
@@ -286,4 +307,4 @@ module.exports = {
 			}
 		});
 	}
-};
+} as IExecutable<Client>;

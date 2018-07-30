@@ -9,3 +9,8 @@ export interface IExecutable<T> {
 export interface ILoadable<T> {
     load(arg: T): void
 }
+
+export interface ReadableStream {
+    title?: string
+    author?: string
+}
