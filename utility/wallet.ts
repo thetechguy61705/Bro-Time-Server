@@ -6,6 +6,10 @@ export const TRANSFER_RATE = .20;
 export class Wallet {
 	private readonly _userId?: Snowflake
 
+	public static getTotal(): Promise<number> {
+		return DataRequest.walletGetStaticTotal();
+	}
+
 	public constructor(userId: Snowflake) {
 		this._userId = userId;
 	}

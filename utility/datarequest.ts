@@ -75,6 +75,14 @@ export class DataRequest {
 		});
 	}
 
+	public static walletGetStaticTotal(): Promise<number> {
+		return new Promise((resolve, reject) => {
+			var request = new DataRequest(DataRequest.REQUEST_TYPE.WalletGetTotal,
+			resolve, reject);
+			DataRequest.sendRequest(request);
+		});
+	}
+
 	public static walletGetTotal(userId: Snowflake): Promise<number> {
 		return new Promise((resolve, reject) => {
 			if (userId == null) {
