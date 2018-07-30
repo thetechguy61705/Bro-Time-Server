@@ -36,38 +36,38 @@ class Queue extends Array {
 	private dispatcher?: StreamDispatcher
 	private timer?: NodeJS.Timer
 
-	constructor(music: Music, guild: Guild) {
+	public constructor(music: Music, guild: Guild) {
 		super();
 		this.music = music;
 		music.players.set(guild.id, this);
 	}
 
-	play(stream: ReadableStream, call: Call) {
+	public play(stream: ReadableStream, call: Call): void {
 		call.message.channel.send(`Added ${stream.title} by ${stream.author} to the queue.`);
 		if (this.length === 0)
 			this.begin(stream, call);
 		this.push(stream);
 	}
 
-	stop() {
+	public stop(): void {
 		this.length = 0;
 		if (this.dispatcher != null)
 			this.dispatcher.end("Finished playing.");
 	}
 
-	skip() {
+	public skip(): void {
 		if (this.dispatcher != null)
 			this.dispatcher.end("Skipping song.");
 	}
 
-	isPaused() {
+	public isPaused(): boolean {
 		var paused = true;
 		if (this.dispatcher != null)
 			paused = this.dispatcher.paused;
 		return paused;
 	}
 
-	toggle() {
+	public toggle(): void {
 		if (this.dispatcher != null) {
 			if (this.dispatcher.paused) {
 				clearTimeout(this.timer);
@@ -79,7 +79,7 @@ class Queue extends Array {
 		}
 	}
 
-	begin(stream, call: Call) {
+	public begin(stream, call: Call): void {
 		if (this.connection != null) {
 			this.dispatcher = this.connection.playStream(stream);
 			errorHandler(this.dispatcher);
@@ -116,12 +116,12 @@ class Music {
 	public isDJ: { (member: GuildMember): boolean }
 	public players: Collection<Snowflake, Queue>
 
-	static isDJ(member: GuildMember) {
+	public static isDJ(member: GuildMember): boolean {
 		return (member.roles.some((role) => DJ_ROLES.includes(role.name) || DJ_ROLES.includes(role.id)))
 			|| (member.voiceChannel != null && member.voiceChannel.members.filter((member) => !member.user.bot).size === 1);
 	}
 
-	static request(message: Message, prompt: string) {
+	private static request(message: Message, prompt: string): Promise<boolean> {
 		var result;
 		if (Music.isDJ(message.member)) {
 			result = Promise.resolve(true);
@@ -138,16 +138,16 @@ class Music {
 		return result;
 	}
 
-	static isMusicChannel(channel: VoiceChannel) {
+	public static isMusicChannel(channel: VoiceChannel): boolean {
 		var name = channel.name.toLowerCase();
 		return MUSIC_CHANNELS.some((keyword) => { return name.startsWith(keyword) || name.endsWith(keyword); });
 	}
 
-	static compareSearchResults() {
+	private static compareSearchResults(): number {
 		return 0;
 	}
 
-	static async getTicket(query: string, call: Call): Promise<ticket> {
+	private static async getTicket(query: string, call: Call): Promise<ticket> {
 		var ticket;
 		for (var source of sources) {
 			ticket = await source.getTicket(query, tokens.get(source.id));
@@ -196,7 +196,7 @@ class Music {
 		return ticket;
 	}
 
-	static isAcceptable(ticket: any, source: Source, matureAllowed: boolean, channel: TextChannel | DMChannel | GroupDMChannel) {
+	private static isAcceptable(ticket: any, source: Source, matureAllowed: boolean, channel: TextChannel | DMChannel | GroupDMChannel): boolean {
 		var playable = source.getPlayable(ticket);
 		if (playable == "mature" && !matureAllowed)
 			channel.send("Mature music is not allowed here.");
@@ -204,12 +204,12 @@ class Music {
 		return playable !== "bad" && (matureAllowed || playable !== "mature");
 	}
 
-	constructor() {
+	public constructor() {
 		this.isDJ = Music.isDJ;
 		this.players = new Collection();
 	}
 
-	play(query: string, call: Call) {
+	public play(query: string, call: Call): void {
 		var queue = this.players.has(call.message.guild.id) ?
 			this.players.get(call.message.guild.id) :
 			new Queue(this, call.message.guild);
@@ -226,7 +226,7 @@ class Music {
 		}
 	}
 
-	stop(call: Call) {
+	public stop(call: Call): void {
 		if (call.client.voiceConnections.has(call.message.guild.id)) {
 			Music.request(call.message, "Stop playing music?").then((accepted) => {
 				if (accepted) {
@@ -240,7 +240,7 @@ class Music {
 		}
 	}
 
-	skip(call: Call) {
+	public skip(call: Call): void {
 		var queue = this.players.get(call.message.guild.id);
 		if (queue != null) {
 			Music.request(call.message, "Skip the current song?").then((accepted) => {
@@ -253,7 +253,7 @@ class Music {
 		}
 	}
 
-	toggle(call: Call) {
+	public toggle(call: Call): void {
 		var queue = this.players.get(call.message.guild.id);
 		if (queue != null) {
 			Music.request(call.message, "Pause or resume playing?").then((accepted) => {
@@ -266,7 +266,7 @@ class Music {
 		}
 	}
 
-	repeat() {
+	public repeat(): void {
 	}
 }
 
