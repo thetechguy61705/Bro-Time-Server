@@ -5,6 +5,7 @@ Giveaways are not permitted to last longer than one month (31 days).
 
 const { RichEmbed } = require("discord.js");
 const ms = require("ms");
+const UPDATE_INTERVAL_MS = 10000;
 const GIVEAWAY_EMOJI = {
 	name: "giveaway",
 	snowflake: "448305337234096130",
@@ -32,7 +33,7 @@ module.exports = {
 				channel = call.message.guild.channels.find((c) => c.type === "text" && ((param || "").includes(c.id) || c.name.toLowerCase().startsWith(param))),
 				amountOfWinners = (call.params.readNumber() || 1);
 			if (title.length <= 256) {
-				if (time != null && time > 5000 && time < 2678400000) {
+				if (time != null && time > UPDATE_INTERVAL_MS && time < 2678400000) {
 					if (channel != null && channel.type === "text") {
 						var giveawayEmbed = new RichEmbed()
 							.setTitle(title)
@@ -63,9 +64,9 @@ module.exports = {
 									call.client.clearInterval(updateLoop);
 								}
 								msg.edit("🎉 **GIVEAWAY** 🎉", { embed: giveawayEmbed });
-								time -= 5000;
+								time -= UPDATE_INTERVAL_MS;
 								giveawayEmbed.setDescription(`**React with ${GIVEAWAY_EMOJI} to enter**\nTime remaining: **${time.expandPretty()}**`);
-							}, 5000);
+							}, UPDATE_INTERVAL_MS);
 						}).catch(() => {
 							call.safeSend("I failed to send the giveaway to the given channel. Please try again.");
 						});

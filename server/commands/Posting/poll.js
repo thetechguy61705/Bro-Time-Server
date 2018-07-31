@@ -11,18 +11,18 @@ module.exports = {
 	botRequires: ["ADD_REACTIONS"],
 	botRequiresMessage: "To add the poll emojis.",
 	exec: (call) => {
-		const pollTitle = call.params.readRaw().split(":")[0];
+		var pollTitle = call.params.readRaw().split(":")[0];
 		if (call.params.readRaw().split(":")[1] !== undefined) {
 			var pollOptions = call.params.readRaw().split(":").slice(1).join(":").split("|");
 			if (pollOptions[0] !== "") {
 				if (pollOptions.length <= 9 && pollOptions.length >= 2) {
 					pollOptions = pollOptions.map((pollOption, i) => EMOJI_ARRAY[i] + " " + pollOption.trim());
-					const POLL_EMBED = new RichEmbed()
+					var pollEmbed = new RichEmbed()
 						.setTitle(pollTitle)
 						.setDescription(pollOptions.join("\n"))
 						.setColor(0x00AE86)
 						.setFooter(`${call.client.user.username} | Poll by ${call.message.author.tag}.`);
-					call.message.channel.send({ embed: POLL_EMBED }).then((poll) => {
+					call.message.channel.send({ embed: pollEmbed }).then((poll) => {
 						poll.reactMultiple(EMOJI_ARRAY.slice(0, pollOptions.length));
 					}).catch(() => {
 						call.safeSend("Something went wrong and I could not create the poll.");

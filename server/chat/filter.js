@@ -9,7 +9,7 @@ const URL_REGEX = /(https?:\/\/(www\.)?)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6
 const MARKDOWN = /(`|\*|_|~)+/g;
 
 function getKeyByValue(object, value) {
-	return Object.keys(object).find((key) => object[key] === value);
+	return Object.keys(object).find((key) => { return object[key] === value; });
 }
 
 function specialCharsToLetters(str) {
@@ -34,7 +34,7 @@ module.exports = {
 			if (!(message.channel.topic || "").includes("<ignore-bad>")) {
 				const BAD_WORDS = ["-".repeat(2001)];
 				// Currently settings/preferences is not available, until then bad words will be an impossible string to create, do to discord message limitations.
-				const BAD_WORDS_REGEX = new RegExp(`(${BAD_WORDS.map((word) => escapeRegExp(word)).join(")|(")})`, "gi");
+				const BAD_WORDS_REGEX = new RegExp(`(${BAD_WORDS.map((word) => { return escapeRegExp(word); }).join(")|(")})`, "gi");
 				var cleanedContent = message.content.toUpperCase();
 				var emojis = message.content.match(new RegExp(require("emoji-regex")(), "g"));
 				var nums = message.content.match(new RegExp(`(${Object.values(NUMBERS).join(")|(")})`, "g"));
@@ -60,6 +60,12 @@ module.exports = {
 			// eslint-disable-next-line no-unreachable
 			if (!(message.channel.topic || "").includes("<ignore-url>") && !isModerator(message.member) && URL_REGEX.test(message.content)) {
 				return "Please do not send links.";
+			}
+		},
+		function(message) {
+			if (message.embeds.find((embed) => { return embed.type === "rich"; }) != null && !message.author.bot
+				&& !(message.channel.topic || "").includes("<allow-userbot>")) {
+				return "Selfbotting is not permitted in this server.";
 			}
 		},
 		async function(message) {

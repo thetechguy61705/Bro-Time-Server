@@ -26,7 +26,7 @@ module.exports = {
 						.setURL(result.permalink)
 						.setColor(0x00AE86)
 						.setDefaultFooter(call.message.author)
-						.setDescription(hyperlinkText(result.definition).substring(0, 2048) || "None")
+						.setDescription(hyperlinkText(result.definition).substring(0, 2048) || "None.")
 						.addField("Example", hyperlinkText(result.example).substring(0, 1024) || "None.")
 						.addField("\u200B", `**${emojis.get("thumbsup")} ${result.thumbs_up} / ${emojis.get("thumbsdown")} ${result.thumbs_down} | ` +
 							`Written by ${result.author} at ${result.written_on.substring(0, 10).replace(/-/g, "/")}**`);
