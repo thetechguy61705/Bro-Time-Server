@@ -1,6 +1,13 @@
 const { RichEmbed } = require("discord.js");
+
 function channelMap(channels, type) {
-	return "`" + channels.filter((channel) => channel.type === type).map((channel) => channel.name).join("`, `") + "`";
+	return channels.filter((channel) => channel.type === type).map((channel) => channel.name);
+}
+
+function andMore(desired, amount) {
+	var result = "";
+	if (desired < amount) result = `\nAnd ${amount - desired} more...`;
+	return result;
 }
 
 module.exports = {
@@ -25,15 +32,20 @@ module.exports = {
 			.addField("Region", guild.region, true);
 		if (guild.iconURL == null) serverEmbed.addBlankField(true);
 		serverEmbed.addField("Owner", guild.owner.user.toString())
-			.addField("Text Channels", channelMap(guild.channels, "text"))
-			.addField("Voice Channels", channelMap(guild.channels, "voice"))
-			.addField("Category Channels", channelMap(guild.channels, "category"))
+			.addField("Text Channels", `\`${channelMap(guild.channels, "text").slice(0, 15).join("`, `")}\`` +
+				andMore(15, channelMap(guild.channels, "text").length))
+			.addField("Voice Channels", `\`${channelMap(guild.channels, "voice").slice(0, 15).join("`, `")}\`` +
+				andMore(15, channelMap(guild.channels, "voice").length))
+			.addField("Category Channels", `\`${channelMap(guild.channels, "category").slice(0, 15).join("`, `")}\`` +
+				andMore(15, channelMap(guild.channels, "category").length))
 			.addField("Members", `Members: \`${members.count}\`\n` +
 				`Online: \`${members.online}\`\n` +
 				`Humans: \`${members.humans}\`\n` +
 				`Bots: \`${members.bots}\``)
 			.addField("Roles", guild._sortedRoles.array().reverse().map((role) => `${role} (${role.members.size})`).slice(0, 35).join(",\n") +
-				("\nAnd " + (guild.roles.size - 35) + " more..."))
+				andMore(35, guild._sortedRoles.size))
+			.addField("Emojis", guild.emojis.map((emoji) => emoji.toString()).slice(0, 35).join("  ") +
+				andMore(35, guild.emojis.size), true)
 			.setDefaultFooter(call.message.author);
 		call.safeSend(null, call.message, { embed: serverEmbed });
 	}
