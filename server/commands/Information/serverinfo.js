@@ -28,7 +28,7 @@ module.exports = {
 		serverEmbed.addField("Channel Count", guild.channels.size, true)
 			.addField("Created At", guild.createdAt.toString().substring(0, 15), true);
 		if (guild.iconURL == null) serverEmbed.addBlankField(true);
-		serverEmbed.addField("Icon", `${guild.iconURL != null ? `URL(${guild.iconURL})` : "None."}`, true)
+		serverEmbed.addField("Icon", `${guild.iconURL != null ? `[URL](${guild.iconURL})` : "None."}`, true)
 			.addField("Region", guild.region, true);
 		if (guild.iconURL == null) serverEmbed.addBlankField(true);
 		serverEmbed.addField("Owner", guild.owner.user.toString())
@@ -44,7 +44,7 @@ module.exports = {
 				`Bots: \`${members.bots}\``)
 			.addField("Roles", guild._sortedRoles.array().reverse().map((role) => `${role} (${role.members.size})`).slice(0, 35).join(",\n") +
 				andMore(35, guild._sortedRoles.size))
-			.addField("Emojis", guild.emojis.map((emoji) => emoji.toString()).slice(0, 20).join("  ") +
+			.addField("Emojis", (guild.emojis.map((emoji) => emoji.toString()).slice(0, 20).join("  ") || "None.") +
 				andMore(20, guild.emojis.size), true)
 			.setDefaultFooter(call.message.author);
 		call.safeSend(null, call.message, { embed: serverEmbed });
