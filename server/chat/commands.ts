@@ -93,7 +93,7 @@ export class Params {
 
 	public hasFinished(): boolean {
 		return this.index >= this.raw.length;
-	}[
+	}
 
 	public readRaw(): string {
 		return this.raw.substring(this.index);
