@@ -17,9 +17,10 @@ module.exports = {
 	paramsHelp: "(query)",
 	exec: (call) => {
 		var search = call.params.readParam(true);
+		var random = search === "random";
 		if (search != null) {
-			urban[search === "random" ? "random" : "term"](search === "random" ? null : search).then((result) => {
-				if (search !== "random") [result] = result.entries;
+			urban[random ? "random" : "term"](random ? null : search).then((result) => {
+				if (!random) [result] = result.entries;
 				if (result != null) {
 					var urbanEmbed = new RichEmbed()
 						.setTitle(result.word)
