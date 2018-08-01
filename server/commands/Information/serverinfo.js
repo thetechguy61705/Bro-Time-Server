@@ -1,7 +1,7 @@
 const { RichEmbed } = require("discord.js");
 
-function channelMap(channels, type) {
-	return channels.filter((channel) => channel.type === type).map((channel) => channel.name);
+function channelMap(channels, type, member) {
+	return channels.filter((channel) => channel.type === type && channel.permissionsFor(member).has("READ_MESSAGES")).map((channel) => channel.name);
 }
 
 function andMore(desired, amount) {
@@ -32,12 +32,12 @@ module.exports = {
 			.addField("Region", guild.region, true);
 		if (guild.iconURL == null) serverEmbed.addBlankField(true);
 		serverEmbed.addField("Owner", guild.owner.user.toString())
-			.addField("Text Channels", `\`${channelMap(guild.channels, "text").slice(0, 15).join("`, `")}\`` +
-				andMore(15, channelMap(guild.channels, "text").length))
-			.addField("Voice Channels", `\`${channelMap(guild.channels, "voice").slice(0, 15).join("`, `")}\`` +
-				andMore(15, channelMap(guild.channels, "voice").length))
-			.addField("Category Channels", `\`${channelMap(guild.channels, "category").slice(0, 15).join("`, `")}\`` +
-				andMore(15, channelMap(guild.channels, "category").length))
+			.addField("Text Channels", `\`${channelMap(guild.channels, "text", call.message.member).slice(0, 15).join("`, `")}\`` +
+				andMore(15, channelMap(guild.channels, "text", call.message.member).length))
+			.addField("Voice Channels", `\`${channelMap(guild.channels, "voice", call.message.member).slice(0, 15).join("`, `")}\`` +
+				andMore(15, channelMap(guild.channels, "voice", call.message.member).length))
+			.addField("Category Channels", `\`${channelMap(guild.channels, "category", call.message.member).slice(0, 15).join("`, `")}\`` +
+				andMore(15, channelMap(guild.channels, "category", call.message.member).length))
 			.addField("Members", `Members: \`${members.count}\`\n` +
 				`Online: \`${members.online}\`\n` +
 				`Humans: \`${members.humans}\`\n` +
