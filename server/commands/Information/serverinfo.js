@@ -44,8 +44,8 @@ module.exports = {
 				`Bots: \`${members.bots}\``)
 			.addField("Roles", guild._sortedRoles.array().reverse().map((role) => `${role} (${role.members.size})`).slice(0, 35).join(",\n") +
 				andMore(35, guild._sortedRoles.size))
-			.addField("Emojis", guild.emojis.map((emoji) => emoji.toString()).slice(0, 35).join("  ") +
-				andMore(35, guild.emojis.size), true)
+			.addField("Emojis", guild.emojis.map((emoji) => emoji.toString()).slice(0, 20).join("  ") +
+				andMore(20, guild.emojis.size), true)
 			.setDefaultFooter(call.message.author);
 		call.safeSend(null, call.message, { embed: serverEmbed });
 	}
