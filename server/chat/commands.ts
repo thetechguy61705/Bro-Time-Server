@@ -93,7 +93,7 @@ export class Params {
 
 	public hasFinished(): boolean {
 		return this.index >= this.raw.length;
-	}
+	}[
 
 	public readRaw(): string {
 		return this.raw.substring(this.index);
@@ -107,7 +107,7 @@ export class Params {
 			var match = this.raw.match(greedy ? this.sepGreedy : this.sep);
 			if (match !== null) {
 				this.index += match[0].length;
-				value = match[0];
+				[value] = match;
 			}
 		}
 		return value;
@@ -120,7 +120,7 @@ export class Params {
 			pattern.lastIndex = this.index;
 			var match = this.raw.match(pattern);
 			if (match != null) {
-				value = match[0];
+				[value] = match;
 				if (offset) this.index += value.length;
 				value = Params.normalizeParam(value);
 				this.readSep();
@@ -136,7 +136,7 @@ export class Params {
 			pattern.lastIndex = this.index;
 			var match = this.raw.match(pattern);
 			if (match !== null) {
-				value = match[0];
+				[value] = match;
 				if (offset) this.index += value.length;
 			}
 		}
@@ -339,7 +339,7 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 		} else {
 			var match = message.content.match("^" + MessageMentions.USERS_PATTERN.source);
 			if (match != null) {
-				prefix = match[0];
+				[prefix] = match;
 				using = message.mentions.users.size === 1 &&
 					message.mentions.users.first().id == message.client.user.id;
 			}
