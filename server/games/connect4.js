@@ -1,4 +1,4 @@
-const { RichEmbed, Collection} = require("discord.js");
+const { RichEmbed } = require("discord.js");
 const EMOJI_ARRAY = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣"];
 
 function getRow(rows, num) {
