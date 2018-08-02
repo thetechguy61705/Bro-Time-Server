@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node --require ./register.js server/launcher.js",
-    "debug": "node --require ./register.js --inspect-brk=0 server/launcher.js",
+    "debug": "ndb --require ./register.js server/launcher.js",
     "test": "eslint . --ext js,ts && eslint test/. --ext js,ts --env mocha && mocha --require ./register.js",
     "fix": "eslint . --fix --ext js,ts && eslint test/. --ext js,ts --env mocha --fix"
   },
@@ -66,6 +66,7 @@
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-typescript": "^0.12.0",
     "mocha": "^4.1.0",
+    "ndb": "^1.0.18",
     "typescript-eslint-parser": "^16.0.1"
   }
 }
