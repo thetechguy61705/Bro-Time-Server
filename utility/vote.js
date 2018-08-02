@@ -10,7 +10,10 @@ function replaceTags(content, values) {
 	if (content instanceof RichEmbed) {
 		result.setTitle(replaceTags(content.title, values));
 		result.setDescription(replaceTags(content.description, values));
-		result.setFooter(replaceTags(content.footer, values));
+		result.setFooter(replaceTags(content.footer.text, values));
+		result.fields = result.fields.map((field) => {
+			return { name: replaceTags(field.name, values), value: replaceTags(field.value, values), inline: field.inline };
+		});
 	} else {
 		for (let value of values) {
 			result = result.replace(new RegExp(value.tag, "g"), value.value);

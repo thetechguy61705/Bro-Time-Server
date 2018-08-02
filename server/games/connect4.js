@@ -7,12 +7,8 @@ function getRow(rows, num) {
 			return numberLoop;
 }
 
-function arrayToCollection(arr) {
-	var newColl = new Collection();
-	for (let i = 0; i < arr.length; i++) {
-		newColl.set(i, arr[i]);
-	}
-	return newColl;
+function split2Dim(arr) {
+	return arr.map((val, index) => { return [index, val]; });
 }
 
 module.exports = {
@@ -27,7 +23,7 @@ module.exports = {
 	allowLateJoin: false,
 	load: () => {},
 	start: (session) => {
-		const author = session.host, target = session.players.last();
+		var author = session.host, target = session.players.last();
 		session.players.set(author.id, author);
 		var rows = [EMOJI_ARRAY, ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],
 				["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"]],
@@ -36,7 +32,7 @@ module.exports = {
 		session.context.channel.send({ embed: connectFourEmbed }).then(async (connectFour) => {
 			await connectFour.reactMultiple(EMOJI_ARRAY);
 			var turn = author.id;
-			const filter = (reaction, user) => (user.id === author.id || user.id === target.id) && EMOJI_ARRAY.includes(reaction.emoji.name)
+			var filter = (reaction, user) => (user.id === author.id || user.id === target.id) && EMOJI_ARRAY.includes(reaction.emoji.name)
 				&& user.id !== session.context.client.user.id,
 				collector = connectFour.createReactionCollector(filter, { time: 600000 });
 			session.connectFour = connectFour;
@@ -45,7 +41,7 @@ module.exports = {
 			collector.on("collect", (reaction) => {
 				reaction.remove(reaction.users.last());
 				if (reaction.users.last().id === turn) {
-					const currentRow = (getRow(rows, EMOJI_ARRAY.indexOf(reaction.emoji.name)) == null) ? 6 : getRow(rows, EMOJI_ARRAY.indexOf(reaction.emoji.name)) - 1;
+					var currentRow = (getRow(rows, EMOJI_ARRAY.indexOf(reaction.emoji.name)) == null) ? 6 : getRow(rows, EMOJI_ARRAY.indexOf(reaction.emoji.name)) - 1;
 					if (currentRow !== 0) {
 						rows[currentRow][EMOJI_ARRAY.indexOf(reaction.emoji.name)] = (turn === author.id) ? "🔴" : "🔵";
 						turn = (turn === author.id) ? target.id : author.id;
@@ -53,8 +49,8 @@ module.exports = {
 						session.embed = connectFourEmbed.setDescription(`🔴 = ${author.tag}\n🔵 = ${target.tag}\n\n` + rows.map((row) => row.join(" ")).join("\n"));
 						connectFour.edit({ embed: connectFourEmbed })
 							.then((newConnectFour) => session.connectFour = newConnectFour);
-						for (var [indexOfRow, row] of arrayToCollection(rows)) {
-							for (var [indexOfCoin, coin] of arrayToCollection(row)) {
+						for (var [indexOfRow, row] of split2Dim(rows)) {
+							for (var [indexOfCoin, coin] of split2Dim(row)) {
 								var done = false;
 								if (coin !== "⚫" && coin === row[indexOfCoin + 1] &&
 									row[indexOfCoin + 1] === row[indexOfCoin + 2] &&
