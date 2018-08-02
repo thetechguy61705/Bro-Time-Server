@@ -25,8 +25,8 @@ module.exports = {
 							console.warn(err.stack);
 						}
 
-						target.kick(`Kicked by ${call.message.author.tag} for ${reason}`).then((user) => {
-							call.message.channel.send(`***Successfully kicked \`${user.tag}\`.***`);
+						target.kick(`Kicked by ${call.message.author.tag} for ${reason}`).then((kicked) => {
+							call.message.channel.send(`***Successfully kicked \`${kicked.user.tag}\`.***`);
 							call.client.emit("kickedByCommand", {
 								target: target,
 								executor: call.message.member,
