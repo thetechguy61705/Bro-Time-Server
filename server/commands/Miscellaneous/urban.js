@@ -5,7 +5,7 @@ const emojis = require("@server/load/emojis.js").emojis;
 function hyperlinkText(text) {
 	var hyperlinks = text.match(/\[(.*?)\]/g);
 	for (let link of hyperlinks || []) {
-		text = text.replace(link, `${link}(https://www.urbandictionary.com/define.php?term=${encodeURI(link.replace(/\[|\]/g, ""))})`);
+		text = text.replace(link, `${link}(https://www.urbandictionary.com/define.php?term=${link.replace(/\[|\]/g, "").replace(/\s/g, "+")})`);
 	}
 	return text;
 }
