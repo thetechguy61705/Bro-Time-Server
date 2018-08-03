@@ -1,4 +1,4 @@
-import { IExecutable, ReadableStream } from "types/server";
+import { IExecutable, MusicStream } from "types/server";
 import { Client, Collection, Snowflake, RichEmbed, Guild, GuildMember, Message, TextChannel, DMChannel, GroupDMChannel, VoiceChannel, VoiceConnection, StreamDispatcher } from "discord.js";
 import { Call } from "@server/chat/commands";
 
@@ -26,7 +26,7 @@ export interface Source {
 	test?: boolean
 	getTicket: { (queue: string, key?: string): ticket }
 	getPlayable: { (ticket: ticket): "good" | "bad" | "mature" | "unkown" }
-	load: { (ticket: ticket): ReadableStream }
+	load: { (ticket: ticket): MusicStream }
 	search: { (query: string, key?: string): Promise<{ display: string, query: string }[]> }
 }
 
@@ -42,13 +42,14 @@ class Queue extends Array {
 		super();
 		this.music = music;
 		this.loop = 0;
+		this.offset = 0;
 		music.players.set(guild.id, this);
 	}
 
-	public play(stream: ReadableStream, call: Call): void {
+	public play(call: Call, stream: MusicStream): void {
 		call.message.channel.send(`Added ${stream.title} by ${stream.author} to the queue.`);
 		if (this.length === 0)
-			this.begin(stream, call);
+			this.begin(call, stream);
 		this.push(stream);
 	}
 
@@ -82,26 +83,28 @@ class Queue extends Array {
 		}
 	}
 
-	public repeat(amount?: number) {
+	public repeat(call: Call, amount?: number) {
 		if (amount == null) {
 			this.loop++;
 		} else {
 			this.loop += amount;
 		}
+		call.message.channel.send(`Repeating ${this.loop} time${this.loop > 1 ? "s" : ""}.`);
 	}
 
-	private begin(stream: any, call: Call): void {
+	private begin(call: Call, stream: MusicStream): void {
 		if (this.connection != null) {
 			this.dispatcher = this.connection.playStream(stream);
 			errorHandler(this.dispatcher);
-			this.dispatcher.on("end", () => {
-				var stream = this.getNext();
+			this.dispatcher.on("finish", () => {
+				var next = this.getNext();
+				console.log(next != null);
 
 				if (this.timer != null)
 					clearTimeout(this.timer);
 
-				if (stream != null) {
-					this.begin(this[0], call);
+				if (next != null) {
+					this.begin(call, next);
 				} else {
 					this.music.players.delete(this.connection.channel.guild.id);
 					this.connection.channel.leave();
@@ -114,7 +117,7 @@ class Queue extends Array {
 		} else if (call.message.member.voiceChannel != null && Music.isMusicChannel(call.message.member.voiceChannel)) {
 			call.message.member.voiceChannel.join().then((connection) => {
 				this.connection = connection;
-				this.begin(stream, call);
+				this.begin(call, stream);
 			}, (exc) => {
 				call.message.channel.send(exc.message);
 				console.warn(exc.stack);
@@ -124,8 +127,8 @@ class Queue extends Array {
 		}
 	}
 
-	private getNext(): any {
-		var result;
+	private getNext(): MusicStream {
+		var result: MusicStream;
 		if (this.loop > 0) {
 			this.offset++;
 			if (this.offset >= this.length) {
@@ -140,7 +143,6 @@ class Queue extends Array {
 			if (this.length > 0)
 				result = this[0];
 		}
-
 		return result;
 	}
 }
@@ -242,14 +244,14 @@ class Music {
 		this.players = new Collection();
 	}
 
-	public play(query: string, call: Call): void {
+	public play(call: Call, query: string): void {
 		var queue = this.players.has(call.message.guild.id) ?
 			this.players.get(call.message.guild.id) :
 			new Queue(this, call.message.guild);
 		if (query != null) {
 			Music.getTicket(query, call).then((ticket) => {
 				if (ticket != null) {
-					queue.play(ticket.load(), call);
+					queue.play(call, ticket.load());
 				} else {
 					call.message.channel.send("Can't find music for the query!");
 				}
@@ -299,7 +301,17 @@ class Music {
 		}
 	}
 
-	public repeat(): void {
+	public repeat(call: Call, amount?: number): void {
+		var queue = this.players.get(call.message.guild.id);
+		if (queue != null) {
+			Music.request(call.message, `Loop ${amount || 1} time${amount != null && amount > 1 ? "s" : ""}?`).then((accepted) => {
+				if (accepted)
+					queue.repeat(call, amount);
+			}, (exc) => {
+				console.warn(exc.stack);
+				call.message.channel.send("Unable to repeat music (try again shortly).");
+			});
+		}
 	}
 }
 

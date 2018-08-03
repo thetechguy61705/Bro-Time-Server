@@ -8,7 +8,7 @@ module.exports = {
 	exec: (call) => {
 		var query = call.params.readParam(true);
 		if (query != null) {
-			call.client.music.play(query, call);
+			call.client.music.play(call, query);
 		} else {
 			call.message.channel.send("Please enter a query (url or term) to try and play.");
 		}
