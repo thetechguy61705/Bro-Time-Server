@@ -25,7 +25,7 @@ export interface Source {
 	id: string
 	test?: boolean
 	getTicket: { (queue: string, key?: string): ticket }
-	getPlayable: { (ticket: ticket): string }
+	getPlayable: { (ticket: ticket): "good" | "mature" | "unkown" }
 	load: { (ticket: ticket): ReadableStream }
 	search: { (query: string, key?: string): Promise<{ display: string, query: string }[]> }
 }
@@ -35,10 +35,13 @@ class Queue extends Array {
 	private connection?: VoiceConnection
 	private dispatcher?: StreamDispatcher
 	private timer?: NodeJS.Timer
+	private loop: number;
+	private offset: number;
 
 	public constructor(music: Music, guild: Guild) {
 		super();
 		this.music = music;
+		this.loop = 0;
 		music.players.set(guild.id, this);
 	}
 
@@ -79,15 +82,25 @@ class Queue extends Array {
 		}
 	}
 
-	public begin(stream, call: Call): void {
+	public repeat(amount?: number) {
+		if (amount == null) {
+			this.loop++;
+		} else {
+			this.loop += amount;
+		}
+	}
+
+	private begin(stream: any, call: Call): void {
 		if (this.connection != null) {
 			this.dispatcher = this.connection.playStream(stream);
 			errorHandler(this.dispatcher);
 			this.dispatcher.on("end", () => {
-				this.shift();
+				var stream = this.getNext();
+
 				if (this.timer != null)
 					clearTimeout(this.timer);
-				if (this.length > 0) {
+
+				if (stream != null) {
 					this.begin(this[0], call);
 				} else {
 					this.music.players.delete(this.connection.channel.guild.id);
@@ -109,6 +122,26 @@ class Queue extends Array {
 		} else {
 			call.message.channel.send("The member is not in a voice channel.");
 		}
+	}
+
+	private getNext(): any {
+		var result;
+		if (this.loop > 0) {
+			this.offset++;
+			if (this.offset >= this.length) {
+				this.loop--;
+				this.offset = 0;
+			}
+
+			result = this[this.offset];
+		} else {
+			this.shift();
+
+			if (this.length > 0)
+				result = this[0];
+		}
+
+		return result;
 	}
 }
 
