@@ -11,20 +11,12 @@ module.exports = {
 	filter: "audio",
 	retires: 0,
 
-	getTicket(query, key) {
+	getTicket(query) {
 		return new Promise((resolve) => {
 			try {
 				ytdl.getInfo(query, this, (err, info) => {
 					if (err == null) {
-						miniget(`https://www.googleapis.com/youtube/v3/videos?id=${info.video_id}&part=contentDetails&key=${key}`, (err, _res, body) => {
-							if (err) {
-								throw err;
-							} else {
-								var rating = JSON.parse(body).items[0].contentDetails.contentRating;
-								info.mature = rating != null && rating.ytRating === "ytAgeRestricted";
-								resolve(info);
-							}
-						});
+						resolve(info);
 					} else {
 						throw err;
 					}
@@ -39,7 +31,7 @@ module.exports = {
 
 	getPlayable(ticket) {
 		var play = "good";
-		if (ticket.mature) {
+		if (ticket.age_restricted) {
 			play = "mature";
 		} else if (ticket.allow_ratings !== "1" || parseFloat(ticket.avg_rating) < MIN_RATING) {
 			play = "unknown";
