@@ -25,7 +25,7 @@ export interface Source {
 	id: string
 	test?: boolean
 	getTicket: { (queue: string, key?: string): ticket }
-	getPlayable: { (ticket: ticket): "good" | "mature" | "unkown" }
+	getPlayable: { (ticket: ticket): "good" | "bad" | "mature" | "unkown" }
 	load: { (ticket: ticket): ReadableStream }
 	search: { (query: string, key?: string): Promise<{ display: string, query: string }[]> }
 }
