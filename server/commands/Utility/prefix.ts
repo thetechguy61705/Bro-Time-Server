@@ -43,7 +43,7 @@ module.exports = {
 					console.warn("Unable to set prefix:");
 					console.warn(exc.stack);
 				});
-			} else call.safeSend("You do not have permissions to trigger this command.");
+			}
 			break;
 		default:
 			DataRequest.getPrefix(call.message.guild.id).then((prefix: String) => {
