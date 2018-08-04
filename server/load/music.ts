@@ -5,6 +5,7 @@ import { Call } from "@server/chat/commands";
 var errorHandler = require("@utility/errorHandler");
 var config = require("@root/config");
 var fs = require("fs");
+var StreamCache = require('stream-cache');
 var sources: Source[] = [];
 var tokens: Collection<string, string> = new Collection();
 var vote = require("@utility/vote");
@@ -30,7 +31,7 @@ export interface Source {
 	search: { (query: string, key?: string): Promise<{ display: string, query: string }[]> }
 }
 
-class Queue extends Array {
+class Queue extends Array<MusicStream> {
 	private music: Music
 	private connection?: VoiceConnection
 	private dispatcher?: StreamDispatcher
@@ -47,10 +48,15 @@ class Queue extends Array {
 	}
 
 	public play(call: Call, stream: MusicStream): void {
-		call.message.channel.send(`Added ${stream.title} by ${stream.author} to the queue.`);
+		var rStream = new StreamCache();
+		stream.pipe(rStream);
+		rStream.title = stream.title;
+		rStream.author = stream.author;
+
+		call.message.channel.send(`Added ${rStream.title} by ${rStream.author} to the queue.`);
 		if (this.length === 0)
-			this.begin(call, stream);
-		this.push(stream);
+			this.begin(call, rStream);
+		this.push(rStream);
 	}
 
 	public stop(): void {
@@ -96,7 +102,7 @@ class Queue extends Array {
 		if (this.connection != null) {
 			this.dispatcher = this.connection.playStream(stream);
 			errorHandler(this.dispatcher);
-			this.dispatcher.on("finish", () => {
+			this.dispatcher.once("end", () => {
 				var next = this.getNext();
 				console.log(next != null);
 
