@@ -61,7 +61,7 @@ export class DataRequest {
 	}
 
 	// todo: Implement setting a prefix.
-	public static setPrefix(guildId: Snowflake, newPrefix: string): Promise<void> {
+	public static setPrefix(guildId: Snowflake, newPrefix: string): Promise<string> {
 		if (guildId == null)
 			throw new Error("Cannot set a prefix for a non-guild.");
 		if (newPrefix == null)
@@ -210,10 +210,12 @@ if (process.env.SHARD_ID != null) {
 			break;
 		}
 		case DataRequest.REQUEST_TYPE.SetPrefix: {
-			await doTransaction(async (connection: PoolClient) => {
-				await connection.query(`UPDATE discord.Servers
-					SET Prefix = $2
-					WHERE Server_Id = $1`, [request.guildId, request.newPrefix]);
+			result = await doTransaction(async (connection: PoolClient) => {
+				return (await connection.query(`INSERT INTO discord.Servers(Server_Id, Prefix)
+					VALUES ($1, $2)
+					ON CONFLICT ON CONSTRAINT Servers_Server_Id_PK
+					DO UPDATE SET Prefix = $2
+					RETURNING Prefix`, [request.guildId, request.newPrefix])).rows[0].prefix;
 			}, async () => {});
 			break;
 		}
