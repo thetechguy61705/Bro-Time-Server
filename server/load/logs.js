@@ -10,16 +10,14 @@ module.exports = {
 		var result;
 		var channel = guild.channels.find((channel) => (channel.name === "logs" && !(channel.topic || "").includes("<no-log>")) || (channel.topic || "").includes("<bro-bot-log>"));
 		if (channel != null) {
-			var transferred = (channel.topic || "").match(/<transfer:\d+>/);
+			var transferred = (channel.topic || "").match(/<transfer:(\d+)>/);
 			if (transferred != null) {
-				transferred = transferred[0].match(/\d+/);
-				if (transferred != null) transferred = transferred[0];
+				[_, transferred] = transferred;
 				var receivingGuild = guild.client.guilds.get(transferred);
 				if (receivingGuild != null) {
 					result = receivingGuild.channels.find((c) => {
-						var received = (c.topic || "").match(/<receive:\d+>/);
-						if (received != null) received = received[0].match(/\d+/);
-						if (received != null) received = received[0];
+						var received = (c.topic || "").match(/<receive:(\d+)>/);
+						if (received != null) [_, received] = received;
 						if (guild.id === received) return true;
 					});
 				}
