@@ -5,7 +5,7 @@ import { Call } from "@server/chat/commands";
 var errorHandler = require("@utility/errorHandler");
 var config = require("@root/config");
 var fs = require("fs");
-var StreamCache = require('stream-cache');
+var StreamCache = require("stream-cache");
 var sources: Source[] = [];
 var tokens: Collection<string, string> = new Collection();
 var vote = require("@utility/vote");
@@ -104,7 +104,6 @@ class Queue extends Array<MusicStream> {
 			errorHandler(this.dispatcher);
 			this.dispatcher.once("end", () => {
 				var next = this.getNext();
-				console.log(next != null);
 
 				if (this.timer != null)
 					clearTimeout(this.timer);
