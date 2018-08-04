@@ -24,8 +24,8 @@ module.exports = {
 			if (checkMod(call.message.author, call.safeSend)) {
 				var newPrefix: string | null = call.params.readParam(true);
 				if (newPrefix && newPrefix.length <= 100) {
-					DataRequest.setPrefix(call.message.guild.id, newPrefix).then(() => {
-						call.message.channel.send(`Set the prefix for this server to \`${newPrefix}\`.`);
+					DataRequest.setPrefix(call.message.guild.id, newPrefix).then((prefix: string) => {
+						call.message.channel.send(`Set the prefix for this server to \`${prefix}\`.`);
 					}, (exc: Error) => {
 						call.safeSend("Failed to set the prefix.");
 						console.warn("Unable to set prefix:");
@@ -36,8 +36,8 @@ module.exports = {
 			break;
 		case "reset":
 			if (checkMod(call.message.author, call.safeSend)) {
-				DataRequest.setPrefix(call.message.guild.id, PREFIX_DEFAULT).then(() => {
-					call.message.channel.send(`Reset the prefix for this server to \`${PREFIX_DEFAULT}\`.`);
+				DataRequest.setPrefix(call.message.guild.id, PREFIX_DEFAULT).then((prefix: string) => {
+					call.message.channel.send(`Reset the prefix for this server to \`${prefix}\`.`);
 				}, (exc: Error) => {
 					call.safeSend("Failed to set the prefix.");
 					console.warn("Unable to set prefix:");
@@ -46,7 +46,7 @@ module.exports = {
 			}
 			break;
 		default:
-			DataRequest.getPrefix(call.message.guild.id).then((prefix: String) => {
+			DataRequest.getPrefix(call.message.guild.id).then((prefix: string) => {
 				call.message.channel.send(`The current prefix for this server is \`${prefix}\`. To change the prefix run \`${prefix}prefix set (new prefix)\`.`);
 			}, (exc: Error) => {
 				call.safeSend("Failed to retrieve the prefix. Please try again.");
