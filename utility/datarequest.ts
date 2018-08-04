@@ -183,7 +183,7 @@ if (process.env.SHARD_ID != null) {
 				result = await offlineTrans();
 			}
 		} catch (exc) {
-			throw exc;
+			result = exc;
 		} finally {
 			if (connection != null)
 				connection.release();
