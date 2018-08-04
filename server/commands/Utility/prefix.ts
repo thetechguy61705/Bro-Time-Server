@@ -18,11 +18,11 @@ module.exports = {
 	paramsHelp: "(option) [new prefix]",
 	access: "Server",
 	exec: (call: Call) => {
-		var option = call.params.readParam();
+		var option: string | null = call.params.readParam();
 		switch (option) {
 		case "set":
 			if (checkMod(call.message.author, call.safeSend)) {
-				var newPrefix = call.params.readParam(true);
+				var newPrefix: string | null = call.params.readParam(true);
 				if (newPrefix && newPrefix.length <= 100) {
 					DataRequest.setPrefix(call.message.guild.id, newPrefix).then(() => {
 						call.message.channel.send(`Set the prefix for this server to \`${newPrefix}\`.`);
