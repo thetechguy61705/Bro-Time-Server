@@ -1,4 +1,4 @@
-const Moderator = require("@utility/moderator");
+const isModerator = require("@utility/moderator");
 const { GuildMember } = require("discord.js");
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
 	access: "Server",
 	exec: async (call) => {
 		var param = call.params.readParam() || "";
-		if (Moderator(call.message.member)) {
+		if (isModerator(call.message.member)) {
 			var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
 			var target = guild.members.find((m) => param.includes(`${m.user.id}`)) || param;
 			if (!(target instanceof GuildMember) && target != null) {
@@ -24,14 +24,15 @@ module.exports = {
 				}
 			}
 			if (target != null) {
-				if (call.message.member.highestRole.position > (target.highestRole || { position: 0 }).position) {
+				if (call.message.member.highestRole.position > (target.highestRole || { position: 0 }).position &&
+					target.id !== call.message.guild.ownerID) {
 					var daysToDelete = call.params.readNumber(false);
 					if (daysToDelete != null) {
 						call.params.offset(daysToDelete.toString().length + 1);
 						daysToDelete = daysToDelete < 0 ? 0 : daysToDelete > 7 ? 7 : daysToDelete;
 					} else daysToDelete = 7;
 					var reason = call.params.readParam(true) || "No reason specified.";
-					if (target.bannable || target.bannable === undefined) {
+					if (call.message.guild.me.hasPermission("BAN_MEMBERS") && (target.bannable || target.bannable === undefined)) {
 						var dmed = false;
 						try {
 							if (target instanceof GuildMember) {
