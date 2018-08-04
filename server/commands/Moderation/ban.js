@@ -52,7 +52,7 @@ module.exports = {
 								dmed: dmed
 							});
 						}).catch(() => {
-							call.message.channel.send(`Failed to ban \`${target instanceof GuildMember ? target.user.tag : target}\`.`);
+							call.message.channel.send(`Failed to ban \`${target instanceof GuildMember ? target.user.tag : target.tag}\`.`);
 						});
 					} else call.safeSend("I do not have permission to ban this user.");
 				} else call.safeSend("That user is too far up in this guild's hierarchy to be banned by you.");
