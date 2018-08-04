@@ -194,68 +194,68 @@ if (process.env.SHARD_ID != null) {
 	module.exports.processRequest = async function(request: DataRequest, shard: Shard): Promise<void> {
 		var result: any;
 		switch (DataRequest.REQUEST_TYPE.get(request.type)) {
-		case DataRequest.REQUEST_TYPE.RoundTrip: {
-			if (request.isInvalid)
-				result = new Error("The request was intentionally made invalid.");
-			break;
-		}
-		case DataRequest.REQUEST_TYPE.GetPrefix: {
-			result = await doTransaction(async (connection: PoolClient) => {
-				return request.guildId == null ? PREFIX_DEFAULT : ((await connection.query(`SELECT Prefix
+			case DataRequest.REQUEST_TYPE.RoundTrip: {
+				if (request.isInvalid)
+					result = new Error("The request was intentionally made invalid.");
+				break;
+			}
+			case DataRequest.REQUEST_TYPE.GetPrefix: {
+				result = await doTransaction(async (connection: PoolClient) => {
+					return request.guildId == null ? PREFIX_DEFAULT : ((await connection.query(`SELECT Prefix
 					FROM discord.Servers
 					WHERE Server_Id = $1`, [request.guildId])).rows[0] || { prefix: PREFIX_DEFAULT }).prefix;
-			}, async () => {
-				return PREFIX_DEFAULT;
-			});
-			break;
-		}
-		case DataRequest.REQUEST_TYPE.SetPrefix: {
-			result = await doTransaction(async (connection: PoolClient) => {
-				return (await connection.query(`INSERT INTO discord.Servers(Server_Id, Prefix)
+				}, async () => {
+					return PREFIX_DEFAULT;
+				});
+				break;
+			}
+			case DataRequest.REQUEST_TYPE.SetPrefix: {
+				result = await doTransaction(async (connection: PoolClient) => {
+					return (await connection.query(`INSERT INTO discord.Servers(Server_Id, Prefix)
 					VALUES ($1, $2)
 					ON CONFLICT ON CONSTRAINT Servers_Server_Id_PK
 					DO UPDATE SET Prefix = $2
 					RETURNING Prefix`, [request.guildId, request.newPrefix])).rows[0].prefix;
-			}, async () => {});
-			break;
-		}
-		case DataRequest.REQUEST_TYPE.WalletGetTotal: {
-			result = await doTransaction(async (connection: PoolClient) => {
-				return (await connection.query("SELECT discord.WalletGet($1)",
-					[request.userId])).rows[0].walletget;
-			}, async () => {});
-			break;
-		}
-		case DataRequest.REQUEST_TYPE.WalletChange: {
-			result = await doTransaction(async (connection: PoolClient) => {
-				var amount = (await connection.query("SELECT discord.WalletChange($2, $1) FOR UPDATE",
-					[request.userId, request.amount])).rows[0].walletchange;
+				}, async () => {});
+				break;
+			}
+			case DataRequest.REQUEST_TYPE.WalletGetTotal: {
+				result = await doTransaction(async (connection: PoolClient) => {
+					return (await connection.query("SELECT discord.WalletGet($1)",
+						[request.userId])).rows[0].walletget;
+				}, async () => {});
+				break;
+			}
+			case DataRequest.REQUEST_TYPE.WalletChange: {
+				result = await doTransaction(async (connection: PoolClient) => {
+					var amount = (await connection.query("SELECT discord.WalletChange($2, $1) FOR UPDATE",
+						[request.userId, request.amount])).rows[0].walletchange;
 
-				shard.manager.broadcastEval(`this.emit('walletChange', '${request.userId}', ${amount});`);
+					shard.manager.broadcastEval(`this.emit('walletChange', '${request.userId}', ${amount});`);
 
-				return amount;
-			}, async () => {});
-			break;
-		}
-		case DataRequest.REQUEST_TYPE.WalletTransfer: {
-			result = await doTransaction(async (connection: PoolClient) => {
-				var amounts = (await connection.query("SELECT discord.WalletTransfer($3, $1, $2) FOR UPDATE",
-					[request.fromUserId, request.toUserId, request.amount])).rows[0].wallettransfer;
+					return amount;
+				}, async () => {});
+				break;
+			}
+			case DataRequest.REQUEST_TYPE.WalletTransfer: {
+				result = await doTransaction(async (connection: PoolClient) => {
+					var amounts = (await connection.query("SELECT discord.WalletTransfer($3, $1, $2) FOR UPDATE",
+						[request.fromUserId, request.toUserId, request.amount])).rows[0].wallettransfer;
 
-				shard.manager.broadcastEval(`this.emit('walletChange', '${request.fromUserId}', ${amounts.from_amount});`);
-				shard.manager.broadcastEval(`this.emit('walletChange', '${request.toUserId}', ${amounts.to_amount});`);
+					shard.manager.broadcastEval(`this.emit('walletChange', '${request.fromUserId}', ${amounts.from_amount});`);
+					shard.manager.broadcastEval(`this.emit('walletChange', '${request.toUserId}', ${amounts.to_amount});`);
 
-				amounts = { fromAmount: amounts.from_amount, toAmount: amounts.to_amount };
-				if (amounts.fromAmount === -1)
-					amounts.fromAmount = Infinity;
-				if (amounts.toAmount === -1)
-					amounts.toAmount = Infinity;
-				return amounts;
-			}, async () => {});
-			break;
-		}
-		default:
-			result = new Error("The data request type has not been implemented.");
+					amounts = { fromAmount: amounts.from_amount, toAmount: amounts.to_amount };
+					if (amounts.fromAmount === -1)
+						amounts.fromAmount = Infinity;
+					if (amounts.toAmount === -1)
+						amounts.toAmount = Infinity;
+					return amounts;
+				}, async () => {});
+				break;
+			}
+			default:
+				result = new Error("The data request type has not been implemented.");
 		}
 		shard.process.send(new DataResponse(result, request.requestId));
 	};
