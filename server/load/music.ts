@@ -330,7 +330,7 @@ class Music {
 			info.setTitle("Queued Music");
 			for (var order = 0; order < queue.length; order++) {
 				song = queue[order];
-				songs[order] = `${order + 1} - ${song.title} by ${song.author} (${song.url})`
+				songs[order] = `${order + 1} - ${song.title} by ${song.author} (${song.url})`;
 			}
 			info.setDescription(songs.join("\n"));
 			call.message.channel.send(info);
