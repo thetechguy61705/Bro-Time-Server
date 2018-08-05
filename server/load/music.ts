@@ -50,6 +50,7 @@ class Queue extends Array<MusicStream> {
 	public play(call: Call, stream: MusicStream): void {
 		var rStream = new StreamCache();
 		stream.pipe(rStream);
+		rStream.url = stream.url;
 		rStream.title = stream.title;
 		rStream.author = stream.author;
 
@@ -316,6 +317,25 @@ class Music {
 				console.warn(exc.stack);
 				call.message.channel.send("Unable to repeat music (try again shortly).");
 			});
+		}
+	}
+
+	public displayQueued(call: Call) {
+		var queue = this.players.get(call.message.guild.id);
+		if (queue != null) {
+			// todo: Display the queued songs.
+			var info = new RichEmbed();
+			var song;
+			var songs = [];
+			info.setTitle("Queued Music");
+			for (var order = 0; order < queue.length; order++) {
+				song = queue[order];
+				songs[order] = `${order + 1} - ${song.title} by ${song.author} (${song.url})`
+			}
+			info.setDescription(songs.join("\n"));
+			call.message.channel.send(info);
+		} else {
+			call.message.channel.send("Nothing is queued at the moment.");
 		}
 	}
 }

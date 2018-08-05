@@ -40,24 +40,26 @@ module.exports = {
 
 	load(ticket) {
 		var stream = ytdl.downloadFromInfo(ticket, this);
-		Object.defineProperty(stream, "title", { value: ticket.title });
-		Object.defineProperty(stream, "author", { value: ticket.author.name });
+		stream.url = ticket.video_url;
+		stream.title = ticket.title;
+		stream.author = ticket.author.name;
 		return stream;
 	},
 
 	search(query, key) {
 		return new Promise((resolve) => {
-			fetch(`https://www.googleapis.com/youtube/v3/search?type=video&q=${querystring.escape(query)}&maxResults=5&part=id,snippet&key=${key}`).then(
-				(err) => {
-					console.warn(err.stack);
-					resolve([]);
-				}, (res) => {
-					resolve(res.json().items.map((item) => {
+			fetch(`https://www.googleapis.com/youtube/v3/search?type=video&q=${querystring.escape(query)}&maxResults=5&part=id,snippet&key=${key}`)
+				.then((res) => res.json())
+				.then((json) => {
+					resolve(json.items.map((item) => {
 						return {
 							display: item.snippet.title,
 							query: item.id.videoId
 						};
 					}));
+				}).catch((err) => {
+					console.warn(err.stack);
+					resolve([]);
 				});
 		});
 	}

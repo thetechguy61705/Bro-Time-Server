@@ -12,6 +12,7 @@ export interface ILoadable<T> {
 }
 
 export interface MusicStream extends Duplex {
-    title?: string
-    author?: string
+    url: string
+    title: string
+    author: string
 }
