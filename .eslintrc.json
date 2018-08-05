@@ -19,7 +19,7 @@
 	"rules": {
 		"max-len": ["error", { "code": 200 }],
 		"line-comment-position": ["error", "above"],
-		"indent": ["error", "tab"],
+		"indent": ["error", "tab", { "SwitchCase": 1 }],
 		"no-trailing-spaces": "error",
 		"space-before-blocks": "error",
 		"keyword-spacing": "error",
