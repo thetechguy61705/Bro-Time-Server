@@ -1,10 +1,10 @@
 import { IExecutable, MusicStream } from "types/server";
 import { Client, Collection, Snowflake, RichEmbed, Guild, GuildMember, Message, TextChannel, DMChannel, GroupDMChannel, VoiceChannel, VoiceConnection, StreamDispatcher } from "discord.js";
 import { Call } from "@server/chat/commands";
+import { load } from "@utility/filesloader";
 
 var errorHandler = require("@utility/errorHandler");
 var config = require("@root/config");
-var fs = require("fs");
 var StreamCache = require("stream-cache");
 var sources: Source[] = [];
 var tokens: Collection<string, string> = new Collection();
@@ -27,7 +27,7 @@ export interface Source {
 	test?: boolean
 	getTicket: { (queue: string, key?: string): ticket }
 	getPlayable: { (ticket: ticket): "good" | "bad" | "mature" | "unkown" }
-	load: { (ticket: ticket): MusicStream }
+	loadStream: { (ticket: ticket): MusicStream }
 	search: { (query: string, key?: string): Promise<{ display: string, query: string }[]> }
 }
 
@@ -194,7 +194,7 @@ class Music {
 			ticket = await source.getTicket(query, tokens.get(source.id));
 			if (ticket != null) {
 				Object.defineProperty(ticket, "load", {
-					value: source.load.bind(source, ticket)
+					value: source.loadStream.bind(source, ticket)
 				});
 				break;
 			}
@@ -323,7 +323,6 @@ class Music {
 	public displayQueued(call: Call) {
 		var queue = this.players.get(call.message.guild.id);
 		if (queue != null) {
-			// todo: Display the queued songs.
 			var info = new RichEmbed();
 			var song;
 			var songs = [];
@@ -340,27 +339,16 @@ class Music {
 	}
 }
 
-for (let file of fs.readdirSync(__dirname + "/../music")) {
-	let match = file.match(/^(.*)\.ts$/);
-	if (match != null) {
-		new Promise((resolve, reject) => {
-			try {
-				resolve(require("@server/music/" + match[1]));
-			} catch (exc) {
-				reject(exc);
-			}
-		}).then((source: Source) => {
-			sources.push(source);
-		}, (exc: Error) => {
-			console.warn(`Unable to load music source ${match}:`);
-			console.warn(exc.stack);
-		});
-	}
-}
-
 module.exports = {
 	id: "music",
 	exec: (client: Client) => {
+		load("music", {
+			success: (source) => {
+				sources.push(source);
+			},
+			failureMessage: "Unable to load music source."
+		});
+
 		for (var [source, key] of Object.entries(TOKENS_MAPPING))
 			tokens.set(source, config[key]);
 		client.music = new Music();

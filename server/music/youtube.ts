@@ -38,7 +38,7 @@ module.exports = {
 		return play;
 	},
 
-	load(ticket) {
+	loadStream(ticket) {
 		var stream = ytdl.downloadFromInfo(ticket, this);
 		stream.url = ticket.video_url;
 		stream.title = ticket.title;
