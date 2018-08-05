@@ -120,7 +120,7 @@ class RobloxUser {
 		return avatar.url;
 	}
 
-	async getPreviousUsernames(includeCurrent) {
+	async getPreviousUsernames(includeCurrent = false) {
 		if (![true, false].includes(includeCurrent)) throw new TypeError("IncludeCurrent must be a boolean.");
 		var usernames = await fetch(`https://newstargeted.com/api/roblox/Users/Usernames?userId=${this.id}`);
 		usernames = await usernames.json();
