@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const EMOJI_ARRAY = ["◀", "▶"];
+const hastebin = require("@utility/hastebin");
 
 module.exports = {
 	id: "members",
@@ -16,16 +17,20 @@ module.exports = {
 		var role = call.params.readRole();
 		if (role || content === "") {
 			await call.message.guild.fetchMembers("", call.message.guild.memberCount);
+			var raw;
 			if (content !== "") {
 				members = role.members.array().sort((a, b) => a.displayName.localeCompare(b.displayName)).map((u) => u.toString()).join("\n");
 				memberEmbed.setTitle(`Users in ${role.name}`);
+				raw = role.members.map((member) => `${member.user.tag.replace(/'/g, "")} - '${member.id}'`);
 			} else {
 				members = call.message.guild.members.array().sort((a, b) => a.displayName.localeCompare(b.displayName)).map((u) => u.toString()).join("\n");
 				memberEmbed.setTitle("Users");
+				raw = call.message.guild.members.map((member) => `'${member.user.tag.replace(/'/g, "")}' - '${member.id}'`);
 			}
 			var membersLength = members.length;
 			var membersToSend;
 			var page = 1;
+			var rawList = await hastebin.post(raw.join("\n"));
 			if (members.split("\n").length > 20) {
 				membersLength = 0;
 				membersToSend = members.split("\n").slice(membersLength, membersLength + 20);
@@ -36,7 +41,8 @@ module.exports = {
 					totalPages = (members.split("\n").length + (20 - (members.split("\n").length % 20)));
 					totalPages /= 20;
 				}
-				memberEmbed.setDescription(membersToSend.join("\n")).setFooter(`Page ${page}/${totalPages} -`).setDefaultFooter(call.message.author);
+				memberEmbed.setDescription(membersToSend.join("\n") +
+					`\n\n[Raw List](https://hastebin.com/${rawList})`).setFooter(`Page ${page}/${totalPages} -`).setDefaultFooter(call.message.author);
 				call.message.channel.send({ embed: memberEmbed }).then(async function(sentEmbed) {
 					await sentEmbed.reactMultiple(EMOJI_ARRAY);
 					const FILTER = (reaction, user) => EMOJI_ARRAY.includes(reaction.emoji.name) && user.id === call.message.author.id;
@@ -58,7 +64,7 @@ module.exports = {
 						}
 
 						memberEmbed = new Discord.RichEmbed()
-							.setDescription(membersToSend.join("\n"))
+							.setDescription(membersToSend.join("\n") + `\n\n[Raw List](https://hastebin.com/${rawList})`)
 							.setColor("ORANGE")
 							.setFooter(`Page ${page}/${totalPages} -`)
 							.setDefaultFooter(call.message.author);
