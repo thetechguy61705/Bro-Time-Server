@@ -1,8 +1,7 @@
 import { Source } from "@server/load/music";
-
-var ytdl = require("ytdl-core");
-var miniget = require("miniget");
-var querystring = require("querystring");
+import fetch from "node-fetch";
+const ytdl = require("ytdl-core");
+const querystring = require("querystring");
 
 const MIN_RATING = 3;
 
@@ -48,19 +47,18 @@ module.exports = {
 
 	search(query, key) {
 		return new Promise((resolve) => {
-			miniget(`https://www.googleapis.com/youtube/v3/search?type=video&q=${querystring.escape(query)}&maxResults=5&part=id,snippet&key=${key}`, (err, _res, body) => {
-				if (err != null) {
+			fetch(`https://www.googleapis.com/youtube/v3/search?type=video&q=${querystring.escape(query)}&maxResults=5&part=id,snippet&key=${key}`).then(
+				(err) => {
 					console.warn(err.stack);
 					resolve([]);
-				} else {
-					resolve(JSON.parse(body).items.map((item) => {
+				}, (res) => {
+					resolve(res.json().items.map((item) => {
 						return {
 							display: item.snippet.title,
 							query: item.id.videoId
 						};
 					}));
-				}
-			});
+				});
 		});
 	}
 } as Source;
