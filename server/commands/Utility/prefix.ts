@@ -23,7 +23,7 @@ module.exports = {
 			case "set":
 				if (checkMod(call.message.author, call.safeSend)) {
 					var newPrefix: string | null = call.params.readParam(true);
-					if (newPrefix && newPrefix.length <= 100) {
+					if (newPrefix && newPrefix.length <= 32) {
 						DataRequest.setPrefix(call.message.guild.id, newPrefix).then((prefix: string) => {
 							call.message.channel.send(`Set the prefix for this server to \`${prefix}\`.`);
 						}, (exc: Error) => {
@@ -31,7 +31,7 @@ module.exports = {
 							console.warn("Unable to set prefix:");
 							console.warn(exc.stack);
 						});
-					} else call.safeSend("Invalid prefix. The prefix must be at least one character and at most 100.");
+					} else call.safeSend("Invalid prefix. The prefix must be at least one character and at most 32.");
 				}
 				break;
 			case "reset":
