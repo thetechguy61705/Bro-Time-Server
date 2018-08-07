@@ -208,7 +208,8 @@ module.exports = {
 
 		client.on("messageUpdate", (oldMessage, newMessage) => {
 			let executor = newMessage.author;
-			let logs = this.getChannel(newMessage.guild);
+			let logs;
+			if (newMessage.guild) logs = this.getChannel(newMessage.guild);
 			if (logs && oldMessage.content !== newMessage.content) logs.send(
 				new RichEmbed()
 					.setAuthor(executor.tag, executor.displayAvatarURL)
