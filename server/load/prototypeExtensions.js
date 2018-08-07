@@ -18,12 +18,14 @@ Number.prototype.diagnostic = function() {
 	return (this <= 0) ? "impossible" : (this < 200) ? "great" : (this < 350) ? "good" : (this < 500) ? "ok" : (this < 750) ? "bad" : (this < 1000) ? "terrible" : "worse than dial up";
 };
 
+/* eslint-disable */
 String.prototype.count = function(c) {
 	var t = 0, l = 0, c = (c + '')[0];
 	while(l = this.indexOf(c, l) + 1)
 		++t;
 	return t;
 };
+/* eslint-enable */
 
 String.prototype.toNumber = function(num = 0) {
 	if (this == "all") {
