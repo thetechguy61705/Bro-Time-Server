@@ -1,6 +1,3 @@
 [submodule "stream-cache"]
 	path = stream-cache
 	url = https://github.com/Bro-Time/node-stream-cache
-[submodule "node_modules/stream-cache"]
-	path = node_modules/stream-cache
-	url = https://github.com/Bro-Time/node-stream-cache
