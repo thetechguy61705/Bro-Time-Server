@@ -1,5 +1,6 @@
 import { Source } from "@server/load/music";
 import fetch from "node-fetch";
+import { MusicStream, MusicSearchResult } from "types/server";
 const ytdl = require("ytdl-core");
 const querystring = require("querystring");
 
@@ -39,7 +40,7 @@ module.exports = {
 	},
 
 	loadStream(ticket) {
-		var stream = ytdl.downloadFromInfo(ticket, this);
+		var stream: MusicStream = ytdl.downloadFromInfo(ticket, this);
 		stream.url = ticket.video_url;
 		stream.title = ticket.title;
 		stream.author = ticket.author.name;
@@ -53,9 +54,11 @@ module.exports = {
 				.then((json) => {
 					resolve(json.items.map((item) => {
 						return {
-							display: item.snippet.title,
-							query: item.id.videoId
-						};
+							title: item.snippet.title,
+							author: item.snippet.channelTitle,
+							url: item.id.videoId,
+							description: item.snippet.description
+						} as MusicSearchResult;
 					}));
 				}).catch((err) => {
 					console.warn(err.stack);

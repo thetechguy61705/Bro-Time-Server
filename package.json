@@ -47,7 +47,7 @@
     "module-alias": "^2.1.0",
     "ms": "^2.1.1",
     "node-fetch": "^2.2.0",
-    "node-gyp": "^3.7.0",
+    "fast-sort": "^1.5.3",
     "node-opus": "^0.2.7",
     "normalize-strings": "^1.1.0",
     "opusscript": "0.0.6",

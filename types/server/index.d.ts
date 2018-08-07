@@ -16,3 +16,13 @@ export interface MusicStream extends Duplex {
     title: string
     author: string
 }
+
+export interface MusicSearchResult {
+    title: string
+    author: string
+    url: string
+    description?: string
+    tags?: string
+    series?: string
+    source?: string
+}

@@ -1,7 +1,8 @@
-import { IExecutable, MusicStream } from "types/server";
+import { IExecutable, MusicStream, MusicSearchResult } from "types/server";
 import { Client, Collection, Snowflake, RichEmbed, Guild, GuildMember, Message, TextChannel, DMChannel, GroupDMChannel, VoiceChannel, VoiceConnection, StreamDispatcher } from "discord.js";
 import { Call } from "@server/chat/commands";
 import { load } from "@utility/filesloader";
+import sort from "fast-sort";
 
 var errorHandler = require("@utility/errorHandler");
 var config = require("@root/config");
@@ -28,7 +29,7 @@ export interface Source {
 	getTicket: { (queue: string, key?: string): ticket }
 	getPlayable: { (ticket: ticket): "good" | "bad" | "mature" | "unkown" }
 	loadStream: { (ticket: ticket): MusicStream }
-	search: { (query: string, key?: string): Promise<{ display: string, query: string }[]> }
+	search: { (query: string, key?: string): Promise<MusicSearchResult[]> }
 }
 
 class Queue extends Array<MusicStream> {
@@ -184,8 +185,16 @@ class Music {
 		return MUSIC_CHANNELS.some((keyword) => { return name.startsWith(keyword) || name.endsWith(keyword); });
 	}
 
-	private static compareSearchResults(): number {
-		return 0;
+	private static sortSearch(query: string, results: MusicSearchResult[]): void {
+		query = query.toLowerCase();
+		sort(results).desc([
+			(result) => { return result.title.toLowerCase().count(query); },
+			(result) => { return result.author.toLowerCase().count(query); },
+			(result) => { return result.description != null ? result.description.toLowerCase().count(query) : 0; },
+			(result) => { return result.tags != null ? result.tags.toLowerCase().count(query) : 0; },
+			(result) => { return result.series != null ? result.series.toLowerCase().count(query) : 0; },
+			(result) => { return result.source != null ? result.source.toLowerCase().count(query) : 0; }
+		]);
 	}
 
 	private static async getTicket(query: string, call: Call): Promise<ticket> {
@@ -207,14 +216,14 @@ class Music {
 			var result;
 			for (let source of sources)
 				Array.prototype.push.apply(results, await source.search(query, tokens.get(source.id)));
-			results.sort(Music.compareSearchResults);
+			Music.sortSearch(query, results);
 			results = results.slice(0, 5);
 
 			if (results.length > 0) {
 				prompt.setTitle("Pick the closest match (by number):").setColor(0x00AE86);
 				// Eventually color should be changable for servers using the future settings command and the database.
 				for (let [number, result] of results.entries())
-					display.push(`${number + 1} - \`${result.display.substring(0, 300)}\``);
+					display.push(`${number + 1} - \`${result.title.substring(0, 300)} by ${result.author.substring(0, 100)}\``);
 				prompt.setDescription(display.join("\n")).setDefaultFooter(call.message.author);
 
 				ticket = null;
