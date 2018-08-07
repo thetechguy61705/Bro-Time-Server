@@ -2,11 +2,11 @@ import { IExecutable, MusicStream, MusicSearchResult } from "types/server";
 import { Client, Collection, Snowflake, RichEmbed, Guild, GuildMember, Message, TextChannel, DMChannel, GroupDMChannel, VoiceChannel, VoiceConnection, StreamDispatcher } from "discord.js";
 import { Call } from "@server/chat/commands";
 import { load } from "@utility/filesloader";
-import sort from "fast-sort";
 
 var errorHandler = require("@utility/errorHandler");
 var config = require("@root/config");
 var StreamCache = require("stream-cache");
+var sort = require("fast-sort/sort");
 var sources: Source[] = [];
 var tokens: Collection<string, string> = new Collection();
 var vote = require("@utility/vote");
@@ -234,7 +234,7 @@ class Music {
 						if (choice != null) {
 							result = results[choice - 1];
 							if (result != null)
-								ticket = Music.getTicket(result.query, call);
+								ticket = Music.getTicket(result.url, call);
 						}
 					}
 				// eslint-disable-next-line no-empty
