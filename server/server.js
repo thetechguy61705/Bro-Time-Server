@@ -90,7 +90,7 @@ client.on("ready", () => {
 			if (!message.author.bot) {
 				for (let handler of chatHandlers) {
 					try {
-						// todo: Move client out of the arguments 
+						// todo: Move client out of the arguments
 						// handler.exec.
 						handler.exec(message, client);
 					} catch (exc) {
