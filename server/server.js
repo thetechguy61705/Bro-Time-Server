@@ -87,13 +87,16 @@ client.on("ready", () => {
 
 	Promise.all(loading).then(() => {
 		client.on("message", (message) => {
-			for (let handler of chatHandlers) {
-				try {
-					// todo: Move client out of the arguments of handler.exec.
-					handler.exec(message, client);
-				} catch (exc) {
-					console.warn("Failed to handle chat message:");
-					console.warn(exc.stack);
+			if (!message.author.bot) {
+				for (let handler of chatHandlers) {
+					try {
+						// todo: Move client out of the arguments 
+						// handler.exec.
+						handler.exec(message, client);
+					} catch (exc) {
+						console.warn("Failed to handle chat message:");
+						console.warn(exc.stack);
+					}
 				}
 			}
 		});
