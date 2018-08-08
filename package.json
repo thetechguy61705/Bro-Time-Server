@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node --require ./register.js server/launcher.js",
+    "postinstall": "node install_optional.js",
     "debug": "ndb --require ./register.js server/launcher.js",
     "test": "eslint . --ext js,ts && eslint test/. --ext js,ts --env mocha && mocha --require ./register.js",
     "fix": "eslint . --fix --ext js,ts && eslint test/. --ext js,ts --env mocha --fix"
@@ -42,14 +43,14 @@
     "emoji-regex": "^7.0.0",
     "enum": "^2.5.0",
     "escape-string-regexp": "^1.0.5",
+    "fast-sort": "^1.5.3",
     "ffmpeg-binaries": "^3.2.2-3",
     "mathjs": "^5.0.3",
     "module-alias": "^2.1.0",
     "ms": "^2.1.1",
     "node-fetch": "^2.2.0",
-    "fast-sort": "^1.5.3",
-    "node-opus": "^0.2.7",
     "normalize-strings": "^1.1.0",
+    "optional-dev-dependency": "^2.0.1",
     "opusscript": "0.0.6",
     "pg": "^7.4.3",
     "random-words": "^1.1.0",
@@ -69,5 +70,8 @@
     "mocha": "^4.1.0",
     "ndb": "^1.0.18",
     "typescript-eslint-parser": "^16.0.1"
+  },
+  "optionalDevDependencies": {
+    "node-opus": "^0.2.7"
   }
 }
