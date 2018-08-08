@@ -1,13 +1,12 @@
 const { RichEmbed } = require("discord.js");
+const { MARKDOWN_REGEX } = require("@server/chat/filter");
 const fetch = require("node-fetch");
 const emojis = require("@server/load/emojis.js").emojis;
 
 function hyperlinkText(text) {
-	var hyperlinks = text.match(/\[(.*?)\]/g);
-	for (let link of hyperlinks || []) {
-		text = text.replace(link, `${link}(https://www.urbandictionary.com/define.php?term=${link.replace(/\[|\]/g, "").replace(/\s/g, "+")})`);
-	}
-	return text;
+	return text.replace(/\[(.*?)\]/g, (match) => {
+		return `${match}(https://www.urbandictionary.com/define.php?term=${match.replace(/\[|\]/g, "").replace(/\s/g, "+")})`;
+	});
 }
 
 module.exports = {
@@ -28,8 +27,8 @@ module.exports = {
 					.setURL(result.permalink)
 					.setColor(0x00AE86)
 					.setDefaultFooter(call.message.author)
-					.setDescription(hyperlinkText(result.definition).substring(0, 2048) || "None.")
-					.addField("Example", hyperlinkText(result.example).substring(0, 1024) || "None.")
+					.setDescription(hyperlinkText(result.definition).replace(MARKDOWN_REGEX, "").substring(0, 2048) || "None.")
+					.addField("Example", hyperlinkText(result.example).replace(MARKDOWN_REGEX, "").substring(0, 1024) || "None.")
 					.addField("\u200B", `**${emojis.get("thumbsup")} ${result.thumbs_up} / ${emojis.get("thumbsdown")} ${result.thumbs_down} | ` +
 						`Written by ${result.author} at ${result.written_on.substring(0, 10).replace(/-/g, "/")}**`);
 				call.safeSend(null, call.message, { embed: urbanEmbed });
