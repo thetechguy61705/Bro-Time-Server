@@ -44,7 +44,7 @@ module.exports = {
 						}
 						var options = { days: daysToDelete, reason: `Banned by ${call.message.author.tag} for ${reason}` };
 
-						(target.ban || call.messags.guild.ban)((target instanceof GuildMember ? options : target), options).then((user) => {
+						(target.ban || call.message.guild.ban)((target instanceof GuildMember ? options : target), options).then((user) => {
 							call.message.channel.send(`***Successfully banned \`${(user.user || { tag: false }).tag || user.tag || user}\`.***`);
 							call.client.emit("bannedByCommand", {
 								target: target,
