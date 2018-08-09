@@ -42,9 +42,10 @@ module.exports = {
 						} catch (err) {
 							console.warn(err.stack);
 						}
+						var options = { days: daysToDelete, reason: `Banned by ${call.message.author.tag} for ${reason}` };
 
-						call.message.guild.ban(target, { days: daysToDelete, reason: `Banned by ${call.message.author.tag} for ${reason}` }).then((user) => {
-							call.message.channel.send(`***Successfully banned \`${user.tag || user.id || user}\`.***`);
+						(target.ban || call.messags.guild.ban)((target instanceof GuildMember ? options : target), options).then((user) => {
+							call.message.channel.send(`***Successfully banned \`${(user.user || { tag: false }).tag || user.tag || user}\`.***`);
 							call.client.emit("bannedByCommand", {
 								target: target,
 								executor: call.message.member,
