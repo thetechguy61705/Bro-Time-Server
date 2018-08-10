@@ -17,13 +17,13 @@ module.exports = {
 				member.user.tag.toLowerCase().startsWith(parameterOne));
 			if (target != null) {
 				if (call.message.member.highestRole.position > target.highestRole.position) {
-					if (!target.roles.has(guild.roles.find("name", "Muted").id)) {
+					if (!target.roles.has(guild.roles.find((role) => role.name === "Muted").id)) {
 						var muteTime = (parameterTwo != null) ? ms(parameterTwo) : null;
 						if (muteTime == null) call.params.offset(parameterTwo.length + 1);
 						var reason = call.params.readParam(true) || "No reason specified.";
 						if (muteTime != null) {
 							if (muteTime >= 10000) {
-								target.addRole(guild.roles.find("name", "Muted")).then(() => {
+								target.addRole(guild.roles.find((role) => role.name === "Muted")).then(() => {
 									call.message.channel.send(`***Successfully muted \`${target.user.tag}\` for ${ms(muteTime, { long: true })}.***`);
 									call.client.emit("mutedByCommand", {
 										target: target,
@@ -32,7 +32,7 @@ module.exports = {
 										reason: reason
 									});
 									call.client.setTimeout(() => {
-										target.removeRole(guild.roles.find("name", "Muted"));
+										target.removeRole(guild.roles.find((role) => role.name === "Muted"));
 										call.client.emit("unmutedByCommand", {
 											target: target,
 											executor: call.message.guild.me,

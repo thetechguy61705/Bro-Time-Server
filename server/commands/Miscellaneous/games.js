@@ -77,8 +77,8 @@ function invite(game, channel, players, host) {
 		.setTitle(`Invite to ${game.id}`)
 		.setDefaultFooter(host)
 		.setColor(0x00AE86);
-	if (channel.guild.roles.find("name", "Bro Time Games")) {
-		var allowedToPing = channel.guild.roles.find("name", "Bro Time Games").members.filter((m) => m.user.presence.status === "online").array().map((m) => m.id);
+	if (channel.guild.roles.find((role) => role.name === "Bro Time Games")) {
+		var allowedToPing = channel.guild.roles.find((role) => role.name === "Bro Time Games").members.filter((m) => m.user.presence.status === "online").array().map((m) => m.id);
 		var hostIndex = allowedToPing.indexOf(host.id);
 		if (hostIndex > -1) allowedToPing.splice(hostIndex, 1);
 		hostIndex = noPing.indexOf(host.id);

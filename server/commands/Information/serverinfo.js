@@ -2,7 +2,7 @@ const { RichEmbed } = require("discord.js");
 const hastebin = require("@utility/hastebin");
 
 function channelMap(channels, type, member) {
-	return channels.filter((channel) => channel.type === type && channel.permissionsFor(member).has("READ_MESSAGES")).map((channel) => channel.name);
+	return channels.filter((channel) => channel.type === type && channel.permissionsFor(member).has("VIEW_CHANNEL")).map((channel) => channel.name);
 }
 
 function andMore(desired, amount) {
@@ -54,6 +54,6 @@ module.exports = {
 			.addField("Emojis", (guild.emojis.map((emoji) => emoji.toString()).slice(0, 20).join("  ") || "None.") +
 				andMore(20, guild.emojis.size) + `\n[Raw Emoji List](https://hastebin.com/${rawEmojis})`, true)
 			.setDefaultFooter(call.message.author);
-		call.safeSend(null, call.message, { embed: serverEmbed });
+		call.safeSend({ embed: serverEmbed });
 	}
 };

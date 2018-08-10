@@ -62,8 +62,6 @@ Discord.Message.prototype.reactMultiple = async function(reactions) {
 	return results;
 };
 
-Discord.Message.prototype.deleted = false;
-
 Discord.Permissions.prototype.list = function(checkAdmin = true) {
 	var list = [];
 	var containing = this.serialize(checkAdmin);
@@ -91,18 +89,5 @@ Discord.Client.prototype.requestPermissions = function(member, channel, permissi
 Discord.RichEmbed.prototype.setDefaultFooter = function(user) {
 	return this.setFooter(`${(this.footer || { text: "" }).text} Ran by ${user.username} (${user.id})`, user.displayAvatarURL);
 };
-
-if (!Discord.Collection.prototype.sweep) {
-	Discord.Collection.prototype.sweep = function(fn, thisArg) {
-		if (typeof thisArg !== "undefined") fn = fn.bind(thisArg);
-		const previousSize = this.size;
-		for (const [key, val] of this) {
-			if (fn(val, key, this)) this.delete(key);
-		}
-		return previousSize - this.size;
-	};
-}
-// Directly from the source code for Discord.js, this is a polyfill of a master version function
-// not yet available on stable.
 
 module.exports.id = "prototypes";

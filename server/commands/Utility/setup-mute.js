@@ -38,7 +38,7 @@ module.exports = {
 							.setDescription(slicedFailedChannels.map((c) => c.name != null ? "`" + c.name + "`" : c).join("\n"))
 							.setFooter("This error is most likely because the bot does not have permissions to change channel overwrites for the channel(s).");
 						msg.delete();
-						call.safeSend(null, call.message, { embed: failureEmbed });
+						call.safeSend({ embed: failureEmbed });
 					}
 				}).catch((exc) => {
 					call.safeSend("Failed to run the setup.");

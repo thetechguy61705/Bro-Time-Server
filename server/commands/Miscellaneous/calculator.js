@@ -23,7 +23,7 @@ module.exports = {
 					.setDescription(`Error while parsing expression supplied: \`${exc.message.replace(/`/g, "")}\`.`)
 					.setColor("RED");
 			}
-			call.safeSend(null, call.message, { embed: mathEmbed });
+			call.safeSend({ embed: mathEmbed });
 		} else call.safeSend("You must supply an expression.");
 	}
 };

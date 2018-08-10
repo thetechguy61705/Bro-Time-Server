@@ -8,10 +8,10 @@ module.exports = {
 		client.on("guildMemberAdd", (member) => {
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
-					hangoutChannel = member.guild.channels.find("name", "hangout");
+					hangoutChannel = member.guild.channels.find((role) => role.name === "hangout");
 					const roles = [
-						member.guild.roles.find("name", "ANN"),
-						member.guild.roles.find("name", "White")
+						member.guild.roles.find((role) => role.name === "ANN"),
+						member.guild.roles.find((role) => role.name === "White")
 					];
 					if (!member.user.bot) {
 						member.addRoles(roles);
@@ -29,7 +29,7 @@ module.exports = {
 								}
 							});
 						});
-					} else member.addRole(member.guild.roles.find("name", "Bots"));
+					} else member.addRole(member.guild.roles.find((role) => role.name === "Bots"));
 				}
 			}
 		});
@@ -37,7 +37,7 @@ module.exports = {
 		client.on("guildMemberRemove", (member) => {
 			if (client.user.id === "393532251398209536") {
 				if (member.guild.id === "330913265573953536") {
-					hangoutChannel = member.guild.channels.find("name", "hangout");
+					hangoutChannel = member.guild.channels.find((role) => role.name === "hangout");
 					if (!member.user.bot) {
 						const goodbyeMessage = new RichEmbed()
 							.setTitle("Goodbye")

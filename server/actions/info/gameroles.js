@@ -10,8 +10,8 @@ const GAMES = [
 function updateEmbed(embed, guild, gameNumber) {
 	return embed
 		.setTitle(GAMES[gameNumber])
-		.setDescription("Players: `" + guild.roles.find("name", GAMES[gameNumber]).members.size + "`")
-		.setColor(guild.roles.find("name", GAMES[gameNumber]).hexColor);
+		.setDescription("Players: `" + guild.roles.find((role) => role.name === GAMES[gameNumber]).members.size + "`")
+		.setColor(guild.roles.find((role) => role.name === GAMES[gameNumber]).hexColor);
 }
 
 module.exports = {

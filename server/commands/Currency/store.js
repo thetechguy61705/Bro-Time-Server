@@ -13,6 +13,6 @@ module.exports = {
 		for (let item of Object.values(store)) {
 			storeEmbed.addField(item.name, `Price: \`${item.price}\`\nDescription: \`${item.description}\``);
 		}
-		call.message.channel.send(storeEmbed);
+		call.safeSend({ embed: storeEmbed });
 	}
 };

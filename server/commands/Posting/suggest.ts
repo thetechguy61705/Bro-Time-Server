@@ -14,7 +14,7 @@ module.exports = {
 	exec: (call: Call) => {
 		var suggestionChannel = call.message.guild.channels
 			.find((c) => {
-				return c.name === "suggestions" && c.type === "text" && c.permissionsFor(call.message.guild.me).has(["READ_MESSAGES", "SEND_MESSAGES", "EMBED_LINKS"]);
+				return c.name === "suggestions" && c.type === "text" && c.permissionsFor(call.message.guild.me).has(["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"]);
 			}) as TextChannel;
 		if (suggestionChannel != null) {
 			if (module.exports.cooldown.indexOf(`${call.message.author.id} ${call.message.guild.id}`) === -1) {
@@ -34,7 +34,7 @@ module.exports = {
 							msg.reactMultiple(["👍", "👎"]);
 							call.message.channel.send({ embed: new RichEmbed()
 								.setTitle("Sent")
-								.setURL(`https://discordapp.com/channels/${suggestionChannel.guild.id}/${suggestionChannel.id}/${msg.id}`)
+								.setURL(msg.url)
 								.setColor("GREEN")
 							}).catch((exc: Error) => {
 								console.warn("Failed sending embed:");

@@ -6,7 +6,7 @@ module.exports = {
 		var channels = [];
 		for (let guild of client.guilds.array()) {
 			var suggestionChannel = guild.channels.find((c) => {
-				return c.name === "suggestions" && c.type === "text" && c.permissionsFor(guild.me).has(["READ_MESSAGES", "SEND_MESSAGES", "EMBED_LINKS"]);
+				return c.name === "suggestions" && c.type === "text" && c.permissionsFor(guild.me).has(["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"]);
 			});
 			if (suggestionChannel != null) {
 				channels.push(suggestionChannel.id);

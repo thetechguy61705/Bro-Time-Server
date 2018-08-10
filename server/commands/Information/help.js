@@ -59,7 +59,7 @@ module.exports = {
 		} else call.safeSend("Invalid command name. Please run `!help (command)` or just `!help`");
 
 		if (helpEmbed.description != null) {
-			call.safeSend(null, call.message, { embed: helpEmbed });
+			call.safeSend({ embed: helpEmbed });
 		}
 	}
 };

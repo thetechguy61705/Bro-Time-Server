@@ -8,7 +8,7 @@ module.exports = {
 		if (call.message.member.roles.has(call.message.guild.roles.find("name", "QOTD Host").id)) {
 			const ANN_CHANNEL = call.message.guild.channels.find("name", "announcements"),
 				QOTD = call.params.readRaw(" "),
-				QOTD_ROLE = call.message.guild.roles.find("name", "QOTD");
+				QOTD_ROLE = call.message.guild.roles.find((role) => role.name === "QOTD");
 			if (QOTD !== "") {
 				QOTD_ROLE.setMentionable(true).then(() => {
 					ANN_CHANNEL.send(`${QOTD_ROLE}: **${QOTD}**\n*Posted by ${call.message.author}*`);

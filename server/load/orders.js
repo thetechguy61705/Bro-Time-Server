@@ -15,7 +15,7 @@ function changeKitchenCommands(remove) {
 
 async function hasOrders(client) {
 	var containsOrders = await client.shard.broadcastEval("this.channels" +
-		".filter((channel) => channel.permissionsFor(channel.guild.me).has(['READ_MESSAGES', 'SEND_MESSAGES'])).keyArray();");
+		".filter((channel) => channel.permissionsFor(channel.guild.me).has(['VIEW_CHANNEL', 'SEND_MESSAGES'])).keyArray();");
 	containsOrders = containsOrders.find((channels) => channels.includes("399290151932526593"));
 	return containsOrders;
 }
@@ -54,7 +54,7 @@ module.exports = {
 		client.on("guildMemberUpdate", (_, member) => {
 			var channel = member.guild.channels.get("399290151932526593");
 			if (member.id === member.guild.me.id && channel) {
-				if (channel.permissionsFor(member).has(["SEND_MESSAGES", "READ_MESSAGES"])) {
+				if (channel.permissionsFor(member).has(["SEND_MESSAGES", "VIEW_CHANNEL"])) {
 					changeKitchenCommands(false);
 				} else changeKitchenCommands(true);
 			}

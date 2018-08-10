@@ -11,8 +11,8 @@ const LEVELS = [ "0", "1", "5", "10", "11", "15", "20", "21", "25", "30", "31", 
 function updateEmbed(embed, message, levelNumber) {
 	return embed
 		.setTitle(LEVEL_ROLES[levelNumber])
-		.setDescription("Members: `" + message.guild.roles.find("name", LEVEL_ROLES[levelNumber]).members.size + "`\nObtain: " + "`level: " + LEVELS[levelNumber] + "`")
-		.setColor(message.guild.roles.find("name", LEVEL_ROLES[levelNumber]).hexColor);
+		.setDescription("Members: `" + message.guild.roles.find((role) => role.name === LEVEL_ROLES[levelNumber]).members.size + "`\nObtain: " + "`level: " + LEVELS[levelNumber] + "`")
+		.setColor(message.guild.roles.find((role) => role.name === LEVEL_ROLES[levelNumber]).hexColor);
 }
 
 module.exports = {

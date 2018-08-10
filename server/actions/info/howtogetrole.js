@@ -16,8 +16,8 @@ const DESCRIPTIONS = [
 function updateEmbed(embed, guild, htgrNumber) {
 	return embed
 		.setTitle(OBTAINABLE_ROLES[htgrNumber])
-		.setDescription("Members: `" + guild.roles.find("name", OBTAINABLE_ROLES[htgrNumber]).members.size + "`\nObtain: `" + DESCRIPTIONS[htgrNumber] + "`")
-		.setColor(guild.roles.find("name", OBTAINABLE_ROLES[htgrNumber]).hexColor);
+		.setDescription("Members: `" + guild.roles.find((role) => role.name === OBTAINABLE_ROLES[htgrNumber]).members.size + "`\nObtain: `" + DESCRIPTIONS[htgrNumber] + "`")
+		.setColor(guild.roles.find((role) => role.name === OBTAINABLE_ROLES[htgrNumber]).hexColor);
 }
 
 module.exports = {

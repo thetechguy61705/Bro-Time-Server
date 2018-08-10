@@ -31,7 +31,7 @@ module.exports = {
 					.addField("Example", hyperlinkText(result.example).replace(MARKDOWN_REGEX, "").substring(0, 1024) || "None.")
 					.addField("\u200B", `**${emojis.get("thumbsup")} ${result.thumbs_up} / ${emojis.get("thumbsdown")} ${result.thumbs_down} | ` +
 						`Written by ${result.author} at ${result.written_on.substring(0, 10).replace(/-/g, "/")}**`);
-				call.safeSend(null, call.message, { embed: urbanEmbed });
+				call.safeSend({ embed: urbanEmbed });
 			} else call.safeSend("Could not find the given query on urban dictionary.");
 		} else call.safeSend("You must specify a query to search urban dictionary with. Supply 'random' for a random urban dictionary result.");
 	}

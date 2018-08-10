@@ -23,7 +23,7 @@ module.exports = {
 						.addField("Windspeed", `${result.current.windspeed}.`, true)
 						.setColor(0x00AE86)
 						.setDefaultFooter(call.message.author);
-					call.safeSend(null, call.message, { embed: weatherEmbed });
+					call.safeSend({ embed: weatherEmbed });
 				} else call.safeSend("Could not find the area given.");
 			});
 		} else call.safeSend("Please specify an area to view the weather in.");

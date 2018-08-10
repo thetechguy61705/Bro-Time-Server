@@ -48,7 +48,7 @@ module.exports = {
 							.addField("Age", profile.age, true)
 							.addField("Blurb", profile.blurb || "None.", true)
 							.addField("Description", profile.description || "None.", true);
-						call.message.channel.send({ embed: userStatsEmbed });
+						call.safeSend({ embed: userStatsEmbed });
 				}
 			} else call.safeSend("Invalid user.");
 		} else call.safeSend(`Invalid game. Supported games: \`${SUPPORTED_GAMES.join("`, `")}\`.`);

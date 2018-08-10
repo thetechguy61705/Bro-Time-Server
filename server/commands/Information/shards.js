@@ -12,6 +12,6 @@ module.exports = {
 			.setDescription("```" + shards.join("\n") + "```")
 			.setColor(0x00AE86)
 			.setDefaultFooter(call.message.author);
-		call.safeSend(null, call.message, { embed: shardEmbed });
+		call.safeSend({ embed: shardEmbed });
 	}
 };

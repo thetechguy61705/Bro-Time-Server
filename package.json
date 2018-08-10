@@ -39,7 +39,7 @@
     "@types/pg": "^7.4.10",
     "array-flatten": "^2.1.1",
     "defaults": "^1.0.3",
-    "discord.js": "^11.3.2",
+    "discord.js": "^11.4.0",
     "emoji-regex": "^7.0.0",
     "enum": "^2.5.0",
     "escape-string-regexp": "^1.0.5",

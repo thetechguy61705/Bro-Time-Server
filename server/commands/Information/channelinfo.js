@@ -30,6 +30,6 @@ module.exports = {
 			infoEmbed.addField("Children", channel.children.size <= 0 ? "none" : "`" + channel.children.map((child) => child.name).join("`, `") + "`");
 		}
 		infoEmbed.setDefaultFooter(call.message.author);
-		call.safeSend(null, call.message, { embed: infoEmbed });
+		call.safeSend({ embed: infoEmbed });
 	}
 };

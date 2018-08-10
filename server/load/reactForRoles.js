@@ -22,7 +22,7 @@ module.exports = {
 						for (let newItem of freeRoles.difference(messages.map((message) => message.embeds[0].title))) {
 							const newItemEmbed = new Discord.RichEmbed()
 								.setTitle(newItem)
-								.setColor(client.guilds.get("330913265573953536").roles.find("name", newItem).hexColor);
+								.setColor(client.guilds.get("330913265573953536").roles.find((role) => role.name === newItem).hexColor);
 							client.channels.get("447205162436788235").send({ embed: newItemEmbed }).then((newItemMessage) => {
 								messages.set(newItemMessage.id, newItemMessage);
 								newItemMessage.react("404768960014450689");
@@ -36,9 +36,9 @@ module.exports = {
 							var member = channel.guild.member(user);
 							if (member != null) {
 								if (member.roles.has(channel.guild.roles.find("name", reaction.message.embeds[0].title).id)) {
-									member.removeRole(channel.guild.roles.find("name", reaction.message.embeds[0].title));
+									member.removeRole(channel.guild.roles.find((role) => role.name === reaction.message.embeds[0].title));
 								} else {
-									member.addRole(channel.guild.roles.find("name", reaction.message.embeds[0].title));
+									member.addRole(channel.guild.roles.find((role) => role.name === reaction.message.embeds[0].title));
 								}
 							}
 						}

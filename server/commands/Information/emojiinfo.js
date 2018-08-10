@@ -24,7 +24,7 @@ module.exports = {
 				.addField("Needs Colons", emoji.requiresColons, true)
 				.setThumbnail(emoji.url);
 			infoEmbed.setDefaultFooter(call.message.author);
-			call.safeSend(null, call.message, { embed: infoEmbed });
+			call.safeSend({ embed: infoEmbed });
 		} else call.safeSend("You did not specify a valid emoji.");
 	}
 };

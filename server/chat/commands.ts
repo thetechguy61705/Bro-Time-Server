@@ -1,4 +1,4 @@
-import { Channel, Role, Permissions, Message, Client, Guild, Collection, MessageMentions, User, MessageOptions, PermissionResolvable } from "discord.js";
+import { Channel, Role, Permissions, Message, Client, Guild, Collection, MessageMentions, User, PermissionResolvable } from "discord.js";
 import { Wallet } from "@utility/wallet.ts";
 import { DiscordResolvable, IExecutable, ILoadable } from "types/server";
 import { DataRequest } from "@utility/datarequest";
@@ -265,11 +265,20 @@ export class Call {
 		return new Wallet(userId);
 	}
 
-	public safeSend(content?: any,
-		message: Message = this.message,
-		options: MessageOptions = { reply: this.message.author }): void {
-		message.channel.send((content || options), (content != null) ? options : undefined).catch((exc) => {
-			message.author.send(`You attempted to use the \`${this.command.id}\` command in ${message.channel}, but I can not chat there.`);
+	public safeSend(msg, content = "", options = { reply: msg.author || this.message.author }): void {
+		if (typeof content !== "string") {
+			options = content;
+			content = "";
+		}
+		if (typeof msg === "string") {
+			content = msg;
+			msg = this.message;
+		} else if (!(msg instanceof Message)) {
+			options = msg;
+			msg = this.message;
+		}
+		msg.channel.send.call(msg.channel, content, options).catch((exc: Error) => {
+			msg.author.send(`You attempted to use the \`${this.command.id}\` command in ${msg.channel}, but I can not chat there.`);
 			console.warn(exc.stack);
 		});
 	}

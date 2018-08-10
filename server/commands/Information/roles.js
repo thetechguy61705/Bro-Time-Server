@@ -21,7 +21,7 @@ module.exports = {
 					.setDescription(roles.join("\n"))
 					.setColor(0x00AE86)
 					.setDefaultFooter(call.message.author);
-				call.safeSend(null, call.message, { embed: rolesEmbed });
+				call.safeSend({ embed: rolesEmbed });
 			} else {
 				var rolesLength = 0,
 					currentPage = 1,

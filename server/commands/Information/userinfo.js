@@ -35,7 +35,7 @@ module.exports = {
 				.addField("Automation", user.bot, true)
 				.addField("Status", user.presence.status === "dnd" ? "do not disturb" : user.presence.status, true);
 			infoEmbed.setDefaultFooter(call.message.author);
-			call.safeSend(null, call.message, { embed: infoEmbed });
+			call.safeSend({ embed: infoEmbed });
 		} else call.safeSend("You did not specify a valid user.");
 	}
 };

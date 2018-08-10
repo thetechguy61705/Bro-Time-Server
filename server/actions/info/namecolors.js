@@ -9,9 +9,9 @@ const NAME_COLORS = [
 function updateEmbed(embed, message, colorNumber) {
 	return embed
 		.setTitle(NAME_COLORS[colorNumber])
-		.setDescription("Members: `" + message.guild.roles.find("name", NAME_COLORS[colorNumber]).members.size + "`" +
-			"\nHex Color: `" + message.guild.roles.find("name", NAME_COLORS[colorNumber]).hexColor + "`")
-		.setColor(message.guild.roles.find("name", NAME_COLORS[colorNumber]).hexColor);
+		.setDescription("Members: `" + message.guild.roles.find((role) => role.name === NAME_COLORS[colorNumber]).members.size + "`" +
+			"\nHex Color: `" + message.guild.roles.find((role) => role.name === NAME_COLORS[colorNumber]).hexColor + "`")
+		.setColor(message.guild.roles.find((role) => role.name === NAME_COLORS[colorNumber]).hexColor);
 }
 
 module.exports = {

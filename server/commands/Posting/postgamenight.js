@@ -21,7 +21,7 @@ module.exports = {
 	requires: "Role: Game Night Host",
 	access: "Server",
 	exec: async (call) => {
-		if (call.message.member.roles.has(call.message.guild.roles.find("name", "Game Night Host").id)) {
+		if (call.message.member.roles.find((role) => role.name === "Game Night Host").id) {
 			var game = await call.requestInput(null, "What is the game you want to host on?", 60000);
 			if (!game) return call.message.channel.send("Canceled prompt because there was no resonse after one minute.");
 			if (game.message.content.toLowerCase() == "cancel") return call.message.channel.send("Canceled prompt.");
@@ -45,7 +45,7 @@ module.exports = {
 				var other = await call.requestInput(null, "Any other information? If none respond with `none`.", 60000);
 				if (!other) return call.message.channel.send("Canceled prompt because there was no resonse after one minute.");
 				if (other.message.content.toLowerCase() == "cancel") return call.message.channel.send("**Canceled Prompt.**");
-				let annchannel = call.message.guild.channels.find("name", "announcements");
+				let annchannel = call.message.guild.channels.find((role) => role.name === "announcements");
 				if (games.includes(game.message.content.toLowerCase())) {
 					gamerole.setMentionable(true).then(() => {
 						annchannel.send(`**Game:** ${gamerole}\n**Link:** ${varlink}\n**Other Information:** \`${other.message.content}\`\n*Posted by ${call.message.author}*`)

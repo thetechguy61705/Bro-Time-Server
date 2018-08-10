@@ -26,6 +26,6 @@ module.exports = {
 			.addBlankField(true)
 			.setColor(0x00AE86)
 			.setDefaultFooter(call.message.author);
-		call.safeSend(null, call.message, { embed: statsEmbed });
+		call.safeSend({ embed: statsEmbed });
 	}
 };
