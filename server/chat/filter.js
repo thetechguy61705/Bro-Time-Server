@@ -1,5 +1,5 @@
 const { Message } = require("discord.js");
-const escapeRegExp = require("escape-string-regexp");
+const escapeRegExp = require("@utility/escapeRegexp");
 const normalizeString = require("normalize-strings");
 const isModerator = require("@utility/moderator");
 const { ALPHABET, NUMBERS } = require("@utility/alphaNumericChars.ts");

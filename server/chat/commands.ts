@@ -4,7 +4,7 @@ import { DiscordResolvable, IExecutable, ILoadable } from "types/server";
 import { DataRequest } from "@utility/datarequest";
 import load from "@utility/filesloader";
 import * as server from "@server/server";
-import * as escapeRegExp from "escape-string-regexp";
+import * as escapeRegExp from "@utility/escapeRegexp";
 import * as fs from "fs";
 
 const LOAD_TIMEOUT = 60000;

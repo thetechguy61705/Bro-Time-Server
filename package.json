@@ -41,7 +41,6 @@
     "discord.js": "^11.4.0",
     "emoji-regex": "^7.0.0",
     "enum": "^2.5.0",
-    "escape-string-regexp": "^1.0.5",
     "fast-sort": "^1.5.3",
     "ffmpeg-binaries": "^3.2.2-3",
     "mathjs": "^5.0.3",
