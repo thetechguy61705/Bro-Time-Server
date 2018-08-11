@@ -39,7 +39,7 @@ module.exports = {
 	requiresInvite: false,
 	allowLateJoin: false,
 	load: () => {},
-	start: (session) => {
+	exec: (session) => {
 		session.least = 0;
 		session.most = 500;
 		var correctNumber = Math.ceil(Math.random() * 500);

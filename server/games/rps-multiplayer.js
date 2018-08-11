@@ -9,7 +9,7 @@ module.exports = {
 	requiresInvite: true,
 	allowLateJoin: false,
 	load: () => {},
-	start: (session) => {
+	exec: (session) => {
 		const PLAYERS = session.players.set(session.host.id, session.host),
 			CHOICES = ["rock", "paper", "scissors"],
 			OPCHOICES = ["paper", "scissors", "rock"];

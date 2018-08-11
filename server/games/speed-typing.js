@@ -35,7 +35,7 @@ module.exports = {
 	allowLateJoin: false,
 	inviteTime: 60000,
 	load: () => {},
-	start: (session) => {
+	exec: (session) => {
 		session.players.set(session.host.id, session.host);
 		var words = randomWords({ exactly: 20, maxLength: 16, formatter: (word) => { return word.toUpperCase(); }});
 		session.letters = words.map((word) => word.length).reduce((a, b) => a += b);

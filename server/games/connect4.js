@@ -22,7 +22,7 @@ module.exports = {
 	requiresInvite: true,
 	allowLateJoin: false,
 	load: () => {},
-	start: (session) => {
+	exec: (session) => {
 		var author = session.host, target = session.players.last();
 		session.players.set(author.id, author);
 		var rows = [EMOJI_ARRAY, ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"], ["⚫", "⚫", "⚫", "⚫", "⚫", "⚫", "⚫"],

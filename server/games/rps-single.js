@@ -9,7 +9,7 @@ module.exports = {
 	requiresInvite: false,
 	allowLateJoin: false,
 	load: () => {},
-	start: (session) => {
+	exec: (session) => {
 		session.players.set(session.host.id, session.host);
 		session.players.set(session.context.client.user.id, session.context.client.user);
 		const CHOICES = ["rock", "paper", "scissors"],

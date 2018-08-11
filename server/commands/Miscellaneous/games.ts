@@ -1,19 +1,22 @@
-const { Collection, RichEmbed, ReactionCollector, Message } = require("discord.js");
-const uuid = require("uuid/v1");
+import { Collection, RichEmbed, ReactionCollector, Message, Client, TextChannel, DMChannel, GroupDMChannel, User, GuildMember, MessageReaction } from "discord.js";
+import { Wallet } from "@utility/wallet.ts";
+import { Call } from "@server/chat/commands";
+import { IExecutable, ILoadable } from "types/server";
+import * as defaults from "defaults";
 const fs = require("fs");
 const util = require("util");
 
-var { Wallet } = require("@utility/wallet.ts");
-var modules = new Collection();
+export var loaded = new Collection<string, Game>();
 var sessions = [];
 var noPing = [];
 var games;
+var nextSessionId = 0;
 
-function getWallet(userId = null) {
+function getWallet(userId = null): Wallet {
 	return new Wallet(userId);
 }
 
-const DEFAULTS = [
+const GAME_DEFAULTS = [
 	{ key: "autoStart", value: false },
 	{ key: "minPlayers", value: 0 },
 	{ key: "maxPlayers", value: Infinity },
@@ -31,21 +34,53 @@ React with the <:pixeldolphin:404768960014450689> emoji to join the game.`;
 // times per second
 const MAX_UPDATE_CYCLES = 60;
 
+export interface Game extends IExecutable<Session>, ILoadable<void> {
+	id: string
+	aliases: string[]
+	shortDescription?: string
+	longDescription?: string
+	instructions?: string
+	autostart?: boolean
+	requiresInvite?: boolean
+	inviteTime: number
+	timeout?: number
+	minPlayers?: number
+	maxPlayers?: number
+	allowLateJoin?: boolean
+	updateInterval?: number
+	bet: number
+	betting: boolean
+	multithreaded?: boolean
+	input: { (input: Input): boolean }
+	end: { (session: Session): void }
+}
+
+export interface Session {
+	id: number
+	game: Game
+}
+
 class Context {
-	constructor(client, scope) {
+	public client: Client
+	public games: any
+	public message: Message
+	public channel: TextChannel | DMChannel | GroupDMChannel
+
+	public constructor(client: Client, scope: Message) {
 		this.client = client;
 		this.games = games;
-		if (scope instanceof Message) {
-			this.message = scope;
-			this.channel = scope.channel;
-		} else {
-			this.channel = scope;
-		}
+		this.message = scope;
+		this.channel = scope.channel;
 	}
 }
 
-class Input {
-	constructor(type, value, user, channel = null) {
+export class Input {
+	public type: string
+	public value: string | MessageReaction | GuildMember
+	public user: User | GuildMember
+	public channel?: TextChannel | DMChannel | GroupDMChannel
+
+	public constructor(type, value, user, channel = null) {
 		this.type = type;
 		this.value = value;
 		this.user = user;
@@ -53,22 +88,21 @@ class Input {
 	}
 }
 
-function listGames(message) {
-	var gameList = modules.keyArray();
-	if (message == null) return gameList;
-	var gameEmbed = new RichEmbed()
-		.setTitle("Available Games")
-		.setDescription("`" + gameList.join("`\n`") + "`")
-		.setFooter(`Ran by ${message.author.username} (${message.author.id})`, message.author.dsiplayAvatarURL)
-		.setColor(0x00AE86);
-	if (gameEmbed.description !== "``") {
-		return message.channel.send({ embed: gameEmbed });
-	} else {
+function listGames(message: Message): Promise<Message | Message[]> {
+	var gameList = loaded.keyArray();
+	if (gameList.length === 0) {
 		return message.reply("Currently there are no games to view.");
+	} else {
+		var gameEmbed = new RichEmbed()
+			.setTitle("Available Games")
+			.setDescription("`" + gameList.join("`\n`") + "`")
+			.setFooter(`Ran by ${message.author.username} (${message.author.id})`, message.author.displayAvatarURL)
+			.setColor(0x00AE86);
+		return message.channel.send({ embed: gameEmbed });
 	}
 }
 
-function invite(game, channel, players, host) {
+function invite(game: Game, channel: TextChannel, players, host) {
 	var messageContent;
 	const inviteEmbed = new RichEmbed()
 		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id, (game.bet > 0) ? "\n**THIS GAME HAS A BET ON IT.**" : ""))
@@ -93,7 +127,7 @@ function invite(game, channel, players, host) {
 		}
 	}
 	return new Promise((resolve, reject) => {
-		channel.send(messageContent, { embed: inviteEmbed }).then((message) => {
+		channel.send(messageContent, { embed: inviteEmbed }).then((message: Message) => {
 			message.react("404768960014450689").then(() => {
 				var collector = new ReactionCollector(message, (reaction, user) =>
 					reaction.emoji.id === "404768960014450689" &&
@@ -150,7 +184,7 @@ function startGame(game, context, solo) {
 	})];
 
 	session = {
-		id: uuid(),
+		id: nextSessionId++,
 		game: game,
 		ended: false,
 		context: context,
@@ -171,7 +205,7 @@ function startGame(game, context, solo) {
 				}
 			}
 		}
-	};
+	} as Session;
 	if (context.message != null)
 		session.host = context.message.author;
 	if (game.requiresInvite && !solo)
@@ -186,7 +220,7 @@ function startGame(game, context, solo) {
 			session.endTimer = context.client.setTimeout(session.endGame, game.timeout);
 		});
 
-		game.start(session);
+		game.exec(session);
 		sessions.push(session);
 	}, () => {
 		if (context.message == null) {
@@ -203,16 +237,13 @@ for (let file of fs.readdirSync(__dirname + "/../../games")) {
 		new Promise((resolve, reject) => {
 			try {
 				var game = require("@server/games/" + match[1]);
-				for (var entry of DEFAULTS) {
-					if (typeof game[entry.key] !== typeof entry.value)
-						game[entry.key] = entry.value;
-				}
+				defaults(game, GAME_DEFAULTS);
 				resolve(game);
 			} catch (exc) {
 				reject(exc);
 			}
-		}).then((module) => {
-			modules.set(module.id, module);
+		}).then((module: Game) => {
+			loaded.set(module.id, module);
 		}, (exc) => {
 			console.warn(`Unable to load game module ${match}:`);
 			console.warn(exc.stack);
@@ -220,10 +251,7 @@ for (let file of fs.readdirSync(__dirname + "/../../games")) {
 	}
 }
 
-module.exports = {
-	Input: Input,
-	loaded: modules,
-
+export default {
 	id: "game",
 	aliases: ["games"],
 	description: "Starts a game.",
@@ -231,21 +259,21 @@ module.exports = {
 	access: "Server",
 	botRequires: ["ADD_REACTIONS"],
 	botRequiresMessage: "To create a game invitation method. Some games also require MANAGE_MESSAGES for removing reactions although it is not required.",
-	exec: async (call) => {
+	exec: async (call: Call) => {
 		var name = call.params.readParam();
-		var bet = (call.client.user.id === "393532251398209536") ? (call.params.readNumber(false, false) || 0) : 0;
+		var bet = process.env.NODE_ENV === "production" ? (call.params.readNumber(false) || 0) : 0;
 		if (bet < 0) bet = 0;
 		var found = false;
 		if (games != null)
 			games = this;
 
 		if (name != null) {
-			var game = modules.get(name.toLowerCase()) || modules.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
+			var game = loaded.get(name.toLowerCase()) || loaded.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
 			if (game != null) {
 				found = true;
 				if (game.betting) game.bet = bet;
 				var solo = bet === 0 && call.params.readParam() === "-solo" && game.minPlayers === 1;
-				var userBalance = (call.client.user.id === "393532251398209536") ? await getWallet(call.message.author.id).getTotal() : Infinity;
+				var userBalance = process.env.NODE_ENV === "production" ? await getWallet(call.message.author.id).getTotal() : Infinity;
 
 				if (userBalance >= bet) {
 					if (!game.autostart) {
@@ -259,7 +287,7 @@ module.exports = {
 		if (!found)
 			listGames(call.message);
 	},
-	dispatchInput: (input) => {
+	dispatchInput: (input: Input) => {
 		for (let session of sessions) {
 			if ((input.channel == null || input.channel == session.context.channel) &&
 				(!session.game.requiresInvite || session.host.id === input.user.id || session.players.has(input.user.id))) {

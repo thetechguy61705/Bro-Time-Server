@@ -294,6 +294,7 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 		load("commands", {
 			client: client,
 			success: (exported) => {
+				exported = exported.default || exported;
 				this.loaded.set(exported.id, exported);
 				if (exported.category === "Kitchen") require("@server/load/orders.js").storedCommands.set(exported.id, exported);
 			},
