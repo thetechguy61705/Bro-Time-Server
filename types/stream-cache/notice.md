@@ -1,0 +1,1 @@
+This type was originally made to be published to [@types](https://github.com/DefinitelyTyped/DefinitelyTyped). After some consideration, I decided to instead include it directly in this server. If the module this is based on is ever updated, I will reconsider publishing this.

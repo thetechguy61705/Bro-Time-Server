@@ -11,7 +11,7 @@ export interface ILoadable<T> {
     load(arg: T): void
 }
 
-export interface MusicStream extends Duplex {
+export interface MusicStream extends StreamCache {
     url: string
     title: string
     author: string

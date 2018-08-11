@@ -2,10 +2,11 @@ import { IExecutable, MusicStream, MusicSearchResult } from "types/server";
 import { Client, Collection, Snowflake, RichEmbed, Guild, GuildMember, Message, TextChannel, DMChannel, GroupDMChannel, VoiceChannel, VoiceConnection, StreamDispatcher } from "discord.js";
 import { Call } from "@server/chat/commands";
 import { load } from "@utility/filesloader";
+import StreamCache = require("stream-cache");
 
 var errorHandler = require("@utility/errorHandler");
 var config = require("@root/config");
-var StreamCache = require("stream-cache");
+
 var sort = require("fast-sort/sort");
 var sources: Source[] = [];
 var tokens: Collection<string, string> = new Collection();
@@ -49,7 +50,7 @@ class Queue extends Array<MusicStream> {
 	}
 
 	public play(call: Call, stream: MusicStream): void {
-		var rStream = new StreamCache();
+		var rStream = new StreamCache() as MusicStream;
 		stream.pipe(rStream);
 		rStream.url = stream.url;
 		rStream.title = stream.title;
