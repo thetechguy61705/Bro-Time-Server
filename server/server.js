@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { load } = require("@utility/filesloader.ts");
+const load = require("@utility/filesloader.ts").default;
 const dataProcessor = require("@utility/datarequest.ts");
 // todo: Move configuration to config.js.
 const BRO_TIME_GUILDS = ["330913265573953536", "453694109819994114", "463408396872187904", "398948242790023168"];

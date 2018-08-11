@@ -2,7 +2,7 @@ import { Channel, Role, Permissions, Message, Client, Guild, Collection, Message
 import { Wallet } from "@utility/wallet.ts";
 import { DiscordResolvable, IExecutable, ILoadable } from "types/server";
 import { DataRequest } from "@utility/datarequest";
-import { load } from "@utility/filesloader";
+import load from "@utility/filesloader";
 import * as server from "@server/server";
 import * as escapeRegExp from "escape-string-regexp";
 import * as fs from "fs";

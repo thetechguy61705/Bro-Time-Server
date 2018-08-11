@@ -75,7 +75,7 @@ function loadFiles(path: string, options: ILoadOptions, tasks: Promise<any>[], c
 	}
 }
 
-export function load(path: string, options: ILoadOptions): Promise<any[]> {
+export default function load(path: string, options: ILoadOptions): Promise<any[]> {
 	var tasks = [];
 	defaults(options, OPTION_DEFAULTS);
 

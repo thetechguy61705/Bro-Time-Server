@@ -1,7 +1,7 @@
 import { IExecutable, MusicStream, MusicSearchResult } from "types/server";
 import { Client, Collection, Snowflake, RichEmbed, Guild, GuildMember, Message, TextChannel, DMChannel, GroupDMChannel, VoiceChannel, VoiceConnection, StreamDispatcher } from "discord.js";
 import { Call } from "@server/chat/commands";
-import { load } from "@utility/filesloader";
+import load from "@utility/filesloader";
 import StreamCache = require("stream-cache");
 
 var errorHandler = require("@utility/errorHandler");
