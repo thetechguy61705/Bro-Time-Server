@@ -1,7 +1,10 @@
 const fetch = require("node-fetch");
 const apiURI = "http://api.roblox.com/";
 const { Collection } = require("discord.js");
-const flatten = require("array-flatten");
+
+function flatten(arr) {
+	return [].concat.apply([], arr);
+}
 
 function decodeHtmlEntity(str) {
 	return str.replace(/&#(\d+);/g, (match, dec) => {
