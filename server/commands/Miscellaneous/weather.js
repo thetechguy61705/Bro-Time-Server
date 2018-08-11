@@ -1,11 +1,12 @@
 const { RichEmbed } = require("discord.js");
-const weather = require("weather-js");
+const weather = () => {};
 
 module.exports = {
 	id: "weather",
 	aliases: ["w"],
 	description: "Displays the weather in the area given",
 	paramsHelp: "(place)",
+	test: true,
 	exec: async (call) => {
 		var area = call.params.readParam(true);
 		if (area) {
