@@ -21,7 +21,6 @@ module.exports = {
 	maxPlayers: 2,
 	requiresInvite: true,
 	allowLateJoin: false,
-	load: () => {},
 	exec: (session) => {
 		var author = session.host, target = session.players.last();
 		session.players.set(author.id, author);

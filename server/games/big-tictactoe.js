@@ -8,7 +8,6 @@ module.exports = {
 	maxPlayers: 2,
 	requiresInvite: true,
 	allowLateJoin: false,
-	load: () => {},
 	exec: (session) => {
 		session.context.channel.send("SOON™");
 		session.endGame();

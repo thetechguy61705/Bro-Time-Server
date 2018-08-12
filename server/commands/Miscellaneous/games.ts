@@ -1,9 +1,9 @@
-import { Collection, RichEmbed, ReactionCollector, Message, Client, TextChannel, DMChannel, GroupDMChannel, User, GuildMember, MessageReaction } from "discord.js";
+import { Collection, RichEmbed, ReactionCollector, Message, Client, TextChannel, DMChannel, GroupDMChannel, User, GuildMember, MessageReaction, Snowflake } from "discord.js";
 import { Wallet } from "@utility/wallet.ts";
 import { Call } from "@server/chat/commands";
-import { IExecutable, ILoadable } from "types/server";
+import { IExecutable } from "types/server";
 import * as defaults from "defaults";
-const fs = require("fs");
+import load from "@utility/filesloader";
 const util = require("util");
 
 export var loaded = new Collection<string, Game>();
@@ -12,7 +12,7 @@ var noPing = [];
 var games;
 var nextSessionId = 0;
 
-function getWallet(userId = null): Wallet {
+function getWallet(userId: Snowflake): Wallet {
 	return new Wallet(userId);
 }
 
@@ -34,7 +34,7 @@ React with the <:pixeldolphin:404768960014450689> emoji to join the game.`;
 // times per second
 const MAX_UPDATE_CYCLES = 60;
 
-export interface Game extends IExecutable<Session>, ILoadable<void> {
+export interface Game extends IExecutable<Session> {
 	id: string
 	aliases: string[]
 	shortDescription?: string
@@ -51,16 +51,29 @@ export interface Game extends IExecutable<Session>, ILoadable<void> {
 	bet: number
 	betting: boolean
 	multithreaded?: boolean
+	loadGame: { (): void | Promise<void> }
 	input: { (input: Input): boolean }
 	end: { (session: Session): void }
+	update?: Function
 }
 
 export interface Session {
 	id: number
 	game: Game
+	context: Context
+	players: Collection<Snowflake, User>
+	host?: User
+	ended?: boolean
+	winner?: User
+	endTimer?: NodeJS.Timer
+	updateTimer?: NodeJS.Timer
+	getWallet: { (userId: Snowflake): Wallet }
+	tooPoor?: boolean
+	endGame: { (): void }
+	restartEndTimer: { (): void }
 }
 
-class Context {
+export class Context {
 	public client: Client
 	public games: any
 	public message: Message
@@ -102,9 +115,9 @@ function listGames(message: Message): Promise<Message | Message[]> {
 	}
 }
 
-function invite(game: Game, channel: TextChannel, players, host) {
-	var messageContent;
-	const inviteEmbed = new RichEmbed()
+function invite(game: Game, channel: TextChannel, players: Collection<Snowflake, User>, host: User): Promise<void> {
+	var messageContent: string;
+	var inviteEmbed = new RichEmbed()
 		.setDescription(util.format(INVITE, game.shortDescription || game.longDescription || game.id, (game.bet > 0) ? "\n**THIS GAME HAS A BET ON IT.**" : ""))
 		.addField("Minimum Players", game.minPlayers, true)
 		.addField("Maximum Players", game.maxPlayers, true)
@@ -172,12 +185,18 @@ function invite(game: Game, channel: TextChannel, players, host) {
 	});
 }
 
-function startGame(game, context, solo) {
-	var loading, session;
+function startGame(game: Game, context: Context, solo: boolean): void {
+	var loading: Promise<void>[]
+	var session: Session;
 
-	loading = [new Promise((resolve, reject) => {
+	loading = [new Promise(async (resolve, reject) => {
 		try {
-			resolve(game.load());
+			var promise;
+			if (game.loadGame != null)
+				promise = game.loadGame();
+			if (promise != null)
+				await promise;
+			resolve();
 		} catch (exc) {
 			reject(exc);
 		}
@@ -204,21 +223,21 @@ function startGame(game, context, solo) {
 							getWallet(player).transfer(session.game.bet, (session.winner.id != session.context.client.user.id) ? session.winner.id : null);
 				}
 			}
+		},
+		restartEndTimer: () => {
+			clearTimeout(session.endTimer);
+			session.endTimer = context.client.setTimeout(session.endGame, game.timeout);
 		}
-	} as Session;
+	};
 	if (context.message != null)
 		session.host = context.message.author;
 	if (game.requiresInvite && !solo)
-		loading.push(invite(game, context.channel, session.players, session.host));
+		loading.push(invite(game, context.channel as TextChannel, session.players, session.host));
 
 	Promise.all(loading).then(() => {
 		if (game.updateInterval > 0)
-			session.updateTimer = context.client.setInterval(1 / Math.min(game.updateInterval, MAX_UPDATE_CYCLES) * 1000, game.update);
+			session.updateTimer = context.client.setInterval(game.update, 1 / Math.min(game.updateInterval, MAX_UPDATE_CYCLES) * 1000);
 		session.endTimer = context.client.setTimeout(session.endGame, game.timeout);
-		session.restartEndTimer = (() => {
-			clearTimeout(session.endTimer);
-			session.endTimer = context.client.setTimeout(session.endGame, game.timeout);
-		});
 
 		game.exec(session);
 		sessions.push(session);
@@ -231,25 +250,13 @@ function startGame(game, context, solo) {
 	});
 }
 
-for (let file of fs.readdirSync(__dirname + "/../../games")) {
-	var match = file.match(/^(.*)\.js$/);
-	if (match != null) {
-		new Promise((resolve, reject) => {
-			try {
-				var game = require("@server/games/" + match[1]);
-				defaults(game, GAME_DEFAULTS);
-				resolve(game);
-			} catch (exc) {
-				reject(exc);
-			}
-		}).then((module: Game) => {
-			loaded.set(module.id, module);
-		}, (exc) => {
-			console.warn(`Unable to load game module ${match}:`);
-			console.warn(exc.stack);
-		});
-	}
-}
+load("games", {
+	success: (game) => {
+		defaults(game, GAME_DEFAULTS);
+		loaded.set(game.id, game);
+	},
+	failureMessage: "Unable to load a game."
+});
 
 export default {
 	id: "game",

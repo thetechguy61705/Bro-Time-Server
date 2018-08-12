@@ -38,7 +38,6 @@ module.exports = {
 	timeout: 60000,
 	requiresInvite: false,
 	allowLateJoin: false,
-	load: () => {},
 	exec: (session) => {
 		session.least = 0;
 		session.most = 500;

@@ -8,7 +8,6 @@ module.exports = {
 	maxPlayers: 2,
 	requiresInvite: true,
 	allowLateJoin: false,
-	load: () => {},
 	exec: (session) => {
 		const E_A = ["1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣"];
 		const author = session.host;

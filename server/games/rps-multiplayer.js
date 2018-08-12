@@ -8,7 +8,6 @@ module.exports = {
 	maxPlayers: 2,
 	requiresInvite: true,
 	allowLateJoin: false,
-	load: () => {},
 	exec: (session) => {
 		const PLAYERS = session.players.set(session.host.id, session.host),
 			CHOICES = ["rock", "paper", "scissors"],

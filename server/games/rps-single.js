@@ -8,7 +8,6 @@ module.exports = {
 	maxPlayers: 1,
 	requiresInvite: false,
 	allowLateJoin: false,
-	load: () => {},
 	exec: (session) => {
 		session.players.set(session.host.id, session.host);
 		session.players.set(session.context.client.user.id, session.context.client.user);
