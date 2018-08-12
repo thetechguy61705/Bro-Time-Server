@@ -212,8 +212,8 @@ function startGame(game: Game, context: Context, solo: boolean): void {
 		endGame: () => {
 			if (!session.ended) {
 				sessions.splice(sessions.indexOf(sessions.find((s) => s.id === session.id)), 1);
-				clearTimeout(session.endTimer);
-				clearInterval(session.updateTimer);
+				context.client.clearTimeout(session.endTimer);
+				context.client.clearInterval(session.updateTimer);
 				session.ended = true;
 				if (session.tooPoor) session.context.channel.send("This game was cancelled because a user playing it became too poor to meet the bet required on this gmae.");
 				session.game.end(session);
@@ -225,8 +225,8 @@ function startGame(game: Game, context: Context, solo: boolean): void {
 			}
 		},
 		restartEndTimer: () => {
-			clearTimeout(session.endTimer);
-			session.endTimer = context.client.setTimeout(session.endGame, game.timeout);
+			context.client.clearTimeout(session.endTimer);
+			session.endTimer = context.client.setTimeout(session.endGame, game.timeout || 180000);
 		}
 	};
 	if (context.message != null)
@@ -237,7 +237,7 @@ function startGame(game: Game, context: Context, solo: boolean): void {
 	Promise.all(loading).then(() => {
 		if (game.updateInterval > 0)
 			session.updateTimer = context.client.setInterval(game.update, 1 / Math.min(game.updateInterval, MAX_UPDATE_CYCLES) * 1000);
-		session.endTimer = context.client.setTimeout(session.endGame, game.timeout);
+		session.endTimer = context.client.setTimeout(session.endGame, game.timeout || 180000);
 
 		game.exec(session);
 		sessions.push(session);
