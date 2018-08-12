@@ -214,7 +214,7 @@ module.exports = {
 				new RichEmbed()
 					.setAuthor(executor.tag, executor.displayAvatarURL)
 					.setTitle("Message Updated")
-					.setDescription(`ID: \`${newMessage.id}\`\nDate: \`${newMessage.editedAt.toString().substring(0, 15)}\``)
+					.setDescription(`ID: \`${newMessage.id}\`\nDate: \`${(newMessage.editedAt || message.createdAt).toString().substring(0, 15)}\``)
 					.addField("Old Content", `\`\`\`md\n${oldMessage.content.substring(0, 1014)}\`\`\``)
 					.addField("New Content", `\`\`\`md\n${newMessage.content.substring(0, 1014)}\`\`\``)
 					.setColor(ORANGE_HEX)

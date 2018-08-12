@@ -11,9 +11,7 @@ declare module "discord.js" {
 	}
 
 	interface Message {
-		deleted: boolean
 		reactMultiple(reactions: EmojiIdentifierResolvable[]): Promise<MessageReaction[]>
-		url: string
 	}
 
 	interface Guild {
