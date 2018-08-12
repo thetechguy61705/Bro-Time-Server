@@ -186,7 +186,7 @@ function invite(game: Game, channel: TextChannel, players: Collection<Snowflake,
 }
 
 function startGame(game: Game, context: Context, solo: boolean): void {
-	var loading: Promise<void>[]
+	var loading: Promise<void>[];
 	var session: Session;
 
 	loading = [new Promise(async (resolve, reject) => {
