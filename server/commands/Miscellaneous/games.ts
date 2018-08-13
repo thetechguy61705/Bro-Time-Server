@@ -16,18 +16,18 @@ function getWallet(userId: Snowflake): Wallet {
 	return new Wallet(userId);
 }
 
-const GAME_DEFAULTS = [
-	{ key: "autoStart", value: false },
-	{ key: "minPlayers", value: 0 },
-	{ key: "maxPlayers", value: Infinity },
-	{ key: "allowLateJoin", value: true },
-	{ key: "requiresInvite", value: false },
-	{ key: "inviteTime", value: 180000 },
-	{ key: "timeout", value: 180000 },
-	{ key: "updateInterval", value: 0 },
-	{ key: "multithreaded", value: false },
-	{ key: "betting", value: false }
-];
+const GAME_DEFAULTS = {
+	autoStart: false,
+	minPlayers: 0,
+	maxPlayers: Infinity,
+	allowLateJoin: true,
+	requiresInvite: false,
+	inviteTime: 180000,
+	timeout: 180000,
+	updateInterval: 0,
+	multithreaded: false,
+	betting: false
+};
 const INVITE = `%s
 
 React with the <:pixeldolphin:404768960014450689> emoji to join the game.`;
@@ -226,7 +226,7 @@ function startGame(game: Game, context: Context, solo: boolean): void {
 		},
 		restartEndTimer: () => {
 			context.client.clearTimeout(session.endTimer);
-			session.endTimer = context.client.setTimeout(session.endGame, game.timeout || 180000);
+			session.endTimer = context.client.setTimeout(session.endGame, game.timeout);
 		}
 	};
 	if (context.message != null)
@@ -237,7 +237,7 @@ function startGame(game: Game, context: Context, solo: boolean): void {
 	Promise.all(loading).then(() => {
 		if (game.updateInterval > 0)
 			session.updateTimer = context.client.setInterval(game.update, 1 / Math.min(game.updateInterval, MAX_UPDATE_CYCLES) * 1000);
-		session.endTimer = context.client.setTimeout(session.endGame, game.timeout || 180000);
+		session.endTimer = context.client.setTimeout(session.endGame, game.timeout);
 
 		game.exec(session);
 		sessions.push(session);
