@@ -6,7 +6,6 @@ module.exports = {
 	description: "Transfers Bro Bits from you to another user with a 90% exchange rate.",
 	paramsHelp: "(user) (amount)",
 	access: "Public",
-	userType: "User",
 	exec: async (call) => {
 		var param = call.params.readParam();
 		param = (param != null) ? param.toLowerCase() : null;

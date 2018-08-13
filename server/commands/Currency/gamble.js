@@ -9,7 +9,6 @@ module.exports = {
 	description: "Allows you to either lose all the bet money, or gain some more money.",
 	paramsHelp: "(amount)",
 	access: "Public",
-	userType: "User",
 	exec: async (call) => {
 		var userBalance = await call.getWallet(call.message.author.id).getTotal();
 		var param = call.params.readNumber(), amountToBet = Math.ceil(param || param.toNumber(userBalance));

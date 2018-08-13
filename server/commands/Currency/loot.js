@@ -42,7 +42,6 @@ module.exports = {
 	description: "Gives you a random amount of Bro Bits.",
 	rateLimit: [],
 	access: "Public",
-	userType: "User",
 	exec: (call) => {
 		if (module.exports.rateLimit.indexOf(call.message.author.id) === -1) {
 			var randomSuccess = ((Math.random() * 10) > 3) ? true : false;

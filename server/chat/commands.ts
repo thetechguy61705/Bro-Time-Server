@@ -10,7 +10,6 @@ import * as fs from "fs";
 const LOAD_TIMEOUT = 60000;
 const TESTING = process.env.NODE_ENV !== "production";
 const ACCESS = new Enum(["Public", "Private", "Server"], { ignoreCase: true });
-const USER_TYPE = new Enum(["User", "Bot"], { ignoreCase: true });
 const SPACE = "\\s,";
 const QUOTES = "\"'";
 
@@ -379,7 +378,7 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 		}
 	}
 
-	public async checkAccess(command: ICommand, message: Message) {
+	public async checkAccess(command: ICommand, message: Message): Promise<boolean> {
 		var result: boolean;
 		if (ACCESS.Public.is(command.access)) {
 			result = true;
@@ -390,26 +389,11 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 		}
 
 		if (result)
-			result = await this.checkUser(command, message);
-
-		if (result)
 			result = await this.checkPermissions(command, message);
 
 		if (result)
 			result = await this.checkRestrictions(command, message);
 
-		return result;
-	}
-
-	private async checkUser(command: ICommand, message: Message): Promise<boolean> {
-		var result: boolean;
-		if (USER_TYPE.User.is(command.userType)) {
-			result = !message.author.bot;
-		} else if (USER_TYPE.Bot.is(command.userType)) {
-			result = message.author.bot;
-		} else {
-			result = true;
-		}
 		return result;
 	}
 
