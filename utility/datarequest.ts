@@ -34,7 +34,7 @@ export class DataRequest {
 		this.reject = reject;
 	}
 
-	private static sendRequest(request: DataRequest) {
+	private static sendRequest(request: DataRequest): void {
 		if (client == null)
 			throw new Error("Unable to send a data request from the parent process.");
 		pending.push(request);

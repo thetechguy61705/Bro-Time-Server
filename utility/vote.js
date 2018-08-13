@@ -22,7 +22,7 @@ function replaceTags(content, values) {
 	return result;
 }
 
-module.exports = function vote(time, channel, required,
+module.exports = function (time, channel, required,
 	filter = () => { return true; },
 	id = null,
 	content = "A vote is required (<current>/<required>)!",

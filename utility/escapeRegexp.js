@@ -1,3 +1,3 @@
-module.exports = function escape(text) {
+module.exports = function (text) {
 	return text.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 };
