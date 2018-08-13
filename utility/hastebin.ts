@@ -10,7 +10,7 @@ export async function post(content: string) {
 
 export async function get(key: string) {
 	if (key.length !== 10) throw new Error("Key must be exactly 10 characters long.");
-	if (key.match(/\d/) != null) throw new Error("Keys cannot contain a number.");
+	if (key.match(/[a-zA-Z]{10}/) != null) throw new Error("Invalid key.");
 	var result = fetch(`https://hastebin.com/documents/${key.toLowerCase()}`).then((res: Request) => res.json());
 	if (result.message) throw new Error(result.message);
 	return result.data;
