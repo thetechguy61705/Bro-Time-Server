@@ -31,7 +31,13 @@ export interface ICommand extends IExecutable<Call> {
 	readonly aliases?: string[]
 	readonly description?: string
 	readonly paramsHelp?: string
-	readonly params?: any
+	readonly params?: {
+		type: string | Function,
+		failure?: string | Function,
+		greedy: boolean,
+		required: boolean,
+		default?: any
+	}[]
 	readonly access?: string | number
 	readonly userType?: string | number
 	readonly userRequires?: PermissionResolvable | PermissionResolvable[]
@@ -220,7 +226,7 @@ export class Call {
 	public readonly params: Params
 	public readonly client: Client
 	public readonly command: ICommand
-	public parameters: any
+	public parameters: any[]
 
 	public constructor(commands: CommandsManager, message: Message, params: Params, command: ICommand) {
 		this.commands = commands;
