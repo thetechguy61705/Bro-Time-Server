@@ -8,28 +8,36 @@ module.exports = {
 	aliases: ["bet"],
 	description: "Allows you to either lose all the bet money, or gain some more money.",
 	paramsHelp: "(amount)",
+	params: [
+		{
+			type: async (input, call) => {
+				var userBalance = await call.getWallet(call.message.author.id).getTotal();
+				var num = Number(input);
+				if (!isNaN(num) && num > 0 && num <= userBalance)
+					return num;
+			},
+			greedy: false,
+			failure: "Please specify a valid amount to bet. It must be above 0 and less than or equal to your balance.",
+			required: true
+		}
+	],
 	access: "Public",
 	exec: async (call) => {
-		var userBalance = await call.getWallet(call.message.author.id).getTotal();
-		var param = call.params.readNumber(), amountToBet = Math.ceil(param || param.toNumber(userBalance));
-		if (amountToBet != null && !isNaN(amountToBet) && amountToBet > 0) {
-			if (amountToBet <= userBalance) {
-				var randomSuccess = (Math.random() * 10) < 4;
-				var randomMultiplier = (Math.random() * 0.8) + 0.6;
-				if (randomSuccess) {
-					call.getWallet(call.message.author.id).change(Math.round(amountToBet * randomMultiplier)).then(() => {
-						call.message.reply("You gained " + Math.round(amountToBet * randomMultiplier) + " Bro Bits. :D").catch(() => {});
-					}).catch(() => {
-						call.safeSend("Failed to change your balance. You did not gain/lose any Bro Bits.");
-					});
-				} else {
-					call.getWallet(call.message.author.id).change(-amountToBet).then(() => {
-						call.message.reply("You lost " + amountToBet + " Bro Bits. D:");
-					}).catch(() => {
-						call.safeSend("Failed to change your balance. You did not gain/lose any Bro Bits.");
-					});
-				}
-			} else call.safeSend("You do not have enough money to bet this amount.");
-		} else call.safeSend("Please specify a valid amount to bet.");
+		var amountToBet = call.parameters[0];
+		var randomSuccess = (Math.random() * 10) < 4;
+		var randomMultiplier = (Math.random() * 0.8) + 0.6;
+		if (randomSuccess) {
+			call.getWallet(call.message.author.id).change(Math.round(amountToBet * randomMultiplier)).then(() => {
+				call.message.reply(`You gained ${Math.round(amountToBet * randomMultiplier)} Bro Bits. :D`).catch(() => {});
+			}).catch(() => {
+				call.safeSend("Failed to change your balance. You did not gain/lose any Bro Bits.");
+			});
+		} else {
+			call.getWallet(call.message.author.id).change(-amountToBet).then(() => {
+				call.message.reply(`You lost ${amountToBet} Bro Bits. D:`);
+			}).catch(() => {
+				call.safeSend("Failed to change your balance. You did not gain/lose any Bro Bits.");
+			});
+		}
 	}
 };

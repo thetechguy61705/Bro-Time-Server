@@ -322,8 +322,12 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 				} else if (test.type instanceof RegExp)
 					param = (call.params.readParam(test.greedy, test.required) || { match: () => null }).match(test.type);
 				if (param != null || !test.required) {
-					if (param != null && !test.required) call.params.offset(param.length + 1);
-					if (param == null && !test.required && test.default) param = test.default;
+					if (param != null && !test.required) call.params.offset(`${param}`.length + 1);
+					if (param == null && !test.required && test.default) {
+						if (typeof test.default !== "function")
+							param = test.default;
+						else param = test.default(call);
+					}
 					result.push(param);
 				} else {
 					result.push(null);

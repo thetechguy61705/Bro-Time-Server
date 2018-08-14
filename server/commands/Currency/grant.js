@@ -6,36 +6,36 @@ module.exports = {
 	description: "Force give/take away Bro Bits to/from a user.",
 	paramsHelp: "(user) (amount)",
 	requires: "Role: Co-Owner Bro, Owner Bro",
+	params: [
+		{
+			type: async (input, call) => {
+				var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
+				// eslint-disable-next-line no-unreachable
+				return guild.members.find((m) => input.includes(m.user.id) || m.user.tag.toLowerCase().startsWith(input.toLowerCase()))
+					|| await call.client.fetchUser(input);
+			},
+			greedy: false,
+			failure: "You did not specify a valid user.",
+			required: true
+		},
+		{
+			type: "number",
+			greedy: false,
+			failure: "You did not specify a valid amount to give to the user.",
+			required: true,
+		}
+	],
 	access: "Public",
 	exec: async (call) => {
 		if (GRANTERS.includes(call.message.author.id)) {
-			var param = call.params.readParam();
-			param = (param != null) ? param.toLowerCase() : "";
-			var target;
-			var failed;
-			try {
-				if (call.message.channel.type === "text") {
-					var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
-					target = guild.members.find((member) => (param || "").includes(member.id) || member.user.tag.toLowerCase().startsWith(param)) ||
-						await call.client.fetchUser(param || "nothing", false);
-				} else {
-					target = await call.client.fetchUser(param || "nothing", false);
-				}
-			} catch (exc) {
-				console.warn(exc.stack);
-				failed = exc.message;
-			}
-			var amount = call.params.readNumber();
+			var target = call.parameters[0];
+			var amount = call.parameters[1];
 			if (target instanceof GuildMember) target = target.user;
-			if (target != null && !failed) {
-				if (amount != null && !isNaN(amount)) {
-					call.getWallet(target.id).change(amount).then(() => {
-						call.message.channel.send(`Changed ${target.tag}'s balance by ${amount}`);
-					}).catch(() => {
-						call.message.channel.send(`Failed to change ${target.tag}'s balance by ${amount}`);
-					});
-				} else call.safeSend("You did not specify a valid amount to give to the user.");
-			} else call.safeSend("You did not specify a valid user.");
+			call.getWallet(target.id).change(amount).then(() => {
+				call.message.channel.send(`Changed ${target.tag}'s balance by ${amount}`);
+			}).catch(() => {
+				call.message.channel.send(`Failed to change ${target.tag}'s balance by ${amount}`);
+			});
 		} else call.safeSend("You do not have permissions to use this command.");
 	}
 };
