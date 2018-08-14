@@ -31,6 +31,7 @@ export interface ICommand extends IExecutable<Call> {
 	readonly aliases?: string[]
 	readonly description?: string
 	readonly paramsHelp?: string
+	readonly params?: any
 	readonly access?: string | number
 	readonly userType?: string | number
 	readonly userRequires?: PermissionResolvable | PermissionResolvable[]
@@ -219,6 +220,7 @@ export class Call {
 	public readonly params: Params
 	public readonly client: Client
 	public readonly command: ICommand
+	public parameters: any
 
 	public constructor(commands: CommandsManager, message: Message, params: Params, command: ICommand) {
 		this.commands = commands;
@@ -288,6 +290,50 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 	public readonly REQUEST_OPTIONS = CommandsManager.REQUEST_OPTIONS;
 	public readonly _requests: Collection<string, IRequest> = new Collection()
 	public loaded: Collection<string, ICommand> = new Collection<string, ICommand>()
+
+	public onFailure(call: Call, param): void {
+		if (typeof param.failure === "string")
+			call.safeSend(param.failure);
+		else if (typeof param.failure === "function")
+			param.failure(call.message);
+		else call.safeSend("Invalid parameter type supplied.");
+	}
+
+	public async runParams(call): Promise<any> {
+		if (call.command.params) {
+			var result = [];
+			for (let test of call.command.params) {
+				var param;
+				if (!test.type|| test.type === "any")
+					param = call.params.readParam(test.greedy, test.required);
+				else if (test.type === "number")
+					param = call.params.readNumber(test.required);
+				else if (test.type === "member") {
+					await call.message.guild.fetchMembers("", call.message.guild.memberCount);
+					param = call.params.readMember(test.required);
+				} else if (typeof test.type === "function") {
+					try {
+						if (call.params.readParam(test.greedy, false))
+							param = await test.type(call.params.readParam(test.greedy, test.required), call);
+					} catch (exc) {
+						param = null;
+						console.warn(exc.stack);
+					}
+				} else if (test.type instanceof RegExp)
+					param = (call.params.readParam(test.greedy, test.required) || { match: () => null }).match(test.type);
+				if (param != null || !test.required) {
+					if (param != null && !test.required) call.params.offset(param.length + 1);
+					if (param == null && !test.required && test.default) param = test.default;
+					result.push(param);
+				} else {
+					result.push(null);
+					return this.onFailure(call, test);
+				}
+			}
+			call.parameters = result;
+			call.command.exec(call);
+		} else call.command.exec(call);
+	}
 
 	public async load(client: Client) {
 		load("commands", {
@@ -366,7 +412,7 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 				if (command != null && this.checkAccess(command, message)) {
 					if (!server.locked.value || command.id === "lockdown") {
 						params.readSep();
-						command.exec(new Call(this, message, params, command));
+						this.runParams(new Call(this, message, params, command));
 					} else {
 						if (!server.locked.channels.includes(message.channel.id)) {
 							server.locked.channels.push(message.channel.id);

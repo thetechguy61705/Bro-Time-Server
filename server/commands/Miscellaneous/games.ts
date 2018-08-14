@@ -264,32 +264,51 @@ export default {
 	description: "Starts a game.",
 	paramsHelp: "[game] [amount to bet]",
 	access: "Server",
+	params: [
+		{
+			type: (game: string) => loaded.find((mod) => mod.id === game.toLowerCase() || (mod.aliases != null && mod.aliases.includes(game))),
+			greedy: false,
+			failure: listGames,
+			required: true
+		},
+		{
+			type: (input: string) => {
+				if (input === "-solo")
+					return input;
+				else if (!isNaN(Number(input)) && Number(input) > 0)
+					return Number(input);
+			},
+			greedy: false,
+			default: 0,
+			required: false
+		}
+	],
 	botRequires: ["ADD_REACTIONS"],
 	botRequiresMessage: "To create a game invitation method. Some games also require MANAGE_MESSAGES for removing reactions although it is not required.",
 	exec: async (call: Call) => {
-		var name = call.params.readParam();
-		var bet = process.env.NODE_ENV === "production" ? (call.params.readNumber(false) || 0) : 0;
-		if (bet < 0) bet = 0;
+		var game = call.parameters[0];
+		var bet = process.env.NODE_ENV === "production" || call.parameters[1] === "-solo" ? call.parameters[1] : 0;
+		var solo = false;
+		if (isNaN(bet)) {
+			bet = 0;
+			solo = game.minPlayers === 1;
+		}
 		var found = false;
 		if (games != null)
 			games = this;
 
-		if (name != null) {
-			var game = loaded.get(name.toLowerCase()) || loaded.find((module) => module.aliases != null && module.aliases.indexOf(name) > -1);
-			if (game != null) {
-				found = true;
-				if (game.betting) game.bet = bet;
-				var solo = bet === 0 && call.params.readParam() === "-solo" && game.minPlayers === 1;
-				var userBalance = process.env.NODE_ENV === "production" ? await getWallet(call.message.author.id).getTotal() : Infinity;
+		if (game != null) {
+			found = true;
+			if (game.betting) game.bet = bet;
+			var userBalance = process.env.NODE_ENV === "production" ? await getWallet(call.message.author.id).getTotal() : Infinity;
 
-				if (userBalance >= bet) {
-					if (!game.autostart) {
-						startGame(game, new Context(call.client, call.message), solo);
-					} else {
-						call.message.channel.send(`The game ${name} can not be started manually.`);
-					}
-				} else call.safeSend("You do not have enough money to make this bet.");
-			}
+			if (userBalance >= bet) {
+				if (!game.autostart) {
+					startGame(game, new Context(call.client, call.message), solo);
+				} else {
+					call.message.channel.send(`The game ${name} can not be started manually.`);
+				}
+			} else call.safeSend("You do not have enough money to make this bet.");
 		}
 		if (!found)
 			listGames(call.message);

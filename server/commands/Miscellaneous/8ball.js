@@ -38,23 +38,29 @@ module.exports = {
 	aliases: ["eightball", "🎱"],
 	description: "Replies with a random result to your question",
 	paramsHelp: "(question)",
+	params: [
+		{
+			type: "any",
+			greedy: true,
+			failure: "Please specify a question to ask the almighty 8ball 🎱.",
+			required: true
+		}
+	],
 	repeats: [],
 	exec: function (call) {
-		var question = call.params.readParam(true);
-		if (question) {
-			var repeat = this.repeats.find((rep) => rep.question === filterText(question));
-			var result;
-			if (repeat != null) {
-				result = repeat.result;
-			} else {
-				var keys = Object.keys(responses);
-				var key = keys[Math.floor(Math.random() * keys.length)];
-				result = responses[key][Math.floor(Math.random() * responses[key].length)];
-				if (key !== "retry") {
-					this.repeats.push({ question: filterText(question), result: result });
-				}
+		var question = call.parameters[0];
+		var repeat = this.repeats.find((rep) => rep.question === filterText(question));
+		var result;
+		if (repeat != null) {
+			result = repeat.result;
+		} else {
+			var keys = Object.keys(responses);
+			var key = keys[Math.floor(Math.random() * keys.length)];
+			result = responses[key][Math.floor(Math.random() * responses[key].length)];
+			if (key !== "retry") {
+				this.repeats.push({ question: filterText(question), result: result });
 			}
-			call.safeSend(result + " 🎱");
-		} else call.safeSend("Please specify a question to ask the almighty 8ball 🎱.");
+		}
+		call.safeSend(result + " 🎱");
 	}
 };

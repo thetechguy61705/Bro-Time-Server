@@ -7,61 +7,71 @@ module.exports = {
 	description: "Bans specified user.",
 	paramsHelp: "(user) [days to delete messages] [reason]",
 	requires: "Moderator permissions",
+	params: [
+		{
+			type: async (input, call) => {
+				var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
+				// eslint-disable-next-line no-unreachable
+				return guild.members.find((m) => input.includes(m.user.id)) || await call.client.fetchUser(input);
+			},
+			greedy: false,
+			failure: "Please mention or supply the id of a valid user.",
+			required: true
+		},
+		{
+			type: "number",
+			greedy: false,
+			failure: () => {},
+			default: 7,
+			required: false
+		},
+		{
+			type: "any",
+			greedy: true,
+			failure: () => {},
+			default: "No reason specified.",
+			required: false
+		}
+	],
 	botRequires: ["BAN_MEMBERS"],
 	botRequiresMessage: "To ban members.",
 	access: "Server",
 	exec: async (call) => {
-		var param = call.params.readParam() || "";
 		if (isModerator(call.message.member)) {
-			var guild = await call.message.guild.fetchMembers("", call.message.guild.memberCount);
-			var target = guild.members.find((m) => param.includes(`${m.user.id}`)) || param;
-			if (!(targetIsGm) && target != null) {
-				try {
-					target = await call.client.fetchUser(target);
-				} catch (exc) {
-					if (!exc.message.includes("not snowflake") && !exc.message.includes("Not Found")) console.warn(exc.stack);
-					target = null;
-				}
-			}
-			if (target != null) {
-				if (call.message.member.highestRole.position > (target.highestRole || { position: 0 }).position &&
-					target.id !== call.message.guild.ownerID) {
-					var targetIsGm = target instanceof GuildMember;
-					var daysToDelete = call.params.readNumber(false);
-					if (daysToDelete != null) {
-						call.params.offset(daysToDelete.toString().length + 1);
-						daysToDelete = daysToDelete < 0 ? 0 : daysToDelete > 7 ? 7 : daysToDelete;
-					} else daysToDelete = 7;
-					var reason = call.params.readParam(true) || "No reason specified.";
-					if (call.message.guild.me.hasPermission("BAN_MEMBERS") && (target.bannable || target.bannable === undefined)) {
-						var dmed = false;
-						try {
-							if (targetIsGm) {
-								await target.send(`You have been banned from the \`${guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);
-								dmed = true;
-							}
-						} catch (err) {
-							console.warn(err.stack);
+			var target = call.parameters[0];
+			if (call.message.member.highestRole.position > (target.highestRole || { position: 0 }).position &&
+				target.id !== call.message.guild.ownerID) {
+				var daysToDelete = call.parameters[1];
+				var reason = call.parameters[2];
+				var targetIsGm = target instanceof GuildMember;
+				if (call.message.guild.me.hasPermission("BAN_MEMBERS") && (target.bannable || target.bannable === undefined)) {
+					var dmed = false;
+					try {
+						if (targetIsGm) {
+							await target.send(`You have been banned from the \`${call.message.guild.name}\` server by \`${call.message.author.tag}\` for ${reason}`);
+							dmed = true;
 						}
-						var options = { days: daysToDelete, reason: `Banned by ${call.message.author.tag} for ${reason}` };
+					} catch (err) {
+						console.warn(err.stack);
+					}
+					var options = { days: daysToDelete, reason: `Banned by ${call.message.author.tag} for ${reason}` };
 
-						(target.ban || call.message.guild.ban).call(targetIsGm ? target : call.message.guild,
-							(targetIsGm ? options : target), options).then((user) => {
-							call.message.channel.send(`***Successfully banned \`${(user.user || { tag: false }).tag || user.tag || user}\`.***`);
-							call.client.emit("bannedByCommand", {
-								target: target,
-								executor: call.message.member,
-								reason: reason,
-								daysDeleted: daysToDelete,
-								dmed: dmed
-							});
-						}).catch((exc) => {
-							console.warn(exc.stack);
-							call.message.channel.send(`Failed to ban \`${targetIsGm ? target.user.tag : target.tag}\`.`);
+					(target.ban || call.message.guild.ban).call(targetIsGm ? target : call.message.guild,
+						(targetIsGm ? options : target), options).then((user) => {
+						call.message.channel.send(`***Successfully banned \`${(user.user || { tag: false }).tag || user.tag || user}\`.***`);
+						call.client.emit("bannedByCommand", {
+							target: target,
+							executor: call.message.member,
+							reason: reason,
+							daysDeleted: daysToDelete,
+							dmed: dmed
 						});
-					} else call.safeSend("I do not have permission to ban this user.");
-				} else call.safeSend("That user is too far up in this guild's hierarchy to be banned by you.");
-			} else call.safeSend("Please mention or supply the id of a valid user.");
+					}).catch((exc) => {
+						console.warn(exc.stack);
+						call.message.channel.send(`Failed to ban \`${targetIsGm ? target.user.tag : target.tag}\`.`);
+					});
+				} else call.safeSend("I do not have permission to ban this user.");
+			} else call.safeSend("That user is too far up in this guild's hierarchy to be banned by you.");
 		} else call.safeSend("You do not have permissions to trigger this command.");
 	}
 };
