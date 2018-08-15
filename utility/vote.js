@@ -65,10 +65,10 @@ module.exports = function ({ time, channel, required,
 
 						message.client.on("messageReactionRemove", onRemove);
 
-						collector.once("end", (users) => {
+						collector.once("end", () => {
 							message.client.removeListener("messageReactionRemove", onRemove);
-							message.edit(replaceTags(content, [{ tag: "<current>", value: users.size }, { tag: "<required>", value: required }]));
-							resolve(users.size >= required);
+							message.edit(replaceTags(content, [{ tag: "<current>", value: collector.total }, { tag: "<required>", value: required }]));
+							resolve(required <= collector.total);
 						});
 					});
 				});
