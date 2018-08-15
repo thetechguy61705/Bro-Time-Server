@@ -1,4 +1,4 @@
-var { Collection, GuildChannel, RichEmbed } = require("discord.js");
+const { Collection, GuildChannel, RichEmbed } = require("discord.js");
 var running = [];
 
 function getScope(channel) {
@@ -22,11 +22,13 @@ function replaceTags(content, values) {
 	return result;
 }
 
-module.exports = function (time, channel, required,
+module.exports = function ({ time, channel, required,
 	filter = () => { return true; },
 	id = null,
 	content = "A vote is required (<current>/<required>)!",
-	user = null) {
+	user = null,
+	updateIncrement = 1
+}) {
 	var result, vote;
 	vote = running.find((other) => getScope(channel) == other.scope && other.id === id);
 	if (id != null && vote != null) {
@@ -35,43 +37,39 @@ module.exports = function (time, channel, required,
 		vote.users.set(user.id, user);
 		result = null;
 	} else {
-		vote = {scope: getScope(channel), id: id};
+		vote = { scope: getScope(channel), id: id };
 		if (id != null)
 			running.push(vote);
 
 		result = new Promise((resolve, reject) => {
 			try {
-				channel.send(replaceTags(content, [{tag: "<current>", value: 0}, {tag: "<required>", value: required}])).then((message) => {
-					message.react("👍").then((upVote) => {
-						var finish, timeout;
-						var getTally = () => {
-							return upVote.users.filter((user) => { return filter(user); }).size - 1;
-						};
-						var updateMessage = (reaction) => {
-							var tally = getTally();
-							if (reaction.message.id === message.id)
-								message.edit(replaceTags(content, [{tag: "<current>", value: tally}, {tag: "<required>", value: required}]));
-							if (tally >= required)
-								finish();
-						};
-						finish = () => {
-							clearTimeout(timeout);
-							channel.client.removeListener("messageReactionAdd", updateMessage);
-							channel.client.removeListener("messageReactionRemove", updateMessage);
-							if (id != null)
-								running.splice(running.indexOf(running.find((other) => getScope(channel) == other.scope && other.id === id)), 1);
-							resolve(getTally() > 0);
+				channel.send(replaceTags(content, [{ tag: "<current>", value: 0 }, { tag: "<required>", value: required }])).then((message) => {
+					message.react("👍").then(() => {
+						var collector = message.createReactionCollector((r, u) => r.emoji.name === "👍" && filter(u),
+							{ time, max: required + 1 });
+						var onRemove = (reaction, user) => {
+							if (reaction.message.id === message.id) {
+								collector.total = reaction.count - (reaction.me ? 1 : 0);
+								if (collector.total % updateIncrement === 0)
+									message.edit(replaceTags(content, [{ tag: "<current>", value: collector.total }, { tag: "<required>", value: required }]));
+								if (!collector.collected.some((r) => r.users.has(user.id)))
+									collector.users.delete(user.id);
+							}
 						};
 
-						upVote = message.reactions.first();
-						if (vote.users != null) {
-							for (let user of vote.users)
-								upVote.users.set(user.id, user);
-						}
-						vote.users = upVote.users;
-						channel.client.on("messageReactionAdd", updateMessage);
-						channel.client.on("messageReactionRemove", updateMessage);
-						timeout = channel.client.setTimeout(finish, time);
+						collector.on("collect", (reaction) => {
+							collector.total = reaction.count - (reaction.me ? 1 : 0);
+							if (collector.total % updateIncrement === 0)
+								message.edit(replaceTags(content, [{ tag: "<current>", value: collector.total }, { tag: "<required>", value: required }]));
+						});
+
+						message.client.on("messageReactionRemove", onRemove);
+
+						collector.once("end", (users) => {
+							message.client.removeListener("messageReactionRemove", onRemove);
+							message.edit(replaceTags(content, [{ tag: "<current>", value: users.size }, { tag: "<required>", value: required }]));
+							resolve(users.size >= required);
+						});
 					});
 				});
 			} catch (exc) {
