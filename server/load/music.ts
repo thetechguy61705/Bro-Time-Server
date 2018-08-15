@@ -183,7 +183,8 @@ class Music {
 
 	public static isMusicChannel(channel: VoiceChannel): boolean {
 		var name = channel.name.toLowerCase();
-		return MUSIC_CHANNELS.some((keyword) => { return name.startsWith(keyword) || name.endsWith(keyword); });
+		// todo: Implement music channel restriction option.
+		return true || MUSIC_CHANNELS.some((keyword) => { return name.startsWith(keyword) || name.endsWith(keyword); });
 	}
 
 	private static sortSearch(query: string, results: MusicSearchResult[]): void {
