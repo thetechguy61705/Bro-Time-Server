@@ -42,12 +42,7 @@ module.exports = {
 
 					target.kick(`Kicked by ${call.message.author.tag} for ${reason}`).then((kicked) => {
 						call.message.channel.send(`***Successfully kicked \`${kicked.user.tag}\`.***`);
-						call.client.emit("kickedByCommand", {
-							target: target,
-							executor: call.message.member,
-							reason: reason,
-							dmed: dmed
-						});
+						call.client.emit("kickedByCommand", { target, executor: call.message.member, reason, dmed });
 					}).catch(() => {
 						call.message.channel.send(`Failed to kick \`${target.user.tag}\`.`);
 					});
