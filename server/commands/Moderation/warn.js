@@ -25,7 +25,7 @@ module.exports = {
 							}
 
 							call.message.channel.send(`***Successfully warned \`${target.user.tag}\`.***`);
-							call.client.emit("memberWarned", { target: target, executor: call.message.member, reason: reason, dmed: dmed });
+							call.client.emit("memberWarned", { target, executor: call.message.member, reason, dmed });
 						} else call.safeSend("Specified user is too high in this guild's hierarchy to be warned by you.");
 					} else call.safeSend("You cannot warn a bot account.");
 				} else call.safeSend("Please supply a valid user tag, mention, or id.");
