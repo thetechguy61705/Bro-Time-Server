@@ -21,7 +21,7 @@ module.exports = {
 						call.client.emit("unbannedByCommand", {
 							target: user,
 							executor: call.message.member,
-							reason: reason
+							reason
 						});
 					}).catch(() => {
 						call.message.reply(`Failed to unban \`${user.tag}\`.`);
