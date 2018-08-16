@@ -60,11 +60,11 @@ module.exports = {
 						(targetIsGm ? options : target), options).then((user) => {
 						call.message.channel.send(`***Successfully banned \`${(user.user || { tag: false }).tag || user.tag || user}\`.***`);
 						call.client.emit("bannedByCommand", {
-							target: target,
+							target,
 							executor: call.message.member,
-							reason: reason,
+							reason,
 							daysDeleted: daysToDelete,
-							dmed: dmed
+							dmed
 						});
 					}).catch((exc) => {
 						console.warn(exc.stack);
