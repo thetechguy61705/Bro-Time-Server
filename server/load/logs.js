@@ -278,7 +278,7 @@ module.exports = {
 				new RichEmbed()
 					.setAuthor(unbanInfo.executor.user.tag, unbanInfo.executor.user.displayAvatarURL)
 					.setTitle("Member Unbanned")
-					.setDescription(`Member: \`${unbanInfo.tag} (${unbanInfo.id})\`\n` +
+					.setDescription(`Member: \`${unbanInfo.target.tag} (${unbanInfo.target.id})\`\n` +
 						`Reason: \`${unbanInfo.reason}\`\n`)
 					.setColor(GREEN_HEX)
 			);
