@@ -422,6 +422,7 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 				if (command != null && this.checkAccess(command, message)) {
 					if (!server.locked.value || command.id === "lockdown") {
 						params.readSep();
+						if (!message.member && message.guild) message.member = await message.guild.fetchMember(message.author.id);
 						this.runParams(new Call(this, message, params, command));
 					} else {
 						if (!server.locked.channels.includes(message.channel.id)) {
