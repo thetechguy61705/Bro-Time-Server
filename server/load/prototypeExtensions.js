@@ -1,21 +1,24 @@
 const Discord = require("discord.js");
 
-Number.prototype.expandPretty = function() {
-	var days = ((this) - (this % 86400000)) / 86400000;
-	var hours = (((this) - (this % 3600000)) / 3600000) - (days * 24);
-	var minutes = ((this % 3600000) - (this % 3600000) % (60000)) / 60000;
-	var seconds = ((this % 3600000) % 60000) - (((this % 3600000) % 60000) % 1000);
-	var milliseconds = (((this % 3600000) % 60000) % 1000) - (((this % 3600000) % 60000) % 1);
-	days = (days > 1) ? `\`${days}\` days, `: (days === 1) ? `\`${days}\` day, ` : "";
-	hours = (hours > 1) ? `\`${hours}\` hours, `: (hours === 1) ? `\`${hours}\` hour, ` : "";
-	minutes = (minutes > 1) ? `\`${minutes}\` minutes, `: (minutes === 1) ? `\`${minutes}\` minute, ` : "";
-	seconds = ((seconds / 1000) > 1) ? `\`${seconds/1000}\` seconds, `: ((seconds / 1000) === 1) ? `\`${seconds/1000}\` second, ` : "";
-	milliseconds = (days === "" && hours === "" && minutes === "" && seconds === "") ? `\`${milliseconds}\` milliseconds.` : `and \`${milliseconds}\` milliseconds.`;
-	return `${days}${hours}${minutes}${seconds}${milliseconds}`;
+Number.prototype.expandPretty = function(ticks = true) {
+	var totalS = this,
+		t = ticks ? "`" : "",
+		hours = Math.floor(totalS / 3600000);
+	totalS %= 3600000;
+	var minutes = Math.floor(totalS / 60000);
+	totalS %= 60000;
+	var seconds = Math.floor(totalS / 1000);
+	totalS %= 1000;
+	var ms = totalS;
+	return (`${hours ? `${hours} hour${hours > 1 ? "s" : ""}, ` : ""}` +
+		`${minutes ? `${hours && !seconds && !ms ? "and " : ""}${minutes} minute${minutes > 1 ? "s" : ""}, ` : ""}` +
+		`${seconds ? `${(hours || minutes) && !ms ? "and " : ""}${seconds} second${seconds > 1 ? "s" : ""}, ` : ""}` +
+		`${ms ? `${hours || minutes || seconds ? "and " : ""}${ms} millisecond${ms > 1 ? "s" : ""}.` : ""}`)
+		.replace(/\d+/g, (match) => { return t ? `\`${match}\`` : match; });
 };
 
 Number.prototype.diagnostic = function() {
-	return (this <= 0) ? "impossible" : (this < 200) ? "great" : (this < 350) ? "good" : (this < 500) ? "ok" : (this < 750) ? "bad" : (this < 1000) ? "terrible" : "worse than dial up";
+	return this <= 0 ? "impossible" : this < 200 ? "great" : this < 350 ? "good" : this < 500 ? "ok" : this < 750 ? "bad" : this < 1000 ? "terrible" : "worse than dial up";
 };
 
 /* eslint-disable */

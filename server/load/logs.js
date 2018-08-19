@@ -304,7 +304,7 @@ module.exports = {
 					.setAuthor(muteInfo.executor.user.tag, muteInfo.executor.user.displayAvatarURL)
 					.setTitle("Member Muted")
 					.setDescription(`Member: \`${muteInfo.target.user.tag} (${muteInfo.target.id})\`\n` +
-						`Time: \`${muteInfo.time.expandPretty().replace(/`/g, "")}\`\n` +
+						`Time: \`${muteInfo.time.expandPretty(false)}\`\n` +
 						`Reason: \`${muteInfo.reason}\``)
 					.setColor(RED_HEX)
 			);

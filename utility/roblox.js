@@ -246,6 +246,10 @@ class RobloxUser {
 		if (!/>(true|false)</.test(friendsWith)) throw new Error(friendsWith);
 		return friendsWith.match(/>(true|false)</)[1].toBoolean();
 	}
+
+	getRankIn(groupID) {
+		return group(groupID).then((grp) => grp.getRoleof(this.id));
+	}
 }
 
 module.exports = {
