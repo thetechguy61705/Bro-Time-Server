@@ -3,12 +3,12 @@ function output(error) {
 }
 
 process.on("unhandledRejection", (reason) => {
-	if (reason instanceof Error)
+	if (reason instanceof Error && !reason.message.includes("N-API"))
 		output(reason);
 });
 
 process.on("warning", (warning) => {
-	output(new Error(warning));
+	if (!warning.toString().includes("N-API")) output(new Error(warning));
 });
 
 module.exports = function handle(object) {
