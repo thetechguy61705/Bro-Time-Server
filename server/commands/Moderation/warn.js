@@ -1,4 +1,5 @@
 const Moderator = require("@utility/moderator");
+const checkPositions = require("@utility/compareObjects").default;
 
 module.exports = {
 	id: "warn",
@@ -14,7 +15,7 @@ module.exports = {
 				var target = guild.members.find((member) => param.includes(member.user.id) || member.user.tag.toLowerCase().startsWith(param.toLowerCase()));
 				if (target != null) {
 					if (!target.user.bot) {
-						if (target.highestRole.position < call.message.member.highestRole.position) {
+						if (checkPositions(call.message.member, target)) {
 							var reason = call.params.readParam(true) || "`No reason specified.`";
 							var dmed = false;
 							try {

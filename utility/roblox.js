@@ -12,6 +12,13 @@ function decodeHtmlEntity(str) {
 	});
 }
 
+function resolveID(input) {
+	var result;
+	if (input instanceof RobloxUser || input instanceof RobloxGroup) result = input.id;
+	if (!/^\d+$/.test(result)) throw new Error("Failed to resolve valid ID.");
+	return result;
+}
+
 async function group(groupID) {
 	var info = await fetch(`https://groups.roblox.com/v1/groups/${groupID}`).then((res) => res.json());
 	if (info.errors && info.errors[0]) throw new Error(`${info.errors[0].code}: ${info.errors[0].message}`);
@@ -99,6 +106,7 @@ class RobloxGroup {
 	}
 
 	async getRoleOf(userID) {
+		userID = resolveID(userID);
 		var groups = await fetch(apiURI + `users/${userID}/groups`).then((res) => res.json());
 		if (groups.errors) throw new Error(`${groups.errors[0].code}: ${groups.errors[0].message}`);
 		var thisGroup = groups.find((g) => g.Id === this.id);
@@ -154,11 +162,13 @@ class RobloxUser {
 		this.username = info.Username;
 	}
 
-	async getFriends() {
+	async getFriends(amount = 4) {
+		if (!(amount instanceof Number)) throw new TypeError("Argument must be a number.");
+		if (amount < 1 || amount > 4) throw new RangeError("Argument must be between 1 and 4");
+		amount = Math.floor(amount);
 		var friends = [];
-		for (let i = 1; i < 5; i++) {
+		for (let i = 1; i < amount + 1; i++)
 			friends.push(fetch(apiURI + `users/${this.id}/friends?page=${i}`).then((res) => res.json()));
-		}
 		friends = await Promise.all(friends);
 		var err = friends.find((friend) => friend.errors);
 		if (err) throw new Error(`${err.errors[0].code}: ${err.errors[0].message}`);
@@ -172,17 +182,17 @@ class RobloxUser {
 	}
 
 	async getProfile() {
-		var profile = await fetch(`https://www.roblox.com/users/${this.id}/profile`).then((res) => res.text());
-		var friendsCount = parseFloat(profile.match(/data-friendscount=(\d+)/)[1]);
-		var followersCount = parseFloat(profile.match(/data-followerscount=((\d|,)+)/)[1].replace(/,/g, ""));
-		var followingCount = parseFloat(profile.match(/data-followingscount=((\d|,)+)/)[1].replace(/,/g, ""));
-		var membership = profile.match(/<\/h2><span class=icon((?:t|o)bc)/) ? profile.match(/<\/h2><span class=icon-((?:t|o)bc)/)[1].toUpperCase() : "NBC";
-		var joinDate = profile.match(/Join Date<p class=text-lead>((\d|\/)+)<li class=profile-stat>/)[1];
-		var age = Math.ceil(
-			(Date.now() / 86400000) -
-			(new Date(joinDate).getTime() / 86400000)
-		);
-		var blurb = profile.match(/data-statustext=(.+?(?=data-editstatusmaxlength=))/)[1].trim();
+		var profile = await fetch(`https://www.roblox.com/users/${this.id}/profile`).then((res) => res.text()),
+			friendsCount = parseFloat(profile.match(/data-friendscount=(\d+)/)[1]),
+			followersCount = parseFloat(profile.match(/data-followerscount=((\d|,)+)/)[1].replace(/,/g, "")),
+			followingCount = parseFloat(profile.match(/data-followingscount=((\d|,)+)/)[1].replace(/,/g, "")),
+			membership = profile.match(/<\/h2><span class=icon((?:t|o)bc)/) ? profile.match(/<\/h2><span class=icon-((?:t|o)bc)/)[1].toUpperCase() : "NBC",
+			joinDate = profile.match(/Join Date<p class=text-lead>((\d|\/)+)<li class=profile-stat>/)[1],
+			age = Math.ceil(
+				(Date.now() / 86400000) -
+				(new Date(joinDate).getTime() / 86400000)
+			),
+			blurb = profile.match(/data-statustext=(.+?(?=data-editstatusmaxlength=))/)[1].trim();
 		if (blurb.charAt(0) === "\"") blurb = blurb.slice(1);
 		if (blurb.charAt(blurb.length - 1) === "\"") blurb = blurb.slice(0, -1);
 		blurb = decodeHtmlEntity(blurb);
@@ -234,6 +244,7 @@ class RobloxUser {
 	}
 
 	async inGroup(groupID) {
+		groupID = resolveID(groupID);
 		var isIn = await fetch(`https://assetgame.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=IsInGroup&playerid=${this.id}&groupid=${groupID}`)
 			.then((res) => res.text());
 		if (!/>(true|false)</.test(isIn)) throw new Error(isIn);
@@ -241,6 +252,7 @@ class RobloxUser {
 	}
 
 	async isFriendsWith(userID) {
+		userID = resolveID(userID);
 		var friendsWith = await fetch(`https://assetgame.roblox.com/Game/LuaWebService/HandleSocialRequest.ashx?method=IsFriendsWith&playerId=${this.id}&userId=${userID}`)
 			.then((res) => res.text());
 		if (!/>(true|false)</.test(friendsWith)) throw new Error(friendsWith);
@@ -248,6 +260,7 @@ class RobloxUser {
 	}
 
 	getRankIn(groupID) {
+		groupID = resolveID(groupID);
 		return group(groupID).then((grp) => grp.getRoleof(this.id));
 	}
 }
@@ -261,11 +274,9 @@ module.exports = {
 	},
 	getIDByUsername: async function(username) {
 		var user = await fetch(apiURI + `users/get-by-username?username=${username}`).then((res) => res.json());
-		if (user.success) {
-			return user.id;
-		} else throw new Error(user.errorMessage);
+		if (!user.success) throw new Error(user.errorMessage);
+		return user.id;
 	},
-
 	usernameOwned: async function(username) {
 		var taken = await fetch(`http://www.roblox.com/UserCheck/DoesUsernameExist?username=${username}`).then((res) => res.json());
 		return taken.success;

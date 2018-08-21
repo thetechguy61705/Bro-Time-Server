@@ -24,14 +24,14 @@ module.exports = {
 	botRequires: ["ADD_REACTIONS"],
 	botRequiresMessage: "To add the poll emojis.",
 	exec: (call) => {
-		if (call.message.member.roles.find("name", "Giveaways") != null) {
+		if (call.message.member.roles.find((role) => role.name === "Giveaways") != null) {
 			var rawContent = call.params.readRaw(),
 				title = rawContent.split(":")[0];
 			call.params.offset(title.length + 2);
 			var time = ms(call.params.readParam() || "."),
 				param = call.params.readParam(),
 				channel = call.message.guild.channels.find((c) => c.type === "text" && ((param || "").includes(c.id) || c.name.toLowerCase().startsWith(param))),
-				amountOfWinners = (call.params.readNumber() || 1);
+				amountOfWinners = call.params.readNumber() || 1;
 			if (title.length <= 256) {
 				if (time != null && time > UPDATE_INTERVAL_MS && time < 2678400000) {
 					if (channel != null && channel.type === "text") {

@@ -18,21 +18,21 @@ module.exports = {
 	exec: (call) => {
 		if (call.message.member.roles.has("409153912558583818")) {
 			if (call.params.readRaw()) {
-				const PARTNER_CHANNEL = call.message.guild.channels.get("409156491640045571"),
-					SPLIT_ARGS = call.params.readRaw().split("|").map((arg) => arg.trim()),
-					TITLE = SPLIT_ARGS[0],
-					DESCRIPTION = SPLIT_ARGS[1],
-					THUMBNAIL = SPLIT_ARGS[2],
-					PARTNER_EMBED = new Discord.RichEmbed()
-						.setTitle(TITLE)
+				var partnerChannel = call.message.guild.channels.get("409156491640045571"),
+					splitArgs = call.params.readParam(true).split("|").map((arg) => arg.trim()),
+					title = splitArgs[0],
+					description = splitArgs[1],
+					thumbnail = splitArgs[2],
+					partnerEmbed = new Discord.RichEmbed()
+						.setTitle(title)
 						.setColor("#FFA500")
-						.setDescription(DESCRIPTION);
-				call.client.fetchInvite(THUMBNAIL).then((invite) => {
-					PARTNER_EMBED.setThumbnail(`https://cdn.discordapp.com/icons/${invite.guild.id}/${invite.guild.icon}.png`);
-					addPartner(PARTNER_CHANNEL, PARTNER_EMBED, call);
+						.setDescription(description);
+				call.client.fetchInvite(thumbnail).then((invite) => {
+					partnerEmbed.setThumbnail(`https://cdn.discordapp.com/icons/${invite.guild.id}/${invite.guild.icon}.png`);
+					addPartner(partnerChannel, partnerEmbed, call);
 				}).catch(() => {
-					PARTNER_EMBED.setThumbnail(THUMBNAIL);
-					addPartner(PARTNER_CHANNEL, PARTNER_EMBED, call);
+					partnerEmbed.setThumbnail(partnerEmbed);
+					addPartner(partnerChannel, partnerEmbed, call);
 				});
 			} else call.safeSend("You did not provide the necessary parameters! `!addpartner (title) (description) (discord invite OR thumbnail url)`");
 		} else call.safeSend("You do not have permission to use this command! `Requires: Community Manager Bro`");

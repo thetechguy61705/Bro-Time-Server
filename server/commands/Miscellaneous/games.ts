@@ -266,13 +266,13 @@ export default {
 	access: "Server",
 	params: [
 		{
-			type: (game: string) => loaded.find((mod) => mod.id === game.toLowerCase() || (mod.aliases != null && mod.aliases.includes(game))),
+			type: (game: string): Game | void => loaded.find((mod) => mod.id === game.toLowerCase() || (mod.aliases != null && mod.aliases.includes(game))),
 			greedy: false,
 			failure: listGames,
 			required: true
 		},
 		{
-			type: (input: string) => {
+			type: (input: string): string | number | void => {
 				if (input === "-solo")
 					return input;
 				else if (!isNaN(Number(input)) && Number(input) > 0)
@@ -286,14 +286,14 @@ export default {
 	botRequires: ["ADD_REACTIONS"],
 	botRequiresMessage: "To create a game invitation method. Some games also require MANAGE_MESSAGES for removing reactions although it is not required.",
 	exec: async (call: Call) => {
-		var game = call.parameters[0];
-		var bet = process.env.NODE_ENV === "production" || call.parameters[1] === "-solo" ? call.parameters[1] : 0;
-		var solo = false;
+		var game: Game = call.parameters[0],
+			bet = process.env.NODE_ENV === "production" || call.parameters[1] === "-solo" ? call.parameters[1] : 0,
+			solo: boolean = false;
 		if (isNaN(bet)) {
 			bet = 0;
 			solo = game.minPlayers === 1;
 		}
-		var found = false;
+		var found: boolean = false;
 		if (games != null)
 			games = this;
 
@@ -313,7 +313,7 @@ export default {
 		if (!found)
 			listGames(call.message);
 	},
-	dispatchInput: (input: Input) => {
+	dispatchInput: (input: Input): void => {
 		for (let session of sessions) {
 			if ((input.channel == null || input.channel == session.context.channel) &&
 				(!session.game.requiresInvite || session.host.id === input.user.id || session.players.has(input.user.id))) {
@@ -322,7 +322,7 @@ export default {
 			}
 		}
 	},
-	dispatchBalances: (userId, newBalance) => {
+	dispatchBalances: (userId: Snowflake, newBalance: number): void => {
 		for (let session of sessions) {
 			if (session.game.betting && session.game.bet > 0 && session.players.has(userId || require("@server/server").client.user.id) && session.game.bet > newBalance) {
 				session.tooPoor = true;

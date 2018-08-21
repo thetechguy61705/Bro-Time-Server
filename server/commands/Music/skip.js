@@ -3,7 +3,5 @@ module.exports = {
 	aliases: ["next"],
 	description: "Skips a playing song.",
 	access: "Server",
-	exec: (call) => {
-		call.client.music.skip(call);
-	}
+	exec: (call) => call.client.music.skip(call)
 };

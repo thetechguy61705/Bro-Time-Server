@@ -10,18 +10,16 @@ module.exports = {
 	botRequires: ["MANAGE_ROLES"],
 	botRequiresMessage: "To change the mentionability of roles.",
 	exec: (call) => {
-		const DATA = (call.message.guild || call.message.channel).data,
-			PREFIX = DATA != null ? DATA.prefix : "/",
-			ROLE = call.params.readRole();
+		var data = (call.message.guild || call.message.channel).data,
+			prefix = data != null ? data.prefix : "/",
+			role = call.params.readRole();
 		if (isModerator(call.message.member)) {
-			if (ROLE != null) {
-				const MENTION = (call.message.content.toLowerCase().startsWith(PREFIX + "mt")) ? true
-					: (call.message.content.toLowerCase().startsWith(PREFIX + "mf")) ? false : !ROLE.mentionable;
-				ROLE.setMentionable(MENTION).then(() => {
-					call.message.delete();
-				}).catch(() => {
-					call.safeSend(`There was an error changing the mentionability of the role \`${ROLE.name}\` to \`${MENTION}\`.`);
-				});
+			if (role != null) {
+				var mention = (call.message.content.toLowerCase().startsWith(prefix + "mt")) ? true
+					: (call.message.content.toLowerCase().startsWith(prefix + "mf")) ? false : !role.mentionable;
+				role.setMentionable(mention)
+					.then(() => call.message.delete())
+					.catch(() => call.safeSend(`There was an error changing the mentionability of the role \`${role.name}\` to \`${mention}\`.`));
 			} else call.safeSend("Invalid role. Please try again.");
 		} else call.safeSend("You do not have permission to use this command!");
 	}

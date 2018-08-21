@@ -1,7 +1,7 @@
-/*
-Number 1 - 10 for non-premium users, 1 - 20 for premium users.
-30% chance of not gaining Bro Bits.
-Use every 10 minutes.
+/**
+* Number 1 - 10 for non-premium users, 1 - 20 for premium users.
+* 30% chance of not gaining Bro Bits.
+* Use every 10 minutes.
 */
 
 var premium = require("@utility/premium");

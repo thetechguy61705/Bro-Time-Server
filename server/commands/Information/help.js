@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const { RichEmbed } = require("discord.js");
 const { DataRequest } = require("@utility/datarequest.ts");
 
 function add(command, help) {
@@ -23,10 +23,10 @@ module.exports = {
 			if (call.message.channel.type === "text" && ["Server", "Public", undefined].includes(cmd.access)) return true;
 			return false;
 		};
-		const prefix = call.message.guild ? await DataRequest.getPrefix(call.message.guild.id) : "/";
-		const param1 = (call.params.readRaw() !== "" && call.params.readRaw() != null) ? call.params.readRaw() : "";
-		const command = call.commands.loaded.find((cmd) => (cmd.aliases || []).concat(cmd.id).includes(param1.toLowerCase()));
-		var helpEmbed = new Discord.RichEmbed()
+		var prefix = call.message.guild ? await DataRequest.getPrefix(call.message.guild.id) : "/",
+			param1 = (call.params.readRaw() !== "" && call.params.readRaw() != null) ? call.params.readRaw() : "",
+			command = call.commands.loaded.find((cmd) => (cmd.aliases || []).concat(cmd.id).includes(param1.toLowerCase()));
+		var helpEmbed = new RichEmbed()
 			.setColor(0x00AE86)
 			.setDefaultFooter(call.message.author);
 		var commandHelp = {};
@@ -54,8 +54,7 @@ module.exports = {
 				`\nAliases: \`${(aliases || ["None"]).join("`, `")}\`` +
 				`\nCategory: \`${command.category}\`` +
 				"\n\n[GitHub URL](https://github.com/Bro-Time/Bro-Time-Server/tree/master/server/commands/" +
-					`${(command.category !== "Other") ? command.category.replace(/\s/g, "%20") + "/" : ""}${file})`)
-				.setDefaultFooter(call.message.author);
+					`${command.category !== "Other" ? command.category.replace(/\s/g, "%20") + "/" : ""}${file})`);
 		} else call.safeSend("Invalid command name. Please run `!help (command)` or just `!help`");
 
 		if (helpEmbed.description != null) {

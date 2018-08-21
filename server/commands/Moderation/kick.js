@@ -1,4 +1,5 @@
 const Moderator = require("@utility/moderator");
+const checkPositions = require("@utility/compareObjects").default;
 
 module.exports = {
 	id: "kick",
@@ -18,7 +19,6 @@ module.exports = {
 		{
 			type: "any",
 			greedy: true,
-			failure: () => {},
 			default: "No reason specified.",
 			required: false
 		}
@@ -29,7 +29,7 @@ module.exports = {
 	exec: async (call) => {
 		if (Moderator(call.message.member)) {
 			var target = call.parameters[0];
-			if (call.message.member.highestRole.position > target.highestRole.position) {
+			if (checkPositions(call.message.member, target)) {
 				var reason = call.parameters[1];
 				if (target.kickable) {
 					var dmed = false;

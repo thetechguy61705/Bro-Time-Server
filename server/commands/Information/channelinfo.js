@@ -7,7 +7,7 @@ module.exports = {
 	paramsHelp: "[channel]",
 	access: "Server",
 	exec: async (call) => {
-		var channel = call.params.readChannel() || call.message.channel;
+		var channel = call.params.readChannel(true, (channel) => channel.permissionsFor(call.message.member).has(["VIEW_CHANNEL"])) || call.message.channel;
 		var infoEmbed = new RichEmbed()
 			.setTitle("Information on " + channel.name)
 			.setColor(0x00AE86)

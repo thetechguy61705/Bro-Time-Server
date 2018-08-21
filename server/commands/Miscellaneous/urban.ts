@@ -1,15 +1,16 @@
-const { RichEmbed } = require("discord.js");
-const { MARKDOWN_REGEX } = require("@server/chat/filter");
-const fetch = require("node-fetch");
-const emojis = require("@server/load/emojis.js").emojis;
+import { RichEmbed } from "discord.js";
+import { MARKDOWN_REGEX } from "@server/chat/filter";
+import { Call } from "@server/chat/commands";
+import Request, * as fetch from "node-fetch";
+import { EMOJIS as emojis } from "@server/load/emojis";
 
-function hyperlinkText(text) {
-	return text.replace(/\[(.*?)\]/g, (match) => {
+function hyperlinkText(text: string): string {
+	return text.replace(/\[(.*?)\]/g, (match: string) => {
 		return `${match}(https://www.urbandictionary.com/define.php?term=${match.replace(/\[|\]/g, "").replace(/\s/g, "+")})`;
 	});
 }
 
-module.exports = {
+export default {
 	id: "urban",
 	aliases: ["urbandictionary"],
 	params: [
@@ -22,13 +23,13 @@ module.exports = {
 	],
 	description: "Searches urban dictionary with the supplied query.",
 	paramsHelp: "(query)",
-	exec: async (call) => {
-		var search = call.parameters[0];
-		var random = search === "random";
-		var urban = await fetch("http://api.urbandictionary.com/v0/" + (random ? "random" : `define?term=${search}`)).then((res) => res.json());
-		var [result] = urban.list;
+	exec: async (call: Call) => {
+		var search: string = call.parameters[0],
+			random: boolean = search === "random",
+			urban: object = await fetch("http://api.urbandictionary.com/v0/" + (random ? "random" : `define?term=${search}`)).then((res: Request) => res.json()),
+			[result] = (urban as any).list;
 		if (result != null) {
-			var urbanEmbed = new RichEmbed()
+			var urbanEmbed: RichEmbed = new RichEmbed()
 				.setTitle(result.word)
 				.setURL(result.permalink)
 				.setColor(0x00AE86)

@@ -4,6 +4,17 @@ const GREEN_HEX = "#00FF7F";
 const ORANGE_HEX = "#FFA500";
 const RED_HEX = "#FF4500";
 
+function trim(raw, amount) {
+	var result;
+	if (raw.length <= amount) result = raw;
+	else if (raw.length > amount) result = raw.substring(0, amount - 3) + "...";
+	return result;
+}
+
+function keepBlock(raw) {
+	return raw.replace(/`/g, "`\u200B");
+}
+
 module.exports = {
 	id: "logging",
 	getChannel: (guild) => {
@@ -215,8 +226,8 @@ module.exports = {
 					.setAuthor(executor.tag, executor.displayAvatarURL)
 					.setTitle("Message Updated")
 					.setDescription(`ID: \`${newMessage.id}\`\nDate: \`${(newMessage.editedAt || newMessage.createdAt).toString().substring(0, 15)}\``)
-					.addField("Old Content", `\`\`\`md\n${oldMessage.content.substring(0, 1014)}\`\`\``)
-					.addField("New Content", `\`\`\`md\n${newMessage.content.substring(0, 1014)}\`\`\``)
+					.addField("Old Content", `\`\`\`md\n${trim(keepBlock(oldMessage.content), 1014)}\`\`\``)
+					.addField("New Content", `\`\`\`md\n${trim(keepBlock(newMessage.content), 1014)}\`\`\``)
 					.setColor(ORANGE_HEX)
 			);
 		});
@@ -229,7 +240,7 @@ module.exports = {
 					.setAuthor(executor.tag, executor.displayAvatarURL)
 					.setTitle("Message Deleted")
 					.setDescription(`ID: \`${message.id}\``)
-					.addField("Content", `\`\`\`md\n${message.content.substring(0, 1014)}\`\`\``)
+					.addField("Content", `\`\`\`md\n${trim(keepBlock(message.content), 1014)}\`\`\``)
 					.setColor(RED_HEX)
 			);
 		});
@@ -239,7 +250,7 @@ module.exports = {
 			if (logs) logs.send(
 				new RichEmbed()
 					.setTitle("Bulk Messages Deleted")
-					.setDescription(`Size: \`${messageIDS.length}\`\nIDs: \`${messageIDS.join("`, `").substring(0, 2020)}\``)
+					.setDescription(`Size: \`${messageIDS.length}\`\nIDs: \`${trim(messageIDS.join("`, `"), 2020)}\``)
 					.setColor(RED_HEX)
 			);
 		});

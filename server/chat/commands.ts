@@ -309,26 +309,31 @@ export class CommandsManager implements IExecutable<Message>, ILoadable<Client> 
 		if (call.command.params) {
 			var result = [];
 			for (let test of call.command.params) {
-				var param;
-				if (!test.type|| test.type === "any")
+				var param, length;
+				if (!test.type|| test.type === "any") {
 					param = call.params.readParam(test.greedy, test.required);
-				else if (test.type === "number")
+					length = (param || { length: 0 }).length;
+				} else if (test.type === "number") {
 					param = call.params.readNumber(test.required);
-				else if (test.type === "member") {
-					await call.message.guild.fetchMembers("", call.message.guild.memberCount);
-					param = call.params.readMember(test.required);
+					length = (param || "").toString().length;
 				} else if (typeof test.type === "function") {
 					try {
-						if (call.params.readParam(test.greedy, false))
-							param = await test.type(call.params.readParam(test.greedy, test.required), call);
+						if (!call.params.hasFinished()) {
+							param = call.params.readParam(test.greedy, test.required);
+							length = param.length;
+							param = await test.type(param, call);
+						}
 					} catch (exc) {
 						param = null;
 						console.warn(exc.stack);
 					}
-				} else if (test.type instanceof RegExp)
-					param = (call.params.readParam(test.greedy, test.required) || { match: () => null }).match(test.type);
+				} else if (test.type instanceof RegExp) {
+					param = call.params.readParam(test.greedy, test.required);
+					if (param) length = param.length;
+					param = (param || { match: () => null }).match(test.type);
+				}
 				if (param != null || !test.required) {
-					if (param != null && !test.required) call.params.offset(`${param}`.length + 1);
+					if (length) call.params.offset(length + 1);
 					if (param == null && !test.required && test.default) {
 						if (typeof test.default !== "function")
 							param = test.default;

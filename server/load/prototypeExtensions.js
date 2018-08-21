@@ -2,7 +2,6 @@ const Discord = require("discord.js");
 
 Number.prototype.expandPretty = function(ticks = true) {
 	var totalS = this,
-		t = ticks ? "`" : "",
 		hours = Math.floor(totalS / 3600000);
 	totalS %= 3600000;
 	var minutes = Math.floor(totalS / 60000);
@@ -14,7 +13,7 @@ Number.prototype.expandPretty = function(ticks = true) {
 		`${minutes ? `${hours && !seconds && !ms ? "and " : ""}${minutes} minute${minutes > 1 ? "s" : ""}, ` : ""}` +
 		`${seconds ? `${(hours || minutes) && !ms ? "and " : ""}${seconds} second${seconds > 1 ? "s" : ""}, ` : ""}` +
 		`${ms ? `${hours || minutes || seconds ? "and " : ""}${ms} millisecond${ms > 1 ? "s" : ""}.` : ""}`)
-		.replace(/\d+/g, (match) => { return t ? `\`${match}\`` : match; });
+		.replace(/\d+/g, (match) => { return ticks ? `\`${match}\`` : match; });
 };
 
 Number.prototype.diagnostic = function() {
@@ -35,7 +34,7 @@ String.prototype.toNumber = function(num = 0) {
 		return num;
 	} else if (this == "half") {
 		return num / 2;
-	} else if (this == "quarter")  {
+	} else if (this == "quarter") {
 		return num / 4;
 	} else if (this == "eighth") {
 		return num / 8;
@@ -49,7 +48,7 @@ String.prototype.toNumber = function(num = 0) {
 };
 
 String.prototype.toBoolean = function() {
-	return (this == "true") ? true : (this == "false") ? false : null;
+	return this == "true" ? true : this == "false" ? false : null;
 };
 
 Array.prototype.difference = function(arr) {

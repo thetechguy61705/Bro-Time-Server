@@ -1,5 +1,5 @@
-const GRANTERS = ["236341625763135500", "245877990938902529", "432650511825633317", "433065327836790784"];
 const { GuildMember } = require("discord.js");
+const { isOwner } = require("@utility/owner.ts");
 
 module.exports = {
 	id: "grant",
@@ -27,7 +27,7 @@ module.exports = {
 	],
 	access: "Public",
 	exec: async (call) => {
-		if (GRANTERS.includes(call.message.author.id)) {
+		if (isOwner(call.message.author.id)) {
 			var target = call.parameters[0];
 			var amount = call.parameters[1];
 			if (target instanceof GuildMember) target = target.user;

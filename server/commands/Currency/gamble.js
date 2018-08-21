@@ -1,6 +1,6 @@
-/*
-Success rate (of gaining money): 40%
-Input multiplying rate (when gaining money): 60% - 140%
+/**
+* Success rate (of gaining money): 40%
+* Input multiplying rate (when gaining money): 60% - 140%
 */
 
 module.exports = {

@@ -3,7 +3,5 @@ module.exports = {
 	aliases: ["pause"],
 	description: "Toggles the music.",
 	access: "Server",
-	exec: (call) => {
-		call.client.music.toggle(call);
-	}
+	exec: (call) => call.client.music.toggle(call)
 };

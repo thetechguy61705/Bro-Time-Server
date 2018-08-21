@@ -1,5 +1,6 @@
-const isModerator = require("@utility/moderator");
 const { GuildMember } = require("discord.js");
+const isModerator = require("@utility/moderator");
+const checkPositions = require("@utility/compareObjects").default;
 
 module.exports = {
 	id: "ban",
@@ -21,14 +22,12 @@ module.exports = {
 		{
 			type: "number",
 			greedy: false,
-			failure: () => {},
 			default: 7,
 			required: false
 		},
 		{
 			type: "any",
 			greedy: true,
-			failure: () => {},
 			default: "No reason specified.",
 			required: false
 		}
@@ -39,8 +38,7 @@ module.exports = {
 	exec: async (call) => {
 		if (isModerator(call.message.member)) {
 			var target = call.parameters[0];
-			if (call.message.member.highestRole.position > (target.highestRole || { position: 0 }).position &&
-				target.id !== call.message.guild.ownerID) {
+			if (checkPositions(call.message.member, target)) {
 				var daysToDelete = call.parameters[1];
 				var reason = call.parameters[2];
 				var targetIsGm = target instanceof GuildMember;

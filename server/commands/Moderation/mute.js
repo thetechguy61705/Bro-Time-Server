@@ -1,5 +1,6 @@
 const ms = require("ms");
 const Moderator = require("@utility/moderator");
+const checkPositions = require("@utility/compareObjects").default;
 
 module.exports = {
 	id: "mute",
@@ -16,7 +17,7 @@ module.exports = {
 			var target = guild.members.find((member) => (parameterOne || "").includes(member.user.id) ||
 				member.user.tag.toLowerCase().startsWith(parameterOne));
 			if (target != null) {
-				if (call.message.member.highestRole.position > target.highestRole.position) {
+				if (checkPositions(call.message.member, target)) {
 					if (!target.roles.has(guild.roles.find((role) => role.name === "Muted").id)) {
 						var muteTime = (parameterTwo != null) ? ms(parameterTwo) : null;
 						if (muteTime == null) call.params.offset(parameterTwo.length + 1);

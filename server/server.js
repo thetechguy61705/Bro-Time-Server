@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const { Client } = require("discord.js");
 const load = require("@utility/filesloader.ts").default;
 const dataProcessor = require("@utility/datarequest.ts");
 // todo: Move configuration to config.js.
@@ -9,7 +9,7 @@ var errorHandler = require("@utility/errorHandler");
 var config = require("@root/config");
 var loaders = [];
 var chatHandlers = [];
-var client = new Discord.Client(config.CLIENT);
+var client = new Client(config.CLIENT);
 
 client.locked = false;
 client.lockedChannels = [];
@@ -28,10 +28,10 @@ module.exports = {
 errorHandler(client);
 
 load("load", {
-	client: client,
+	client,
 	displayErrorStack: false,
 	success: (exported) => {
-		loaders.push(exported);
+		loaders.push(exported.default || exported);
 	},
 	failure: (exc) => {
 		console.warn("Failed to load:");
