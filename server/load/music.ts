@@ -230,7 +230,7 @@ class Music {
 
 				ticket = null;
 				try {
-					choice = await call.requestInput(call.commands.REQUEST_OPTIONS.Anyone, prompt);
+					choice = await call.requestInput(null, prompt);
 					if (choice != null) {
 						choice = choice.params.readNumber();
 						if (choice != null) {
@@ -364,13 +364,14 @@ module.exports = {
 			tokens.set(source, config[key]);
 		client.music = new Music();
 		client.on("voiceStateUpdate", (oldMember, newMember) => {
-			var queue;
+			var queue,
+				queueFind = ({ connection }) => { return connection != null && connection.channel === oldMember.voiceChannel; };
 			if (newMember.voiceChannel == null) {
-				queue = client.music.players.find((queue) => { return queue.connection != null && queue.connection.channel === oldMember.voiceChannel; });
-				if (queue != null && !queue.isPaused() && queue.connection.channel.members.every((member) => { return member.user.bot; }))
+				queue = client.music.players.find(queueFind);
+				if (queue != null && !queue.isPaused() && queue.connection.channel.members.every(({ user }) => { return user.bot; }))
 					queue.toggle();
 			} else if (oldMember.voiceChannel == null) {
-				queue = client.music.players.find((queue) => { return queue.connection != null && queue.connection.channel === newMember.voiceChannel; });
+				queue = client.music.players.find(queueFind);
 				if (queue != null && queue.isPaused() && queue.connection.channel.members.every((member) => { return member.user.bot || member === newMember; }))
 					queue.toggle();
 			}
